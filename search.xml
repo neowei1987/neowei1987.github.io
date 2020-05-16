@@ -107,6 +107,7 @@
       <tags>
         <tag>数据结构</tag>
         <tag>算法</tag>
+        <tag>技巧</tag>
       </tags>
   </entry>
   <entry>
@@ -213,12 +214,13 @@
 			</script>
 		]]></content>
       <categories>
-        <category>经验分享</category>
+        <category>日常</category>
       </categories>
       <tags>
         <tag>后端</tag>
         <tag>架构</tag>
         <tag>知识体系</tag>
+        <tag>设计</tag>
       </tags>
   </entry>
 </search>

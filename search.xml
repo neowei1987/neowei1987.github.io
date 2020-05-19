@@ -357,7 +357,7 @@
 <h3 id="修改maven-setting配置"><a href="#修改maven-setting配置" class="headerlink" title="修改maven setting配置"></a>修改maven setting配置</h3><ol>
 <li>找到配置文件地址：$MAVEN_HONE/libexec/conf/settings.xml</li>
 <li>编辑文件，添加以下内容：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;mirror&gt;</span><br><span class="line">   &lt;id&gt;alimaven&lt;&#x2F;id&gt;</span><br><span class="line">   &lt;mirrorOf&gt;central&lt;&#x2F;mirrorOf&gt;</span><br><span class="line">   &lt;name&gt;aliyun maven&lt;&#x2F;name&gt;</span><br><span class="line">   &lt;url&gt;http:&#x2F;&#x2F;maven.aliyun.com&#x2F;nexus&#x2F;content&#x2F;repositories&#x2F;central&#x2F;&lt;&#x2F;url&gt;</span><br><span class="line">   &lt;&#x2F;mirror&gt;</span><br></pre></td></tr></table></figure>
-<img src="https://graph.baidu.com/resource/222f02fd6561b69f87ee901589881351.png" alt="file"></li>
+<img src="http://graph.baidu.com/resource/222f02fd6561b69f87ee901589881351.png" alt="file"></li>
 </ol>
 </div>
 

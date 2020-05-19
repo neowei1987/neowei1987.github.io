@@ -20,23 +20,21 @@
     var CONFIG = {"hostname":"neowei1987.github.io","root":"/","scheme":"Muse","version":"8.0.0-rc.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="亲爱的读者您好，感谢您在阅读我的文章。 出于发布渠道的考虑，我可能在各个渠道更新文章不够及时。 因此，如果您喜欢我的文章，想阅读更多我的文字， 您可转到我的个人博客或者公众账号阅读文章： 0xFF 写在前面  			 			 			var isMobile &#x3D; navigator.userAgent.match(&#x2F;(phone|pad|pod|iPhone|iPod|ios|iPad|Androi">
+  <meta name="description" content="它的主要特性包括：批流一体化、精密的状态管理、事件时间支持以及精确一次的状态一致性保障等 使用场景   			 			 			var isMobile &#x3D; navigator.userAgent.match(&#x2F;(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wO">
 <meta property="og:type" content="article">
-<meta property="og:title" content="一文搞懂Redis6">
-<meta property="og:url" content="https://neowei1987.github.io/2020/05/17/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82Redis6/index.html">
+<meta property="og:title" content="Flink简介">
+<meta property="og:url" content="https://neowei1987.github.io/2020/05/19/Flink%E7%AE%80%E4%BB%8B/index.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
-<meta property="og:description" content="亲爱的读者您好，感谢您在阅读我的文章。 出于发布渠道的考虑，我可能在各个渠道更新文章不够及时。 因此，如果您喜欢我的文章，想阅读更多我的文字， 您可转到我的个人博客或者公众账号阅读文章： 0xFF 写在前面  			 			 			var isMobile &#x3D; navigator.userAgent.match(&#x2F;(phone|pad|pod|iPhone|iPod|ios|iPad|Androi">
+<meta property="og:description" content="它的主要特性包括：批流一体化、精密的状态管理、事件时间支持以及精确一次的状态一致性保障等 使用场景   			 			 			var isMobile &#x3D; navigator.userAgent.match(&#x2F;(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wO">
 <meta property="og:locale" content="zh">
-<meta property="og:image" content="http://graph.baidu.com/resource/22251103dcfcfc1b2c4cf01589605159.png">
-<meta property="article:published_time" content="2020-05-17T14:51:17.000Z">
-<meta property="article:modified_time" content="2020-05-19T07:52:09.644Z">
+<meta property="article:published_time" content="2020-05-19T08:15:56.000Z">
+<meta property="article:modified_time" content="2020-05-19T08:19:25.912Z">
 <meta property="article:author" content="NeoWei">
-<meta property="article:tag" content="Redis">
-<meta property="article:tag" content="最新发布">
+<meta property="article:tag" content="Flink">
+<meta property="article:tag" content="流式计算">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://graph.baidu.com/resource/22251103dcfcfc1b2c4cf01589605159.png">
 
-<link rel="canonical" href="https://neowei1987.github.io/2020/05/17/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82Redis6/">
+<link rel="canonical" href="https://neowei1987.github.io/2020/05/19/Flink%E7%AE%80%E4%BB%8B/">
 
 
 <script id="page-configurations">
@@ -49,7 +47,7 @@
   };
 </script>
 
-  <title>一文搞懂Redis6 | Neo's Blog</title>
+  <title>Flink简介 | Neo's Blog</title>
   
 
 
@@ -165,7 +163,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/2020/05/17/%E4%B8%80%E6%96%87%E6%90%9E%E6%87%82Redis6/">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/2020/05/19/Flink%E7%AE%80%E4%BB%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -178,7 +176,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          一文搞懂Redis6
+          Flink简介
         </h1>
 
         <div class="post-meta">
@@ -187,16 +185,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2020-05-17 22:51:17" itemprop="dateCreated datePublished" datetime="2020-05-17T22:51:17+08:00">2020-05-17</time>
+              <time title="Created: 2020-05-19 16:15:56 / Modified: 16:19:25" itemprop="dateCreated datePublished" datetime="2020-05-19T16:15:56+08:00">2020-05-19</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-05-19 15:52:09" itemprop="dateModified" datetime="2020-05-19T15:52:09+08:00">2020-05-19</time>
-              </span>
 
           
 
@@ -209,11 +201,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <div id="vip-container"><p>亲爱的读者您好，感谢您在阅读我的文章。</p>
-<p>出于发布渠道的考虑，我可能在各个渠道更新文章不够及时。</p>
-<p>因此，如果您喜欢我的文章，想阅读更多我的文字，</p>
-<p>您可转到我的<a href="https://neowei1987.github.io/">个人博客</a>或者公众账号阅读文章：<br><img src="http://graph.baidu.com/resource/22251103dcfcfc1b2c4cf01589605159.png" alt="file"></p>
-<h2 id="0xFF-写在前面"><a href="#0xFF-写在前面" class="headerlink" title="0xFF 写在前面"></a>0xFF 写在前面</h2></div>
+        <div id="vip-container"><p>它的主要特性包括：批流一体化、精密的状态管理、事件时间支持以及精确一次的状态一致性保障等</p>
+<p>使用场景</p>
+</div>
 
 			<script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
 			<script>
@@ -238,8 +228,8 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Redis/" rel="tag"># Redis</a>
-              <a href="/tags/%E6%9C%80%E6%96%B0%E5%8F%91%E5%B8%83/" rel="tag"># 最新发布</a>
+              <a href="/tags/Flink/" rel="tag"># Flink</a>
+              <a href="/tags/%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97/" rel="tag"># 流式计算</a>
           </div>
 
         
@@ -248,12 +238,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/05/16/%E8%81%8A%E8%81%8A%E5%90%8E%E7%AB%AF%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E7%9F%A5%E8%AF%86%E4%BD%93%E7%B3%BB-%E7%AC%AC%E4%B8%80%E7%AF%87/" rel="prev" title="聊聊后端程序员的知识体系-第一篇">
-      <i class="fa fa-chevron-left"></i> 聊聊后端程序员的知识体系-第一篇
+    <a href="/2020/05/19/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E4%BB%8B%E7%BB%8D/" rel="prev" title="推荐系统介绍">
+      <i class="fa fa-chevron-left"></i> 推荐系统介绍
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/05/19/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E4%BB%8B%E7%BB%8D/" rel="next" title="推荐系统介绍">
-      推荐系统介绍 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/05/19/%E5%A6%82%E4%BD%95%E4%B8%BAMaven%E9%85%8D%E7%BD%AE%E5%9B%BD%E5%86%85%E9%95%9C%E5%83%8F%E8%B5%84%E6%BA%90/" rel="next" title="如何为Maven配置国内镜像资源">
+      如何为Maven配置国内镜像资源 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -313,7 +303,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0xFF-写在前面"><span class="nav-number">1.</span> <span class="nav-text">0xFF 写在前面</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

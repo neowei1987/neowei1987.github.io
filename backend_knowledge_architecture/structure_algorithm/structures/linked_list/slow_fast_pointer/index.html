@@ -5,27 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 5.2.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
   <meta http-equiv="Cache-Control" content="no-transform">
   <meta http-equiv="Cache-Control" content="no-siteapp">
 
-<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/blog/css/main.css">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/blog/lib/font-awesome/css/all.min.css">
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"www.b5mang.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"neowei1987.github.io","root":"/blog/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="链表快慢指针相关经典题目    题目分类 题目名称 考察点 其他说明      排序链表删除重复节点 哨兵、双指针    链表中环的入口 双指针之快慢指针    链表倒数第K个节点 双指针之快慢指针    两个链表的公共节点 双指针之快慢指针">
 <meta property="og:type" content="article">
 <meta property="og:title" content="链表-快慢指针">
-<meta property="og:url" content="http://www.b5mang.com/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/index.html">
+<meta property="og:url" content="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/index.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
 <meta property="og:description" content="链表快慢指针相关经典题目    题目分类 题目名称 考察点 其他说明      排序链表删除重复节点 哨兵、双指针    链表中环的入口 双指针之快慢指针    链表倒数第K个节点 双指针之快慢指针    两个链表的公共节点 双指针之快慢指针">
 <meta property="og:locale">
@@ -36,7 +36,7 @@
 <meta property="article:tag" content="快慢指针">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://www.b5mang.com/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/">
+<link rel="canonical" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/">
 
 
 <script id="page-configurations">
@@ -111,7 +111,7 @@
 
   <div class="site-meta">
 
-    <a href="/" class="brand" rel="start">
+    <a href="/blog/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
       <h1 class="site-title">Neo's Blog</h1>
       <span class="logo-line-after"><i></i></span>
@@ -133,22 +133,22 @@
   <ul id="menu" class="main-menu menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+    <a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+    <a href="/blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+    <a href="/blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+    <a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -207,10 +207,10 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/index.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/index.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
       <meta itemprop="name" content="NeoWei">
       <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
     </span>
@@ -247,11 +247,11 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                  <a href="/blog/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
                 </span>
                   , 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87Offer/" itemprop="url" rel="index"><span itemprop="name">剑指Offer</span></a>
+                  <a href="/blog/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87Offer/" itemprop="url" rel="index"><span itemprop="name">剑指Offer</span></a>
                 </span>
             </span>
 
@@ -264,8 +264,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/index.html" itemprop="commentCount"></span>
+    <a title="valine" href="/blog/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/blog/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/index.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -329,13 +329,13 @@
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="http://www.b5mang.com/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/entryNodeOfLoop.html">链表系列-链表环入口</a></li>
+            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/entryNodeOfLoop.html">链表系列-链表环入口</a></li>
         
-            <li><a href="http://www.b5mang.com/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/findKthToTail.html">链表系列-链表倒数第K个节点</a></li>
+            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/findKthToTail.html">链表系列-链表倒数第K个节点</a></li>
         
-            <li><a href="http://www.b5mang.com/backend_knowledge_architecture/structure_algorithm/structures/linked_list/reverse/reverseList.html">链表系列-链表反转</a></li>
+            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/linked_list/reverse/reverseList.html">链表系列-链表反转</a></li>
         
-            <li><a href="http://www.b5mang.com/backend_knowledge_architecture/structure_algorithm/structures/linked_list/reverse/reverse_to_array.html">链表系列-链表逆序打印到数组</a></li>
+            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/linked_list/reverse/reverse_to_array.html">链表系列-链表逆序打印到数组</a></li>
         
     </ul>
      
@@ -357,12 +357,12 @@
   <div id="qr" style="display: none;">
       
       <div style="display: inline-block;">
-        <img src="/images/wechatpay.png" alt="NeoWei WeChat Pay">
+        <img src="/blog/images/wechatpay.png" alt="NeoWei WeChat Pay">
         <p>WeChat Pay</p>
       </div>
       
       <div style="display: inline-block;">
-        <img src="/images/alipay.png" alt="NeoWei Alipay">
+        <img src="/blog/images/alipay.png" alt="NeoWei Alipay">
         <p>Alipay</p>
       </div>
 
@@ -372,8 +372,8 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E9%93%BE%E8%A1%A8/" rel="tag"># 链表</a>
-              <a href="/tags/%E5%BF%AB%E6%85%A2%E6%8C%87%E9%92%88/" rel="tag"># 快慢指针</a>
+              <a href="/blog/tags/%E9%93%BE%E8%A1%A8/" rel="tag"># 链表</a>
+              <a href="/blog/tags/%E5%BF%AB%E6%85%A2%E6%8C%87%E9%92%88/" rel="tag"># 快慢指针</a>
           </div>
 
         
@@ -382,11 +382,11 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/reverse/reverseList.html" rel="prev" title="链表系列-链表反转">
+    <a href="/blog/backend_knowledge_architecture/structure_algorithm/structures/linked_list/reverse/reverseList.html" rel="prev" title="链表系列-链表反转">
       <i class="fa fa-chevron-left"></i> 链表系列-链表反转
     </a></div>
       <div class="post-nav-item">
-    <a href="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/findKthToTail.html" rel="next" title="链表系列-链表倒数第K个节点">
+    <a href="/blog/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/findKthToTail.html" rel="next" title="链表系列-链表倒数第K个节点">
       链表系列-链表倒数第K个节点 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
@@ -476,20 +476,20 @@
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
+          <a href="/blog/archives/">
         
           <span class="site-state-item-count">325</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/categories/">
+            <a href="/blog/categories/">
           
         <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-            <a href="/tags/">
+            <a href="/blog/tags/">
           
         <span class="site-state-item-count">55</span>
         <span class="site-state-item-name">tags</span></a>
@@ -550,19 +550,19 @@
   </div>
 
   
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
+  <script src="/blog/lib/anime.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.ui.min.js"></script>
 
-<script src="/js/utils.js"></script>
+<script src="/blog/js/utils.js"></script>
 
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/pisces.js"></script>
+<script src="/blog/js/motion.js"></script>
 
 
-<script src="/js/next-boot.js"></script>
+<script src="/blog/js/schemes/pisces.js"></script>
+
+
+<script src="/blog/js/next-boot.js"></script>
 
 
 
@@ -598,7 +598,7 @@
 
 
   
-<script src="/js/local-search.js"></script>
+<script src="/blog/js/local-search.js"></script>
 
 
 

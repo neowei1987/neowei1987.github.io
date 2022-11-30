@@ -5,27 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 5.2.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
   <meta http-equiv="Cache-Control" content="no-transform">
   <meta http-equiv="Cache-Control" content="no-siteapp">
 
-<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/blog/css/main.css">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/blog/lib/font-awesome/css/all.min.css">
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"www.b5mang.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"neowei1987.github.io","root":"/blog/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="0xFF 写在前面之前总有一些年轻人问我，我应该了解哪些知识才能像某某某那么牛B。这句话的意思其实就是：他们特别困惑，想知道一个后端程序员的知识体系，想知道从哪开始学起。 关于这个问题，琢磨了好久，我不想简单的一句话就敷衍过去了，这个问题我要深思熟虑去回答。因为如果 10 年前有人告诉我这个问题的答案，现在的我将少走很多的弯路，技术水平也会更上一层楼。 简单说一下全文的结构，全文一共分为四大部分。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="聊聊后端程序员的知识体系-第一篇">
-<meta property="og:url" content="http://www.b5mang.com/backend_knowledge_architecture/knowledge.html">
+<meta property="og:url" content="https://neowei1987.github.io/backend_knowledge_architecture/knowledge.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
 <meta property="og:description" content="0xFF 写在前面之前总有一些年轻人问我，我应该了解哪些知识才能像某某某那么牛B。这句话的意思其实就是：他们特别困惑，想知道一个后端程序员的知识体系，想知道从哪开始学起。 关于这个问题，琢磨了好久，我不想简单的一句话就敷衍过去了，这个问题我要深思熟虑去回答。因为如果 10 年前有人告诉我这个问题的答案，现在的我将少走很多的弯路，技术水平也会更上一层楼。 简单说一下全文的结构，全文一共分为四大部分。">
 <meta property="og:locale">
@@ -82,7 +82,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://cdn.b5mang.com/20201211221553.png">
 
-<link rel="canonical" href="http://www.b5mang.com/backend_knowledge_architecture/knowledge.html">
+<link rel="canonical" href="https://neowei1987.github.io/backend_knowledge_architecture/knowledge.html">
 
 
 <script id="page-configurations">
@@ -157,7 +157,7 @@
 
   <div class="site-meta">
 
-    <a href="/" class="brand" rel="start">
+    <a href="/blog/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
       <h1 class="site-title">Neo's Blog</h1>
       <span class="logo-line-after"><i></i></span>
@@ -179,22 +179,22 @@
   <ul id="menu" class="main-menu menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+    <a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+    <a href="/blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+    <a href="/blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+    <a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -253,10 +253,10 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/knowledge.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/knowledge.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
       <meta itemprop="name" content="NeoWei">
       <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
     </span>
@@ -301,8 +301,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/knowledge.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/knowledge.html" itemprop="commentCount"></span>
+    <a title="valine" href="/blog/backend_knowledge_architecture/knowledge.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/blog/backend_knowledge_architecture/knowledge.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -1496,13 +1496,13 @@
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="http://www.b5mang.com/backend_knowledge_architecture/structure_algorithm/algorithm/dp/reg_match.html">字符串正则匹配</a></li>
+            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/reg_match.html">字符串正则匹配</a></li>
         
-            <li><a href="http://www.b5mang.com/backend_knowledge_architecture/structure_algorithm/structures/queue/mono_queue/slding_window_max.html">单调队列系列-滑动窗口的最大值</a></li>
+            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/queue/mono_queue/slding_window_max.html">单调队列系列-滑动窗口的最大值</a></li>
         
-            <li><a href="http://www.b5mang.com/core/%E8%BF%90%E8%90%A5%E5%8A%9B/user_keep.html">用户留存</a></li>
+            <li><a href="https://neowei1987.github.io/core/%E8%BF%90%E8%90%A5%E5%8A%9B/user_keep.html">用户留存</a></li>
         
-            <li><a href="http://www.b5mang.com/core/product/burying_point.html">产品埋点</a></li>
+            <li><a href="https://neowei1987.github.io/core/product/burying_point.html">产品埋点</a></li>
         
     </ul>
      
@@ -1524,12 +1524,12 @@
   <div id="qr" style="display: none;">
       
       <div style="display: inline-block;">
-        <img src="/images/wechatpay.png" alt="NeoWei WeChat Pay">
+        <img src="/blog/images/wechatpay.png" alt="NeoWei WeChat Pay">
         <p>WeChat Pay</p>
       </div>
       
       <div style="display: inline-block;">
-        <img src="/images/alipay.png" alt="NeoWei Alipay">
+        <img src="/blog/images/alipay.png" alt="NeoWei Alipay">
         <p>Alipay</p>
       </div>
 
@@ -1539,7 +1539,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E7%9F%A5%E8%AF%86%E4%BD%93%E7%B3%BB/" rel="tag"># 知识体系</a>
+              <a href="/blog/tags/%E7%9F%A5%E8%AF%86%E4%BD%93%E7%B3%BB/" rel="tag"># 知识体系</a>
           </div>
 
         
@@ -1548,11 +1548,11 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/core/%E8%BF%90%E8%90%A5%E5%8A%9B/user_keep.html" rel="prev" title="用户留存">
+    <a href="/blog/core/%E8%BF%90%E8%90%A5%E5%8A%9B/user_keep.html" rel="prev" title="用户留存">
       <i class="fa fa-chevron-left"></i> 用户留存
     </a></div>
       <div class="post-nav-item">
-    <a href="/backend_knowledge_architecture/structure_algorithm/structures/queue/mono_queue/slding_window_max.html" rel="next" title="单调队列系列-滑动窗口的最大值">
+    <a href="/blog/backend_knowledge_architecture/structure_algorithm/structures/queue/mono_queue/slding_window_max.html" rel="next" title="单调队列系列-滑动窗口的最大值">
       单调队列系列-滑动窗口的最大值 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
@@ -1642,20 +1642,20 @@
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
+          <a href="/blog/archives/">
         
           <span class="site-state-item-count">325</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/categories/">
+            <a href="/blog/categories/">
           
         <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-            <a href="/tags/">
+            <a href="/blog/tags/">
           
         <span class="site-state-item-count">55</span>
         <span class="site-state-item-name">tags</span></a>
@@ -1716,19 +1716,19 @@
   </div>
 
   
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
+  <script src="/blog/lib/anime.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.ui.min.js"></script>
 
-<script src="/js/utils.js"></script>
+<script src="/blog/js/utils.js"></script>
 
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/pisces.js"></script>
+<script src="/blog/js/motion.js"></script>
 
 
-<script src="/js/next-boot.js"></script>
+<script src="/blog/js/schemes/pisces.js"></script>
+
+
+<script src="/blog/js/next-boot.js"></script>
 
 
 
@@ -1764,7 +1764,7 @@
 
 
   
-<script src="/js/local-search.js"></script>
+<script src="/blog/js/local-search.js"></script>
 
 
 

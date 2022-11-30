@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.b5mang.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="如何才能更好地理解秒杀系统呢？ 一个秒杀系统的架构，包括CDN，反向代理，session共享，由于分布式数据库我不熟，所以数据一致性那部分没有解决。  主要技术点： （1）缓存 （2）独立秒杀系统、独立集群 （3）验证系统，防秒杀器  主要技术点： （1）动静分离 （2）本地缓存 （3）热点隔离 权衡点：要想获得极致性能，必然会牺牲通用型、易用性等 动静分离“动态数据”和“静态数据”的主要区别就是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常见系统设计题系列-秒杀系统">
+<meta property="og:url" content="http://www.b5mang.com/backend_knowledge_architecture/system_design/second_kill.html">
+<meta property="og:site_name" content="Neo&#39;s Blog">
+<meta property="og:description" content="如何才能更好地理解秒杀系统呢？ 一个秒杀系统的架构，包括CDN，反向代理，session共享，由于分布式数据库我不熟，所以数据一致性那部分没有解决。  主要技术点： （1）缓存 （2）独立秒杀系统、独立集群 （3）验证系统，防秒杀器  主要技术点： （1）动静分离 （2）本地缓存 （3）热点隔离 权衡点：要想获得极致性能，必然会牺牲通用型、易用性等 动静分离“动态数据”和“静态数据”的主要区别就是">
+<meta property="og:locale">
+<meta property="og:image" content="http://cdn.b5mang.com/2021319231635.png">
+<meta property="og:image" content="http://cdn.b5mang.com/2021319231913.png">
+<meta property="og:image" content="http://cdn.b5mang.com/2021319233932.png">
+<meta property="og:image" content="http://cdn.b5mang.com/2021319234014.png">
+<meta property="og:image" content="http://cdn.b5mang.com/2021319234237.png">
+<meta property="og:image" content="http://cdn.b5mang.com/2021319235220.png">
+<meta property="og:image" content="http://cdn.b5mang.com/20213200139.png">
+<meta property="og:image" content="http://cdn.b5mang.com/202132003655.png">
+<meta property="article:published_time" content="2021-01-19T05:20:03.000Z">
+<meta property="article:modified_time" content="2022-02-25T07:22:12.818Z">
+<meta property="article:author" content="NeoWei">
+<meta property="article:tag" content="后端开发知识体系,知识体系构建,刷题技巧,本质思考">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://cdn.b5mang.com/2021319231635.png">
+
+<link rel="canonical" href="http://www.b5mang.com/backend_knowledge_architecture/system_design/second_kill.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.css"><style>
+#needsharebutton-postbottom {
+  cursor: pointer;
+  height: 26px;
+  margin-top: 10px;
+  position: relative;
+}
+#needsharebutton-postbottom .btn {
+  border: 1px solid $btn-default-border-color;
+  border-radius: 3px;
+  display: initial;
+  padding: 1px 4px;
+}
+</style>
+  <title>常见系统设计题系列-秒杀系统 | Neo's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Neo's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不抽象就无法深入思考<br>不还原就看不到本来面目!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+		<div id="container">
+		  <div class="content post posts-expand">
+		    
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/system_design/second_kill.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          常见系统设计题系列-秒杀系统
+        </h1>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-19 13:20:03" itemprop="dateCreated datePublished" datetime="2021-01-19T13:20:03+08:00">2021-01-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-02-25 15:22:12" itemprop="dateModified" datetime="2022-02-25T15:22:12+08:00">2022-02-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">系统设计</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/system_design/second_kill.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/system_design/second_kill.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>如何才能更好地理解秒杀系统呢？</p>
+<p>一个秒杀系统的架构，包括CDN，反向代理，session共享，由于分布式数据库我不熟，所以数据一致性那部分没有解决。</p>
+<p><img src="http://cdn.b5mang.com/2021319231635.png" alt="10wQPS量级架构"></p>
+<p>主要技术点：</p>
+<p>（1）缓存</p>
+<p>（2）独立秒杀系统、独立集群</p>
+<p>（3）验证系统，防秒杀器</p>
+<p><img src="http://cdn.b5mang.com/2021319231913.png" alt="100wQPS量级架构"></p>
+<p>主要技术点：</p>
+<p>（1）动静分离</p>
+<p>（2）本地缓存</p>
+<p>（3）热点隔离</p>
+<p>权衡点：要想获得极致性能，必然会牺牲通用型、易用性等</p>
+<h4 id="动静分离"><a href="#动静分离" class="headerlink" title="动静分离"></a>动静分离</h4><p>“动态数据”和“静态数据”的主要区别就是看页面中输出的数据是否和 URL、浏览者、时间、地域相关，以及是否含有 Cookie 等私密数据</p>
+<p>第一，你应该把静态数据缓存到离用户最近的地方。</p>
+<p>第二，静态化改造就是要直接缓存 HTTP 连接。</p>
+<p>第三，让谁来缓存静态数据也很重要。（一般是web服务器来做，而不是应用服务器）</p>
+<p>URL 唯一化；分离浏览者相关的因素；分离时间因素；异步化地域因素；去掉 Cookie</p>
+<p>动态内容的处理通常有两种方案：ESI（Edge Side Includes）、CSI（Client Side Include）</p>
+<p><img src="http://cdn.b5mang.com/2021319233932.png" alt="实体机单机部署方案"></p>
+<p>Cache 分成若干组，是希望能达到命中率和访问热点的平衡。Hash 分组越少，缓存的命中率肯定就会越高，但短板是也会使单个商品集中在一个分组中，容易导致 Cache 被击穿，所以我们应该适当增加多个相同的分组，来平衡访问热点和命中率的问题。</p>
+<p>不容易运维；浪费CPU</p>
+<p><img src="http://cdn.b5mang.com/2021319234014.png" alt="统一Cache 层"></p>
+<p>网卡瓶颈、丢失数据</p>
+<p><img src="http://cdn.b5mang.com/2021319234237.png" alt="CDN部署"></p>
+<p>CDN：失效问题、命中率问题、发布更新问题</p>
+<p>二级cache是指cdn设置了多级回源机制，就是如果缓存没有命中再到二级缓存中去取，而不是直接回服务端来请求。本质是减少回源的请求量</p>
+<h4 id="二八原则：有针对性地处理好系统的“热点数据”"><a href="#二八原则：有针对性地处理好系统的“热点数据”" class="headerlink" title="二八原则：有针对性地处理好系统的“热点数据”"></a>二八原则：有针对性地处理好系统的“热点数据”</h4><p>热点：热点操作（读操作、写操作）、热点数据（静态热点数据、动态热点数据）</p>
+<p>热点发现：对于静态热点（人工标识、大数据统计计算），以及实时热点发现方案</p>
+<p><img src="http://cdn.b5mang.com/2021319235220.png" alt="动态热点发现系统"></p>
+<p>热点处理：</p>
+<p>（1）优化：缓存、LRU</p>
+<p>（2）限制：hash分桶，避免相互影响</p>
+<p>（3）隔离：从上到下三个层次，业务隔离、系统隔离、数据隔离</p>
+<h4 id="流量削峰"><a href="#流量削峰" class="headerlink" title="流量削峰"></a>流量削峰</h4><p>常见做法：</p>
+<p>（1）排队-对发出来的请求进行缓冲（消息队列、文件缓存、内存队列、线程池加锁等）</p>
+<p>（2）答题-少发请求（两个功效：防止秒杀器；延缓请求，将请求峰值按照时间分片-从1s延长到2~10s）</p>
+<p>（3）分层过滤-不符合条件的请求进行过滤（交易性的写请求）</p>
+<p><img src="http://cdn.b5mang.com/20213200139.png" alt="分层过滤"></p>
+<p>分层校验的目的是：在读系统中，尽量减少由于一致性校验带来的系统瓶颈，但是尽量将不影响性能的检查条件提前，如用户是否具有秒杀资格、商品状态是否正常、用户答题是否正确、秒杀是否已经结束、是否非法请求、营销等价物是否充足等；在写数据系统中，主要对写的数据（如“库存”）做一致性检查，最后在数据库层保证数据的最终准确性（如“库存”不能减为负数）。</p>
+<h4 id="极致优化"><a href="#极致优化" class="headerlink" title="极致优化"></a>极致优化</h4><p>首先是“发现短板”，比如考虑以下因素的一些限制：光速（光速：C = 30 万千米 / 秒；光纤：V = C/1.5=20 万千米 / 秒，即数据传输是有物理距离的限制的）、网速（2017 年 11 月知名测速网站 Ookla 发布报告，全国平均上网带宽达到 61.24 Mbps，千兆带宽下 10KB 数据的极限 QPS 为 1.25 万 QPS=1000Mbps/8/10KB）、网络结构（交换机 / 网卡的限制）、TCP/IP、虚拟机（内存 /CPU/IO 等资源的限制）和应用本身的一些瓶颈等。</p>
+<p>其次是减少数据。事实上，有两个地方特别影响性能，一是服务端在处理数据时不可避免地存在字符到字节的相互转化，二是 HTTP 请求时要做 Gzip 压缩，还有网络传输的耗时，这些都和数据大小密切相关。</p>
+<p>再次，就是数据分级，也就是要保证首屏为先、重要信息为先，次要信息则异步加载，以这种方式提升用户获取数据的体验。</p>
+<p>最后就是要减少中间环节，减少字符到字节的转换，增加预处理（提前做字符到字节的转换）去掉不需要的操作。</p>
+<p>此外，要做好优化，你还需要做好应用基线，比如性能基线（何时性能突然下降）、成本基线（去年双 11 用了多少台机器）、链路基线（我们的系统发生了哪些变化），你可以通过这些基线持续关注系统的性能，做到在代码上提升编码质量，在业务上改掉不合理的调用，在架构和调用链路上不断的改进。</p>
+<h4 id="防超卖"><a href="#防超卖" class="headerlink" title="防超卖"></a>防超卖</h4><p>减库存的三种时机：</p>
+<p>（1）下单后</p>
+<p>优点：体验好，不超买</p>
+<p>不足：恶意下单</p>
+<p>（2）支付后</p>
+<p>优点：不会被人恶意刷单</p>
+<p>不足：存在付款后超卖的情况</p>
+<p>（3）预扣库存（为用户保留一段时间）</p>
+<p>优点：一定程度上缓解上面的问题</p>
+<p>不足：没有根治，需要结合风控策略来综合考虑</p>
+<p>解决大并发读问题，可以采用 LocalCache（即在秒杀系统的单机上缓存商品相关的数据）和对数据进行分层过滤的方式。</p>
+<p>像减库存这种大并发写无论如何还是避免不了，这也是秒杀场景下最为核心的一个技术难题</p>
+<p>一般的电商系统，通常采用第三种减库存的方式；</p>
+<p>而对于秒杀系统，我们更多的采用第一种方式。原因在于：</p>
+<p>（1）秒杀系统的商品对库存都有比较严格的管控</p>
+<p>（2）下单后不支付的概率比较小</p>
+<p>秒杀商品和普通商品的减库存还是有些差异的，例如商品数量比较少，交易时间段也比较短，因此这里有一个大胆的假设，即能否把秒杀商品减库存直接放到缓存系统中实现，也就是直接在缓存中减库存或者在一个带有持久化功能的缓存系统（如 Redis）中完成呢？</p>
+<p>应用层做排队。按照商品维度设置队列顺序执行，这样能减少同一台机器对数据库同一行记录进行操作的并发度，同时也能控制单个商品占用数据库连接的数量，防止热点商品占用太多的数据库连接。</p>
+<p>数据库层做排队。应用层只能做到单机的排队，但是应用机器数本身很多，这种排队方式控制并发的能力仍然有限，所以如果能在数据库层做全局排队是最理想的。阿里的数据库团队开发了针对这种 MySQL 的 InnoDB 层上的补丁程序（patch），可以在数据库层上对单行记录做到并发排队。</p>
+<p>在活动开始之前一段时间，把商品库存放在Redis中。</p>
+<p>手段：通过Redis来抗，Lua脚本来完成CAS操作</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.yuque.com/chenboxue/kb/gmy24m">https://www.yuque.com/chenboxue/kb/gmy24m</a></p>
+<h4 id="高可用建设"><a href="#高可用建设" class="headerlink" title="高可用建设"></a>高可用建设</h4><p><img src="http://cdn.b5mang.com/202132003655.png" alt="高可用建设"></p>
+<p>运行时：<br>体验降级：牺牲了一部分次要的功能和用户的体验效果<br>限流<br>拒绝服务，避免打死长时间无法恢复<br>熔断</p>
+<p>网站的高可用建设是基础，可以说要深入到各个环节，更要长期规划并进行体系化建设，要在预防（建立常态的压力体系，例如上线前的单机压测到上线后的全链路压测）、管控（做好线上运行时的降级、限流和兜底保护）、监控（建立性能基线来记录性能的变化趋势以及线上机器的负载报警体系，发现问题及时预警）和恢复体系（遇到故障要及时止损，并提供快速的数据订正工具等）等这些地方加强建设，每一个环节可能都有很多事情要做。</p>
+<h2 id="设计难点"><a href="#设计难点" class="headerlink" title="设计难点"></a>设计难点</h2><p>解决秒杀这种特定业务场景，可以使用 CDN 的边缘结点来扛流量，然后过滤用户请求（限流用户请求），来保护数据中心的系统，这样才让整个秒杀得以顺利进行。</p>
+<a id="more"></a>
+<h3 id="高并发问题"><a href="#高并发问题" class="headerlink" title="高并发问题"></a>高并发问题</h3><p>限流：前端限流、后端限流</p>
+<p>异步化：要确保进入队列的购买请求一定能处理成功！</p>
+<h3 id="防恶意请求"><a href="#防恶意请求" class="headerlink" title="防恶意请求"></a>防恶意请求</h3><p>目的：防止被黑产盯上之后通过脚本来请求服务端</p>
+<p>解决方案：动态获取秒杀地址</p>
+
+    </div>
+
+    
+    
+    
+
+    
+      <div>
+        <div class="recommended_posts">
+    
+    
+    <h1>Recommended Posts </h1>
+    <ul>
+        
+            <li><a href="http://www.b5mang.com/backend_knowledge_architecture/system_design/kv_ttl.html">常见系统设计题系列- 带TTL的KV存储</a></li>
+        
+            <li><a href="http://www.b5mang.com/backend_knowledge_architecture/system_design/push.html">常见系统设计题系列-推送系统</a></li>
+        
+            <li><a href="http://www.b5mang.com/backend_knowledge_architecture/system_design/tiny_url.html">常见系统设计题系列-短网址系统</a></li>
+        
+            <li><a href="http://www.b5mang.com/backend_knowledge_architecture/system_design/lottery.html">常见系统设计题系列-抽奖系统</a></li>
+        
+    </ul>
+     
+</div> 
+
+      </div>
+    <div class="post-widgets">
+      <div id="needsharebutton-postbottom">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    </div>
+        <div class="reward-container">
+  <div>你的支持是我坚持的最大动力!</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="NeoWei WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="NeoWei Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/backend_knowledge_architecture/system_design/tiny_url.html" rel="prev" title="常见系统设计题系列-短网址系统">
+      <i class="fa fa-chevron-left"></i> 常见系统设计题系列-短网址系统
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/backend_knowledge_architecture/system_design/push.html" rel="next" title="常见系统设计题系列-推送系统">
+      常见系统设计题系列-推送系统 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+		  </div>
+		  
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+		  
+<script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+<script>
+    const btw = new BTWPlugin();
+
+    btw.init({
+        id: 'container',
+        blogId: '22171-1589640164808-286',
+        name: '第一性原理思考者',
+        qrcode: 'http://cdn.b5mang.com/img_first.png',
+        keyword: '思考',
+    });
+</script>
+
+
+		</div>
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A8%E9%9D%99%E5%88%86%E7%A6%BB"><span class="nav-number">1.</span> <span class="nav-text">动静分离</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E5%85%AB%E5%8E%9F%E5%88%99%EF%BC%9A%E6%9C%89%E9%92%88%E5%AF%B9%E6%80%A7%E5%9C%B0%E5%A4%84%E7%90%86%E5%A5%BD%E7%B3%BB%E7%BB%9F%E7%9A%84%E2%80%9C%E7%83%AD%E7%82%B9%E6%95%B0%E6%8D%AE%E2%80%9D"><span class="nav-number">2.</span> <span class="nav-text">二八原则：有针对性地处理好系统的“热点数据”</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%81%E9%87%8F%E5%89%8A%E5%B3%B0"><span class="nav-number">3.</span> <span class="nav-text">流量削峰</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%81%E8%87%B4%E4%BC%98%E5%8C%96"><span class="nav-number">4.</span> <span class="nav-text">极致优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%98%B2%E8%B6%85%E5%8D%96"><span class="nav-number">5.</span> <span class="nav-text">防超卖</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8%E5%BB%BA%E8%AE%BE"><span class="nav-number">6.</span> <span class="nav-text">高可用建设</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E9%9A%BE%E7%82%B9"><span class="nav-number"></span> <span class="nav-text">设计难点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98"><span class="nav-number"></span> <span class="nav-text">高并发问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B2%E6%81%B6%E6%84%8F%E8%AF%B7%E6%B1%82"><span class="nav-number"></span> <span class="nav-text">防恶意请求</span></a></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">NeoWei</p>
+  <div class="site-description" itemprop="description">我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">325</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">NeoWei</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a>
+  </div>
+
+<br>
+<a href="https://beian.miit.gov.cn/" rel="external nofollow noreferrer"  style="color:#f72b07" target="_blank">沪ICP备2020030798号-1</a>
+<br>
+
+        
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1279618438&web_id=1279618438"></script>
+  </div>
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.js"></script>
+  <script>
+      pbOptions = {};
+        pbOptions.iconStyle = "box";
+        pbOptions.boxForm = "horizontal";
+        pbOptions.position = "bottomCenter";
+        pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+  </script>
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'uE8T6jDhH4vW6BtH143y72nw-gzGzoHsz',
+      appKey     : '3xulfIcqN5mLqRSxptxvnamK',
+      placeholder: "Just go go",
+      avatar     : 'identicon',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

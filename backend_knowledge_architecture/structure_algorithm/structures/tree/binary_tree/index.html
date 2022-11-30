@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.b5mang.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="关于二叉树，你一定要知道的 Q：二叉树遍历  A: 作为图的一种简单形式，树也有两种遍历方式：广度优先、深度优先；广度优先的话，即对应二叉树的按层次遍历；深度优先的话，我们可以按照中间节点的访问顺序， 进一步分为先序遍历（中、左、右）、中序遍历（左、中、右）、后序遍历（左、右、中）。  Q：二叉树的层次遍历（BFS遍历）  A: 通常我们借助队列（queue)来辅助完成分层遍历。 还有某些情况，我">
+<meta property="og:type" content="article">
+<meta property="og:title" content="二叉树系列-二叉树常用套路汇总&amp;必知必会">
+<meta property="og:url" content="http://www.b5mang.com/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/index.html">
+<meta property="og:site_name" content="Neo&#39;s Blog">
+<meta property="og:description" content="关于二叉树，你一定要知道的 Q：二叉树遍历  A: 作为图的一种简单形式，树也有两种遍历方式：广度优先、深度优先；广度优先的话，即对应二叉树的按层次遍历；深度优先的话，我们可以按照中间节点的访问顺序， 进一步分为先序遍历（中、左、右）、中序遍历（左、中、右）、后序遍历（左、右、中）。  Q：二叉树的层次遍历（BFS遍历）  A: 通常我们借助队列（queue)来辅助完成分层遍历。 还有某些情况，我">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-01-13T05:47:03.000Z">
+<meta property="article:modified_time" content="2022-03-03T11:40:16.207Z">
+<meta property="article:author" content="NeoWei">
+<meta property="article:tag" content="二叉树">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.b5mang.com/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.css"><style>
+#needsharebutton-postbottom {
+  cursor: pointer;
+  height: 26px;
+  margin-top: 10px;
+  position: relative;
+}
+#needsharebutton-postbottom .btn {
+  border: 1px solid $btn-default-border-color;
+  border-radius: 3px;
+  display: initial;
+  padding: 1px 4px;
+}
+</style>
+  <title>二叉树系列-二叉树常用套路汇总&必知必会 | Neo's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Neo's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不抽象就无法深入思考<br>不还原就看不到本来面目!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+		<div id="container">
+		  <div class="content post posts-expand">
+		    
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          二叉树系列-二叉树常用套路汇总&必知必会
+        </h1>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-13 13:47:03" itemprop="dateCreated datePublished" datetime="2021-01-13T13:47:03+08:00">2021-01-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-03 19:40:16" itemprop="dateModified" datetime="2022-03-03T19:40:16+08:00">2022-03-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="关于二叉树，你一定要知道的"><a href="#关于二叉树，你一定要知道的" class="headerlink" title="关于二叉树，你一定要知道的"></a>关于二叉树，你一定要知道的</h2><ul>
+<li>Q：二叉树遍历</li>
+</ul>
+<p>A: 作为图的一种简单形式，树也有两种遍历方式：广度优先、深度优先；广度优先的话，即对应二叉树的按层次遍历；深度优先的话，我们可以按照中间节点的访问顺序， 进一步分为先序遍历（中、左、右）、中序遍历（左、中、右）、后序遍历（左、右、中）。</p>
+<ul>
+<li>Q：二叉树的层次遍历（BFS遍历）</li>
+</ul>
+<p>A: 通常我们借助队列（queue)来辅助完成分层遍历。 还有某些情况，我们需要了解到每一个节点的深度（也就是位于第几层）。对于这种要求，我在下面的代码模版中给出了一种解决方案，供参考。</p>
+<a id="more"></a>
+<ul>
+<li>Q：二叉树的常规遍历（DFS遍历）</li>
+</ul>
+<p>A: 如前面所讲，常规遍历分为前中后序三种；实现的话，又分为递归版本和迭代版本。具体可以参考下面的代码。</p>
+<ul>
+<li>Q: 二叉树的遍历（前中后序遍历、层次遍历）与图的遍历（DFS、BFS）的联系与区别</li>
+</ul>
+<p>A: 联系在于二叉树遍历是图遍历的一种简化形式；区别在于，tree的遍历不需要st来保存访问状态，不需要通过遍历的方式来访问相邻节点，直接通过left、right即可。</p>
+<ul>
+<li>Q: 回溯是什么？回溯一般用递归来实现，那如果有递归，一定会回溯吗？</li>
+</ul>
+<p>A: 关于回溯是什么，这里不展开讨论，后续会有专门文章来细讲。</p>
+<p>我们尝试着来回答第二个问题：有递归是否一定会有回溯。首先<strong>递归是一种算法结构</strong>，<strong>回溯是一种思想</strong>，一种通过枚举解空间来找到最优解的问题解决套路，两者本质是不同的，自然也就<strong>没有有递归一定有回溯</strong>的说法。</p>
+<p>例如，我通过递归来解决斐波那契数列数列的计算问题，$f(n)=f(n-1) + f(n-2)$ ，这里是有递归发生的，但完全不涉及回溯算法中保存现场、还原现场这些概念。</p>
+<ul>
+<li>Q: 为什么二叉树的遍历过程中我感觉不到回溯？</li>
+</ul>
+<p>A: 这里我给出的答案是，“感觉不到有两方面原因：第一，感觉不到是由于实际上就没有发生回溯；第二，感觉不到是由于在回溯前后使用的是局部变量，系统自动帮我们进行了现场的保存与还原”。</p>
+<p>在遍历二叉树时是否发生回溯，取决于我们解决问题的视角。如果我们是从子问题视角去解决问题，那么我们大概是看不到回溯的影子的。</p>
+<p>但如果我们是从遍历整个树的视角去解决问题，那么我们就会看到回溯。</p>
+<ul>
+<li>Q: 二叉树的遍历过程与回溯的联系与区别又是什么？</li>
+</ul>
+<p>A: 我们平常在利用回溯求解问题时，会把问题的解空间想像成一个二叉树或者多叉树，整个回溯的过程就是在进行这个树的遍历。</p>
+<p>所以要说两者的联系的话，我们可以把二叉树遍历当作是回溯的一种实现形式。回溯的代码写出来，都特别类似于我们在遍历一颗多叉树。</p>
+<h2 id="二叉树相关的代码模版"><a href="#二叉树相关的代码模版" class="headerlink" title="二叉树相关的代码模版"></a>二叉树相关的代码模版</h2><p>图的DFS一般形式</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">bool</span> st[N]; <span class="comment">//表示某一个节点是否访问过</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> u)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//访问节点u</span></span><br><span class="line">    st[u] = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">for</span> (与节点u相邻的所有节点 x ) &#123;</span><br><span class="line">         <span class="keyword">if</span> (!st[x]) &#123;</span><br><span class="line">             dfs(x);</span><br><span class="line">         &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>多叉树的DFS一般形式（以B树的先序遍历为例）</p>
+<p>与上面图的DFS很像，只是没有用st来记录某个节点是否被访问过。这是为什么呢？因为对于树的访问都是从父亲到孩子，从上到下，所以从来不会重复访问到之前访问过的节点，也就没有必要用st来保存访问状态了。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">TreeNode</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> val;</span><br><span class="line">    TreeNode* children[N];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//访问节点root</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; root-&gt;val &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">for</span> (child in root-&gt;children ) &#123;</span><br><span class="line">        dfs(child);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>树的DFS一般形式(以先序遍历为例)</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">TreeNode</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> val;</span><br><span class="line">    TreeNode* left;</span><br><span class="line">    TreeNode* right;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//访问节点root</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; root-&gt;val &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="comment">//对于最常见的二叉树来说，与root相邻的节点只有左、右两个孩子节点，所以就不用for循环了。</span></span><br><span class="line">    dfs(root-&gt;left);</span><br><span class="line">    dfs(root-&gt;right);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>树的BFS一般形式（仅需按照层的顺序访问到每一个节点即可）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">bfs</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">queue</span>&lt;TreeNode*&gt; q;</span><br><span class="line">    q.push(root);</span><br><span class="line">    <span class="keyword">while</span> (q.size()) &#123;</span><br><span class="line">        <span class="keyword">auto</span> x = q.front(); q.pop();</span><br><span class="line">        <span class="comment">//访问当前节点x</span></span><br><span class="line">        <span class="keyword">if</span> (x-&gt;left) q.push(x-&gt;left);</span><br><span class="line">        <span class="keyword">if</span> (r-&gt;right) q.push(x-&gt;right);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>树的BFS特殊形式（不仅要访问到节点，还要了解到节点的所属层次）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">bfs</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">queue</span>&lt;TreeNode*&gt; q;</span><br><span class="line">    q.push(root);</span><br><span class="line">    <span class="keyword">while</span> (q.size()) &#123;</span><br><span class="line">        <span class="keyword">int</span> n = q.size(); <span class="comment">//注意这里不可以使用q.size()来代替n</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">auto</span> x = q.front(); q.pop();</span><br><span class="line">            <span class="comment">//访问当前节点x</span></span><br><span class="line">            <span class="keyword">if</span> (x-&gt;left) q.push(x-&gt;left);</span><br><span class="line">            <span class="keyword">if</span> (r-&gt;right) q.push(x-&gt;right);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>二叉树的前、中、后序遍历（迭代版本）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pre_dfs</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; root-&gt;val &lt;&lt; <span class="built_in">endl</span>;  <span class="comment">//访问节点root</span></span><br><span class="line">    pre_dfs(root-&gt;left);</span><br><span class="line">    pre_dfs(root-&gt;right);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">in_dfs</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; root-&gt;val &lt;&lt; <span class="built_in">endl</span>;  <span class="comment">//访问节点root</span></span><br><span class="line">    in_dfs(root-&gt;left);</span><br><span class="line">    in_dfs(root-&gt;right);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">post_dfs</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">    post_dfs(root-&gt;left);</span><br><span class="line">    post_dfs(root-&gt;right);</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; root-&gt;val &lt;&lt; <span class="built_in">endl</span>;  <span class="comment">//访问节点root</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>二叉树的前、中、后序遍历（统一非迭代版本）</p>
+<p>如同递归版本一样，非递归版本的代码形式也是完全一致的，区别仅在于节点的压栈顺序不同，特别容易记忆。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pre_travel</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">stack</span>&lt;TreeNode*&gt; s;</span><br><span class="line">    s.push(root);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (s.size()) &#123;</span><br><span class="line">        <span class="keyword">auto</span> x = s.top(); s.pop();</span><br><span class="line">        <span class="keyword">if</span> (x) &#123;</span><br><span class="line">            <span class="comment">//由于是前序遍历，所以节点访问序是：中，左，右；又由于是栈（后进先出），所以入栈顺序是：右、左、中</span></span><br><span class="line">            <span class="keyword">if</span> (x-&gt;right) s.push(x-&gt;right);</span><br><span class="line">            <span class="keyword">if</span> (x-&gt;left) s.push(x-&gt;left);</span><br><span class="line">            s.push(x);</span><br><span class="line">            s.push(<span class="literal">NULL</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;  <span class="comment">//前一个指针是null，说明下一个就是要访问的节点</span></span><br><span class="line">            x = s.top(); s.pop(); </span><br><span class="line">            <span class="built_in">cout</span> &lt;&lt; x-&gt;val &lt;&lt; <span class="built_in">endl</span>;  <span class="comment">//访问节点x</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">in_travel</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">stack</span>&lt;TreeNode*&gt; s;</span><br><span class="line">    s.push(root);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (s.size()) &#123;</span><br><span class="line">        <span class="keyword">auto</span> x = s.top(); s.pop();</span><br><span class="line">        <span class="keyword">if</span> (x) &#123;</span><br><span class="line">            <span class="comment">//由于是中序遍历，所以节点访问序是：左，中，右；又由于是栈（后进先出），所以入栈顺序是：右、中、左</span></span><br><span class="line">            <span class="keyword">if</span> (x-&gt;right) s.push(x-&gt;right);</span><br><span class="line">            s.push(x);</span><br><span class="line">            s.push(<span class="literal">NULL</span>);</span><br><span class="line">            <span class="keyword">if</span> (x-&gt;left) s.push(x-&gt;left);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;  <span class="comment">//前一个指针是null，说明下一个就是要访问的节点</span></span><br><span class="line">            x = s.top(); s.pop(); </span><br><span class="line">            <span class="built_in">cout</span> &lt;&lt; x-&gt;val &lt;&lt; <span class="built_in">endl</span>;  <span class="comment">//访问节点x</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">post_travel</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">stack</span>&lt;TreeNode*&gt; s;</span><br><span class="line">    s.push(root);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (s.size()) &#123;</span><br><span class="line">        <span class="keyword">auto</span> x = s.top(); s.pop();</span><br><span class="line">        <span class="keyword">if</span> (x) &#123;</span><br><span class="line">            <span class="comment">//由于是后序遍历，所以节点访问序是：左，右，中；又由于是栈（后进先出），所以入栈顺序是：中、右、左</span></span><br><span class="line">            s.push(x);</span><br><span class="line">            s.push(<span class="literal">NULL</span>);</span><br><span class="line">            <span class="keyword">if</span> (x-&gt;right) s.push(x-&gt;right);</span><br><span class="line">            <span class="keyword">if</span> (x-&gt;left) s.push(x-&gt;left);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;  <span class="comment">//前一个指针是null，说明下一个就是要访问的节点</span></span><br><span class="line">            x = s.top(); s.pop(); </span><br><span class="line">            <span class="built_in">cout</span> &lt;&lt; x-&gt;val &lt;&lt; <span class="built_in">endl</span>;  <span class="comment">//访问节点x</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//不关心访问顺序，仅需要每一个节点能够访问到（也就是前序遍历）</span></span><br><span class="line"> <span class="function"><span class="keyword">void</span> <span class="title">no_care_travel</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">stack</span>&lt;TreeNode*&gt; s;</span><br><span class="line">    s.push(root);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (s.size()) &#123;</span><br><span class="line">        <span class="keyword">auto</span> x = s.top(); s.pop();</span><br><span class="line">        <span class="keyword">if</span> (x) &#123;</span><br><span class="line">            <span class="comment">//visit x directly</span></span><br><span class="line">            <span class="keyword">if</span> (x-&gt;right) s.push(x-&gt;right);</span><br><span class="line">            <span class="keyword">if</span> (x-&gt;left) s.push(x-&gt;left);</span><br><span class="line">        &#125; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>树的深度求解（递归子问题的视角）</p>
+<p>如果从<strong>递归子问题的视角</strong>来看，为了求得树的深度，我们需要解决两个子问题：左右子树的深度分别是多少。在解决了这两个子问题之后，总的问题的解就等于 1 + max(left_depth, right_depth) 了。</p>
+<p>从这个视角来看，确实是没有回溯发生的。具体代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">treeDepth</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (!root) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">      <span class="keyword">int</span> left_depth = treeDepth(root-&gt;right);</span><br><span class="line">      <span class="keyword">int</span> right_depth = treeDepth(root-&gt;left);</span><br><span class="line">      <span class="keyword">return</span> <span class="number">1</span> + max(left_depth, right_depth);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>树的深度求解（二叉树遍历的视角）</p>
+<p>如果从二叉树遍历的视角来看呢， 我为了求得树的深度，我需要<strong>访问到所有的叶子节点</strong>，并记录下每一个叶子节点的深度，然后与当前的最大深度去比较。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">int</span> result;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">getDepth</span><span class="params">(TreeNode* node, <span class="keyword">int</span> depth)</span> </span>&#123;</span><br><span class="line">        result = depth &gt; result ? depth : result; <span class="comment">// 中</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (node-&gt;left == <span class="literal">NULL</span> &amp;&amp; node-&gt;right == <span class="literal">NULL</span>) <span class="keyword">return</span> ;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (node-&gt;left) &#123; <span class="comment">// 左</span></span><br><span class="line">            depth++;    <span class="comment">// 深度+1</span></span><br><span class="line">            getDepth(node-&gt;left, depth);</span><br><span class="line">            depth--;    <span class="comment">// 回溯，深度-1</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (node-&gt;right) &#123; <span class="comment">// 右</span></span><br><span class="line">            depth++;    <span class="comment">// 深度+1</span></span><br><span class="line">            getDepth(node-&gt;right, depth);</span><br><span class="line">            depth--;    <span class="comment">// 回溯，深度-1</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxDepth</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        result = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="number">0</span>) <span class="keyword">return</span> result;</span><br><span class="line">        getDepth(root, <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>树的深度求解（二叉树遍历的视角，局部变量隐藏回溯细节）</p>
+<p>还是上面的思路，但是下面的写法会更加精简，同时也隐藏了回溯细节，让人感觉不到回溯的存在。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">int</span> result;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">getDepth</span><span class="params">(TreeNode* node, <span class="keyword">int</span> depth)</span> </span>&#123;</span><br><span class="line">        result = depth &gt; result ? depth : result; <span class="comment">// 中</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (node-&gt;left == <span class="literal">NULL</span> &amp;&amp; node-&gt;right == <span class="literal">NULL</span>) <span class="keyword">return</span> ;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (node-&gt;left) &#123; <span class="comment">// 左</span></span><br><span class="line">            <span class="comment">//注意：这里depth+1作为一个临时变量传给子节点</span></span><br><span class="line">            getDepth(node-&gt;left, depth + <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (node-&gt;right) &#123; <span class="comment">// 右</span></span><br><span class="line">            getDepth(node-&gt;right, depth + <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxDepth</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        result = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="number">0</span>) <span class="keyword">return</span> result;</span><br><span class="line">        getDepth(root, <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="二叉树相关题目索引"><a href="#二叉树相关题目索引" class="headerlink" title="二叉树相关题目索引"></a>二叉树相关题目索引</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>题目分类</th>
+<th>题目名称</th>
+<th>考察点</th>
+<th>其他说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>二叉树遍历</td>
+<td><a href="./treeDepth.html">获取树的深度</a></td>
+<td></td>
+</tr>
+<tr>
+<td>二叉树遍历</td>
+<td><a href="./lowest_ancestor.html">最低公共祖先</a></td>
+<td></td>
+</tr>
+<tr>
+<td>二叉树遍历</td>
+<td><a href="./mirror.html">二叉树镜像</a></td>
+<td></td>
+</tr>
+<tr>
+<td>二叉树遍历</td>
+<td><a href="./isSymmetric.html">判断二叉树是否对称</a></td>
+<td></td>
+</tr>
+<tr>
+<td>二叉树遍历</td>
+<td><a href="./isBalanced.html">判定是否平衡树</a></td>
+<td></td>
+</tr>
+<tr>
+<td>二叉树遍历</td>
+<td><a href="./hasSubtree.html">二叉树子结构</a></td>
+<td></td>
+</tr>
+<tr>
+<td>二叉树遍历</td>
+<td><a href="./deserialize.html">二叉树的序列化与反序列化</a></td>
+<td>二叉树遍历</td>
+</tr>
+<tr>
+<td>二叉树构建</td>
+<td><a href="pre_in_build.html">根据前序序列与中序序列重建二叉树</a></td>
+<td></td>
+</tr>
+<tr>
+<td>二叉树层次遍历</td>
+<td><a href="./printFromTopToBottom.html">从上往下打印出二叉树的每个结点</a></td>
+<td></td>
+</tr>
+<tr>
+<td>二叉搜索树遍历</td>
+<td><a href="./tree2list.html">二叉搜索树转有序双向链表</a></td>
+<td></td>
+</tr>
+<tr>
+<td>二叉搜索树遍历</td>
+<td><a href="./kthNode.html">获取第k个节点</a></td>
+<td>全局变量技巧</td>
+</tr>
+<tr>
+<td>二叉搜索树遍历</td>
+<td><a href="../verifySequenceOfBST.html">判断该数组是不是某二叉搜索树的后序遍历的结果</a></td>
+<td></td>
+</tr>
+<tr>
+<td>二叉搜索树遍历</td>
+<td><a href="./inorderSuccessor.html">中序遍历序列的下一个节点</a></td>
+<td></td>
+</tr>
+<tr>
+<td>二叉树遍历系列</td>
+<td><a href="./findPathInTree.html">二叉树中结点值的和为输入整数的所有路径</a></td>
+<td></td>
+</tr>
+<tr>
+<td>二叉树遍历系列</td>
+<td><a href="GetMaxDistance.html">求二叉树中节点的最大距离</a></td>
+<td>全局变量技巧</td>
+</tr>
+<tr>
+<td>二叉树遍历系列</td>
+<td><a href="node_path.html">二叉树的路径打印</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+    </div>
+
+    
+    
+    
+
+    
+      <div>
+        <div class="recommended_posts">
+    
+    
+    <h1>Recommended Posts </h1>
+    <ul>
+        
+            <li><a href="http://www.b5mang.com/backend_knowledge_architecture/structure_algorithm/algorithm/back_tracking/has_str_path.html">回溯-矩阵中找字符串</a></li>
+        
+            <li><a href="http://www.b5mang.com/backend_knowledge_architecture/structure_algorithm/algorithm/back_tracking/moving_cnt.html">回溯-机器人移动次数</a></li>
+        
+            <li><a href="http://www.b5mang.com/backend_knowledge_architecture/structure_algorithm/algorithm/bit/index.html">位运算系列-分类索引</a></li>
+        
+            <li><a href="http://www.b5mang.com/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_group.html">动态规划背包问题-分组背包</a></li>
+        
+    </ul>
+     
+</div> 
+
+      </div>
+    <div class="post-widgets">
+      <div id="needsharebutton-postbottom">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    </div>
+        <div class="reward-container">
+  <div>你的支持是我坚持的最大动力!</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="NeoWei WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="NeoWei Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="tag"># 二叉树</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/bit/index.html" rel="prev" title="位运算系列-分类索引">
+      <i class="fa fa-chevron-left"></i> 位运算系列-分类索引
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/back_tracking/moving_cnt.html" rel="next" title="回溯-机器人移动次数">
+      回溯-机器人移动次数 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+		  </div>
+		  
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+		  
+<script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+<script>
+    const btw = new BTWPlugin();
+
+    btw.init({
+        id: 'container',
+        blogId: '22171-1589640164808-286',
+        name: '第一性原理思考者',
+        qrcode: 'http://cdn.b5mang.com/img_first.png',
+        keyword: '思考',
+    });
+</script>
+
+
+		</div>
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E4%BA%8C%E5%8F%89%E6%A0%91%EF%BC%8C%E4%BD%A0%E4%B8%80%E5%AE%9A%E8%A6%81%E7%9F%A5%E9%81%93%E7%9A%84"><span class="nav-number">1.</span> <span class="nav-text">关于二叉树，你一定要知道的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9B%B8%E5%85%B3%E7%9A%84%E4%BB%A3%E7%A0%81%E6%A8%A1%E7%89%88"><span class="nav-number">2.</span> <span class="nav-text">二叉树相关的代码模版</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9B%B8%E5%85%B3%E9%A2%98%E7%9B%AE%E7%B4%A2%E5%BC%95"><span class="nav-number">3.</span> <span class="nav-text">二叉树相关题目索引</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">NeoWei</p>
+  <div class="site-description" itemprop="description">我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">325</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">NeoWei</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a>
+  </div>
+
+<br>
+<a href="https://beian.miit.gov.cn/" rel="external nofollow noreferrer"  style="color:#f72b07" target="_blank">沪ICP备2020030798号-1</a>
+<br>
+
+        
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1279618438&web_id=1279618438"></script>
+  </div>
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.js"></script>
+  <script>
+      pbOptions = {};
+        pbOptions.iconStyle = "box";
+        pbOptions.boxForm = "horizontal";
+        pbOptions.position = "bottomCenter";
+        pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+  </script>
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'uE8T6jDhH4vW6BtH143y72nw-gzGzoHsz',
+      appKey     : '3xulfIcqN5mLqRSxptxvnamK',
+      placeholder: "Just go go",
+      avatar     : 'identicon',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

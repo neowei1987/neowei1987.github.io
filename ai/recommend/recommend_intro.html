@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.b5mang.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="亲爱的读者您好，感谢您在阅读我的文章。出于发布渠道的考虑，我可能在各个渠道更新文章不够及时。因此，如果您喜欢我的文章，想阅读更多我的文字，您可转到我的个人博客或者公众账号阅读文章： 推荐系统产生的三个背景">
+<meta property="og:type" content="article">
+<meta property="og:title" content="推荐系统介绍">
+<meta property="og:url" content="http://www.b5mang.com/ai/recommend/recommend_intro.html">
+<meta property="og:site_name" content="Neo&#39;s Blog">
+<meta property="og:description" content="亲爱的读者您好，感谢您在阅读我的文章。出于发布渠道的考虑，我可能在各个渠道更新文章不够及时。因此，如果您喜欢我的文章，想阅读更多我的文字，您可转到我的个人博客或者公众账号阅读文章： 推荐系统产生的三个背景">
+<meta property="og:locale">
+<meta property="og:image" content="http://graph.baidu.com/resource/22251103dcfcfc1b2c4cf01589605159.png">
+<meta property="article:published_time" content="2020-05-19T06:37:55.000Z">
+<meta property="article:modified_time" content="2022-02-16T13:28:56.698Z">
+<meta property="article:author" content="NeoWei">
+<meta property="article:tag" content="后端开发知识体系,知识体系构建,刷题技巧,本质思考">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://graph.baidu.com/resource/22251103dcfcfc1b2c4cf01589605159.png">
+
+<link rel="canonical" href="http://www.b5mang.com/ai/recommend/recommend_intro.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.css"><style>
+#needsharebutton-postbottom {
+  cursor: pointer;
+  height: 26px;
+  margin-top: 10px;
+  position: relative;
+}
+#needsharebutton-postbottom .btn {
+  border: 1px solid $btn-default-border-color;
+  border-radius: 3px;
+  display: initial;
+  padding: 1px 4px;
+}
+</style>
+  <title>推荐系统介绍 | Neo's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Neo's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不抽象就无法深入思考<br>不还原就看不到本来面目!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+		<div id="container">
+		  <div class="content post posts-expand">
+		    
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/ai/recommend/recommend_intro.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          推荐系统介绍
+        </h1>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-05-19 14:37:55" itemprop="dateCreated datePublished" datetime="2020-05-19T14:37:55+08:00">2020-05-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-02-16 21:28:56" itemprop="dateModified" datetime="2022-02-16T21:28:56+08:00">2022-02-16</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/ai/recommend/recommend_intro.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/ai/recommend/recommend_intro.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>亲爱的读者您好，感谢您在阅读我的文章。<br>出于发布渠道的考虑，我可能在各个渠道更新文章不够及时。<br>因此，如果您喜欢我的文章，想阅读更多我的文字，<br>您可转到我的<a target="_blank" rel="noopener external nofollow noreferrer" href="https://neowei1987.github.io/">个人博客</a>或者公众账号阅读文章：<br><img src="http://graph.baidu.com/resource/22251103dcfcfc1b2c4cf01589605159.png" alt="file"></p>
+<h2 id="推荐系统产生的三个背景"><a href="#推荐系统产生的三个背景" class="headerlink" title="推荐系统产生的三个背景"></a>推荐系统产生的三个背景</h2><a id="more"></a>
+<ol>
+<li>服务“标的物”的种类也越来越多样</li>
+<li>个性喜好，“长尾理论”也很好的解释了多样化物品中的非畅销品可以满足人们多样化的需求，这些需求加起来不一定比热门物品产生的销售额小。</li>
+<li>不同于生存需求，面对非生存需求，人们实际上更愿意接受被动推荐的好的物品， 比如给你推荐一部电影，如果符合你的口味，你可能会很喜欢。</li>
+</ol>
+<h2 id="推荐系统能够解决了什么问题"><a href="#推荐系统能够解决了什么问题" class="headerlink" title="推荐系统能够解决了什么问题"></a>推荐系统能够解决了什么问题</h2><p>从本质上讲，推荐系统提升了信息分发和信息获取的效率。<br>推荐系统本质上是在用户需求不明确的情况下， 从海量的信息中为用户寻找其感兴趣的信息的技术手段。<br>推荐系统结合用户的信息(地域，年龄，性别等)，物品信息(价格，产地等)，以及用户过去对物品的行为(是否购买，是否点击，是否播放等)，利用机器学习技术构建用户兴趣模型，为用户提供精准的个性化推荐。<br>推荐系统很好的满足了“标的物”提供方，平台方，用户三方的需求。</p>
+<h2 id="应用领域"><a href="#应用领域" class="headerlink" title="应用领域"></a>应用领域</h2><p>只要存在大量的“供用户消费的商品”的互联网产品，推荐系统就有用武之地！</p>
+<h2 id="推荐系统的定义"><a href="#推荐系统的定义" class="headerlink" title="推荐系统的定义"></a>推荐系统的定义</h2><p>推荐系统是一项工程技术解决方案，通过利用机器学习等技术，在用户使用产品进行浏览交互的过程中，系统主动为用户展示可能会喜欢的物品，从而促进物品的“消费”，节省用户时间，提升用户体验， 做到资源的优化配置。</p>
+<p>涉及到大量的工程开发，涉及到日志打点、日志收集、ETL、分布式计算、特征工程、推荐算法建模、数据存储、提供接口服务、UI展示与交互、推荐效果评估等各个方面；</p>
+<p>推荐系统是一种为用户提供感兴趣信息的便捷渠道，通过为用户提供信息创造商业价值；推荐系统的本质是通过技术手段将“标的物”与人关联起来，方便人获取对自己有价值的“标的物”。</p>
+<h2 id="常用推荐算法"><a href="#常用推荐算法" class="headerlink" title="常用推荐算法"></a>常用推荐算法</h2><ol>
+<li>基于内容的推荐<br>举个例子：系统分析了某个人的浏览记录，发现他对恐怖电影分类比较感兴趣，系统便推荐更多的恐怖电影给用户。</li>
+<li>协同过滤<br>基于“物以类聚，人以群分”的朴素思想：<br>“人以群分” 基于用户的协同过滤<br>拿看电影这个例子来说，如果你喜欢《蝙蝠侠》、《碟中谍》、《星际穿越》、《源代码》等电影，另外有个人也都喜欢这些电影，而且他还喜欢《钢铁侠》，则很有可能你也喜欢《钢铁侠》这部电影。<br>所以说，当一个用户 A 需要个性化推荐时，可以先找到和他兴趣相似的用户群体 G，然后把 G 喜欢的、并且 A 没有听说过的物品推荐给 A，这就是基于用户的系统过滤算法。<br>具体参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/shixiaoguo90/article/details/80253567">https://blog.csdn.net/shixiaoguo90/article/details/80253567</a><br>“物以类聚” 基于物品的协同过滤<br>当用户表达出对一个物品的喜爱后, 推荐与该物品相似的物品。<br>具体参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.jianshu.com/p/27b1c035b693">https://www.jianshu.com/p/27b1c035b693</a> <a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/qq_40006058/article/details/83385324">https://blog.csdn.net/qq_40006058/article/details/83385324</a></li>
+<li>基于模型的推荐<br>基于用户行为记录，用户相关信息(年龄，性别，地域，消费习惯等)，物品相关信息，构建算法模型，预测用户对物品的偏好，常用的算法有logistic回归，矩阵分解等。</li>
+<li>基于关注关系的推荐</li>
+</ol>
+<h2 id="推荐系统的挑战"><a href="#推荐系统的挑战" class="headerlink" title="推荐系统的挑战"></a>推荐系统的挑战</h2><ol>
+<li><p>推荐系统推荐精准度的问题？</p>
+</li>
+<li><p>冷启动问题： 新用户、新物品没有相关行为信息， 这时系统怎么给用户推荐，怎么将新物品推荐出去， 在推荐系统落地过程中都需要做结合业务场景的特殊处理才能达到好的用户体验；</p>
+</li>
+<li><p>高并发，高可用；</p>
+</li>
+<li><p>数据缺失的问题：现实场景中一定存在用户或者物品的信息不完善，或者部分信息有误，这些也是在构建推荐算法模型过程中必须考虑和解决的问题；</p>
+</li>
+<li><p>非结构化的信息：用户和物品相关的信息有可能是非结构化的信息，比如图片，视频，音频，文本等，怎么高效的利用这些信息，为推荐模型提供更多信息输入， 随着深度学习在推荐系统中大规模运用，这类问题可以得到较好的解决；</p>
+</li>
+<li><p>一些噪音及恶意攻击也会产生大量垃圾数据，对更好的做推荐产生很大的干扰， 怎么很好的保证训练数据的质量，这是ETL和特征工程需要解决的重要问题；</p>
+</li>
+<li><p>大规模计算与存储：大量的用户和大量的物品，对数据处理和计算造成很大的压力，需要采用分布式技术(如Hadoop，Spark等)来做数据存储，处理，计算等， 所以要很好的落地推荐系统需要企业构建一套高效的大数据分析处理平台；</p>
+</li>
+<li><p>实时性：为了给用户提供实时的个性化推荐(如今日头条的新闻推荐等)， 需要实时收集处理用户的反馈，做到更及时精准的推荐，为用户提供强感知的服务。对大规模用户做到实时响应，对算法，计算，处理有相当大的挑战。</p>
+</li>
+<li><p>怎么评估推荐算法的价值：推荐系统怎么服务于业务，怎么衡量推荐系统的价值产出，怎么为推荐系统制定业务指标，通过指标提升推荐系统效果的同时促进业务发展？这些问题都是摆在推荐系统开发人员， 甚至是公司管理者面前的重要问题， 只有很好的度量出推荐系统的价值，才能更好的优化推荐系统，发挥推荐系统的价值。</p>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    
+      <div>
+        <div class="recommended_posts">
+    
+    
+    <h1>Recommended Posts </h1>
+    <ul>
+        
+            <li><a href="http://www.b5mang.com/risk_ctrl/risk_ctrl_summary.html">风控要略-互联网业务反欺诈之路</a></li>
+        
+            <li><a href="http://www.b5mang.com/ai/ml_3.html">机器学习三要素：模型、策略和算法</a></li>
+        
+            <li><a href="http://www.b5mang.com/%E7%A0%94%E5%8F%91%E6%B5%81%E7%A8%8B/maven_site.html">如何为Maven配置国内镜像资源</a></li>
+        
+            <li><a href="http://www.b5mang.com/%E5%BA%95%E5%B1%82%E6%80%9D%E7%BB%B4/gap_thinking.html">跨界思维-各学科核心理论一览</a></li>
+        
+    </ul>
+     
+</div> 
+
+      </div>
+    <div class="post-widgets">
+      <div id="needsharebutton-postbottom">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    </div>
+        <div class="reward-container">
+  <div>你的支持是我坚持的最大动力!</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="NeoWei WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="NeoWei Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/%E5%BA%95%E5%B1%82%E6%80%9D%E7%BB%B4/gap_thinking.html" rel="prev" title="跨界思维-各学科核心理论一览">
+      <i class="fa fa-chevron-left"></i> 跨界思维-各学科核心理论一览
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/%E7%A0%94%E5%8F%91%E6%B5%81%E7%A8%8B/maven_site.html" rel="next" title="如何为Maven配置国内镜像资源">
+      如何为Maven配置国内镜像资源 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+		  </div>
+		  
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+		  
+<script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+<script>
+    const btw = new BTWPlugin();
+
+    btw.init({
+        id: 'container',
+        blogId: '22171-1589640164808-286',
+        name: '第一性原理思考者',
+        qrcode: 'http://cdn.b5mang.com/img_first.png',
+        keyword: '思考',
+    });
+</script>
+
+
+		</div>
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E4%BA%A7%E7%94%9F%E7%9A%84%E4%B8%89%E4%B8%AA%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">推荐系统产生的三个背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E8%83%BD%E5%A4%9F%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">推荐系统能够解决了什么问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E9%A2%86%E5%9F%9F"><span class="nav-number">3.</span> <span class="nav-text">应用领域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">4.</span> <span class="nav-text">推荐系统的定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%8E%A8%E8%8D%90%E7%AE%97%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">常用推荐算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%8C%91%E6%88%98"><span class="nav-number">6.</span> <span class="nav-text">推荐系统的挑战</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">NeoWei</p>
+  <div class="site-description" itemprop="description">我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">325</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">NeoWei</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a>
+  </div>
+
+<br>
+<a href="https://beian.miit.gov.cn/" rel="external nofollow noreferrer"  style="color:#f72b07" target="_blank">沪ICP备2020030798号-1</a>
+<br>
+
+        
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1279618438&web_id=1279618438"></script>
+  </div>
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.js"></script>
+  <script>
+      pbOptions = {};
+        pbOptions.iconStyle = "box";
+        pbOptions.boxForm = "horizontal";
+        pbOptions.position = "bottomCenter";
+        pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+  </script>
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'uE8T6jDhH4vW6BtH143y72nw-gzGzoHsz',
+      appKey     : '3xulfIcqN5mLqRSxptxvnamK',
+      placeholder: "Just go go",
+      avatar     : 'identicon',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

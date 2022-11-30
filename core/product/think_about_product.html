@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.b5mang.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="作为一个时不时需要跟产品同学打交道的非专业人士（一介码农），有必要掌握一些一些关于产品的入门知识。 下面的这几个问题，我觉得是最基础的。本文就结合梁宁老师的《产品思维30讲》来尝试着回答一下。  产品的本质是什么？ 做产品的通用方法论是什么？ 如何才能做出爆品？ 产品创新有啥通用方法论吗？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一个非专业人士关于产品的思考">
+<meta property="og:url" content="http://www.b5mang.com/core/product/think_about_product.html">
+<meta property="og:site_name" content="Neo&#39;s Blog">
+<meta property="og:description" content="作为一个时不时需要跟产品同学打交道的非专业人士（一介码农），有必要掌握一些一些关于产品的入门知识。 下面的这几个问题，我觉得是最基础的。本文就结合梁宁老师的《产品思维30讲》来尝试着回答一下。  产品的本质是什么？ 做产品的通用方法论是什么？ 如何才能做出爆品？ 产品创新有啥通用方法论吗？">
+<meta property="og:locale">
+<meta property="article:published_time" content="2022-03-04T14:55:48.015Z">
+<meta property="article:modified_time" content="2022-03-03T16:03:03.000Z">
+<meta property="article:author" content="NeoWei">
+<meta property="article:tag" content="后端开发知识体系,知识体系构建,刷题技巧,本质思考">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.b5mang.com/core/product/think_about_product.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.css"><style>
+#needsharebutton-postbottom {
+  cursor: pointer;
+  height: 26px;
+  margin-top: 10px;
+  position: relative;
+}
+#needsharebutton-postbottom .btn {
+  border: 1px solid $btn-default-border-color;
+  border-radius: 3px;
+  display: initial;
+  padding: 1px 4px;
+}
+</style>
+  <title>一个非专业人士关于产品的思考 | Neo's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Neo's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不抽象就无法深入思考<br>不还原就看不到本来面目!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+		<div id="container">
+		  <div class="content post posts-expand">
+		    
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/core/product/think_about_product.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          一个非专业人士关于产品的思考
+        </h1>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-03-04 22:55:48 / Modified: 00:03:03" itemprop="dateCreated datePublished" datetime="2022-03-04T22:55:48+08:00">2022-03-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BA%A7%E5%93%81/" itemprop="url" rel="index"><span itemprop="name">产品</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/core/product/think_about_product.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/core/product/think_about_product.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>作为一个时不时需要跟产品同学打交道的非专业人士（一介码农），有必要掌握一些一些关于产品的入门知识。</p>
+<p>下面的这几个问题，我觉得是最基础的。本文就结合梁宁老师的《产品思维30讲》来尝试着回答一下。</p>
+<ol>
+<li>产品的本质是什么？</li>
+<li>做产品的通用方法论是什么？</li>
+<li>如何才能做出爆品？</li>
+<li>产品创新有啥通用方法论吗？</li>
+</ol>
+<a id="more"></a>
+<hr>
+<p>第一个问题，产品的本质是什么？</p>
+<p>我们首先考虑下你用过有哪些产品：<br>产品，有时候是一项服务，例如理发。<br>产品，有时候是一个实体，例如手机。<br>产品，有时候是一个网站，例如 www.baidu.com<br>产品，有时候是一个app，例如大众点评app</p>
+<p>等等，某一个能产生现金流的债权也有可能被证券化，打包成一款产品，供其他人来购买。</p>
+<p>让我们看一下百度百科上产品的定义：</p>
+<blockquote>
+<p>产品是指作为商品提供给市场，被人们使用和消费，并能满足人们某种需求的任何东西，包括有形的物品、无形的服务、组织、观念或它们的组合。</p>
+</blockquote>
+<p>从上面的定义可以看出，关于产品最重要的一点就是：它需要能够满足用户的某种需求。</p>
+<p>用户需要被满足的需求有很多。例如，我老婆在购物时发现有一个商品一下买两个的话价格会便宜50%，可是呢？两个她又用不了。这时候，他就产生了一个需求：“如果有一个人跟我一起买就好了！”</p>
+<p>还有一点，好多时候用户在出现某一款产品来满足他的“需求“之前根本就没有需求。Jobs就说过，用户根本不知道自己想要什么。例如，在汽车出来之前，人们出行都是靠马车的。那个时候，用户能够说出自己的真正需求吗？</p>
+<p>说这么多，回答刚才的问题。产品的本质是什么？ 在我看来，产品就是用来满足用户需求的东西。这句话的重点不是主语，而是定语。好的产品与坏的产品的差别就在于：</p>
+<ol>
+<li>相比坏产品，好的产品更好的满足用户的需求。用户用起来更爽，更顺手。</li>
+<li>相比坏产品，好的产品满足了用户真正的需求。好的产品，直击要害。</li>
+</ol>
+<p>所以，做好一款产品，最重要的是就是<strong>围绕着用户去思考，我可以解决哪些用户的哪些需求，给这些使用我产品的用户带来什么价值</strong>。</p>
+<p>用一个公式来表示： 产品价值 = 细分用户 * 用户需求</p>
+<p>为什么要细分用户呢？ 因为不同的用户有不同的需求，而一个产品不可能满足所有用户的需求。</p>
+<hr>
+<p>站在产品经理的视角，怎么看待一个人或者一款产品呢？</p>
+<p>首先是表面，</p>
+<ol>
+<li>外在层，他长得如何，页面做的是否华丽。</li>
+<li>角色层，他是做什么职业的</li>
+</ol>
+<p>其次是中间层，</p>
+<ol>
+<li>资源层，他拥有多少财富、人脉、精神资源？</li>
+</ol>
+<p>最后是核心，</p>
+<ol>
+<li>能力层，他能做成什么事情，这块产品给我提供什么确定性</li>
+<li>存在感，为什么而存在，存在的价值是什么？</li>
+</ol>
+<hr>
+<h3 id="动用同理心，去洞察人性"><a href="#动用同理心，去洞察人性" class="headerlink" title="动用同理心，去洞察人性"></a>动用同理心，去洞察人性</h3><p>首先说人性，也就是四个生理情绪</p>
+<p>人，首先有需求，不是所有的需求都能得到满足。</p>
+<p>需求得到满足了，就会<strong>愉悦</strong>。</p>
+<p>需求憋了好久，终于得到满足了，就会<strong>爽</strong>。</p>
+<p>需求得不到满足，就会郁闷，就会<strong>不爽</strong>。</p>
+<p>接着，人活在世上，免不了与别人接触。</p>
+<p>在接触的过程中，如果自己的边界被侵犯了，我们就会<strong>恐惧</strong>。</p>
+<p>侵犯过程中，如果我们意识到对方没有那么强大，可以教训教训他，我们就会<strong>愤怒</strong>。</p>
+<p>恐惧是一个非常基本的情绪，好多其他情绪都是源于恐惧；例如刚才说的愤怒，是一种对自己无能的恐惧；羞耻，是一种对社会世俗眼光的恐惧等等。</p>
+<p>我们做产品，要么就满足用户的爽点，让用户愉悦；要么就解决用户的痛点，让用户不再恐惧。</p>
+<hr>
+<p>接着，再谈意识与潜意识。</p>
+<p>对比一个好的销售与好的产品经理。销售擅长的是打破消费者“意识”的防御，但不管怎样，意识起作用了，”意识即防御“。</p>
+<p>对比看，一个好的产品经理，会充分考虑人性，遵从人的潜意识，顺应人性，让用户自然而然的做了某件事情，根本不会触及到意识的防御。</p>
+<p>这里提到了潜意识，潜意识的形成可能有两方面：童年、基于重复的催眠（洗脑）。其实本质是就是重复。</p>
+<p>从小到大，我们接触的最多的催眠，就是教育。</p>
+<hr>
+<p>最后谈下的人的角色化与集体人格</p>
+<p>教育是反人性的，教育本质上讲就是通过不停的通过重复去按照社会想要的样子去塑造我们，让人们去角色化，成为集体的一部分。</p>
+<p>当然，集体人格不一定能够深入到人的潜意识当中。人们需要按照角色<strong>应该的方式</strong>的去做事情，但是内心并不顺从，并不自然。</p>
+<p>做产品，也是类似。用户不应该按我们要求的去做，而是用户在使用我们产品的过程中，很自然就做了某些事情。</p>
+<h3 id="机会判断"><a href="#机会判断" class="headerlink" title="机会判断"></a>机会判断</h3><p>首先，点线面体思考框架</p>
+<p>点线面体本质上是高维思考，这种思考方式让我们不局限于当下的一个点，而是要进行维度升级，升级到线、面甚至是体。 这关乎格局，关乎对趋势的预判。</p>
+<p>例如，职业选择问题。 你在一家夕阳行业的公司争取一个高端职位的意义，不一定大于在一个朝阳行业公司做一个普通员工。</p>
+<p>有道是“胜与不胜在于彼，败与不败在于己”与“求之于势，不责于人”，说的也是这个道理。</p>
+<p>作为领导者，应该去修炼自己的格局，去抓更大的趋势，去做更维度的思考，而不要过分“责于人”，竟关注每一个员工小小的“点”的努力。</p>
+<hr>
+<p>当然，规划产品时，一定要有切入点。这里的切入点前面提过，一共有三个：</p>
+<p>痛点： 帮客户解决了什么恐惧的问题；</p>
+<p>爽点：给用户带来了什么愉悦的感觉；</p>
+<p>痒点：产品有没有满足虚拟自我，想象中的自己； 网红产品、偶像剧就很大程度上满足了用户的痒点。</p>
+<p>这个切入点必须是真实的，具体的，不能是YY出来的，不能不痛不痒。</p>
+<hr>
+<p>两套经典的用户画像</p>
+<p>第一个模型是草地模型。</p>
+<p>该模型把产品比喻成草地；</p>
+<p>产品的第一批用户，比喻成第一支羊。这只羊来到草地吃了草之后，是死了呢？还是很愉悦呢？ </p>
+<p>产品的核心用户，比喻成头羊。网络效应。</p>
+<p>产品的付费用户，比喻成狼。</p>
+<p>第二个模型是大明、笨笨、小闲</p>
+<p>大明：用户有明确的需求，对价格敏感，一般忠诚度不高。 例如：百度、京东。这类用户的爽点需求：平台提供的价格特别符合预期、系统提供的搜索结果满足了自己的需求。</p>
+<p>笨笨：用户不知道想要买什么，就是逛逛，看看自己需要什么。例如：小红书、淘宝。 这类用户的痒点需求：看到别的大V、明星的分享，特别羡慕，特别向往，所以追求。</p>
+<p>小闲：纯打发时间，例如腾讯玩游戏、看视频。这类用户的爽点需求：好装备掉落、推荐类似的、自动播放下一集等。</p>
+<hr>
+<p>场景</p>
+<p>场景 = 时间、空间 + 情景、触发情绪</p>
+<p>人的理性、意识拉着你不去做，而人的潜意识、情绪推着你去做事情，这是不由自主的。</p>
+<p>例如，你读了一篇好的书摘，当你读完之后，你下意识最想做的事情是什么呢？ 很多用户肯定想把书下载下来（当然，将来看不看就不得而知了，😁）。此情此景下，我们的产品要做的事情就呼之欲出了：把电子书的下载链接放在文末。</p>
+<hr>
+<h3 id="系统能力"><a href="#系统能力" class="headerlink" title="系统能力"></a>系统能力</h3>
+    </div>
+
+    
+    
+    
+
+    
+      <div>
+        <div class="recommended_posts">
+    
+    
+    <h1>Recommended Posts </h1>
+    <ul>
+        
+            <li><a href="http://www.b5mang.com/backend_knowledge_architecture/server/timer/time_wheel.html">定时器系列｜时间轮</a></li>
+        
+            <li><a href="http://www.b5mang.com/backend_knowledge_architecture/structure_algorithm/algorithm/dp/longest_palindrome.html">动态规划系列-最长回文子序列</a></li>
+        
+            <li><a href="http://www.b5mang.com/core/product/liangning_chanpinsiwei30.html">产品思维30讲摘要</a></li>
+        
+            <li><a href="http://www.b5mang.com/backend_knowledge_architecture/distributed_system/layered_architecture.html">分布式系统-分层与抽象</a></li>
+        
+    </ul>
+     
+</div> 
+
+      </div>
+    <div class="post-widgets">
+      <div id="needsharebutton-postbottom">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    </div>
+        <div class="reward-container">
+  <div>你的支持是我坚持的最大动力!</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="NeoWei WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="NeoWei Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/core/product/liangning_chanpinsiwei30.html" rel="prev" title="产品思维30讲摘要">
+      <i class="fa fa-chevron-left"></i> 产品思维30讲摘要
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/longest_palindrome.html" rel="next" title="动态规划系列-最长回文子序列">
+      动态规划系列-最长回文子序列 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+		  </div>
+		  
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+		  
+<script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+<script>
+    const btw = new BTWPlugin();
+
+    btw.init({
+        id: 'container',
+        blogId: '22171-1589640164808-286',
+        name: '第一性原理思考者',
+        qrcode: 'http://cdn.b5mang.com/img_first.png',
+        keyword: '思考',
+    });
+</script>
+
+
+		</div>
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E7%94%A8%E5%90%8C%E7%90%86%E5%BF%83%EF%BC%8C%E5%8E%BB%E6%B4%9E%E5%AF%9F%E4%BA%BA%E6%80%A7"><span class="nav-number">1.</span> <span class="nav-text">动用同理心，去洞察人性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%BA%E4%BC%9A%E5%88%A4%E6%96%AD"><span class="nav-number">2.</span> <span class="nav-text">机会判断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E8%83%BD%E5%8A%9B"><span class="nav-number">3.</span> <span class="nav-text">系统能力</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">NeoWei</p>
+  <div class="site-description" itemprop="description">我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">325</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">NeoWei</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a>
+  </div>
+
+<br>
+<a href="https://beian.miit.gov.cn/" rel="external nofollow noreferrer"  style="color:#f72b07" target="_blank">沪ICP备2020030798号-1</a>
+<br>
+
+        
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1279618438&web_id=1279618438"></script>
+  </div>
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.js"></script>
+  <script>
+      pbOptions = {};
+        pbOptions.iconStyle = "box";
+        pbOptions.boxForm = "horizontal";
+        pbOptions.position = "bottomCenter";
+        pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+  </script>
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'uE8T6jDhH4vW6BtH143y72nw-gzGzoHsz',
+      appKey     : '3xulfIcqN5mLqRSxptxvnamK',
+      placeholder: "Just go go",
+      avatar     : 'identicon',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

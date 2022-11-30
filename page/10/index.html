@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.b5mang.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Neo&#39;s Blog">
+<meta property="og:url" content="http://www.b5mang.com/page/10/index.html">
+<meta property="og:site_name" content="Neo&#39;s Blog">
+<meta property="og:description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+<meta property="og:locale">
+<meta property="article:author" content="NeoWei">
+<meta property="article:tag" content="后端开发知识体系,知识体系构建,刷题技巧,本质思考">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.b5mang.com/page/10/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'zh-Hans'
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.css"><style>
+#needsharebutton-postbottom {
+  cursor: pointer;
+  height: 26px;
+  margin-top: 10px;
+  position: relative;
+}
+#needsharebutton-postbottom .btn {
+  border: 1px solid $btn-default-border-color;
+  border-radius: 3px;
+  display: initial;
+  padding: 1px 4px;
+}
+</style>
+  <title>Neo's Blog - 不抽象就无法深入思考<br>不还原就看不到本来面目!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Neo's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不抽象就无法深入思考<br>不还原就看不到本来面目!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+		<div id="container">
+		  <div class="content index posts-expand">
+		    
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/os/os_structure.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/os/os_structure.html" class="post-title-link" itemprop="url">操作系统中碰到的数据结构汇总</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 10:35:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:35:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:41:33" itemprop="dateModified" datetime="2022-03-01T22:41:33+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/os/os_structure.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/os_structure.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="hash"><a href="#hash" class="headerlink" title="hash"></a>hash</h4><p>hlist_head hlist_node 散列表拉链</p>
+<p>根据PID定位task：PID哈希表</p>
+<h4 id="双向链表"><a href="#双向链表" class="headerlink" title="双向链表"></a>双向链表</h4><p>list_head 双向链表</p>
+<p>提高调度程序运行速度：建立多个可运行程序链表</p>
+<p>等待队列（双向链表）：用自旋锁加保护的等待队列头、等待队列链表的元素</p>
+<p>等待队列中睡眠进程的唤醒：互斥进程，非互斥进程</p>
+<p>链表维护节点；节点包括管理区【硬件限制，ZONE_DMA, ZONE_NORMAL, ZONE_HIGHMEM】+ page数组</p>
+<p>动态定时器的链表组（将同一时间段内即将到时的定时器归入一组）</p>
+<h4 id="bitmap"><a href="#bitmap" class="headerlink" title="bitmap"></a>bitmap</h4><p>pid分配管理：bitmap pidmap_array</p>
+<p>inode、磁盘文件数据块</p>
+<h4 id="并发与同步"><a href="#并发与同步" class="headerlink" title="并发与同步"></a>并发与同步</h4><h5 id="每CPU变量"><a href="#每CPU变量" class="headerlink" title="每CPU变量"></a>每CPU变量</h5><p>不需要同步的内核数组，为每个cpu分配数组一元素</p>
+<h5 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a>自旋锁</h5><h5 id="RCU机制"><a href="#RCU机制" class="headerlink" title="RCU机制"></a>RCU机制</h5><p>RCU(读取-拷贝-更新)：只保护被动态分配并通过指针引用的数据结构</p>
+<p>何时释放旧副本？ CPU经过静止状态后，定期检测！！</p>
+<h4 id="原子变量"><a href="#原子变量" class="headerlink" title="原子变量"></a>原子变量</h4><h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>thread 与 thread_info 紧密挨着；根据esp 屏蔽 低13位 可以最快的获取thread_info;<br>同时进程描述符指针在thread_info中的偏移为0!</p>
+<p>也就是将： OS将task_struct指针存放到了栈上（可以通过esp做简单的AND操作即可）</p>
+<p>jiffies:子系统启动的节拍总数</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/os/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/os/index.html" class="post-title-link" itemprop="url">操作系统 - 概览</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 10:33:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:33:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:41:24" itemprop="dateModified" datetime="2022-03-01T22:41:24+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/os/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="操作系统智慧"><a href="#操作系统智慧" class="headerlink" title="操作系统智慧"></a>操作系统智慧</h4><p>懒人哲学：越简单、越傻瓜、用户使用的学习成本越低越好</p>
+<p>让困于人：当我们遇到困难时，搞不定的或者我们自己搞成本很大的，交给别人来搞(一般让操作系统来搞，其实操作系统也是别人完成的软件系统)</p>
+<p>留有余地: 可扩展性，让系统有可扩展性</p>
+<p>足够智能：一个系统最好能解决所有的问题，跟人的感觉是一个万能的解决方案，也就是操作系统的魔术师的角色</p>
+<p>时空转换：在一个纬度遇到的瓶颈，那就改变方案把瓶颈移到另外一个纬度 【内存页表太大，占用内存资源；那就页表分级，不活跃的放到磁盘】</p>
+<p>策机分离和权利分离：一个系统或者平台在主要指定规则、提供通用化的插件即可</p>
+<p>简单与美：苛求于简，归于永恒</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/network/http.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/network/http.html" class="post-title-link" itemprop="url">计算机网络 - HTTP协议</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 10:20:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:20:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-10-30 21:27:50" itemprop="dateModified" datetime="2022-10-30T21:27:50+08:00">2022-10-30</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/network/http.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/network/http.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://pic.rmb.bdstatic.com/bjh/news/6722dbdf63eabaa62b59486f2c51df6e.png" alt="HTTP对比"></p>
+<h3 id="HTTP1-0"><a href="#HTTP1-0" class="headerlink" title="HTTP1.0"></a>HTTP1.0</h3><p>301: 永久重定向<br>302: 临时重定向</p>
+<h3 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h3><p>可以参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/xiaoming100001/article/details/81109617">https://blog.csdn.net/xiaoming100001/article/details/81109617</a></p>
+<p>对称加密与非对称加密相结合</p>
+<p>通信内容，通过对称加密算法来加解密；其中有一个重要的东西叫：密钥</p>
+<p><strong>密钥</strong>是通过<strong>非对称加密</strong>算法来加密传输，客户端使用服务器的public key来加密，服务端通过自己的private key来解密。</p>
+<p>服务器的public key，浏览器如何得知呢？ <strong>通过SSL证书</strong>。</p>
+<p>SSL证书组织是一个树形组织，最上面的几层是hardcode在系统中的。</p>
+<p>当需要验证证书有效性时，浏览器会通过根认证组织逐层认证！</p>
+<h3 id="HTTP2-0"><a href="#HTTP2-0" class="headerlink" title="HTTP2.0"></a>HTTP2.0</h3><p>服务器推送、头信息压缩、等</p>
+<h4 id="二进制分帧"><a href="#二进制分帧" class="headerlink" title="二进制分帧"></a>二进制分帧</h4><p>先来理解几个概念：</p>
+<p>帧：HTTP/2 数据通信的最小单位消息：指 HTTP/2 中逻辑上的 HTTP 消息。例如请求和响应等，消息由一个或多个帧组成。</p>
+<p>流：存在于连接中的一个虚拟通道。流可以承载双向消息，每个流都有一个唯一的整数ID。</p>
+<p>HTTP/2 采用二进制格式传输数据，而非 HTTP 1.x 的文本格式，二进制协议解析起来更高效。 HTTP / 1 的请求和响应报文，都是由起始行，首部和实体正文（可选）组成，各部分之间以文本换行符分隔。HTTP/2 将请求和响应数据分割为更小的帧，并且它们采用二进制编码。</p>
+<p>HTTP/2 中，同域名下所有通信都在单个连接上完成，该连接可以承载任意数量的双向数据流。每个数据流都以消息的形式发送，而消息又由一个或多个帧组成。多个帧之间可以乱序发送，根据帧首部的流标识可以重新组装。</p>
+<h4 id="多路复用"><a href="#多路复用" class="headerlink" title="多路复用"></a>多路复用</h4><p>在 HTTP/2 中，有了二进制分帧之后，HTTP /2 不再依赖 TCP 链接去实现多流并行了，在 HTTP/2中：</p>
+<p>同域名下所有通信都在单个连接上完成。<br>单个连接可以承载任意数量的双向数据流。<br>数据流以消息的形式发送，而消息又由一个或多个帧组成，多个帧之间可以乱序发送，因为根据帧首部的流标识可以重新组装。</p>
+<h4 id="服务器推送"><a href="#服务器推送" class="headerlink" title="服务器推送"></a>服务器推送</h4><p>服务端可以在发送页面HTML时主动推送其它资源，而不用等到浏览器解析到相应位置，发起请求再响应。例如服务端可以主动把JS和CSS文件推送给客户端，而不需要客户端解析HTML时再发送这些请求。</p>
+<p>服务端可以主动推送，客户端也有权利选择是否接收。如果服务端推送的资源已经被浏览器缓存过，浏览器可以通过发送RST_STREAM帧来拒收。主动推送也遵守同源策略，服务器不会随便推送第三方资源给客户端。</p>
+<h4 id="头部压缩"><a href="#头部压缩" class="headerlink" title="头部压缩"></a>头部压缩</h4><p>HTTP 1.1请求的大小变得越来越大，有时甚至会大于TCP窗口的初始大小，因为它们需要等待带着ACK的响应回来以后才能继续被发送。HTTP/2对消息头采用HPACK（专为http/2头部设计的压缩格式）进行压缩传输，能够节省消息头占用的网络的流量。而HTTP/1.x每次请求，都会携带大量冗余头信息，浪费了很多带宽资源。</p>
+<p>为了减少这块的资源消耗并提升性能， HTTP/2对这些首部采取了压缩策略：</p>
+<p>HTTP/2在客户端和服务器端使用“首部表”来跟踪和存储之前发送的键－值对，对于相同的数据，不再通过每次请求和响应发送；</p>
+<p>首部表在HTTP/2的连接存续期内始终存在，由客户端和服务器共同渐进地更新;</p>
+<p>每个新的首部键－值对要么被追加到当前表的末尾，要么替换表中之前的值。</p>
+<h3 id="HTTP3-0"><a href="#HTTP3-0" class="headerlink" title="HTTP3.0"></a>HTTP3.0</h3><p><img src="https://s3.51cto.com/images/blog/202107/01/2d9b80a4cd6fadcf1e08fee31669d61a.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt="HTTP23对比"></p>
+<p>QUIC（Quick UDP Internet Connections）基于 UDP 实现，是 HTTP/3 中的底层支撑协议，该协议基于 UDP，又取了 TCP 中的精华，实现了即快又可靠的协议</p>
+<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.51cto.com/u_6315133/3122045">https://blog.51cto.com/u_6315133/3122045</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/hardware/number.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/hardware/number.html" class="post-title-link" itemprop="url">计算机硬件-数字的表示</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:01:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/hardware/number.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/hardware/number.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="负数"><a href="#负数" class="headerlink" title="负数"></a>负数</h2><p>负数用补码来表示，补码等于数的反码 + 1</p>
+<h2 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h2><p>两种表示小数的数据类型，分别是双精度浮点数和单精度浮点数</p>
+<p>双精度浮点数类型用64位:符号位（1位） + 阶码（11位） + 尾数（52位）</p>
+<p>单精度浮点数类型用32位:符号位（1位） + 阶码（8位） + 尾数（23位）</p>
+<p>符号位：正数为0，负数为1；</p>
+<p>指数位：<strong>阶数+偏移量</strong>，阶数是2^(e-1)-1，e为阶码的位数，也就是指数位的位数。偏移量是把小数点移动到整数位只有1时移动的位数，正数表示向左移，负数表示向右移；</p>
+<p>小数位：即二进制小数点后面的数。</p>
+<h3 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h3><p>把0.1(10)转成的二进制0.00011 0011 0011 …(2)转成浮点数形式的二进制：</p>
+<p>（能够<strong>精确表示</strong>的小数为：0.5，0.25，0.125…等的自由组合）</p>
+<p>转化过程见：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://cloud.tencent.com/developer/article/1856972">https://cloud.tencent.com/developer/article/1856972</a></p>
+<p>1、先要把小数点移动到整数位只有1，要向右移动4位，故偏移量为-4，通过指数位的计算公式2^(e-1)-1+偏移量 = 2^(11-1)-1-4 = 1019，把1019转成二进制为1111111011，不够11位要补零，最终得出指数位位01111111011；</p>
+<p>2、移位后的小数位为.1 0011 0011 …，因为小数位只能保留52位，第50、51、52位、53位分别为0011，故对第52位进1使第51位为1，使第50、51、52位为010。</p>
+<p>注意：此处的<strong>精度丢失</strong>问题，有很多小数（例如本例中的0.1）在转二进制时会出现无限循环的情况，所以在位数有限的境况下，肯定需要舍弃后面的精度。这一点，就与1/3这种小数是在十进制下无限循环类似。</p>
+<h2 id="定点数"><a href="#定点数" class="headerlink" title="定点数"></a>定点数</h2><p>只能表示纯小数，例如0.999991212</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/hardware/cpu.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/hardware/cpu.html" class="post-title-link" itemprop="url">计算机硬件-CPU寄存器简介</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:01:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-02 09:04:18" itemprop="dateModified" datetime="2022-03-02T09:04:18+08:00">2022-03-02</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/hardware/cpu.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/hardware/cpu.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="CPU寄存器"><a href="#CPU寄存器" class="headerlink" title="CPU寄存器"></a>CPU寄存器</h2><p>在用途方面，他们有各自默认的用途：</p>
+<ul>
+<li>Eax用来保存所有API函数的返回值。寄存器AX和AL通常称为累加器(Accumulator)，用累加器进行的操作可能需要更少时间。累加器可用于乘、除、输入/输出等操作，它们的使用频率很高；</li>
+<li>寄存器BX称为基地址寄存器(Base Register)。它可作为存储器指针来使用；</li>
+<li>寄存器CX称为计数寄存器(Count Register)。在循环和字符串操作时，要用它来控制循环次数；在位操作中，当移多位时，要用CL来指明移位的位数；</li>
+<li>寄存器DX称为数据寄存器(Data Register)。在进行乘、除运算时，它可作为默认的操作数参与运算，也可用于存放I/O的端口地址。</li>
+</ul>
+<p>寄存器ESI、EDI、SI和DI称为变址寄存器(Index Register)，</p>
+<p>它们主要用于存放存储单元在段内的偏移量，用它们可实现多种存储器操作数的寻址方式，为以不同的地址形式访问存储单元提供方便。</p>
+<p>那么ESP和EBP指的分别是什么呢？</p>
+<ul>
+<li>ESP：栈指针寄存器(extended stack pointer)，其内存放着一个指针，该指针永远指向系统栈最上面一个栈帧的栈顶。</li>
+<li>EBP：基址指针寄存器(extended base pointer)，其内存放着一个指针，该指针永远指向系统栈最上面一个栈帧的底部。</li>
+</ul>
+<h3 id="CPU指令的执行"><a href="#CPU指令的执行" class="headerlink" title="CPU指令的执行"></a>CPU指令的执行</h3><p>一个基本的CPU执行计算的过程如下：</p>
+<ol>
+<li>程序以及数据被加载到主内存</li>
+<li>指令和数据被加载到CPU的高速缓存</li>
+<li>CPU执行指令，把结果写到高速缓存</li>
+<li>高速缓存中的数据写回主内存</li>
+</ol>
+<h3 id="一次函数调用"><a href="#一次函数调用" class="headerlink" title="一次函数调用"></a>一次函数调用</h3><p>栈的增长方向：向下增长，ESP越来愈小、ESP比EBP小</p>
+<p>一个函数执行步骤：</p>
+<ol>
+<li>函数参数压入stack中<br> push p1<br> push p2</li>
+<li>CPU<strong>自己</strong>把返回地址压入stack中<br> push eip</li>
+<li>CPU自己跳转到新的函数地址(call func)，开始执行（先保存EBP，然后让EBP指向当前ESP）<br> push ebp 保存老函数的EBP到新的stack中<br> mov esp =&gt; ebp  让ebp保存新函数的stack base</li>
+<li>分配局部变量<br> sub esp 100 分配100字节的局部变量</li>
+<li>局部变量赋值与访问<br> 通过ebp - $Offset$ 来访问局部变量</li>
+<li>访问参数<br> 通过ebp + $Offset$ 来访问参数</li>
+<li>函数返回<br> add esp 100<br> mov ebp =&gt; esp<br> 注意：上面这一句应该是重复的，理论上只要对esp进行了完成逆操作，esp应该等于ebp了。是不需要额外通过ebp来还原的；当然如果要通过ebp来还原，也就不需要去显示操作esp了。<br> pop ebp 还原ebp<br> ret（pop eip）</li>
+<li>将压入的参数POP出来<br> pop p2<br> pop p1</li>
+</ol>
+<h2 id="co-实现"><a href="#co-实现" class="headerlink" title="co 实现"></a>co 实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">co_ctx&#123;</span><br><span class="line"><span class="keyword">void</span>* regs[<span class="number">14</span>]; <span class="comment">//用于保存或者设定特定寄存器</span></span><br><span class="line"><span class="keyword">size_t</span> ss_size; <span class="comment">//栈帧区域大小</span></span><br><span class="line"><span class="keyword">char</span>* ss_sp; <span class="comment">// 协程栈帧内存区域，这个区域一般在堆上分配</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">co_make (co_ctx* co, func* p, p1, p2)</span><br><span class="line">    使用p, p1, p2把co填充起来</span><br><span class="line">    co.ss_sp都是分配在堆上</span><br><span class="line">    co的EIP与ESP需要被单独赋值</span><br><span class="line">&#125;</span><br><span class="line">co_swap（）&#123;</span><br><span class="line">    主要要保存当前寄存器到要swap_out的co_ctx中</span><br><span class="line">    将要swap_in的co_ctx设置到寄存器中</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>具体参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://vinsflyfish.github.io/posts/thinking-in-libco/">https://vinsflyfish.github.io/posts/thinking-in-libco/</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/hardware/tlb.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/hardware/tlb.html" class="post-title-link" itemprop="url">计算机硬件-TLB</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:01:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:40:21" itemprop="dateModified" datetime="2022-03-01T22:40:21+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/hardware/tlb.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/hardware/tlb.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>TLB（Translation Lookaside Buffer）是一块高速缓存。</p>
+<p>TLB缓存虚拟地址和其映射的物理地址。</p>
+<p>数据cache缓存地址(虚拟地址或者物理地址)和数据。</p>
+<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://zhuanlan.zhihu.com/p/108425561">https://zhuanlan.zhihu.com/p/108425561</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/distributed_system/high_consistency.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/distributed_system/high_consistency.html" class="post-title-link" itemprop="url">分布式系统-一致性</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-24 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-24T10:01:03+08:00">2022-02-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 23:20:26" itemprop="dateModified" datetime="2022-03-01T23:20:26+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/distributed_system/high_consistency.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/high_consistency.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="CAP-VS-BASE"><a href="#CAP-VS-BASE" class="headerlink" title="CAP VS BASE"></a>CAP VS BASE</h4><h4 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h4><h5 id="强一致性"><a href="#强一致性" class="headerlink" title="强一致性"></a>强一致性</h5><p>保证手段：单机落磁盘、数据库事务、分布式事务等</p>
+<h5 id="弱一致性"><a href="#弱一致性" class="headerlink" title="弱一致性"></a>弱一致性</h5><p>可能丢失一定的数据：异步复制、PageCache的write back</p>
+<h5 id="最终一致性"><a href="#最终一致性" class="headerlink" title="最终一致性"></a>最终一致性</h5><p>带TTL的缓存</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/distributed_system/fs.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/distributed_system/fs.html" class="post-title-link" itemprop="url">分布式文件系统</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-24 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-24T10:01:03+08:00">2022-02-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/distributed_system/fs.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/fs.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>存储的分布式化</p>
+<p>高效存储的一些考虑：</p>
+<ol>
+<li>很长时间没有人访问的老数据，怎么办？</li>
+<li>是不是减少副本的同时，还能还原出数据？（例如，RAID）</li>
+<li>数据压缩，平成好压缩效果与压缩/解压速度</li>
+<li>数据的分层存储：根据数据的冷热来选择不同的存储介质（局部性原理），内存、硬盘（SSD、SATA)</li>
+<li>存储与计算分离（底层基础：网络IO不再是瓶颈，而CPU性能、磁盘IO性能跟不上）</li>
+</ol>
+<h4 id="分布式存储引擎"><a href="#分布式存储引擎" class="headerlink" title="分布式存储引擎"></a>分布式存储引擎</h4><p>主要解决数据如何拆分、数据如何冗余、数据如何定位的问题。</p>
+<p>（1）parititioning 方式，即数据在逻辑上怎么切分</p>
+<p>（2）localization 方式，即数据在物理上怎么分布</p>
+<p>一个系统要想拥有高可用性，有且只有一个办法 — 副本（replication），因为物理故障是无法避免的，只能花钱做备份。</p>
+<p>主从和时效性是 replication 要考虑的两个重要问题。</p>
+<p>主从主要有单主、多主和无主三种方式。</p>
+<p>时效性主要有同步、异步、半同步三种方式。</p>
+<p>（3）rebalance 方式，即在节点数变化后，数据在物理上怎么重新分布.</p>
+<h4 id="分布式文件系统"><a href="#分布式文件系统" class="headerlink" title="分布式文件系统"></a>分布式文件系统</h4><p>按照Block拆分文件，然后通过一个管理员来管理Block到对应及其的映射关系。</p>
+<p>新的问题：<br>如果存储block的机器挂了怎么办？ 如果管理员挂了怎么办？</p>
+<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://zhuanlan.zhihu.com/p/141775358">https://zhuanlan.zhihu.com/p/141775358</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/distributed_system/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/distributed_system/index.html" class="post-title-link" itemprop="url">分布式系统介绍</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-24 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-24T10:01:03+08:00">2022-02-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-10-30 22:32:12" itemprop="dateModified" datetime="2022-10-30T22:32:12+08:00">2022-10-30</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/distributed_system/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="为什么会有分布式"><a href="#为什么会有分布式" class="headerlink" title="为什么会有分布式"></a>为什么会有分布式</h3><p>两点：算得慢（算力不足），存不下（数据分散）。</p>
+<p>无论是线程、进程，还是协程，本质上，目的都是为了计算的并行化，解决的是算的慢的问题。</p>
+<p>因为一个CPU算不过来，而单机扩容CPU数量成本极高（有空间这个刚性限制），所以需要水平扩容，多搞几台机器。</p>
+<p>计算的分布式化：基于分治思想，出现了分布式框架。</p>
+<p>MapReduce: 分布式计算的总体思想。</p>
+<p>分布式计算框架更多尝试对资源的调度做优化。ResourceManager, yarn, k8s;<br>（多租户，隔离，软隔离，租借，抢占等）</p>
+<h3 id="高并发系统的三个目标与挑战"><a href="#高并发系统的三个目标与挑战" class="headerlink" title="高并发系统的三个目标与挑战"></a>高并发系统的三个目标与挑战</h3><p>高并发是一个系统的<strong>挑战</strong></p>
+<p>如何衡量一个系统的并发有多高呢？ 同时在线人数</p>
+<p>高性能、高可用、可扩展是一个牛B系统<strong>目标</strong></p>
+<h4 id="三者的关系"><a href="#三者的关系" class="headerlink" title="三者的关系"></a>三者的关系</h4><p>为了保证高可用，需要冗余更多的相同功能机器（replication)，要求系统可扩展；</p>
+<p>为了保证高性能，必须需要更多的相同功能的机器（存储的replication、应用的无状态）或者服务于不同对象的机器（shard)，也要求可扩展；</p>
+<p>一份完整的数据，分为多个shard的过程需要可扩展；</p>
+<p>一份数据冗余了多份，前端对下游访问时用到的负载均衡策略需要可扩展。</p>
+<h4 id="如何衡量一个吞吐量有多大呢？"><a href="#如何衡量一个吞吐量有多大呢？" class="headerlink" title="如何衡量一个吞吐量有多大呢？"></a>如何衡量一个吞吐量有多大呢？</h4><p>系统的QPS，吞吐量 = 并发进程数 / 响应时间</p>
+<h4 id="如何衡量一个系统的性能有多高呢？"><a href="#如何衡量一个系统的性能有多高呢？" class="headerlink" title="如何衡量一个系统的性能有多高呢？"></a>如何衡量一个系统的性能有多高呢？</h4><p>一旦系统的负载被描述好，就可以研究当负载增加会发生什么。我们可以从两种角度来看：</p>
+<ul>
+<li>增加负载参数并保持系统资源（CPU、内存、网络带宽等）不变时，系统性能将受到什么影响？（接口响应时间，分位耗时）</li>
+<li>增加负载参数并希望保持性能不变时，需要增加多少系统资源？</li>
+</ul>
+<h4 id="如何衡量一个系统的可用性有多高呢？"><a href="#如何衡量一个系统的可用性有多高呢？" class="headerlink" title="如何衡量一个系统的可用性有多高呢？"></a>如何衡量一个系统的可用性有多高呢？</h4><p>平均故障间隔，平均故障恢复时间</p>
+<p><img src="http://cdn.b5mang.com/202132011926.png" alt="不同可用性标准下允许的故障时间"></p>
+<h4 id="如何衡量一个系统的可扩展能力？"><a href="#如何衡量一个系统的可扩展能力？" class="headerlink" title="如何衡量一个系统的可扩展能力？"></a>如何衡量一个系统的可扩展能力？</h4><p>考察一个问题：能够通过增加进程来应对更高的并发？ 如果一直加机器，我一直能线性的提高系统的处理能力吗？</p>
+<h3 id="如何应对系统的挑战"><a href="#如何应对系统的挑战" class="headerlink" title="如何应对系统的挑战"></a>如何应对系统的挑战</h3><p>架构通用原则：“4 要 1 不要”</p>
+<p>(1) 数据要尽量少</p>
+<ul>
+<li>用户请求的数据能少就少</li>
+<li>系统依赖的数据能少就少</li>
+</ul>
+<p>(2) 请求数要尽量少</p>
+<p>例如，静态文件合并</p>
+<p>（3）路径要尽量短</p>
+<p>将强依赖的服务进行单机部署</p>
+<p>（4）依赖要尽量少</p>
+<p>系统服务分级，高等级服务尽量少依赖低等级服务</p>
+<p>（5）不要有单点</p>
+<p>服务无状态，可扩展；存储层做副本备份</p>
+<p><img src="https://vonng.gitbooks.io/ddia-cn/content/img/fig1-1.png" alt="主流系统架构"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/design_pattern/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/design_pattern/index.html" class="post-title-link" itemprop="url">设计模式-概览</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-24 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-24T10:01:03+08:00">2022-02-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/design_pattern/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/design_pattern/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>软件设计模式的几种分类</p>
+<h4 id="创建型"><a href="#创建型" class="headerlink" title="创建型"></a>创建型</h4><p>创建对象时，不再由我们直接实例化对象；而是根据特定场景，由程序来确定创建对象的方式，从而保证更大的性能、更好的架构优势。</p>
+<p>创建型模式主要有：</p>
+<h5 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h5><h5 id="工厂方法"><a href="#工厂方法" class="headerlink" title="工厂方法"></a>工厂方法</h5><p>意图：定义一个创建对象的接口，让其子类自己决定实例化哪一个工厂类，工厂模式使其创建过程延迟到子类进行。</p>
+<p>主要解决：主要解决接口选择的问题。</p>
+<p>何时使用：我们明确地计划不同条件下创建不同实例时。</p>
+<p>如何解决：让其子类实现工厂接口，返回的也是一个抽象的产品。</p>
+<p>关键代码：创建过程在其子类执行。</p>
+<p>应用实例：<br> 1、您需要一辆汽车，可以直接从工厂里面提货，而不用去管这辆汽车是怎么做出来的，以及这个汽车里面的具体实现。<br> 2、Hibernate 换数据库只需换方言和驱动就可以。</p>
+<p>优点：<br>1、一个调用者想创建一个对象，只要知道其名称就可以了。<br>2、扩展性高，如果想增加一个产品，只要扩展一个工厂类就可以。<br>3、屏蔽产品的具体实现，调用者只关心产品的接口。</p>
+<p>缺点：每次增加一个产品时，都需要增加一个具体类和对象实现工厂，使得系统中类的个数成倍增加，在一定程度上增加了系统的复杂度，同时也增加了系统具体类的依赖。这并不是什么好事。</p>
+<p>使用场景：<br>1、日志记录器：记录可能记录到本地硬盘、系统事件、远程服务器等，用户可以选择记录日志到什么地方。<br>2、数据库访问，当用户不知道最后系统采用哪一类数据库，以及数据库可能有变化时。<br>3、设计一个连接服务器的框架，需要三个协议，”POP3”、”IMAP”、”HTTP”，可以把这三个作为产品类，共同实现一个接口。</p>
+<p>注意事项：作为一种创建类模式，在任何需要生成复杂对象的地方，都可以使用工厂方法模式。有一点需要注意的地方就是复杂对象适合使用工厂模式，而简单对象，特别是只需要通过 new 就可以完成创建的对象，无需使用工厂模式。如果使用工厂模式，就需要引入一个工厂类，会增加系统的复杂度。</p>
+<h5 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h5><p>就是建立一个工厂类，对实现了同一接口的一些类进行实例的创建。简单工厂模式的实质是由一个工厂类根据传入的参数，动态决定应该创建哪一个产品类（这些产品类继承自一个父类或接口）的实例。</p>
+<p>意图：提供一个创建一系列相关或相互依赖对象的接口，而无需指定它们具体的类。</p>
+<p>主要解决：主要解决接口选择的问题。</p>
+<p>何时使用：系统的产品有多于一个的产品族，而系统只消费其中某一族的产品。</p>
+<p>如何解决：在一个产品族里面，定义多个产品。</p>
+<p>关键代码：在一个工厂里聚合多个同类产品。</p>
+<p>应用实例：</p>
+<p>优点：当一个产品族中的多个对象被设计成一起工作时，它能保证客户端始终只使用同一个产品族中的对象。</p>
+<p>缺点：产品族扩展非常困难，要增加一个系列的某一产品，既要在抽象的 Creator 里加代码，又要在具体的里面加代码。</p>
+<p>使用场景： 1、QQ 换皮肤，一整套一起换。 2、生成不同操作系统的程序。</p>
+<p>注意事项：产品族难扩展，产品等级易扩展。</p>
+<h5 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h5><p>全局资源管理，简化访问。</p>
+<p>意图：保证一个类仅有一个实例，并提供一个访问它的全局访问点。</p>
+<p>主要解决：一个全局使用的类频繁地创建与销毁。</p>
+<p>何时使用：当您想控制实例数目，节省系统资源的时候。</p>
+<p>如何解决：判断系统是否已经有这个单例，如果有则返回，如果没有则创建。</p>
+<p>关键代码：构造函数是私有的。</p>
+<p>应用实例：</p>
+<p>1、一个班级只有一个班主任。<br>2、Windows 是多进程多线程的，在操作一个文件的时候，就不可避免地出现多个进程或线程同时操作一个文件的现象，所以所有文件的处理必须通过唯一的实例来进行。<br>3、一些设备管理器常常设计为单例模式，比如一个电脑有两台打印机，在输出的时候就要处理不能两台打印机打印同一个文件。</p>
+<p>优点：<br>1、在内存里只有一个实例，减少了内存的开销，尤其是频繁的创建和销毁实例（比如管理学院首页页面缓存）。<br>2、避免对资源的多重占用（比如写文件操作）。</p>
+<p>缺点：没有接口，不能继承，与单一职责原则冲突，一个类应该只关心内部逻辑，而不关心外面怎么样来实例化。</p>
+<p>使用场景：</p>
+<p>1、要求生产唯一序列号。<br>2、WEB 中的计数器，不用每次刷新都在数据库里加一次，用单例先缓存起来。<br>3、创建的一个对象需要消耗的资源过多，比如 I/O 与数据库的连接等。</p>
+<p>注意事项：getInstance() 方法中需要使用同步锁 synchronized (Singleton.class) 防止多线程同时进入造成 instance 被多次实例化。</p>
+<h5 id="建造者模式"><a href="#建造者模式" class="headerlink" title="建造者模式"></a>建造者模式</h5><p>意图：将一个复杂的构建与其表示相分离，使得同样的构建过程可以创建不同的表示。</p>
+<p>主要解决：主要解决在软件系统中，有时候面临着”一个复杂对象”的创建工作，其通常由各个部分的子对象用一定的算法构成；由于需求的变化，这个复杂对象的各个部分经常面临着剧烈的变化，但是将它们组合在一起的算法却相对稳定。</p>
+<p>何时使用：一些基本部件不会变，而其组合经常变化的时候。</p>
+<p>如何解决：将变与不变分离开。</p>
+<p>关键代码：建造者：创建和提供实例，导演：管理建造出来的实例的依赖关系。</p>
+<p>应用实例：<br>1、去肯德基，汉堡、可乐、薯条、炸鸡翅等是不变的，而其组合是经常变化的，生成出所谓的”套餐”。<br>2、JAVA 中的 StringBuilder。</p>
+<p>优点： 1、建造者独立，易扩展。 2、便于控制细节风险。</p>
+<p>缺点： 1、产品必须有共同点，范围有限制。 2、如内部变化复杂，会有很多的建造类。</p>
+<p>使用场景： 1、需要生成的对象具有复杂的内部结构。 2、需要生成的对象内部属性本身相互依赖。</p>
+<p>一个类的各个组成部分的具体实现类或者算法经常面临着变化，但是将他们组合在一起的算法却相对稳定。提供一种封装机制 将稳定的组合算法于易变的各个组成部分隔离开来。</p>
+<p>注意事项：与工厂模式的区别是：建造者模式更加关注与零件装配的顺序</p>
+<h5 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h5><p>意图：用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象。</p>
+<p>主要解决：在运行期建立和删除原型。</p>
+<p>何时使用：<br>1、当一个系统应该独立于它的产品创建，构成和表示时。<br>2、当要实例化的类是在运行时刻指定时，例如，通过动态装载。<br>3、为了避免创建一个与产品类层次平行的工厂类层次时。<br>4、当一个类的实例只能有几个不同状态组合中的一种时。建立相应数目的原型并克隆它们可能比每次用合适的状态手工实例化该类更方便一些。</p>
+<p>如何解决：利用已有的一个原型对象，快速地生成和原型对象一样的实例。</p>
+<p>关键代码：<br> 1、实现克隆操作，在 JAVA 实现 Cloneable 接口，重写 clone()，在 .NET 中可以使用 Object 类的 MemberwiseClone() 方法来实现对象的浅拷贝或通过序列化的方式来实现深拷贝。<br>2、原型模式同样用于隔离类对象的使用者和具体类型（易变类）之间的耦合关系，它同样要求这些”易变类”拥有稳定的接口。</p>
+<p>应用实例： 1、细胞分裂。 2、JAVA 中的 Object clone() 方法。</p>
+<p>优点： 1、性能提高。 2、逃避构造函数的约束。</p>
+<p>缺点： 1、配备克隆方法需要对类的功能进行通盘考虑，这对于全新的类不是很难，但对于已有的类不一定很容易，特别当一个类引用不支持串行化的间接对象，或者引用含有循环结构的时候。 2、必须实现 Cloneable 接口。</p>
+<p>使用场景： 1、资源优化场景。 2、类初始化需要消化非常多的资源，这个资源包括数据、硬件资源等。 3、性能和安全要求的场景。 4、通过 new 产生一个对象需要非常繁琐的数据准备或访问权限，则可以使用原型模式。 5、一个对象多个修改者的场景。 6、一个对象需要提供给其他对象访问，而且各个调用者可能都需要修改其值时，可以考虑使用原型模式拷贝多个对象供调用者使用。 7、在实际项目中，原型模式很少单独出现，一般是和工厂方法模式一起出现，通过 clone 的方法创建一个对象，然后由工厂方法提供给调用者。原型模式已经与 Java 融为浑然一体，大家可以随手拿来使用。</p>
+<p>注意事项：与通过对一个类进行实例化来构造新对象不同的是，原型模式是通过拷贝一个现有对象生成新对象的。浅拷贝实现 Cloneable，重写，深拷贝是通过实现 Serializable 读取二进制流。</p>
+<h4 id="结构型"><a href="#结构型" class="headerlink" title="结构型"></a>结构型</h4><p>用于帮助将多个对象组织成更大的结构。</p>
+<p>结构型模式主要有：</p>
+<h5 id="适配器模式adapter"><a href="#适配器模式adapter" class="headerlink" title="适配器模式adapter"></a>适配器模式adapter</h5><p>适配器模式（Adapter Pattern）是作为两个不兼容的接口之间的桥梁。这种类型的设计模式属于结构型模式，它结合了两个独立接口的功能。</p>
+<p>意图：将一个类的接口转换成客户希望的另外一个接口。适配器模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。</p>
+<p>主要解决：主要解决在软件系统中，常常要将一些”现存的对象”放到新的环境中，而新环境要求的接口是现对象不能满足的。</p>
+<p>何时使用：<br>1、系统需要使用现有的类，而此类的接口不符合系统的需要。<br>2、想要建立一个可以重复使用的类，用于与一些彼此之间没有太大关联的一些类，包括一些可能在将来引进的类一起工作，这些源类不一定有一致的接口。<br>3、通过接口转换，将一个类插入另一个类系中。（比如老虎和飞禽，现在多了一个飞虎，在不增加实体的需求下，增加一个适配器，在里面包容一个虎对象，实现飞的接口。）</p>
+<p>如何解决：继承或依赖（推荐）。</p>
+<p>关键代码：适配器继承或依赖已有的对象，实现想要的目标接口。</p>
+<p>应用实例：<br>1、美国电器 110V，中国 220V，就要有一个适配器将 110V 转化为 220V。<br>2、JAVA JDK 1.1 提供了 Enumeration 接口，而在 1.2 中提供了 Iterator 接口，想要使用 1.2 的 JDK，则要将以前系统的 Enumeration 接口转化为 Iterator 接口，这时就需要适配器模式。<br>3、在 LINUX 上运行 WINDOWS 程序。 4、JAVA 中的 jdbc。</p>
+<p>优点： 1、可以让任何两个没有关联的类一起运行。 2、提高了类的复用。 3、增加了类的透明度。 4、灵活性好。</p>
+<p>缺点： 1、过多地使用适配器，会让系统非常零乱，不易整体进行把握。比如，明明看到调用的是 A 接口，其实内部被适配成了 B 接口的实现，一个系统如果太多出现这种情况，无异于一场灾难。因此如果不是很有必要，可以不使用适配器，而是直接对系统进行重构。 2.由于 JAVA 至多继承一个类，所以至多只能适配一个适配者类，而且目标类必须是抽象类。</p>
+<p>使用场景：有动机地修改一个正常运行的系统的接口，这时应该考虑使用适配器模式。</p>
+<p>注意事项：适配器不是在详细设计时添加的，而是解决正在服役的项目的问题。</p>
+<h5 id="桥接模式bridge"><a href="#桥接模式bridge" class="headerlink" title="桥接模式bridge"></a>桥接模式bridge</h5><p>意图：将抽象部分与实现部分分离，使它们都可以独立的变化。</p>
+<p>主要解决：在有多种可能会变化的情况下，用继承会造成类爆炸问题，扩展起来不灵活。</p>
+<p>何时使用：实现系统可能有多个角度分类，每一种角度都可能变化。</p>
+<p>如何解决：把这种多角度分类分离出来，让它们独立变化，减少它们之间耦合。</p>
+<p>关键代码：抽象类依赖实现类。</p>
+<p>应用实例： </p>
+<p>1、猪八戒从天蓬元帅转世投胎到猪，转世投胎的机制将尘世划分为两个等级，即：灵魂和肉体，前者相当于抽象化，后者相当于实现化。生灵通过功能的委派，调用肉体对象的功能，使得生灵可以动态地选择。 </p>
+<p>2、墙上的开关，可以看到的开关是抽象的，不用管里面具体怎么实现的。</p>
+<p>优点： </p>
+<p>1、抽象和实现的分离。<br>2、优秀的扩展能力。<br>3、实现细节对客户透明。</p>
+<p>缺点：桥接模式的引入会增加系统的理解与设计难度，由于聚合关联关系建立在抽象层，要求开发者针对抽象进行设计与编程。</p>
+<p>使用场景： 1、如果一个系统需要在构件的抽象化角色和具体化角色之间增加更多的灵活性，避免在两个层次之间建立静态的继承联系，通过桥接模式可以使它们在抽象层建立一个关联关系。 2、对于那些不希望使用继承或因为多层次继承导致系统类的个数急剧增加的系统，桥接模式尤为适用。 3、一个类存在两个独立变化的维度，且这两个维度都需要进行扩展。</p>
+<p>注意事项：对于两个独立变化的维度，使用桥接模式再适合不过了。</p>
+<h5 id="组合器模式component"><a href="#组合器模式component" class="headerlink" title="组合器模式component"></a>组合器模式component</h5><p>意图：将对象组合成树形结构以表示”部分-整体”的层次结构。组合模式使得用户对单个对象和组合对象的使用具有一致性。</p>
+<p>主要解决：它在我们树型结构的问题中，模糊了简单元素和复杂元素的概念，客户程序可以像处理简单元素一样来处理复杂元素，从而使得客户程序与复杂元素的内部结构解耦。</p>
+<p>何时使用： </p>
+<p>1、您想表示对象的部分-整体层次结构（树形结构）。<br>2、您希望用户忽略组合对象与单个对象的不同，用户将统一地使用组合结构中的所有对象。</p>
+<p>如何解决：树枝和叶子实现统一接口，树枝内部组合该接口。</p>
+<p>关键代码：树枝内部组合该接口，并且含有内部属性 List，里面放 Component。</p>
+<p>应用实例：<br>1、算术表达式包括操作数、操作符和另一个操作数，其中，另一个操作数也可以是操作数、操作符和另一个操作数。<br>2、在 JAVA AWT 和 SWING 中，对于 Button 和 Checkbox 是树叶，Container 是树枝。</p>
+<p>优点： </p>
+<p>1、高层模块调用简单。 2、节点自由增加。</p>
+<p>缺点：在使用组合模式时，其叶子和树枝的声明都是实现类，而不是接口，违反了依赖倒置原则。</p>
+<p>使用场景：部分、整体场景，如树形菜单，文件、文件夹的管理。</p>
+<p>注意事项：定义时为具体类。</p>
+<h5 id="外观门面模式Facade"><a href="#外观门面模式Facade" class="headerlink" title="外观门面模式Facade"></a>外观门面模式Facade</h5><p>意图：为子系统中的一组接口提供一个一致的界面，外观模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。</p>
+<p>主要解决：降低访问复杂系统的内部子系统时的复杂度，简化客户端之间的接口。</p>
+<p>何时使用： 1、客户端不需要知道系统内部的复杂联系，整个系统只需提供一个”接待员”即可。 2、定义系统的入口。</p>
+<p>如何解决：客户端不与系统耦合，外观类与系统耦合。</p>
+<p>关键代码：在客户端和复杂系统之间再加一层，这一层将调用顺序、依赖关系等处理好。</p>
+<p>应用实例： </p>
+<p>1、去医院看病，可能要去挂号、门诊、划价、取药，让患者或患者家属觉得很复杂，如果有提供接待人员，只让接待人员来处理，就很方便。<br>2、JAVA 的三层开发模式。</p>
+<p>优点： 1、减少系统相互依赖。 2、提高灵活性。 3、提高了安全性。</p>
+<p>缺点：不符合开闭原则，如果要改东西很麻烦，继承重写都不合适。</p>
+<p>使用场景：<br>1、为复杂的模块或子系统提供外界访问的模块。<br>2、子系统相对独立。 3、预防低水平人员带来的风险。</p>
+<p>注意事项：在层次化结构中，可以使用外观模式定义系统中每一层的入口。</p>
+<h5 id="亨元模式flyweight"><a href="#亨元模式flyweight" class="headerlink" title="亨元模式flyweight"></a>亨元模式flyweight</h5><p>意图：运用共享技术有效地支持大量细粒度的对象。</p>
+<p>主要解决：在有大量对象时，有可能会造成内存溢出，我们把其中共同的部分抽象出来，如果有相同的业务请求，直接返回在内存中已有的对象，避免重新创建。</p>
+<p>何时使用： </p>
+<p>1、系统中有大量对象。<br>2、这些对象消耗大量内存。<br>3、这些对象的状态大部分可以外部化。<br>4、这些对象可以按照内蕴状态分为很多组，当把外蕴对象从对象中剔除出来时，每一组对象都可以用一个对象来代替。<br>5、系统不依赖于这些对象身份，这些对象是不可分辨的。</p>
+<p>如何解决：用唯一标识码判断，如果在内存中有，则返回这个唯一标识码所标识的对象。</p>
+<p>关键代码：用 HashMap 存储这些对象。</p>
+<p>应用实例：<br>1、JAVA 中的 String，如果有则返回，如果没有则创建一个字符串保存在字符串缓存池里面。<br>2、数据库的数据池。</p>
+<p>优点：大大减少对象的创建，降低系统的内存，使效率提高。</p>
+<p>缺点：提高了系统的复杂度，需要分离出外部状态和内部状态，而且外部状态具有固有化的性质，不应该随着内部状态的变化而变化，否则会造成系统的混乱。</p>
+<p>使用场景： 1、系统有大量相似对象。 2、需要缓冲池的场景。</p>
+<p>注意事项： 1、注意划分外部状态和内部状态，否则可能会引起线程安全问题。 2、这些类必须有一个工厂对象加以控制。</p>
+<h5 id="装饰器模式decorator"><a href="#装饰器模式decorator" class="headerlink" title="装饰器模式decorator"></a>装饰器模式decorator</h5><p>对已有的业务逻辑进一步的封装，使其增加额外的功能，如java中的<strong>IO流</strong>就使用了装饰者模式，用户在使用的时候，可以任意组装，达到自己想要的效果。</p>
+<h5 id="代理模式proxy"><a href="#代理模式proxy" class="headerlink" title="代理模式proxy"></a>代理模式proxy</h5><p>代理模式是给某一个对象提供一个代理，并由代理对象控制对原对象的引用。</p>
+<p>优点：代理模式能够协调调用者和被调用者，在一定程度上降低了系统的耦合度；可以灵活地隐藏被代理对象的部分功能和服务，也增加额外的功能和服务。</p>
+<p>缺点：</p>
+<p>由于使用了代理模式，因此程序的性能没有直接调用性能高；使用代理模式提高了代码的复杂度。</p>
+<p>举一个生活中的例子：比如买飞机票，由于离飞机场太远，直接去飞机场买票不太现实，这个时候我们就可以上携程 App 上购买飞机票，这个时候携程 App 就相当于是飞机票的代理商。</p>
+<h4 id="行为型"><a href="#行为型" class="headerlink" title="行为型"></a>行为型</h4><p>用于帮助系统间各对象的通信，以及如何控制复杂系统中流程。</p>
+<p>行为型模式主要有：</p>
+<h5 id="解释器模式"><a href="#解释器模式" class="headerlink" title="解释器模式"></a>解释器模式</h5><p>用的比较少，可能出现的地方：<strong>语法解析</strong></p>
+<h5 id="中介者模式"><a href="#中介者模式" class="headerlink" title="中介者模式"></a>中介者模式</h5><p>作用：<br>通过使用一个中间对象来进行消息分发以及减少类之间的直接依赖。</p>
+<p>本质：</p>
+<p>ComponentA,ComponentB,ComponentC 都拥有一个Mediator（拥有一个方法notify)</p>
+<p>当某一个Component执行某一个操作的时候, 除了做完自己的事情，还需要Mediator::Notify</p>
+<p>Mediator有一个具体的子类叫：ConcreteMediator，他拥有所有的Component，并overwrite了Notify接口</p>
+<h5 id="命令模式command"><a href="#命令模式command" class="headerlink" title="命令模式command"></a>命令模式command</h5><p>命令模式：将一个请求封装为一个对象，从而使你可以用不同的请求对客户进行参数化，对请求排队和记录请求日志，以及支持可撤销的操作。</p>
+<p>应用场景：将命令者与执行者完全解耦。</p>
+<p>Java中的Runnable就是命令模式</p>
+<h5 id="迭代器模式"><a href="#迭代器模式" class="headerlink" title="迭代器模式"></a>迭代器模式</h5><p>STL::iterator</p>
+<h5 id="备忘录模式"><a href="#备忘录模式" class="headerlink" title="备忘录模式"></a>备忘录模式</h5><p>Originator 发起者；<br>CareTaker 备忘录管理者，管理所有的备忘录快照<br>Memoto 备忘录，有getState, setState两个方法</p>
+<p>一个游戏，玩一会儿，自动存档，再玩一会，自动存档。就可以考虑用备忘录模式</p>
+<h5 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h5><p>发布订阅模式</p>
+<p>对象间一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。Android中的<strong>各种Listener</strong>就使用到了这一设计模式，只要用户对手机进行操作，对应的listener就会被通知，并作出响应的处理。</p>
+<h5 id="状态模式state"><a href="#状态模式state" class="headerlink" title="状态模式state"></a>状态模式state</h5><p>状态模式：允许对象在其内部状态改变时改变他的行为。对象看起来似乎改变了他的类。</p>
+<p>应用场景：一个对象的内部状态改变时，他的行为剧烈的变化。</p>
+<p>context 使用 State</p>
+<p>concreteStateA，B，C继承自State</p>
+<p>concreteStateA 可以在实现时切换状态到B</p>
+<h5 id="模板模式"><a href="#模板模式" class="headerlink" title="模板模式"></a>模板模式</h5><p>模板方法模式是指定义一个模板结构，将具体内容延迟到子类去实现。</p>
+<p>让子类可以重写方法的一部分，而不是整个重写，你可以控制子类需要重写那些操作。</p>
+<p>做一件事情需要1，2，3三步，父类提供了基本实现，子类也可以选择overwrite。</p>
+<h5 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h5><p>答：策略模式是指定义一系列算法，将每个算法都封装起来，并且使他们之间可以相互替换。</p>
+<p>优点：遵循了开闭原则，扩展性良好。</p>
+<p>缺点：随着策略的增加，对外暴露越来越多。</p>
+<p>策略模式则是以接口形式提供抽象接口。由具体实现类提供不同算法。</p>
+<p>策略模式一般由3部分组成</p>
+<ul>
+<li>一个Context持有所有策略实现类引用，提供给客户端运行</li>
+<li>一个策略接口提供</li>
+<li>具体的策略实现类</li>
+</ul>
+<p>通过上面可以看到，策略模式和模板模式有一个最重要的区别，即模板模式一般只针对一套算法，注重对<strong>同一个算法的不同细节进行抽象提供不同的实现</strong>。而策略模式注重多套算法多套实现，在算法中间不应该有交集，因此算法和算法只间一般不会有冗余代码！因为不同算法之间的实现一般不同很相近。</p>
+<p>因此我们可以看到，策略模式的关注点更广，模板模式的关注点更深。而且两种模式可以一起使用，即具体某个策略下可以通过模板减少不同步骤的冗余代码。</p>
+<p>例如：限流是服务器要实现的功能，但是实现策略有基于滑动窗口的限流策略、基于令牌桶的限流策略等。</p>
+<h5 id="访问者模式"><a href="#访问者模式" class="headerlink" title="访问者模式"></a>访问者模式</h5><p>用途：文件遍历<br>java.nio.file.FileVisitor接口<br>类功能：一个用于访问文件的接口。这一接口的实现类通过Files.walkFileTree方法实现对文件树中每一个文件的访问。<br>public static Path walkFileTree(Path start,Set options,<br>int maxDepth,FileVisitor&lt; super Path&gt; visitor) ，这一方法中回调了visitor的方法。<br>方法实现上：访问者对每一个被访问者都有一个实现方法。每一个被访问者都有一个通用方法，输入参数为访问者，此方法用于调用访问者的方法。</p>
+<h5 id="责任链"><a href="#责任链" class="headerlink" title="责任链"></a>责任链</h5><p>webserver的filter</p>
+<p>通过把请求从一个对象传递到链条中下一个对象的方式来解除对象之间的耦合，直到请求被处理完毕。链中的对象是同一接口或抽象类的不同实现。</p>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/sinat_34166518/article/details/89206059">https://blog.csdn.net/sinat_34166518/article/details/89206059</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/9/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/33/">33</a><a class="extend next" rel="next" href="/page/11/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+  </nav>
+
+
+
+		  </div>
+		  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+		  
+
+		</div>
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">NeoWei</p>
+  <div class="site-description" itemprop="description">我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">325</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">NeoWei</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a>
+  </div>
+
+<br>
+<a href="https://beian.miit.gov.cn/" rel="external nofollow noreferrer"  style="color:#f72b07" target="_blank">沪ICP备2020030798号-1</a>
+<br>
+
+        
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1279618438&web_id=1279618438"></script>
+  </div>
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.js"></script>
+  <script>
+      pbOptions = {};
+        pbOptions.iconStyle = "box";
+        pbOptions.boxForm = "horizontal";
+        pbOptions.position = "bottomCenter";
+        pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+  </script>
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'uE8T6jDhH4vW6BtH143y72nw-gzGzoHsz',
+      appKey     : '3xulfIcqN5mLqRSxptxvnamK',
+      placeholder: "Just go go",
+      avatar     : 'identicon',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

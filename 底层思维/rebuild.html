@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.b5mang.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="理论课 2019年版 使命：让哲科思维点亮创新者！ 用第一性原理，跨越非连续性，实现第二曲线式增长。 第一部分 创新的三个模型：第一曲线、第二曲线、非连续性 三个模型的逻辑关系：第一曲线 + 非连续性 &#x3D; 第二曲线 生物进化论：遗传变异，自然选择创新与进化的完美类比遗传 （第一曲线）变异+选择 （分形创新）新物种 （第二曲线）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重塑知识体系">
+<meta property="og:url" content="http://www.b5mang.com/%E5%BA%95%E5%B1%82%E6%80%9D%E7%BB%B4/rebuild.html">
+<meta property="og:site_name" content="Neo&#39;s Blog">
+<meta property="og:description" content="理论课 2019年版 使命：让哲科思维点亮创新者！ 用第一性原理，跨越非连续性，实现第二曲线式增长。 第一部分 创新的三个模型：第一曲线、第二曲线、非连续性 三个模型的逻辑关系：第一曲线 + 非连续性 &#x3D; 第二曲线 生物进化论：遗传变异，自然选择创新与进化的完美类比遗传 （第一曲线）变异+选择 （分形创新）新物种 （第二曲线）">
+<meta property="og:locale">
+<meta property="og:image" content="http://cdn.b5mang.com/20201021131256.png">
+<meta property="og:image" content="http://cdn.b5mang.com/20201021132350.png">
+<meta property="article:published_time" content="2020-10-20T10:27:34.359Z">
+<meta property="article:modified_time" content="2022-03-02T13:22:22.821Z">
+<meta property="article:author" content="NeoWei">
+<meta property="article:tag" content="后端开发知识体系,知识体系构建,刷题技巧,本质思考">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://cdn.b5mang.com/20201021131256.png">
+
+<link rel="canonical" href="http://www.b5mang.com/%E5%BA%95%E5%B1%82%E6%80%9D%E7%BB%B4/rebuild.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.css"><style>
+#needsharebutton-postbottom {
+  cursor: pointer;
+  height: 26px;
+  margin-top: 10px;
+  position: relative;
+}
+#needsharebutton-postbottom .btn {
+  border: 1px solid $btn-default-border-color;
+  border-radius: 3px;
+  display: initial;
+  padding: 1px 4px;
+}
+</style>
+  <title>重塑知识体系 | Neo's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Neo's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不抽象就无法深入思考<br>不还原就看不到本来面目!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+		<div id="container">
+		  <div class="content post posts-expand">
+		    
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/%E5%BA%95%E5%B1%82%E6%80%9D%E7%BB%B4/rebuild.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          重塑知识体系
+        </h1>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-10-20 18:27:34" itemprop="dateCreated datePublished" datetime="2020-10-20T18:27:34+08:00">2020-10-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-02 21:22:22" itemprop="dateModified" datetime="2022-03-02T21:22:22+08:00">2022-03-02</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/%E5%BA%95%E5%B1%82%E6%80%9D%E7%BB%B4/rebuild.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/%E5%BA%95%E5%B1%82%E6%80%9D%E7%BB%B4/rebuild.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>理论课</p>
+<p>2019年版</p>
+<p>使命：让哲科思维点亮创新者！</p>
+<p>用第一性原理，跨越非连续性，实现第二曲线式增长。</p>
+<p>第一部分</p>
+<p>创新的三个模型：第一曲线、第二曲线、非连续性</p>
+<p>三个模型的逻辑关系：第一曲线 + 非连续性 = 第二曲线</p>
+<p>生物进化论：遗传变异，自然选择<br>创新与进化的完美<strong>类比</strong><br>遗传 （第一曲线）<br>变异+选择 （分形创新）<br>新物种 （第二曲线）</p>
+<a id="more"></a>
+<h2 id="第一曲线"><a href="#第一曲线" class="headerlink" title="第一曲线"></a>第一曲线</h2><p>第一个问题：为什么要创新？</p>
+<p>论点1: 增长（任何企业的首要战略目标）</p>
+<p>论点2: 你最渴望的东西，往往也是最制约你的东西。<br>增长魔咒</p>
+<p>第二个问题：如何才能增长？<br>三种增长引擎：创新、红利、管理<br>S曲线：技术性创新/连续性创新，Better<br>隐含假设：只要努力，就能持续增长。</p>
+<p>第三个问题：会持续增长下去吗？<br>不会，因为有极限点</p>
+<p>第四个问题：为什么会有极限点？<br>城市：超线性增长；组织：亚线性增长<br>随着规模增加，人均产出在降低</p>
+<p>第五个问题：为什么随着规模增加，人均产出在降低<br>熵增定律：封闭系统的熵随着时间的推移不断增加，且不可逆。</p>
+<p>极限点 挑战 传统的经典战略理论（坚守本业）</p>
+<p>遭遇极限点以及由此导致的非连续性断层期，是大公司的第一死因。</p>
+<p>第六个问题：如何发现极限点：<br>如何发现极限点：单一要素十倍速变坏<br>两类曲线：显曲线（收入、利润、市占率），隐曲线（技术、产品、组织）；<br>隐藏的能力曲线先于财务曲线遭遇极限点，所以仅仅在财务上判断会有滞后性。</p>
+<p>第七个问题：企业增长的宿命如何？<br>增长越来越慢，最终导致死亡。</p>
+<p>创新 与 管理 是二元对立，相互遏制的<br>一线，二点，三阶段</p>
+<h2 id="第二曲线"><a href="#第二曲线" class="headerlink" title="第二曲线"></a>第二曲线</h2><p>第一个问题：什么是两种性质的增长？<br>市场级增长、企业级增长；企业增长往往比不过市场；<br>连续性 vs 非连续性<br>管理和延续 vs 创新与破坏<br>封闭式增长  vs 开放式增长<br>保护性思维 vs 破坏性思维</p>
+<p>第二个问题：什么是第二曲线创新<br>只有第二曲线创新，才能带来实质性的增长。<br>创新是经济发展的唯一因；<br>只有破坏子系统才能让母系统长存。</p>
+<p>企业长寿方法论：守正出奇<br>管理：尽量延长第一曲线的生命来应对既有市场<br>创新：独立启动第二曲线来应对新兴市场</p>
+<p>第三个问题：开启第二曲线的最佳时期<br>1）第一曲线已过破局点<br>2）第一曲线还在增长，但增长加速度开始下降之后<br>3）deadline: 第一曲线到达财务极限点之前</p>
+<p>基业长青的关键在于：一次又一次的跨越第二曲线bai</p>
+<h2 id="分形创新"><a href="#分形创新" class="headerlink" title="分形创新"></a>分形创新</h2><p>如何打破管理与创新的二元对立？<br>两难困境：不创新，等死；创新，找死。</p>
+<p>如果小尺度看不清pattern， 把尺度放大一下；<br>公司创新 =》 生命进化？<br>自然界无飞跃： 尺度变换：生存竞争的主角不是物种之间的竞争，而是同一物种个体之间的竞争。<br>变异 + 变异选择 =》 新物种</p>
+<p>第二曲线不是布局出来的，而是长出来的。第二曲线绝对不是多元化理论。</p>
+<p>创新与进化的同构性底层算法：S曲线这个自相似结构在不同尺度上的无限分形</p>
+<p>分形创新</p>
+<p>所谓第二曲线创新，不是放弃主营业务，布局新业务；恰恰相反：往主营业务中注入创新，新业务将是自然而然的结果。</p>
+<p>分形，一种极其深刻的数学思想： Z = Z^2 + c</p>
+<p>复杂系统，可以由简单的几个法则构成。</p>
+<p>神性法则，逆熵性；超越S曲线魔咒；</p>
+<p>第一性原理打破非连续性，而分形便是其中一个！</p>
+<p>更小的尺度进去，大尺度出来</p>
+<p>第二部分<br>战略的三个模型：组合创新、单一要素、战略杠杆</p>
+<p>理论基础：物理原子论、哲学还原论<br>三者的逻辑关系，源于物理学的还原论（组合创新）：基本要素（单一要素），重新组合（战略杠杆）</p>
+<h2 id="组合创新"><a href="#组合创新" class="headerlink" title="组合创新"></a>组合创新</h2><p>相关论断：<br>创新，并非“无中生有”，而是把不同的事务关联起来，合成新事物。</p>
+<pre><code>                                                - 乔布斯
+</code></pre><p>旧要素，新组合。<br>组成经济结构的基本要素：技术、产品、市场、资源、组织。</p>
+<pre><code>                                                - 熊彼特
+</code></pre><p>供需连模型：供给侧（技术、产品）、需求侧（客户、用户）、连接侧（平台、组织）</p>
+<p>两个步骤：<br>拆解基本要素（创新基本功）<br>    拆解到模块化即可（社会、组织、个体、细胞、分子、原子、质子、夸克）<br>重新组合</p>
+<h2 id="单一要素"><a href="#单一要素" class="headerlink" title="单一要素"></a>单一要素</h2><p>组合要素的本质是什么？ 依存条件<br>充分条件越多越好，必要条件越少越好。</p>
+<p>论断：<br>过了破局点，正循环自增长；不过破局点，低水平重复。<br>破局点，往往跟风口、周期有关系。<br>击破阈值之前，遍地是红海；击破阈值之后，一花一世界。<br>单一元素最大化： 聚焦第一曲线的某一个元素，将它最大化为第二曲线的全部<br>取胜的系统在追求最大化单一要素和最小化其他要素上，走到近乎荒谬的极端。</p>
+<pre><code>                                                     - 芒格《最大化模型》
+</code></pre><p>两个问题：</p>
+<p>如何识别破局点？<br>    单一要素十倍速变化</p>
+<p>在企业资源有限的前提下，如何突破破局点？<br>    最小切口，力出一孔</p>
+<h2 id="战略杠杆"><a href="#战略杠杆" class="headerlink" title="战略杠杆"></a>战略杠杆</h2><p>好战略就是杠杆作用！<br>创新红利，只是切入点；为了打造长期战略，必须定义长线指标。否则，会陷入价值网陷阱。</p>
+<p>杠杆模型-战略杠杆四个一<br>创新红利：十倍速一<br>    供需连模型<br>真北指标：长线的一</p>
+<p>核心能力：舍九取一<br>    技术、产品、市场、组织、运营、模式、资本<br>战略支点：不变的一<br>    基石假设、第一性原理、使命愿景</p>
+<p>战略支点，为什么需要不变的一？<br>找到关键要素，将所有力量集中在支点上；<br>不变的一，唯一的的一；<br>“简一律”<br>简一律破二元对立</p>
+<p>核心能力，为什么要舍九取一？<br>一个好的战略的标准就是：他的对立面也是好的战略。<br>战略本身什么要不是，他必须着力于某一个载体才能起作用。</p>
+<p>亚马逊：<br>长线指标：利润（短期） VS 自由现金流（长期）<br>核心运营能力：无限选择、更低的价格、快速配送 （增长飞轮，越。。。越。。。）</p>
+<p>第三部分<br>竞争</p>
+<p>错位竞争，初创企业的第一法则<br>颠覆创新，错位竞争的最佳范式<br>边缘分化，颠覆创新的底层定律</p>
+<h3 id="错位竞争"><a href="#错位竞争" class="headerlink" title="错位竞争"></a>错位竞争</h3><p>错位竞争：与其更好，不如不同</p>
+<p>理论：<br>达尔文：性状趋异原则</p>
+<p>概念：</p>
+<p>生态位：</p>
+<p>价值网：一方面供给；一方面禁锢！<br>价值网如何而来？<br>熊彼特创新的五个基本要素：技术、产品、市场、组织、资源等。<br>克里斯坦森简化的价值网模型：供给：技术、需求：市场<br><img src="http://cdn.b5mang.com/20201021131256.png" alt="价值网"></p>
+<p>洞见：<br>1）技术无所谓颠覆，市场也无所谓颠覆，只有技术与市场的新组合才有颠覆性。<br>2）通常把在位企业的生态位看成了全部可能的生存空间。<br>3）在位企业有自己的认知边界与隐含假设，又或者被自己所在的价值网束缚。<br>4）一旦选择了基本要素并完成组合，企业也就选择了自己的生态位。<br>5）错位竞争，不是自感弱小，而是让棋盘变得更大（从平面思维变成分形尺度思维）</p>
+<p>方法论：<br>王慧文 A/B分类法（横切一刀，纵切一刀，再切一刀）</p>
+<p>案例：</p>
+<ol>
+<li>酒店旅游， 美团 VS 携程</li>
+<li>团购，美团 VS 阿里聚划算</li>
+</ol>
+<h3 id="颠覆创新"><a href="#颠覆创新" class="headerlink" title="颠覆创新"></a>颠覆创新</h3><p>定义</p>
+<p>创造性破坏的一体两面：<br>对内：第二曲线创新<br>对外：颠覆性创新</p>
+<p>概念</p>
+<p>技术曲线<br>连续性创新：沿着技术曲线持续<strong>改善</strong>， 做的<strong>更好</strong>，定位于主流消费者；但伴随<strong>遏制不住的复杂化</strong>而会遭遇极限点<br>连续性技术<br>正向非连续性<br>反向非连续性：才具有颠覆性<br>“右上角迁移力”：颠覆式创新的逻辑奇点（技术进度的速度会超过市场需求的速度）<br><img src="http://cdn.b5mang.com/20201021132350.png" alt="20201021132350"></p>
+<p>方法论<br>如何进行颠覆性创新？ 两个关键步骤：</p>
+<ol>
+<li><strong>需求</strong>：识别未被满足的大众需求（低端、边缘）<br>供给：引入新兴技术和产品（更方便、更便宜）</li>
+<li><strong>供给</strong>：技术和产品连续性迭代进步（护城河）</li>
+</ol>
+<h3 id="边缘分化"><a href="#边缘分化" class="headerlink" title="边缘分化"></a>边缘分化</h3><p>回答的一个问题：为什么创新总来自于边缘？<br>偶然现象还是底层原理？</p>
+<p>理论基础：王东岳 递弱代偿原理</p>
+<p>第四部分<br>组织</p>
+<p>文化的三要素：<br>生存结构、思维方式、遮蔽效应</p>
+<ol>
+<li>生存结构：价值网络</li>
+<li>思维方式：组织心智</li>
+<li>打破窘境：破界创新</li>
+</ol>
+<h2 id="价值网络"><a href="#价值网络" class="headerlink" title="价值网络"></a>价值网络</h2><p>价值网依赖理论<br>需求侧价值网：客户价值网、资本价值网</p>
+<p>真正决定企业未来发展方向的是价值网，而非管理者。管理者只不过扮演了一个象征性的角色而已。</p>
+<p>回不去的低端：大企业无法进入小市场，因为满足不了资本的要求。</p>
+<p>如何突破价值网，找到真正的主体？</p>
+<ol>
+<li>重新定义真北指标（长线）</li>
+<li>重新定义战略支点（不变）</li>
+</ol>
+<h2 id="组织心智"><a href="#组织心智" class="headerlink" title="组织心智"></a>组织心智</h2><p>心智模式自动化<br>群体心智模式，一旦形成，很难改变。<br>心智模式的作用：解释过去，预测未来。<br>心智模式的假设边界：未来不变的连续性假设</p>
+<p>生存结构，容易改变；思维方式，很难改变。</p>
+<p>每一个人都是自己认知框架的囚徒。</p>
+<p>延续性创新，发生在原有体系内；<br>突破性创新，用重量级团队方式，改变流程；<br>破坏性创新，用独立小机构，改变流程与价值标准。</p>
+<p>类比：</p>
+<p>新的物种是如何产生的：变异 + 选择 + 隔离（地理隔离 =》 生殖隔离 =》 新物种）</p>
+<p>案例：<br>百度：搜索、新浪：媒体、联想：贸工技、盛大：运营、苏宁：线下；<br>阿里：电商+金融、腾讯：社交+投资<br>IBM的衰弱：新的CEO是大型机负责人<br>微软的重生：新的CEO是云业务负责人</p>
+<p>方法论：</p>
+<ol>
+<li>现有核心业务曲线发展到极致（尽其天年而不中道夭）</li>
+<li>带领新组织开辟新的价值曲线网（独立小机构）</li>
+</ol>
+<h2 id="破界创新"><a href="#破界创新" class="headerlink" title="破界创新"></a>破界创新</h2><p>第一性原理 = 逻辑奇点 + 公理演绎</p>
+<p>奇点下移</p>
+<p>2020年版</p>
+<h2 id="第二曲线（2020版本）"><a href="#第二曲线（2020版本）" class="headerlink" title="第二曲线（2020版本）"></a>第二曲线（2020版本）</h2><h3 id="组合创新：-如何在旧要素中发现新机会"><a href="#组合创新：-如何在旧要素中发现新机会" class="headerlink" title="组合创新： 如何在旧要素中发现新机会"></a>组合创新： 如何在旧要素中发现新机会</h3><h3 id="单点破局：-如何力出一孔十倍速增长"><a href="#单点破局：-如何力出一孔十倍速增长" class="headerlink" title="单点破局： 如何力出一孔十倍速增长"></a>单点破局： 如何力出一孔十倍速增长</h3><h3 id="错位竞争：-如何做到与其更好不如不同"><a href="#错位竞争：-如何做到与其更好不如不同" class="headerlink" title="错位竞争： 如何做到与其更好不如不同"></a>错位竞争： 如何做到与其更好不如不同</h3><h3 id="低端颠覆：-新生力量如何逆袭上位"><a href="#低端颠覆：-新生力量如何逆袭上位" class="headerlink" title="低端颠覆： 新生力量如何逆袭上位"></a>低端颠覆： 新生力量如何逆袭上位</h3><h3 id="组织心智：-如何冲破创新中的内部障碍"><a href="#组织心智：-如何冲破创新中的内部障碍" class="headerlink" title="组织心智： 如何冲破创新中的内部障碍"></a>组织心智： 如何冲破创新中的内部障碍</h3><h3 id="第二曲线：-如何重启增长持续创新"><a href="#第二曲线：-如何重启增长持续创新" class="headerlink" title="第二曲线： 如何重启增长持续创新"></a>第二曲线： 如何重启增长持续创新</h3><h3 id="分形创新：-老产品如何长出新生命"><a href="#分形创新：-老产品如何长出新生命" class="headerlink" title="分形创新： 老产品如何长出新生命"></a>分形创新： 老产品如何长出新生命</h3><h3 id="战略杠杆：-如何系统思考构建长期战略"><a href="#战略杠杆：-如何系统思考构建长期战略" class="headerlink" title="战略杠杆： 如何系统思考构建长期战略"></a>战略杠杆： 如何系统思考构建长期战略</h3><h2 id="第一性原理"><a href="#第一性原理" class="headerlink" title="第一性原理"></a>第一性原理</h2><h3 id="第一原理：-什么是顶级智慧的至简之道"><a href="#第一原理：-什么是顶级智慧的至简之道" class="headerlink" title="第一原理： 什么是顶级智慧的至简之道"></a>第一原理： 什么是顶级智慧的至简之道</h3><h3 id="公理思维：-如何从本质出发构建创新系统"><a href="#公理思维：-如何从本质出发构建创新系统" class="headerlink" title="公理思维： 如何从本质出发构建创新系统"></a>公理思维： 如何从本质出发构建创新系统</h3><h3 id="破界创新：-如何打破旧认知发现新世界"><a href="#破界创新：-如何打破旧认知发现新世界" class="headerlink" title="破界创新： 如何打破旧认知发现新世界"></a>破界创新： 如何打破旧认知发现新世界</h3><h3 id="组织刷新：-如何刷新使命驱动战略"><a href="#组织刷新：-如何刷新使命驱动战略" class="headerlink" title="组织刷新： 如何刷新使命驱动战略"></a>组织刷新： 如何刷新使命驱动战略</h3><h3 id="第一创新：-如何用第一原理引领创新"><a href="#第一创新：-如何用第一原理引领创新" class="headerlink" title="第一创新： 如何用第一原理引领创新"></a>第一创新： 如何用第一原理引领创新</h3><h3 id="万物至理：-如何超越对立走向整合"><a href="#万物至理：-如何超越对立走向整合" class="headerlink" title="万物至理： 如何超越对立走向整合"></a>万物至理： 如何超越对立走向整合</h3><h3 id="从众效应：-如何打破群体信念"><a href="#从众效应：-如何打破群体信念" class="headerlink" title="从众效应： 如何打破群体信念"></a>从众效应： 如何打破群体信念</h3><h3 id="批判思维：-高手是如何发现真相的"><a href="#批判思维：-高手是如何发现真相的" class="headerlink" title="批判思维： 高手是如何发现真相的"></a>批判思维： 高手是如何发现真相的</h3><h2 id="理念世界"><a href="#理念世界" class="headerlink" title="理念世界"></a>理念世界</h2><h3 id="理念世界：-存在是一"><a href="#理念世界：-存在是一" class="headerlink" title="理念世界： 存在是一"></a>理念世界： 存在是一</h3><h3 id="理念世界：-零时空场"><a href="#理念世界：-零时空场" class="headerlink" title="理念世界： 零时空场"></a>理念世界： 零时空场</h3><h3 id="觉性智慧：-觉性是一"><a href="#觉性智慧：-觉性是一" class="headerlink" title="觉性智慧： 觉性是一"></a>觉性智慧： 觉性是一</h3><h3 id="觉性智慧：-一个源头"><a href="#觉性智慧：-一个源头" class="headerlink" title="觉性智慧： 一个源头"></a>觉性智慧： 一个源头</h3><h3 id="临在当下"><a href="#临在当下" class="headerlink" title="临在当下"></a>临在当下</h3><h3 id="灵感流淌"><a href="#灵感流淌" class="headerlink" title="灵感流淌"></a>灵感流淌</h3><h3 id="美好作品"><a href="#美好作品" class="headerlink" title="美好作品"></a>美好作品</h3><h3 id="使命召唤"><a href="#使命召唤" class="headerlink" title="使命召唤"></a>使命召唤</h3>
+    </div>
+
+    
+    
+    
+
+    
+      <div>
+        <div class="recommended_posts">
+    
+    
+    <h1>Recommended Posts </h1>
+    <ul>
+        
+            <li><a href="http://www.b5mang.com/risk_ctrl/data_monitor.html">数据与监控</a></li>
+        
+            <li><a href="http://www.b5mang.com/risk_ctrl/risk_control_arch.html">风控系统架构</a></li>
+        
+            <li><a href="http://www.b5mang.com/risk_ctrl/rule_engine_intro.html">风控规则引擎介绍</a></li>
+        
+            <li><a href="http://www.b5mang.com/invest/redirect_money.html">引流</a></li>
+        
+    </ul>
+     
+</div> 
+
+      </div>
+    <div class="post-widgets">
+      <div id="needsharebutton-postbottom">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    </div>
+        <div class="reward-container">
+  <div>你的支持是我坚持的最大动力!</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="NeoWei WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="NeoWei Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/risk_ctrl/rule_engine_intro.html" rel="prev" title="风控规则引擎介绍">
+      <i class="fa fa-chevron-left"></i> 风控规则引擎介绍
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/risk_ctrl/risk_control_arch.html" rel="next" title="风控系统架构">
+      风控系统架构 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+		  </div>
+		  
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+		  
+<script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+<script>
+    const btw = new BTWPlugin();
+
+    btw.init({
+        id: 'container',
+        blogId: '22171-1589640164808-286',
+        name: '第一性原理思考者',
+        qrcode: 'http://cdn.b5mang.com/img_first.png',
+        keyword: '思考',
+    });
+</script>
+
+
+		</div>
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%9B%B2%E7%BA%BF"><span class="nav-number">1.</span> <span class="nav-text">第一曲线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%9B%B2%E7%BA%BF"><span class="nav-number">2.</span> <span class="nav-text">第二曲线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%BD%A2%E5%88%9B%E6%96%B0"><span class="nav-number">3.</span> <span class="nav-text">分形创新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%84%E5%90%88%E5%88%9B%E6%96%B0"><span class="nav-number">4.</span> <span class="nav-text">组合创新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E4%B8%80%E8%A6%81%E7%B4%A0"><span class="nav-number">5.</span> <span class="nav-text">单一要素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%98%E7%95%A5%E6%9D%A0%E6%9D%86"><span class="nav-number">6.</span> <span class="nav-text">战略杠杆</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%99%E4%BD%8D%E7%AB%9E%E4%BA%89"><span class="nav-number">6.1.</span> <span class="nav-text">错位竞争</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%A0%E8%A6%86%E5%88%9B%E6%96%B0"><span class="nav-number">6.2.</span> <span class="nav-text">颠覆创新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%B9%E7%BC%98%E5%88%86%E5%8C%96"><span class="nav-number">6.3.</span> <span class="nav-text">边缘分化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%B7%E5%80%BC%E7%BD%91%E7%BB%9C"><span class="nav-number">7.</span> <span class="nav-text">价值网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%84%E7%BB%87%E5%BF%83%E6%99%BA"><span class="nav-number">8.</span> <span class="nav-text">组织心智</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A0%B4%E7%95%8C%E5%88%9B%E6%96%B0"><span class="nav-number">9.</span> <span class="nav-text">破界创新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%9B%B2%E7%BA%BF%EF%BC%882020%E7%89%88%E6%9C%AC%EF%BC%89"><span class="nav-number">10.</span> <span class="nav-text">第二曲线（2020版本）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E5%90%88%E5%88%9B%E6%96%B0%EF%BC%9A-%E5%A6%82%E4%BD%95%E5%9C%A8%E6%97%A7%E8%A6%81%E7%B4%A0%E4%B8%AD%E5%8F%91%E7%8E%B0%E6%96%B0%E6%9C%BA%E4%BC%9A"><span class="nav-number">10.1.</span> <span class="nav-text">组合创新： 如何在旧要素中发现新机会</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E7%82%B9%E7%A0%B4%E5%B1%80%EF%BC%9A-%E5%A6%82%E4%BD%95%E5%8A%9B%E5%87%BA%E4%B8%80%E5%AD%94%E5%8D%81%E5%80%8D%E9%80%9F%E5%A2%9E%E9%95%BF"><span class="nav-number">10.2.</span> <span class="nav-text">单点破局： 如何力出一孔十倍速增长</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%99%E4%BD%8D%E7%AB%9E%E4%BA%89%EF%BC%9A-%E5%A6%82%E4%BD%95%E5%81%9A%E5%88%B0%E4%B8%8E%E5%85%B6%E6%9B%B4%E5%A5%BD%E4%B8%8D%E5%A6%82%E4%B8%8D%E5%90%8C"><span class="nav-number">10.3.</span> <span class="nav-text">错位竞争： 如何做到与其更好不如不同</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%8E%E7%AB%AF%E9%A2%A0%E8%A6%86%EF%BC%9A-%E6%96%B0%E7%94%9F%E5%8A%9B%E9%87%8F%E5%A6%82%E4%BD%95%E9%80%86%E8%A2%AD%E4%B8%8A%E4%BD%8D"><span class="nav-number">10.4.</span> <span class="nav-text">低端颠覆： 新生力量如何逆袭上位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E7%BB%87%E5%BF%83%E6%99%BA%EF%BC%9A-%E5%A6%82%E4%BD%95%E5%86%B2%E7%A0%B4%E5%88%9B%E6%96%B0%E4%B8%AD%E7%9A%84%E5%86%85%E9%83%A8%E9%9A%9C%E7%A2%8D"><span class="nav-number">10.5.</span> <span class="nav-text">组织心智： 如何冲破创新中的内部障碍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%9B%B2%E7%BA%BF%EF%BC%9A-%E5%A6%82%E4%BD%95%E9%87%8D%E5%90%AF%E5%A2%9E%E9%95%BF%E6%8C%81%E7%BB%AD%E5%88%9B%E6%96%B0"><span class="nav-number">10.6.</span> <span class="nav-text">第二曲线： 如何重启增长持续创新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%BD%A2%E5%88%9B%E6%96%B0%EF%BC%9A-%E8%80%81%E4%BA%A7%E5%93%81%E5%A6%82%E4%BD%95%E9%95%BF%E5%87%BA%E6%96%B0%E7%94%9F%E5%91%BD"><span class="nav-number">10.7.</span> <span class="nav-text">分形创新： 老产品如何长出新生命</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%98%E7%95%A5%E6%9D%A0%E6%9D%86%EF%BC%9A-%E5%A6%82%E4%BD%95%E7%B3%BB%E7%BB%9F%E6%80%9D%E8%80%83%E6%9E%84%E5%BB%BA%E9%95%BF%E6%9C%9F%E6%88%98%E7%95%A5"><span class="nav-number">10.8.</span> <span class="nav-text">战略杠杆： 如何系统思考构建长期战略</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%80%A7%E5%8E%9F%E7%90%86"><span class="nav-number">11.</span> <span class="nav-text">第一性原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E5%8E%9F%E7%90%86%EF%BC%9A-%E4%BB%80%E4%B9%88%E6%98%AF%E9%A1%B6%E7%BA%A7%E6%99%BA%E6%85%A7%E7%9A%84%E8%87%B3%E7%AE%80%E4%B9%8B%E9%81%93"><span class="nav-number">11.1.</span> <span class="nav-text">第一原理： 什么是顶级智慧的至简之道</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AC%E7%90%86%E6%80%9D%E7%BB%B4%EF%BC%9A-%E5%A6%82%E4%BD%95%E4%BB%8E%E6%9C%AC%E8%B4%A8%E5%87%BA%E5%8F%91%E6%9E%84%E5%BB%BA%E5%88%9B%E6%96%B0%E7%B3%BB%E7%BB%9F"><span class="nav-number">11.2.</span> <span class="nav-text">公理思维： 如何从本质出发构建创新系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A0%B4%E7%95%8C%E5%88%9B%E6%96%B0%EF%BC%9A-%E5%A6%82%E4%BD%95%E6%89%93%E7%A0%B4%E6%97%A7%E8%AE%A4%E7%9F%A5%E5%8F%91%E7%8E%B0%E6%96%B0%E4%B8%96%E7%95%8C"><span class="nav-number">11.3.</span> <span class="nav-text">破界创新： 如何打破旧认知发现新世界</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E7%BB%87%E5%88%B7%E6%96%B0%EF%BC%9A-%E5%A6%82%E4%BD%95%E5%88%B7%E6%96%B0%E4%BD%BF%E5%91%BD%E9%A9%B1%E5%8A%A8%E6%88%98%E7%95%A5"><span class="nav-number">11.4.</span> <span class="nav-text">组织刷新： 如何刷新使命驱动战略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E5%88%9B%E6%96%B0%EF%BC%9A-%E5%A6%82%E4%BD%95%E7%94%A8%E7%AC%AC%E4%B8%80%E5%8E%9F%E7%90%86%E5%BC%95%E9%A2%86%E5%88%9B%E6%96%B0"><span class="nav-number">11.5.</span> <span class="nav-text">第一创新： 如何用第一原理引领创新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%87%E7%89%A9%E8%87%B3%E7%90%86%EF%BC%9A-%E5%A6%82%E4%BD%95%E8%B6%85%E8%B6%8A%E5%AF%B9%E7%AB%8B%E8%B5%B0%E5%90%91%E6%95%B4%E5%90%88"><span class="nav-number">11.6.</span> <span class="nav-text">万物至理： 如何超越对立走向整合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E4%BC%97%E6%95%88%E5%BA%94%EF%BC%9A-%E5%A6%82%E4%BD%95%E6%89%93%E7%A0%B4%E7%BE%A4%E4%BD%93%E4%BF%A1%E5%BF%B5"><span class="nav-number">11.7.</span> <span class="nav-text">从众效应： 如何打破群体信念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%B9%E5%88%A4%E6%80%9D%E7%BB%B4%EF%BC%9A-%E9%AB%98%E6%89%8B%E6%98%AF%E5%A6%82%E4%BD%95%E5%8F%91%E7%8E%B0%E7%9C%9F%E7%9B%B8%E7%9A%84"><span class="nav-number">11.8.</span> <span class="nav-text">批判思维： 高手是如何发现真相的</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%90%86%E5%BF%B5%E4%B8%96%E7%95%8C"><span class="nav-number">12.</span> <span class="nav-text">理念世界</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%90%86%E5%BF%B5%E4%B8%96%E7%95%8C%EF%BC%9A-%E5%AD%98%E5%9C%A8%E6%98%AF%E4%B8%80"><span class="nav-number">12.1.</span> <span class="nav-text">理念世界： 存在是一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%90%86%E5%BF%B5%E4%B8%96%E7%95%8C%EF%BC%9A-%E9%9B%B6%E6%97%B6%E7%A9%BA%E5%9C%BA"><span class="nav-number">12.2.</span> <span class="nav-text">理念世界： 零时空场</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%89%E6%80%A7%E6%99%BA%E6%85%A7%EF%BC%9A-%E8%A7%89%E6%80%A7%E6%98%AF%E4%B8%80"><span class="nav-number">12.3.</span> <span class="nav-text">觉性智慧： 觉性是一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%89%E6%80%A7%E6%99%BA%E6%85%A7%EF%BC%9A-%E4%B8%80%E4%B8%AA%E6%BA%90%E5%A4%B4"><span class="nav-number">12.4.</span> <span class="nav-text">觉性智慧： 一个源头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%B4%E5%9C%A8%E5%BD%93%E4%B8%8B"><span class="nav-number">12.5.</span> <span class="nav-text">临在当下</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%81%B5%E6%84%9F%E6%B5%81%E6%B7%8C"><span class="nav-number">12.6.</span> <span class="nav-text">灵感流淌</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BE%8E%E5%A5%BD%E4%BD%9C%E5%93%81"><span class="nav-number">12.7.</span> <span class="nav-text">美好作品</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E5%91%BD%E5%8F%AC%E5%94%A4"><span class="nav-number">12.8.</span> <span class="nav-text">使命召唤</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">NeoWei</p>
+  <div class="site-description" itemprop="description">我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">325</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">NeoWei</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a>
+  </div>
+
+<br>
+<a href="https://beian.miit.gov.cn/" rel="external nofollow noreferrer"  style="color:#f72b07" target="_blank">沪ICP备2020030798号-1</a>
+<br>
+
+        
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1279618438&web_id=1279618438"></script>
+  </div>
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.js"></script>
+  <script>
+      pbOptions = {};
+        pbOptions.iconStyle = "box";
+        pbOptions.boxForm = "horizontal";
+        pbOptions.position = "bottomCenter";
+        pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+  </script>
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'uE8T6jDhH4vW6BtH143y72nw-gzGzoHsz',
+      appKey     : '3xulfIcqN5mLqRSxptxvnamK',
+      placeholder: "Just go go",
+      avatar     : 'identicon',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

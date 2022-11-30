@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.b5mang.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="单体到微服务为什么要转向微服务架构（收益）  系统扩展性不足（例如，因为DB连接问题导致无法持续扩容） 迭代效率低。如果是预估到业务在飞速增长，那就别犹豫，一定要提前考虑微服务的拆分。 系统编译、部署成本高 如果在设计架构的时候，发现需要很多异构的技术栈，那也要考虑下微服务。  转向微服务架构需要克服什么困难（成本）  技术基础设施要求比较高（如果公司技术基础设施非常完备，对应的业务起初就设计的非">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微服务系列-概览">
+<meta property="og:url" content="http://www.b5mang.com/backend_knowledge_architecture/micro_service/micro_service.html">
+<meta property="og:site_name" content="Neo&#39;s Blog">
+<meta property="og:description" content="单体到微服务为什么要转向微服务架构（收益）  系统扩展性不足（例如，因为DB连接问题导致无法持续扩容） 迭代效率低。如果是预估到业务在飞速增长，那就别犹豫，一定要提前考虑微服务的拆分。 系统编译、部署成本高 如果在设计架构的时候，发现需要很多异构的技术栈，那也要考虑下微服务。  转向微服务架构需要克服什么困难（成本）  技术基础设施要求比较高（如果公司技术基础设施非常完备，对应的业务起初就设计的非">
+<meta property="og:locale">
+<meta property="og:image" content="http://cdn.b5mang.com/2021320212041.png">
+<meta property="og:image" content="http://cdn.b5mang.com/2021320212155.png">
+<meta property="og:image" content="http://cdn.b5mang.com/2021320214129.png">
+<meta property="article:published_time" content="2022-02-25T04:01:03.000Z">
+<meta property="article:modified_time" content="2022-11-01T14:17:47.994Z">
+<meta property="article:author" content="NeoWei">
+<meta property="article:tag" content="微服务">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://cdn.b5mang.com/2021320212041.png">
+
+<link rel="canonical" href="http://www.b5mang.com/backend_knowledge_architecture/micro_service/micro_service.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.css"><style>
+#needsharebutton-postbottom {
+  cursor: pointer;
+  height: 26px;
+  margin-top: 10px;
+  position: relative;
+}
+#needsharebutton-postbottom .btn {
+  border: 1px solid $btn-default-border-color;
+  border-radius: 3px;
+  display: initial;
+  padding: 1px 4px;
+}
+</style>
+  <title>微服务系列-概览 | Neo's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Neo's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不抽象就无法深入思考<br>不还原就看不到本来面目!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+		<div id="container">
+		  <div class="content post posts-expand">
+		    
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/micro_service/micro_service.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          微服务系列-概览
+        </h1>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 12:01:03" itemprop="dateCreated datePublished" datetime="2022-02-25T12:01:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/micro_service/micro_service.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/micro_service/micro_service.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="单体到微服务"><a href="#单体到微服务" class="headerlink" title="单体到微服务"></a>单体到微服务</h4><p>为什么要转向微服务架构（收益）</p>
+<ol>
+<li>系统扩展性不足（例如，因为DB连接问题导致无法持续扩容）</li>
+<li>迭代效率低。如果是预估到业务在飞速增长，那就别犹豫，一定要提前考虑微服务的拆分。</li>
+<li>系统编译、部署成本高</li>
+<li>如果在设计架构的时候，发现需要很多异构的技术栈，那也要考虑下微服务。</li>
+</ol>
+<p>转向微服务架构需要克服什么困难（成本）</p>
+<ol>
+<li>技术基础设施要求比较高（如果公司技术基础设施非常完备，对应的业务起初就设计的非常复杂，那么也别犹豫，起手就上微服务。）</li>
+<li>工程拆分挑战比较大，实现时容易为了拆分而拆分。</li>
+</ol>
+<h4 id="拆分原则"><a href="#拆分原则" class="headerlink" title="拆分原则"></a>拆分原则</h4><p>从单体到微服务，也许可以有一个过度：工程的拆分</p>
+<p>微服务拆分的大原则</p>
+<ol>
+<li>单一服务内的高内聚、低耦合，单一职责</li>
+<li>拆分粒度：先粗拆，后细拆（伴随业务复杂度的变多，或者对业务的理解程度加深）</li>
+<li>拆分过程中，要避免影响业务的日常功能迭代—按照依赖顺序，挨个拆分</li>
+<li>确保服务接口定义有可扩展性</li>
+<li>避免环形依赖问题（通过分层，例如业务层、数据访问层）</li>
+</ol>
+<p>业务优先，组织结构，质量维度</p>
+<p>SRP Single Responsibilty 单一指责原则<br>CCP Common Closure Principle 共同闭包原则，包中包含的所有类应该是同类的变化的一个集合，也就是说，如果对包作出修改，需要调整的类应该都在这个包之内。</p>
+<p>你的团队成员结构是什么样的，你的架构就会长成啥样。</p>
+<p>团队按照业务边界来拆分；确保团队不要太大</p>
+<p>因为微服务就是为了减少研发成本，而包括沟通成本。</p>
+<p>服务拆分带来的问题</p>
+<ol>
+<li>接口调用耗时增加</li>
+<li>如何知道调用哪个服务？服务注册中心</li>
+<li>服务治理体系：熔断、限流、降级、超时控制等</li>
+<li>问题排查困难（分布式链路追踪）</li>
+</ol>
+<h4 id="微服务组件"><a href="#微服务组件" class="headerlink" title="微服务组件"></a>微服务组件</h4><h5 id="API网关"><a href="#API网关" class="headerlink" title="API网关"></a>API网关</h5><p>入口网关：隔离客户端与微服务，协议转换、安全策略、认证、限流、熔断等</p>
+<p>出口网关：调用外部API，统一认证，授权、授权、访问控制等</p>
+<p>性能：IO多路复用、异步非阻塞、线程池</p>
+<p>设计要点：性能、扩展性（责任链模式）</p>
+<p>隔离性：针对接口对线程池进行分类</p>
+<h5 id="服务注册与发现"><a href="#服务注册与发现" class="headerlink" title="服务注册与发现"></a>服务注册与发现</h5><p>zookeeper, consul, euraker</p>
+<h5 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h5><p>RoundRobin, Hash, Weight</p>
+<h5 id="熔断、限流"><a href="#熔断、限流" class="headerlink" title="熔断、限流"></a>熔断、限流</h5><h5 id="配置实时下发"><a href="#配置实时下发" class="headerlink" title="配置实时下发"></a>配置实时下发</h5><h6 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h6><p>配置项的读取-变更推送如何实现：</p>
+<ol>
+<li>轮询 + 摘要 （简单，实时性略差）</li>
+<li>长轮询 + 版本号（复杂，实时性好一些）</li>
+</ol>
+<p>client的高性能实现逻辑：</p>
+<ol>
+<li>DoubleBufferedData， 数据分前台和后台</li>
+<li>读拿到自己所在线程的thread-local读写锁，执行查询逻辑后释放锁。</li>
+<li>同时只有一个写：修改后台数据，切换前后台，挨个获得所有thread-local锁并立刻释放，结束后再改一遍新后台（老前台）。</li>
+</ol>
+<p>一个小原则：配置系统的旁路化，不要因为配置系统挂了，你的程序启动不了；<br>可以做两层缓存：内存缓存、文件保存</p>
+<h6 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h6><p>不同的配置类型：节点类型 》机房类型 》 全局配置</p>
+<p>配置项的存储-配置系统的高可用</p>
+<p>核心指标在于可用性！！！5个9？</p>
+<h5 id="对接调用链追踪-（Jager"><a href="#对接调用链追踪-（Jager" class="headerlink" title="对接调用链追踪 （Jager)"></a>对接调用链追踪 （Jager)</h5><p>trace_id + span_id来标识链路的调用关系。</p>
+<p>对trace_id采样，而不要随机采样。</p>
+<p>span 基本工作单元，一次链路调用（可以是RPC，DB等没有特定的限制）创建一个span，通过一个64位ID标识它，uuid较为方便，span中还有其他的数据，例如描述信息，时间戳，key-value对的（Annotation）tag信息，<strong>parent_id</strong>(基于parent_span_id来维护树形结构）等,其中parent-id可以表示span调用链路来源。</p>
+<p>trace_id 类似于 树结构的Span集合，表示一次完整的跟踪，从请求到服务器开始，服务器返回response结束，跟踪每次rpc调用的耗时，存在唯一标识trace_id。比如：你运行的分布式大数据存储一次Trace就由你的一次请求组成。</p>
+<p>Annotation 注解，用来记录请求特定事件相关信息（例如时间），一个span中会有多个annotation注解描述。通常包含四个注解信息：</p>
+<h5 id="监控系统"><a href="#监控系统" class="headerlink" title="监控系统"></a>监控系统</h5><p><img src="http://cdn.b5mang.com/2021320212041.png" alt="监控哪些内容"></p>
+<p><img src="http://cdn.b5mang.com/2021320212155.png" alt="监控系统架构"></p>
+<p>方案：普罗米修斯、Graphna</p>
+<p>APM：端到端的监控体系</p>
+<p>如何防止消息被篡改：对消息体 + 消息头 进行加密，生成一个签名<br>如何对数据进行加密：</p>
+<p>使用非对称加密的公钥对 “对称加密的私钥-OriginPrivate“ 进行加密，得到SecretPrivate<br>然后服务端利用非对称加密的私钥，对 SecretPrivate进行解密，得到OriginPrivate</p>
+<p>然后再使用OriginPrivate对加密之后的消息体（SecretContext)进行解密，得到Contenxt</p>
+<p>监控哪些东西：网络卡顿率、做某件事情的失败率等</p>
+<p>考虑暂存 + retry来应对网络状况不佳的情况</p>
+<h5 id="自动化全链路压测系统"><a href="#自动化全链路压测系统" class="headerlink" title="自动化全链路压测系统"></a>自动化全链路压测系统</h5><p>压测的原则-尽量模拟真实情况；压测的注意点：<br>（1）使用线上数据与线上数据<br>（2）使用线上流量（流量拷贝）<br>（3）流量应该从尽量靠近用户的CDN发起</p>
+<p>如何搭建：<br>（1）流量的隔离（区分压测流量与正式流量）<br>（2）风险控制（尽量避免压测对正常用户的影响）</p>
+<p><img src="http://cdn.b5mang.com/2021320214129.png" alt="自动化全链路压测系统"></p>
+<p>压测数据的产生：<br>  拷贝真实流量（可以从访问日志、可以抓取某个端口的数据等）<br>  打上压测标签<br>  放在合适的机房（尽量接近用户）<br>数据隔离：<br>  针对读请求，针对某些不能压测（例如推荐、数据分析等）的组件进行mock<br>  对于写请求，把流量产生的数据写入影子库（数据库-拷贝一份库表和数据；缓存-加压测前缀；ES-多搞一份索引）<br>压力测试的实施<br>  持续放大，做好系统过载的识别（例如超时率、resp time等）</p>
+
+    </div>
+
+    
+    
+    
+
+    
+      <div>
+        <div class="recommended_posts">
+    
+    
+    <h1>Recommended Posts </h1>
+    <ul>
+        
+            <li><a href="http://www.b5mang.com/backend_knowledge_architecture/mq/index.html">消息队列-概览</a></li>
+        
+            <li><a href="http://www.b5mang.com/backend_knowledge_architecture/micro_service/discovery.html">微服务系列-服务注册与发现</a></li>
+        
+            <li><a href="http://www.b5mang.com/backend_knowledge_architecture/server/breaker/index.html">高性能服务器设计-熔断模型</a></li>
+        
+            <li><a href="http://www.b5mang.com/backend_knowledge_architecture/parallel/index.html">并行算法 - 概览</a></li>
+        
+    </ul>
+     
+</div> 
+
+      </div>
+    <div class="post-widgets">
+      <div id="needsharebutton-postbottom">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    </div>
+        <div class="reward-container">
+  <div>你的支持是我坚持的最大动力!</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="NeoWei WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="NeoWei Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag"># 微服务</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/backend_knowledge_architecture/server/breaker/index.html" rel="prev" title="高性能服务器设计-熔断模型">
+      <i class="fa fa-chevron-left"></i> 高性能服务器设计-熔断模型
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/backend_knowledge_architecture/micro_service/discovery.html" rel="next" title="微服务系列-服务注册与发现">
+      微服务系列-服务注册与发现 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+		  </div>
+		  
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+		  
+<script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+<script>
+    const btw = new BTWPlugin();
+
+    btw.init({
+        id: 'container',
+        blogId: '22171-1589640164808-286',
+        name: '第一性原理思考者',
+        qrcode: 'http://cdn.b5mang.com/img_first.png',
+        keyword: '思考',
+    });
+</script>
+
+
+		</div>
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%95%E4%BD%93%E5%88%B0%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.</span> <span class="nav-text">单体到微服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8B%86%E5%88%86%E5%8E%9F%E5%88%99"><span class="nav-number">2.</span> <span class="nav-text">拆分原则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%BB%84%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">微服务组件</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#API%E7%BD%91%E5%85%B3"><span class="nav-number">3.1.</span> <span class="nav-text">API网关</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E4%B8%8E%E5%8F%91%E7%8E%B0"><span class="nav-number">3.2.</span> <span class="nav-text">服务注册与发现</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-number">3.3.</span> <span class="nav-text">负载均衡</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%86%94%E6%96%AD%E3%80%81%E9%99%90%E6%B5%81"><span class="nav-number">3.4.</span> <span class="nav-text">熔断、限流</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%AE%9E%E6%97%B6%E4%B8%8B%E5%8F%91"><span class="nav-number">3.5.</span> <span class="nav-text">配置实时下发</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-number">3.5.1.</span> <span class="nav-text">客户端</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="nav-number">3.5.2.</span> <span class="nav-text">服务端</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AF%B9%E6%8E%A5%E8%B0%83%E7%94%A8%E9%93%BE%E8%BF%BD%E8%B8%AA-%EF%BC%88Jager"><span class="nav-number">3.6.</span> <span class="nav-text">对接调用链追踪 （Jager)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%9B%91%E6%8E%A7%E7%B3%BB%E7%BB%9F"><span class="nav-number">3.7.</span> <span class="nav-text">监控系统</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E5%8C%96%E5%85%A8%E9%93%BE%E8%B7%AF%E5%8E%8B%E6%B5%8B%E7%B3%BB%E7%BB%9F"><span class="nav-number">3.8.</span> <span class="nav-text">自动化全链路压测系统</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">NeoWei</p>
+  <div class="site-description" itemprop="description">我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">325</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">NeoWei</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a>
+  </div>
+
+<br>
+<a href="https://beian.miit.gov.cn/" rel="external nofollow noreferrer"  style="color:#f72b07" target="_blank">沪ICP备2020030798号-1</a>
+<br>
+
+        
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1279618438&web_id=1279618438"></script>
+  </div>
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.js"></script>
+  <script>
+      pbOptions = {};
+        pbOptions.iconStyle = "box";
+        pbOptions.boxForm = "horizontal";
+        pbOptions.position = "bottomCenter";
+        pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+  </script>
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'uE8T6jDhH4vW6BtH143y72nw-gzGzoHsz',
+      appKey     : '3xulfIcqN5mLqRSxptxvnamK',
+      placeholder: "Just go go",
+      avatar     : 'identicon',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

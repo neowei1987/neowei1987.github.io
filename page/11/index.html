@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.b5mang.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Neo&#39;s Blog">
+<meta property="og:url" content="http://www.b5mang.com/page/11/index.html">
+<meta property="og:site_name" content="Neo&#39;s Blog">
+<meta property="og:description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+<meta property="og:locale">
+<meta property="article:author" content="NeoWei">
+<meta property="article:tag" content="后端开发知识体系,知识体系构建,刷题技巧,本质思考">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.b5mang.com/page/11/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'zh-Hans'
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.css"><style>
+#needsharebutton-postbottom {
+  cursor: pointer;
+  height: 26px;
+  margin-top: 10px;
+  position: relative;
+}
+#needsharebutton-postbottom .btn {
+  border: 1px solid $btn-default-border-color;
+  border-radius: 3px;
+  display: initial;
+  padding: 1px 4px;
+}
+</style>
+  <title>Neo's Blog - 不抽象就无法深入思考<br>不还原就看不到本来面目!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Neo's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不抽象就无法深入思考<br>不还原就看不到本来面目!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+		<div id="container">
+		  <div class="content index posts-expand">
+		    
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/distributed_system/high_availability.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/distributed_system/high_availability.html" class="post-title-link" itemprop="url">分布式系统-可用性</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-24 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-24T10:01:03+08:00">2022-02-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-26 22:26:13" itemprop="dateModified" datetime="2022-11-26T22:26:13+08:00">2022-11-26</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/distributed_system/high_availability.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/high_availability.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>系统在困境（adversity）（硬件故障、软件故障、人为错误）中仍可正常工作（正确完成功能，并能达到期望的性能水准）。</p>
+<p>plan挂了之后，系统能不能活下来？ 有没有负责兜底的PlanB。</p>
+<p>造成错误的原因叫做故障（fault），能预料并应对故障的系统特性可称为容错（fault-tolerant）或韧性（resilient）。</p>
+<p>注意故障（fault）不同于失效（failure）【2】。故障通常定义为系统的<strong>一部分</strong>状态偏离其标准，而失效则是系统作为一个<strong>整体</strong>停止向用户提供服务。故障的概率不可能降到零，因此最好设计容错机制以防因故障而导致失效。</p>
+<h2 id="影响可用性的因素"><a href="#影响可用性的因素" class="headerlink" title="影响可用性的因素"></a>影响可用性的因素</h2><p>首先我们先梳理一下影响系统稳定性的一些常见的问题场景，大致可分为三类：</p>
+<h3 id="人为因素"><a href="#人为因素" class="headerlink" title="人为因素"></a>人为因素</h3><p>不合理的变更、外部攻击等等</p>
+<h3 id="软件因素"><a href="#软件因素" class="headerlink" title="软件因素"></a>软件因素</h3><p>代码bug、设计漏洞、GC问题、线程池异常、上下游异常</p>
+<h3 id="硬件因素"><a href="#硬件因素" class="headerlink" title="硬件因素"></a>硬件因素</h3><p>网络故障、机器故障等 </p>
+<h3 id="可用性速降到最低的表现-雪崩"><a href="#可用性速降到最低的表现-雪崩" class="headerlink" title="可用性速降到最低的表现-雪崩"></a>可用性速降到最低的表现-雪崩</h3><p>两个导火索：</p>
+<ul>
+<li>下游或者本身机器故障导致latency增加</li>
+<li>上游请求qps变高</li>
+</ul>
+<p>实际的并发超过了最大能支持的并发（当下游变慢后，该值迅速会下降），过载就发生了。过载不可怕，如果上游不重试，系统终将恢复。</p>
+<h2 id="如何提高可用性"><a href="#如何提高可用性" class="headerlink" title="如何提高可用性"></a>如何提高可用性</h2><h3 id="系统拆分"><a href="#系统拆分" class="headerlink" title="系统拆分"></a>系统拆分</h3><p>拆分不是以减少不可用时间为目的，而是以减少故障影响面为目的。因为一个大的系统拆分成了几个小的独立模块，一个模块出了问题不会影响到其他的模块，从而降低故障的影响面。系统拆分又包括接入层拆分、服务拆分、数据库拆分。</p>
+<h4 id="接入层-amp-服务层"><a href="#接入层-amp-服务层" class="headerlink" title="接入层&amp;服务层"></a>接入层&amp;服务层</h4><p>【轻重分离】<br>一般是按照业务模块、重要程度、变更频次等维度拆分。</p>
+<h4 id="数据层"><a href="#数据层" class="headerlink" title="数据层"></a>数据层</h4><p>【轻重分离】、【冷热分离】、【读写分离】<br>一般先按照业务拆分后，如果有需要还可以做垂直拆分也就是数据分片、读写分离、数据冷热分离等。</p>
+<h3 id="解耦"><a href="#解耦" class="headerlink" title="解耦"></a>解耦</h3><p>系统进行拆分之后，会分成多个模块。模块之间的依赖有强弱之分。</p>
+<p>如果是强依赖的，那么如果依赖方出问题了，也会受到牵连出问题。</p>
+<p>这时可以梳理整个流程的调用关系，做成弱依赖调用。</p>
+<p>弱依赖调用可以用MQ的方式来实现解耦。即使下游出现问题，也不会影响当前模块。</p>
+<h3 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h3><p>可以在适用性、优缺点、产品口碑、社区活跃度、实战案例、扩展性等多个方面进行全量评估，挑选出<strong>适合当前业务场景的中间件&amp;数据库</strong>。前期的调研一定要充分，先对比、测试、研究，再决定，磨刀不误砍柴工。</p>
+<h3 id="冗余部署-amp-故障自动转移"><a href="#冗余部署-amp-故障自动转移" class="headerlink" title="冗余部署&amp;故障自动转移"></a>冗余部署&amp;故障自动转移</h3><p>服务层的冗余部署很好理解，一个服务部署多个节点，有了冗余之后还不够，每次出现故障需要人工介入恢复势必会增加系统的不可服务时间。</p>
+<p>所以，又往往是通过“自动故障转移”来实现系统的高可用。即某个节点宕机后需要能自动摘除上游流量，这些能力基本上都可以通过<strong>负载均衡的探活机制</strong>来实现。</p>
+<p>涉及到数据层就比较复杂了，但是一般都有成熟的方案可以做参考。</p>
+<p>一般分为一主一从、一主多从、多主多从。不过大致的原理都是数据同步实现多从，数据分片实现多主，故障转移时都是通过选举算法选出新的主节点后在对外提供服务（这里如果写入的时候不做强一致同步，故障转移时会丢失一部分数据）。具体可以参考Redis Cluster、ZK、Kafka等集群架构。</p>
+<h3 id="容量评估"><a href="#容量评估" class="headerlink" title="容量评估"></a>容量评估</h3><ol>
+<li>每个系统，自己的最大处理能力是多少要做到清清楚楚。</li>
+</ol>
+<p>在系统上线前需要对整个服务用到的机器、DB、cache都要做容量评估，机器容量的容量可以采用以下方式评估：</p>
+<ol>
+<li>明确预期流量指标-QPS；</li>
+<li>明确可接受的时延和安全水位指标（比如CPU%≤40%，核心链路RT≤50ms）；</li>
+</ol>
+<p>通过压测评估单机在安全水位以下能支持的最高QPS（建议通过混合场景来验证，比如按照预估流量配比同时压测多个核心接口）；</p>
+<p>最后就可以估算出具体的机器数量了。</p>
+<p>DB和cache评估除了QPS之外还需要评估数据量，方法大致相同，等到系统上线后就可以根据监控指标做扩缩容了。</p>
+<h3 id="服务快速扩容能力-amp-泄洪能力"><a href="#服务快速扩容能力-amp-泄洪能力" class="headerlink" title="服务快速扩容能力&amp;泄洪能力"></a>服务快速扩容能力&amp;泄洪能力</h3><p>现阶段不论是容器还是ECS，单纯的节点复制扩容是很容易的，扩容的重点需要评估的是服务本身是不是无状态的，比如：</p>
+<ol>
+<li><p>下游DB的连接数最多支持当前服务扩容几台？</p>
+</li>
+<li><p>扩容后缓存是否需要预热？</p>
+</li>
+<li><p>放量策略</p>
+</li>
+</ol>
+<p>这些因素都是需要提前做好准备，整理出完备的SOP文档，当然最好的方式是进行演练，实际上手操作，有备无患。</p>
+<p><strong>泄洪能力</strong>一般是指冗余部署的情况下，选择几个节点作为备用节点，平时承担很小一部分流量，当流量洪峰来临时，通过调整流量路由策略把热节点的一部分流量转移到备用节点上。</p>
+<p>对比扩容方案这种成本相对较高，但是好处就是响应快，风险小。</p>
+<h3 id="限流-amp-熔断降级"><a href="#限流-amp-熔断降级" class="headerlink" title="限流&amp;熔断降级"></a>限流&amp;熔断降级</h3><p><img src="http://images.elecfans.top/uploads/20221109/491f36c6-6037-11ed-8abf-dac502259ad0.png" alt="限流"></p>
+<ol>
+<li><p>每个系统要有能力发现哪些是有效的请求，哪些是无效的请求。</p>
+</li>
+<li><p>前端系统有保护后端系统的义务，sla中承诺多大的能力，就只给到后端多大的压力。这就要求每一个前后端接口的地方，都有明确的负载约定，一环扣一环。</p>
+</li>
+<li><p>当过载发生时，该拒绝的请求（1、超出整个系统处理能力范围的；2、已经超时的无效请求）越早拒绝越好</p>
+</li>
+<li><p>中间层server对后端发送请求，重试机制要慎用，一定要用的话要有严格频率控制。</p>
+</li>
+<li><p>对于用户的重试行为，要适当的延缓。例如登录发现后端响应失败，再重新展现登录页面前，可以适当延时几秒钟，并展现进度条等友好界面。当多次重试还失败的情况下，要安抚用户。</p>
+</li>
+<li><p>当雪球发生了，直接清空雪球队列（例如重启进程可以清空socket缓冲区）可能是快速恢复的有效方法。</p>
+</li>
+<li><p>过载保护很重要的一点，不是说要加强系统性能、容量，成功应答所有请求，而是保证在高压下，系统的服务能力不要陡降到0，而是顽强的对外展现最大有效处理能力。</p>
+</li>
+</ol>
+<p>流量整形也就是常说的限流，主要是防止超过预期外的流量把服务打垮，熔断则是为了自身组件或者依赖下游故障时，可以快速失败防止长期阻塞导致雪崩。</p>
+<p>关于限流熔断的能力，开源组件Sentinel基本上都具备了，用起来也很简单方便，但是有一些点需要注意。</p>
+<p>【自适应限流】限流阈值一般是配置为服务的某个资源能支撑的最高水位，这个需要通过压测摸底来评估。随着系统的迭代，这个值可能是需要持续调整的。如果配置的过高，会导致系统崩溃时还没触发保护，配置的过低会导致误伤。</p>
+<p>熔断降级-某个接口或者某个资源熔断后，要根据业务场景跟熔断资源的重要程度来评估应该抛出异常还是返回一个兜底结果。</p>
+<p>比如下单场景如果扣减库存接口发生熔断，由于扣减库存在下单接口是必要条件，所以熔断后只能抛出异常让整个链路失败回滚，如果是获取商品评论相关的接口发生熔断，那么可以选择返回一个空，不影响整个链路。</p>
+<h3 id="资源隔离"><a href="#资源隔离" class="headerlink" title="资源隔离"></a>资源隔离</h3><p>如果一个服务的多个下游同时出现阻塞，单个下游接口一直达不到熔断标准（比如异常比例跟慢请求比例没达到阈值），那么将会导致整个服务的吞吐量下降和更多的线程数占用，极端情况下甚至导致线程池耗尽。引入资源隔离后，可以限制单个下游接口可使用的最大线程资源，确保在未熔断前尽可能小的影响整个服务的吞吐量。</p>
+<p>说到隔离机制，这里可以扩展说一下，由于每个接口的流量跟ResponseTime都不一样，很难去设置一个比较合理的可用最大线程数，并且随着业务迭代，这个阈值也难以维护。</p>
+<p>这里可以采用<strong>共享加独占</strong>来解决这个问题，每个接口有自己的独占线程资源，当独占资源占满后，使用共享资源，共享池在达到一定水位后，强制使用独占资源，排队等待。</p>
+<p>这种机制优点比较明显就是可以在资源利用最大化的同时保证隔离性。</p>
+<p>这里的线程数只是资源的一种，资源也可以是连接数、内存等等。</p>
+<h3 id="系统性保护"><a href="#系统性保护" class="headerlink" title="系统性保护"></a>系统性保护</h3><p><img src="http://images.elecfans.top/uploads/20221109/494d16cc-6037-11ed-8abf-dac502259ad0.png" alt=""></p>
+<p>系统性保护是一种无差别限流，一句话概念就是在系统快要崩溃之前对所有流量入口进行无差别限流，当系统恢复到健康水位后停止限流。具体一点就是结合应用的 Load、总体平均 RT、入口 QPS 和线程数等几个维度的监控指标，让系统的入口流量和系统的负载达到一个平衡，让系统尽可能跑在最大吞吐量的同时保证系统整体的稳定性。</p>
+<h3 id="4-10-可观测性-amp-告警"><a href="#4-10-可观测性-amp-告警" class="headerlink" title="4.10 可观测性&amp;告警"></a>4.10 可观测性&amp;告警</h3><p><img src="http://images.elecfans.top/uploads/20221109/496b13ca-6037-11ed-8abf-dac502259ad0.png" alt=""></p>
+<p>当系统出现故障时，我们首先需找到故障的原因，然后才是解决问题，最后让系统恢复。排障的速度很大程度上决定了整个故障恢复的时长，而可观测性的最大价值在于快速排障。其次基于Metrics、Traces、Logs三大支柱配置告警规则，可以提前发现系统可能存在的风险&amp;问题，避免故障的发生。</p>
+<h3 id="4-11-变更流程三板斧"><a href="#4-11-变更流程三板斧" class="headerlink" title="4.11 变更流程三板斧"></a>4.11 变更流程三板斧</h3><p>变更是可用性最大的敌人，99%的故障都是来自于变更，可能是配置变更，代码变更，机器变更等等。那么如何减少变更带来的故障呢？</p>
+<h4 id="可灰度"><a href="#可灰度" class="headerlink" title="可灰度"></a>可灰度</h4><p>用小比例的一部分流量来验证变更后的内容，减小影响用户群。</p>
+<p>产品特性设计和发布上，要尽量避免某个时刻导致大量用户集体触发某些请求的设计。发布的时候注意灰度。</p>
+<h4 id="可回滚"><a href="#可回滚" class="headerlink" title="可回滚"></a>可回滚</h4><p>出现问题后，能有有效的回滚机制。涉及到数据修改的，发布后会引起脏数据的写入，需要有可靠的回滚流程，保证脏数据的清除。</p>
+<h4 id="可观测"><a href="#可观测" class="headerlink" title="可观测"></a>可观测</h4><p>通过观察变更前后的指标变化，很大程度上可以提前发现问题。 除了以上三板斧外，还应该在其他开发流程上做规范，比如代码控制，集成编译、自动化测试、静态代码扫描等。</p>
+<p>五、总结</p>
+<p>对于一个动态演进的系统而言，我们没有办法将故障发生的概率降为0，能做的只有尽可能的预防和缩短故障时的恢复时间。当然我们也不用一味的追求可用性，毕竟提升稳定性的同时，维护成本、机器成本等也会跟着上涨，所以需要结合系统的业务SLO要求，适合的才是最好的。</p>
+<h3 id="冗余"><a href="#冗余" class="headerlink" title="冗余"></a>冗余</h3><p>解决高可用，只有一个方法，就是冗余。</p>
+<p>通过冗余更多的机器，来应对机器的硬件故障或者彼此之间的网络故障。</p>
+<h4 id="多机房部署"><a href="#多机房部署" class="headerlink" title="多机房部署"></a>多机房部署</h4><p>通过多机房部署来增加冗余。</p>
+<p>多活的好处</p>
+<ol>
+<li>响应时间短、提升用户体验</li>
+<li>服务高可用</li>
+<li>降低成本</li>
+</ol>
+<ul>
+<li>廉价的机器（非洲用户访问非洲的机器）</li>
+<li>流量的分摊（西方节日时，流量通过亚洲来分摊）</li>
+</ul>
+<p>如何做到异地多活（必须要解决的一些问题）</p>
+<ol>
+<li><p>接入层流量控制：用户默认访问哪个DC？什么时候做切换？ 如何控制这个切换过程？</p>
+</li>
+<li><p>各DC业务逻辑一致：对于用户来说， 他的流量被调度前后，业务逻辑是一致的。 比如facebook上有一些内容对于亚洲用户是不可见的，不能因为亚洲用户的流量被迁移到了美洲机房，这个限制就失效了。</p>
+</li>
+<li><p>跨DC的实时数据同步与冲突处理：还是以fb为例， 如果访问非洲机房的用户A给访问南美洲机房的用户B的一个帖子点了赞， 那么B应该能及时收到相关的通知。这背后就依赖数据的实时同步。<br>在多活情况下， 多DC的数据写入势必会引入数据的冲突， 比如facebook位于美东的的审核系统和位于东南亚的用户同时操作了一条帖子， 就会产生数据的冲突。</p>
+</li>
+<li><p>提供全球级别的强一致性<br>对于大多数业务而言， 我们只需要最终一致性即可（比如点赞之类的计数）。 但是某些业务，需要全球的强一致保障(比如下<br>单、支付之类的操作）。</p>
+</li>
+</ol>
+<p><strong>同城多机房</strong>：延迟1～3ms</p>
+<p>主要看接口的实现（如果有几十次的跨机房交互，这种是不可接受的）</p>
+<p>实现相对比较简单</p>
+<p>单机房写入；每一个机房近读取本机房的缓存与数据</p>
+<p>如果数据发生变更，需要做两边机房缓存的清理，一般通过canal订阅数据库变更</p>
+<p><img src="http://cdn.b5mang.com/202132021118.png" alt="同城多活示意图"></p>
+<p><strong>国内异地多机房</strong>:延迟50ms以内</p>
+<p>尽量减少跨机房的调用；而应该避免跨机房的数据库与缓存操作</p>
+<p>多机房写入，按照用户或者其他业务维度来进行流量分割，使得一部分流量总是请求A机房，而另外的总是请求B机房。</p>
+<p>根据业务需要，选择满足：<br>(1）一致性（如果选择了一致性，那么可用性便得不到100%保障）<br>(2）可用性（如果选择了可用性，那么一致性需要事后做补偿）</p>
+<p>数据同步方式有两种：<br>（1）基于存储系统主从复制：同步redis、Mysql等<br>（2）基于消息队列：同步缓存、HBase的数据</p>
+<p><img src="http://cdn.b5mang.com/20213202149.png" alt="异步多活示意图"></p>
+<p><strong>跨国多机房</strong>：延迟在100～200ms</p>
+<p>避免跨机房的调用，而只能做异步同步</p>
+<hr>
+<p>除此以外，我们还需要提一点，就是防止系统被瞬间的异常拖死，也就是系统能够自己保护好自己。</p>
+<h3 id="过载保护"><a href="#过载保护" class="headerlink" title="过载保护"></a>过载保护</h3><p>异常有内外两种，一种是外部流量特别高，一种是某一个依赖故障导致系统响应变慢。</p>
+<p>这里的课题应该包括：熔断、限流、超时控制、全局超时控制、服务降级（区分核心流程与非核心流程）</p>
+<h4 id="过载保护方案"><a href="#过载保护方案" class="headerlink" title="过载保护方案"></a>过载保护方案</h4><p>这里推荐一种方案：在该系统每个机器上新增一个进程：interface进程。</p>
+<p>Interface进程能够快速的从socket缓冲区中取得请求，打上当前时间戳，压入channel。</p>
+<p>业务处理进程从channel中获取请求和该请求的时间戳，如果发现时间戳早于当前时间减去超时时间（即已经超时，处理也没有意义），就直接丢弃该请求，或者应答一个失败报文。</p>
+<p>Channel是一个先进先出的通信方式，可以是socket，也可以是共享内存、消息队列、或者管道，不限。</p>
+<p>Socket缓冲区要设置合理，如果过大，导致及时interface进程都需要处理长时间才能清空该队列，就不合适了。</p>
+<p>建议的大小上限是：缓存住超时时间内interface进程能够处理掉的请求个数（注意考虑网络通讯中的元数据）。</p>
+<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.sohu.com/a/211248633_472869">https://www.sohu.com/a/211248633_472869</a></p>
+<h2 id="每个SLA级别需要做的事情"><a href="#每个SLA级别需要做的事情" class="headerlink" title="每个SLA级别需要做的事情"></a>每个SLA级别需要做的事情</h2><p>感觉一下提高1个9，难度有多大。</p>
+<p>三个9: 非核心业务可以容忍</p>
+<p>四个9: 核心业务</p>
+<p>运维值班体系、业务变更流程、故障处理流程、更加完善的系统故障排查工具、灰度发布（确保服务可回滚）</p>
+<p>五个9: 必须让机器来自动处理恢复！</p>
+<p>尽量思考故障发生后应该怎么办</p>
+<p>考虑点：如何自动的发现故障、如何自动化的应对故障、系统运维-尽量避免故障发生</p>
+<p>具体方法：failover(故障转移)、超时控制、服务降级、熔断限流</p>
+<p>failover:</p>
+<ul>
+<li>完全对等</li>
+<li>非完全对等（例如存在主备节点，心跳，选择paxos, raft等）</li>
+</ul>
+<p>系统分层<br>（1）接入层、服务层、数据层</p>
+<p>服务本身<br>（1）容量预估、合理的超时<br>（2）服务拆分、异步化解耦</p>
+<p>基础架构层面需要支持：<br>（1）监控&amp;告警<br>（2）自动化（快速）扩容&amp;泄洪能力<br>（1）熔断、限流、负载均衡、降级<br>（2）资源隔离（线程池、内存池、连接池）</p>
+<p>中间件&amp;存储，综合考虑业务场景、可运维性来进行技术选型</p>
+<p>控制变更流程<br>（1）可回滚、可灰度、可观测</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/server/memory_pool/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/memory_pool/index.html" class="post-title-link" itemprop="url">内存池系列｜概览</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-23 22:41:32" itemprop="dateCreated datePublished" datetime="2022-02-23T22:41:32+08:00">2022-02-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-10-30 18:50:38" itemprop="dateModified" datetime="2022-10-30T18:50:38+08:00">2022-10-30</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/memory_pool/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/memory_pool/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="什么是内存池"><a href="#什么是内存池" class="headerlink" title="什么是内存池"></a>什么是内存池</h2><p>1.1 池化是在计算技术中经常使用的一种设计模式，其内涵在于：将程序中需要经常使用的核心资源先申请出来，放到一个池内，由程序自管理，这样可以提高资源的利用率，也可以保证本程序占有的资源数量，经常使用的池化技术包括内存池，线程池，和连接池等，其中尤以内存池和线程池使用最多。</p>
+<p>1.2 内存池（Memory Pool）是一种动态内存分配与管理技术，通常情况下，程序员习惯直接使用new，delete，malloc,free等API申请和释放内存，这样导致的后果就是：当程序运行的时间很长的时候，由于所申请的内存块的大小不定，频繁使用时会造成大量的内存碎片从而降低程序和操作系统的性能。</p>
+<p>内存池则是在真正使用内存之前，先申请分配一大块内存（内存池）留作备用。当程序员申请内存时，从池中取出一块动态分配，当程序员释放时，将释放的内存放回到池内，再次申请，就可以从池里取出来使用，并尽量与周边的空闲内存块合并。若内存池不够时，则自动扩大内存池，从操作系统中申请更大的内存池。</p>
+<h2 id="内存池解决什么问题？"><a href="#内存池解决什么问题？" class="headerlink" title="内存池解决什么问题？"></a>内存池解决什么问题？</h2><ol>
+<li>内存碎片问题（解决glib、操作系统层面的内存碎片问题，提供内存利用率）</li>
+<li>加速了内存的分配与回收，增加了系统性能。</li>
+</ol>
+<p>先说第一个，</p>
+<p>造成堆利用率很低的一个主要原因就是<strong>内存碎片化</strong>。如果有未使用的存储器，但是这块存储器不能用来满足分配的请求，这时候就会产生内存碎片化问题。内存碎片化分为内部碎片和外部碎片。</p>
+<p>内碎片内部碎片是指一个已分配的块比有效载荷大时发生的。(假设以前分配了10个大小的字节，现在只用了5个字节，则剩下的5个字节就会内碎片)。内部碎片的大小就是已经分配的块的大小和他们的有效载荷之差的和。因此内部碎片取决于以前请求内存的模式和分配器实现(对齐的规则)的模式。</p>
+<p><img src="https://images2015.cnblogs.com/blog/163084/201606/163084-20160602211318383-2024258119.png" alt="内部碎片问题"></p>
+<p>外碎片假设系统依次分配了16byte、8byte、16byte、4byte，还剩余8byte未分配。这时要分配一个24byte的空间，操作系统回收了一个上面的两个16byte，总的剩余空间有40byte，但是却不能分配出一个连续24byte的空间，这就是外碎片问题。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-fb5aef66f1ec634afa6999641f24da85_1440w.jpg" alt="外部碎片问题"></p>
+<p>每一个场景都通用的解决方案 VS 为某一个场景的定制方案</p>
+<p><img src="https://pic2.zhimg.com/80/v2-77c340491489371f7ff19532a5dd67fe_1440w.jpg" alt="底层逻辑"></p>
+<h2 id="内存池设计"><a href="#内存池设计" class="headerlink" title="内存池设计"></a>内存池设计</h2><p>总体思路：</p>
+<p>一次性向底层内存系统（依次为glibc、操作系统）申请一块大的内存慢慢使用，避免了频繁的向内存请求内存操作，提高内存分配的效率；由于向底层内存系统申请的内存块都是比较大的，所以能够降低（下一级别内存系统的）外碎片问题。</p>
+<p>值得一提是的：内碎片问题无法避免，只能尽可能的降低。甚至，本层内存池需要通过额外的内存来管理内存，从宏观上讲（对于底层内存分配系统来讲），这是对内存的一种浪费，也可以称之为一种内部碎片。</p>
+<p>例如，我每次只需要存储8个字节的数据，一共存储了1000次；显然这种的有效数据是8k; 但是实际上我管理着8k的数据，却使用了底层16k的内存，内存使用率只有50%。</p>
+<p>所以，衡量一个内存池系统很重要的一方面就是：他的内存使用效率，他多大程度上降低了内存内碎片的产生。</p>
+<ol>
+<li>内存池只能分配特定对象(数据结构)</li>
+<li>充分考虑释考虑内存对象的生命周期（例如apache webserver)</li>
+<li>考虑内存地址的对齐</li>
+<li>考虑线程局部存储来避免不必要的锁冲突</li>
+<li>除了考虑从大块内存上高效地将小内存划分出去，还要注意内存碎片问题。</li>
+<li>当回收内存时要注意是否需要将相邻的空闲内存块进行合并管理。<br>当内存池的空闲内存到达一定的阈值时，要合理地返还系统。</li>
+<li>在多核处理器能够 scale</li>
+</ol>
+<h2 id="内存池的演变"><a href="#内存池的演变" class="headerlink" title="内存池的演变"></a>内存池的演变</h2><h3 id="最简单的内存分配器"><a href="#最简单的内存分配器" class="headerlink" title="最简单的内存分配器"></a>最简单的内存分配器</h3><p>做一个链表指向空闲内存，分配就是取出一块来，改写链表，返回，释放就是放回到链表里面，并做好归并。</p>
+<p>注意做好标记和保护，避免二次释放，还可以花点力气在如何查找最适合大小的内存快的搜索上，减少内存碎片，有空你还可以把链表换成伙伴算法。</p>
+<p>优点： 实现简单</p>
+<p>缺点： 分配时搜索合适的内存块效率低，释放回归内存后归并消耗大，实际中不实用。</p>
+<h3 id="定长内存分配器"><a href="#定长内存分配器" class="headerlink" title="定长内存分配器"></a>定长内存分配器</h3><p>定长内存分配器即实现一个 FreeList，每个 FreeList 用于分配固定大小的内存块，比如用于分配 32字节对象的固定内存分配器，之类的。每个固定内存分配器里面有两个链表，OpenList 用于存储未分配的空闲对象，CloseList用于存储已分配的内存对象，那么所谓的分配就是从 OpenList 中取出一个对象放到 CloseList 里并且返回给用户，释放又是从 CloseList 移回到 OpenList。分配时如果不够，那么就需要增长 OpenList：申请一个大一点的内存块，切割成比如 64 个相同大小的对象添加到 OpenList中。这个固定内存分配器回收的时候，统一把先前向系统申请的内存块全部还给系统。</p>
+<p>优点： 简单粗暴，分配和释放的效率高，解决实际中特定场景下的问题有效。</p>
+<p>缺点： 功能单一，只能解决定长的内存需求，另外占着内存没有释放。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-9b82fa3f6d8649c4574760981dc0e772_1440w.jpg" alt="定长内存分配器"></p>
+<h3 id="哈希映射的FreeList"><a href="#哈希映射的FreeList" class="headerlink" title="哈希映射的FreeList"></a>哈希映射的FreeList</h3><p>池在定长分配器的基础上，按照不同对象大小(8，16，32，64，128，256，512，1k…64K),构造十多个固定内存分配器，分配内存时根据要申请内存大小进行对齐然后查H表，决定到底由哪个分配器负责，分配后要在内存头部的 header 处写上 cookie，表示由该块内存哪一个分配器分配的，这样释放时候你才能正确归还。如果大于64K，则直接用系统的 malloc作为分配，如此以浪费内存为代价你得到了一个分配时间近似O(1)的内存分配器。这种内存池的缺点是假设某个 FreeList 如果高峰期占用了大量内存即使后面不用，也无法支援到其他内存不够的 FreeList，达不到分配均衡的效果。</p>
+<p>优点：这个本质是定长内存池的改进，分配和释放的效率高。可以解决一定长度内的问题。</p>
+<p>缺点：存在内碎片的问题，且将一块大内存切小以后，申请大内存无法使用。多线程并发场景下，锁竞争激烈，效率降低。</p>
+<p>范例：sgi stl 六大组件中的空间配置器就是这种设计实现的。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-0aa79060ce43db2408093746182f4d0e_1440w.jpg" alt="哈希映射的FreeList"></p>
+<h3 id="并发内存池"><a href="#并发内存池" class="headerlink" title="并发内存池"></a>并发内存池</h3><p>第一层是Thread Cache，线程缓存是每个线程独有的，在这里设计的是用于小于64k的内存分配，线程在这里申请不需要加锁，每一个线程都有自己独立的cache，这也就是这个项目并发高效的地方。</p>
+<p>第二层是Central Cache，在这里是所有线程共享的，它起着承上启下的作用，Thread Cache是按需要从Central Cache中获取对象，它就要起着平衡多个线程按需调度的作用，既可以将内存对象分配给Thread Cache来的每个线程，又可以将线程归还回来的内存进行管理。Central Cache是存在竞争的，所以在这里取内存对象的时候是需要加锁的，但是锁的力度可以控制得很小。</p>
+<p>第三层是Page Cache，存储的是以页为单位存储及分配的，Central Cache没有内存对象(Span)时，从Page cache分配出一定数量的Page，并切割成定长大小的小块内存，分配给Central Cache。Page Cache会回收Central Cache满足条件的Span(使用计数为0)对象，并且合并相邻的页，组成更大的页，缓解内存碎片的问题。</p>
+<p><img src="https://pic2.zhimg.com/80/v2-59285244475d89d156c0900126926192_1440w.jpg" alt="并发内存池"></p>
+<h3 id="一些常见的内存分配策略"><a href="#一些常见的内存分配策略" class="headerlink" title="一些常见的内存分配策略"></a>一些常见的内存分配策略</h3><h4 id="如何分配定长记录"><a href="#如何分配定长记录" class="headerlink" title="如何分配定长记录"></a>如何分配定长记录</h4><p>最大化内存使用率，最小化分配时间</p>
+<ul>
+<li>bitmap来管理定长记录</li>
+</ul>
+<p>内存使用率：bitmap需要额外内存，有一定浪费</p>
+<p>时间分配效率：$O(1)$</p>
+<ul>
+<li>FreeList来管理定长记录</li>
+</ul>
+<p>内存使用率：100%<br>时间分配效率：$O(1)$</p>
+<h4 id="如何分配变长记录"><a href="#如何分配变长记录" class="headerlink" title="如何分配变长记录"></a>如何分配变长记录</h4><p>变长记录进行“取整”操作，带来了内存碎片问题，我们只能减少，而无可避免。</p>
+<p>为了减少内部碎片，分配规则按照 8, 16, 32, 48, 64, 80，并非2的幂次级</p>
+<p>FreeList来管理“取整”之后的定长记录</p>
+<p>内存使用率：有一定的内存碎片</p>
+<p>时间分配效率：$O(1)$</p>
+<p>以上分配方式都是基于page，当分配小于page的对象时会使用。</p>
+<h4 id="大的对象如何分配"><a href="#大的对象如何分配" class="headerlink" title="大的对象如何分配"></a>大的对象如何分配</h4><p>首先，每一个线程有一块ThreadCache来管理从CentralCache分配的内存</p>
+<p>由于ThreadLocal，所以从ThreadCache分配内存不需要加锁。</p>
+<p>CentralCache通过page以及span来管理内存，当需要分配内存时，会通过spinlock来加锁保护。</p>
+<p>span关键属性：是否空闲、startPageId, pageNum</p>
+<p>page关键属性：是否空闲</p>
+<p>通过Buddy系统来管理所有空闲的page, 而分配出去的Page通过RadixTree来管理起来。</p>
+<p>通过RadixTree管理有两个好处：</p>
+<ol>
+<li>节省内存，按需分配</li>
+<li>查询性能也还不错，等价于树高度</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/server/memory_pool/memcahce_for_tcmalloc.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/memory_pool/memcahce_for_tcmalloc.html" class="post-title-link" itemprop="url">内存池系列｜TCMalloc分析</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-23 22:41:04" itemprop="dateCreated datePublished" datetime="2022-02-23T22:41:04+08:00">2022-02-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-10-30 18:53:45" itemprop="dateModified" datetime="2022-10-30T18:53:45+08:00">2022-10-30</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/memory_pool/memcahce_for_tcmalloc.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/memory_pool/memcahce_for_tcmalloc.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>实现要点</p>
+<ol>
+<li>分层（ThreadCache, CentralCache, PageCache)</li>
+<li>线程局部存储来管理ThreadCache</li>
+<li>通过基于hash的freelist来管理小对象</li>
+<li>通过radix tree来管理分配出来的obj到span的映射，如此来方便做回收【对象地址到span的映射】</li>
+<li>通过buddy算法来管理span, 保证用来分配内存的span尽可能的大（大的<strong>总是</strong>可以通过分裂成为小的，小的只有在<strong>合适的时机-内存连续</strong>才能合并成为大的）</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/server/memory_pool/memcache_for_go.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/memory_pool/memcache_for_go.html" class="post-title-link" itemprop="url">内存池系列｜Go内存分配</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-23 22:41:04" itemprop="dateCreated datePublished" datetime="2022-02-23T22:41:04+08:00">2022-02-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:44:05" itemprop="dateModified" datetime="2022-03-01T22:44:05+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/memory_pool/memcache_for_go.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/memory_pool/memcache_for_go.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/server/memory_pool/memcache_for_mc.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/memory_pool/memcache_for_mc.html" class="post-title-link" itemprop="url">内存池系列｜MC内存分配</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-23 22:41:04" itemprop="dateCreated datePublished" datetime="2022-02-23T22:41:04+08:00">2022-02-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:44:10" itemprop="dateModified" datetime="2022-03-01T22:44:10+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/memory_pool/memcache_for_mc.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/memory_pool/memcache_for_mc.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>slab allcator的机制</p>
+<p><img src="http://cdn.b5mang.com/2021320115717.png" alt="memcache内存分配示意图"></p>
+<p>综合上面的介绍，memcached的内存分配策略就是：按slab需求分配page，各slab按需使用chunk存储。</p>
+<p>这里有几个特点要注意，</p>
+<p>Memcached分配出去的page不会被回收或者重新分配</p>
+<p>Memcached申请的内存不会被释放</p>
+<p>slab空闲的chunk不会借给任何其他slab使用</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/server/memory_pool/memcache_for_nginx.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/memory_pool/memcache_for_nginx.html" class="post-title-link" itemprop="url">内存池系列｜nginx内存分配</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-23 22:41:04" itemprop="dateCreated datePublished" datetime="2022-02-23T22:41:04+08:00">2022-02-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:44:13" itemprop="dateModified" datetime="2022-03-01T22:44:13+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/memory_pool/memcache_for_nginx.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/memory_pool/memcache_for_nginx.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.it610.com%2Fimage%2Finfo5%2F7488f6235cda4dabaa7beed536bac0ba.jpg&amp;refer=http%3A%2F%2Fimg.it610.com&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=jpeg" alt="nginx内存池"></p>
+<p>有几个：</p>
+<ol>
+<li>nginx_pool_s 虽然包含了 ngx_pool_data，但是nginx_pool_s本身的内存管理还是通过ngx_pool_data来进行分配的</li>
+<li>可以理解为：nginx_pool_s是一种特殊类型的ngx_pool_data。</li>
+<li>nginx_pool_s 维护了current指针，来指向下一个用来分配内存的小内存块链表节点</li>
+<li>nginx_pool_s 维护了large指针，来指向下一个用来分配内存的d大内存块链表节点</li>
+<li>ngx_pool_data 维护了next指针 来指向下一个nginx_pool_s</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/server/memory_pool/memcache_for_stl.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/memory_pool/memcache_for_stl.html" class="post-title-link" itemprop="url">内存池系列｜STL内存分配</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-23 22:41:04" itemprop="dateCreated datePublished" datetime="2022-02-23T22:41:04+08:00">2022-02-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:44:16" itemprop="dateModified" datetime="2022-03-01T22:44:16+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/memory_pool/memcache_for_stl.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/memory_pool/memcache_for_stl.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ol>
+<li>基于hash的freelist</li>
+<li>由于STL知道分配出去的内存对象大小，所以他技巧性地用了union来减少内碎片。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/design_pattern/reactor.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/design_pattern/reactor.html" class="post-title-link" itemprop="url">设计模式-reactor模式</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 23:23:36" itemprop="dateModified" datetime="2022-03-01T23:23:36+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/design_pattern/reactor.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/design_pattern/reactor.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Reactor 模式首先是事件驱动的，有一个或多个并发输入源，有一个Service Handler，有多个Request Handlers；这个Service Handler会同步的将输入的请求（Event）多路复用的分发给相应的Request Handler。如果用图表示的如下：</p>
+<p><img src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/4/5/169ed823caf32d30~tplv-t2oaga2asx-watermark.awebp" alt="Reactor模式"></p>
+<p>其实在设计模式层面，IO多路复用也是采用 Reactor 模式的。</p>
+<p>IO 多路复用模型可以看成是 Reactor 模式在 IO 模型上的应用。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/distributed_system/high_perfermance.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/distributed_system/high_perfermance.html" class="post-title-link" itemprop="url">分布式系统-低延迟，高性能</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-02 08:54:55" itemprop="dateModified" datetime="2022-03-02T08:54:55+08:00">2022-03-02</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/distributed_system/high_perfermance.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/high_perfermance.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在我看来，高性能指的是，我们的系统能够在尽可能短的时间内完成用户的请求，也就是说latency尽可能的低。</p>
+<p>如果说系统能够支撑更大的吞吐量，能够承载更多的同时在线。我们除了降低latency，还可以考虑加机器（如果还没有reach到某个系统平瓶颈的前提下）</p>
+<h3 id="提高吞吐量"><a href="#提高吞吐量" class="headerlink" title="提高吞吐量"></a>提高吞吐量</h3><h4 id="增加并发进程数"><a href="#增加并发进程数" class="headerlink" title="增加并发进程数"></a>增加并发进程数</h4><p>注意：无限增加，不会无限提升性能(对系统的扩展性有要求)</p>
+<p><img src="http://cdn.b5mang.com/202132011337.png" alt="性能拐点模型"></p>
+<h4 id="减少响应时间"><a href="#减少响应时间" class="headerlink" title="减少响应时间"></a>减少响应时间</h4><p>IO密集型：优化数据库索引、加缓存</p>
+<p>CPU密集型：优化算法时间复杂度、减少不必要运算等</p>
+<p>并发读的核心优化理念是尽量减少用户到服务端来“读”数据，或者让他们读更少的数据；</p>
+<p>并发写的处理原则也一样，它要求我们在数据库层面独立出来一个库，做特殊的处理。</p>
+<p>从一个架构师的角度来看，要想打造并维护一个超大流量并发读写、高性能、高可用的系统，在整个用户请求路径上从浏览器到服务端我们要遵循几个原则，就是要保证</p>
+<ol>
+<li>用户请求的数据尽量少</li>
+<li>完成这个请求的路径尽量短、依赖尽量少 =》 上游到下游的请求数尽量少</li>
+</ol>
+<p>也就两个大的方向：提升单次效率、减少不必要的请求</p>
+<ol>
+<li>动静分离方案（移除无关依赖、减少请求）</li>
+<li>热点的发现与隔离（缩短热点的服务路径）</li>
+<li>请求的削峰与分层过滤（异步化，减少无必要的依赖）</li>
+<li>服务端的极致优化（缩短热点的服务路径）</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/backend_knowledge_architecture/distributed_system/high_scalability.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/distributed_system/high_scalability.html" class="post-title-link" itemprop="url">分布式系统-可扩展</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-04 22:55:48" itemprop="dateModified" datetime="2022-03-04T22:55:48+08:00">2022-03-04</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/distributed_system/high_scalability.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/high_scalability.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h2><p>有合理的办法应对系统的增长（数据量、流量、复杂性）</p>
+<p>一个良好适配应用的可扩展架构，是围绕着<strong>假设</strong>（assumption）建立的：哪些操作是常见的？哪些操作是罕见的？这就是所谓负载参数。如果假设最终是错误的，那么为扩展所做的工程投入就白费了，最糟糕的是适得其反。</p>
+<p>数据库、缓存、依赖的第三方、复杂均衡、交换机带宽都是系统扩展时需要考虑的点</p>
+<h3 id="分层"><a href="#分层" class="headerlink" title="分层"></a>分层</h3><p>首先要分层，分层是实现扩展的必要条件；分了层才能让系统有更好的可扩展能力；</p>
+<p><img src="http://cdn.b5mang.com/2021320104242.png" alt="架构分层"></p>
+<p>我们将系统分为如下几层：</p>
+<h4 id="接入层"><a href="#接入层" class="headerlink" title="接入层"></a>接入层</h4><p>主要负责负载均衡，要求负载均衡策略的时间复杂度要尽量简单，追求$O(lgn)$的时间复杂度，最坏不能超过$O(n)$。对于更坏时间复杂度的均衡策略，性能上会扛不住。</p>
+<h4 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h4><p>业务层：按照业务拆分、按照重要性拆分（轻重分离，核心、非核心）、按照请求来源（客户端、web、内网等）—这个跑偏了，这些点主要服务于可用性。</p>
+<p>这里侧重点在于无状态，我们一定要确保我们的服务无状态。</p>
+<h4 id="存储层"><a href="#存储层" class="headerlink" title="存储层"></a>存储层</h4><p>存储层做扩展会更麻烦一些。</p>
+<p>一般情况下，要求我们根据业务量提前估计好存储容量。根据计算出来的总的存储量，提前做足够的数据分片。</p>
+<p>换言之，对于存储层，我们的一种思路是：早做扩展，以确保将来不做扩展；</p>
+<p>另外一种思路是，添加必要的路由层（数据访问路由层）或者路由算法（数据表倍增法），来确保将来的扩展对上层不可见。</p>
+<h4 id="manager层"><a href="#manager层" class="headerlink" title="manager层"></a>manager层</h4><ol>
+<li>抽象service层可能提供的一些原子能力</li>
+<li>封装对第三方接口的调用</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/10/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/33/">33</a><a class="extend next" rel="next" href="/page/12/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+  </nav>
+
+
+
+		  </div>
+		  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+		  
+
+		</div>
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">NeoWei</p>
+  <div class="site-description" itemprop="description">我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">325</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">NeoWei</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a>
+  </div>
+
+<br>
+<a href="https://beian.miit.gov.cn/" rel="external nofollow noreferrer"  style="color:#f72b07" target="_blank">沪ICP备2020030798号-1</a>
+<br>
+
+        
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1279618438&web_id=1279618438"></script>
+  </div>
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.js"></script>
+  <script>
+      pbOptions = {};
+        pbOptions.iconStyle = "box";
+        pbOptions.boxForm = "horizontal";
+        pbOptions.position = "bottomCenter";
+        pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+  </script>
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'uE8T6jDhH4vW6BtH143y72nw-gzGzoHsz',
+      appKey     : '3xulfIcqN5mLqRSxptxvnamK',
+      placeholder: "Just go go",
+      avatar     : 'identicon',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

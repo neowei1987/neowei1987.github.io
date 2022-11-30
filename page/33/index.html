@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.b5mang.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Neo&#39;s Blog">
+<meta property="og:url" content="http://www.b5mang.com/page/33/index.html">
+<meta property="og:site_name" content="Neo&#39;s Blog">
+<meta property="og:description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+<meta property="og:locale">
+<meta property="article:author" content="NeoWei">
+<meta property="article:tag" content="后端开发知识体系,知识体系构建,刷题技巧,本质思考">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://www.b5mang.com/page/33/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'zh-Hans'
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.css"><style>
+#needsharebutton-postbottom {
+  cursor: pointer;
+  height: 26px;
+  margin-top: 10px;
+  position: relative;
+}
+#needsharebutton-postbottom .btn {
+  border: 1px solid $btn-default-border-color;
+  border-radius: 3px;
+  display: initial;
+  padding: 1px 4px;
+}
+</style>
+  <title>Neo's Blog - 不抽象就无法深入思考<br>不还原就看不到本来面目!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Neo's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不抽象就无法深入思考<br>不还原就看不到本来面目!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+		<div id="container">
+		  <div class="content index posts-expand">
+		    
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/risk_ctrl/risk_ctrl_summary.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/risk_ctrl/risk_ctrl_summary.html" class="post-title-link" itemprop="url">风控要略-互联网业务反欺诈之路</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-09-29 18:43:06" itemprop="dateCreated datePublished" datetime="2020-09-29T18:43:06+08:00">2020-09-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-02-16 21:26:19" itemprop="dateModified" datetime="2022-02-16T21:26:19+08:00">2022-02-16</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/risk_ctrl/risk_ctrl_summary.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/risk_ctrl/risk_ctrl_summary.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="背景-业务安全正在崛起"><a href="#背景-业务安全正在崛起" class="headerlink" title="背景 业务安全正在崛起"></a>背景 业务安全正在崛起</h2><ul>
+<li>注册和登录场景的风控：<br>  如何对抗黑产注册虚假账号、养号的行为，<br>  如何对抗黑产暴力破解账户密码，<br>  如何对抗“撞库”攻击。<br>  黑产手中掌握了大量的手机号卡、公民信息和数以亿计的已泄露的互联网账号密码，这对任何一个互联网平台都是致命的威胁。</li>
+<li>营销活动风控保护：<br>  营销活动发放的红包、游戏点券或其他奖励如何才能够不被黑产团伙“薅羊毛”。</li>
+<li>APP渠道推广保护：<br>  推广APP 装机量投入巨额费用后，如何衡量真实效果。<br>  用户每安装激活一个APP，平台需要支付10元甚至20元，黑产通过“手机农场”虚假安装已经是广告行业顽疾。</li>
+<li>交易和支付场景风控：<br>  盗号支付如何解决、<br>  非法聚合支付如何解决、<br>  洗钱如何解决，这些合规性问题关乎支付平台和相关业务的生死。</li>
+<li>接口安全保护：<br>  短信发送接口被坏人用于制作“短信炸弹”是大家都遇到过的场</li>
+<li>内容安全：<br>  内容安全既包括“入”也包括“出”，<br>  “入”是检测用户发布到平台的内容是否包含“色情、反动、赌博和暴恐”等违规信息，<br>  “出”则是对抗专业爬虫大量获取网站内容信息</li>
+</ul>
+<h2 id="洞察黑产"><a href="#洞察黑产" class="headerlink" title="洞察黑产"></a>洞察黑产</h2><p>黑产从业人员已达数十万余人，每年给互联网公司造成的经济损失超过百亿元</p>
+<h3 id="黑产组织结构"><a href="#黑产组织结构" class="headerlink" title="黑产组织结构"></a>黑产组织结构</h3><p>黑色产业链结构<br>附图</p>
+<p>反欺诈词典</p>
+<ul>
+<li>垃圾注册（产生大规模账号）</li>
+<li>薅羊毛</li>
+<li>刷单/黄牛</li>
+<li>众包</li>
+<li>炒信（刷好评、刷热门词等）</li>
+<li>套利（黑产与商家的勾结）</li>
+<li>空包（代发快递）</li>
+</ul>
+<h3 id="黑产武器库"><a href="#黑产武器库" class="headerlink" title="黑产武器库"></a>黑产武器库</h3><ul>
+<li>虚假号码</li>
+</ul>
+<p>手机卡商 =》 接码平台 =》 短信验证码代收服务 （产业链上游）<br>关键词：手机rom后门、猫池、流量卡和物联网卡、空号注册、接码平台、短信验证码</p>
+<ul>
+<li>代理IP</li>
+</ul>
+<p>IP怎么来的？ 控制更多的肉鸡程序</p>
+<ul>
+<li>设备伪造工具</li>
+</ul>
+<p>改机工具、多开工具、Root/越狱工具、Xposed、Cydia、Frida、硬改、脱机挂、备份/抹机恢复、模拟器、定制浏览器、自动化脚本</p>
+<ul>
+<li>其他<br>群控设备、位置伪造、工具箱</li>
+</ul>
+<h2 id="黑产打击体系构建"><a href="#黑产打击体系构建" class="headerlink" title="黑产打击体系构建"></a>黑产打击体系构建</h2><p>“终端风险识别+云端风险决策+AI”的一体化反欺诈解决方案</p>
+<h3 id="设备指纹"><a href="#设备指纹" class="headerlink" title="设备指纹"></a>设备指纹</h3><p>设备ID 可以用于统计业务运营数据（如DAU、MAU、广告激活），也可以用于用户画像、广告精准营销、Bug 上报等。<br>在互联网反欺诈对抗中，设备ID 类规则是防刷单、防薅羊毛、虚假设备识别、反爬虫、账号安全等场景的核心规则。</p>
+<p>好的设备指纹产品特性：</p>
+<p>准确性-准确率高，不同设备生成的设备指纹保证不会重复，确保设备指纹生成的唯一性。个人的常用设备总是有限的，一段时间内一般不会超过5个以上。<br>稳定性-设备系统升级或少量参数变更，设备指纹码不会发生变更。<br>生成率-即设备覆盖率，确保各种设备载体都能生成设备指纹唯一码。<br>安全性-不会再网络传输中杯篡改、注入导致生成设备伪码。</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://zhuanlan.zhihu.com/p/68852244">https://zhuanlan.zhihu.com/p/68852244</a></p>
+<h3 id="基于用户行为的生物探针"><a href="#基于用户行为的生物探针" class="headerlink" title="基于用户行为的生物探针"></a>基于用户行为的生物探针</h3><p>无感认证的基础：<br>自然人、机器人的操作行为存在差异。<br>每个人都有自己不可复制的行为习惯。<br>通过这些差异即可识别用户的身份。</p>
+<h3 id="智能验证码"><a href="#智能验证码" class="headerlink" title="智能验证码"></a>智能验证码</h3><p>对抗生成网络方法的出现基本宣告了字符验证码退出历史舞台<br>打码平台</p>
+<h3 id="风控引擎"><a href="#风控引擎" class="headerlink" title="风控引擎"></a>风控引擎</h3><p>所有的规则描述都是基于自然语言的，易于风控运营人员理解和维护。</p>
+<h3 id="实时指标计算"><a href="#实时指标计算" class="headerlink" title="实时指标计算"></a>实时指标计算</h3><p>作用域：针对事件类型、针对事件标志</p>
+<p>Lamba架构：<br>我们把一个时间跨度较长的实时指标计算转化为一个“较短时间窗口的实时指标”加上一个“历史数据的离线指标”的聚合结果</p>
+<h3 id="风险态势感知系统"><a href="#风险态势感知系统" class="headerlink" title="风险态势感知系统"></a>风险态势感知系统</h3><p>原因：专家水平差异性、黑产攻击手法多样性、运营人员操作风险、产品和系统bug</p>
+<p>方法：基于统计分析的方法、基于半监督、无监督算法的聚类方法和基于业务情报的方法</p>
+<p>前提：<br>正常业务具有连续性和稳定性，异常事件具有波动性。<br>正常用户总是表现出分布离散性，而黑产总是表现出聚集性</p>
+<h4 id="基于统计分析的方法"><a href="#基于统计分析的方法" class="headerlink" title="基于统计分析的方法"></a>基于统计分析的方法</h4><p>两类核心统计数据：</p>
+<ol>
+<li>核心风险事件数据：主要指风控系统中产生的数据，包括实时决策系统的入参、出参、中间计算结果、决策结果等。</li>
+</ol>
+<p>PSI 群体稳定性指标 SUM[(AC - EX) * ln(AC / EX)]<br>调用量、拒绝率、拒绝变化率、人审率、人审变化率<br>决策结构PSI、规则命中PSI<br>字段获取率</p>
+<ol>
+<li>核心业务数据：主要指业务自身的核心数据指标，和具体业务场景相关，如电商、O2O、直播等各不相同。</li>
+</ol>
+<p>预警业务风险态势需要的数据包括IP 段分布、收货地址分布、商品类目分布及店铺分布等</p>
+<h4 id="基于无监督学习的方法"><a href="#基于无监督学习的方法" class="headerlink" title="基于无监督学习的方法"></a>基于无监督学习的方法</h4><p>无监督学习方法的步骤一般包括特征抽取、建立连通图、群组聚类等<br>通过无监督学习方法发现风险后，可以和实时决策的结果进行比对。<br>如果无监督学习方法比实时决策的增益率高，则需要关注当天的数据，业务有被攻击的可能。</p>
+<h4 id="基于业务情报的方法"><a href="#基于业务情报的方法" class="headerlink" title="基于业务情报的方法"></a>基于业务情报的方法</h4><p>通过<strong>语义分析</strong>可以准确提取情报主体（客户名）、类型（薅羊毛）、手法（新用户抽奖）等信息，及时预警给风控运营人员进行针对性防控。</p>
+<h3 id="名单系统"><a href="#名单系统" class="headerlink" title="名单系统"></a>名单系统</h3><p>首先需要明确哪些数据可以用于建立名单，确定名单数据的主键。<br>在互联网反欺诈业务中，常见的几种名单主键是：手机号、身份证、银行卡、IP 和各类设备标识</p>
+<p>其次，需要明确标签的类别。<br>标签可以指向一种明确的风险，如可以建立一个“刷单”的手机号黑名单，或者一个爬虫的IP 黑名单，这样的标签都直接指向了一种特定风险</p>
+<h3 id="欺诈情报体系"><a href="#欺诈情报体系" class="headerlink" title="欺诈情报体系"></a>欺诈情报体系</h3><p>对一次欺诈事件来说，需要综合各方面进行分析，梳理清楚其来龙去脉：<br>黑产团伙为什么这么做？<br>黑产团伙是具体如何操作的？<br>黑产团伙如何绕过已有的一些风控策略？<br>黑产团伙是否使用了比较特殊的欺诈技术或欺诈手段？其原理是什么？<br>黑产团伙使用了哪些资源？这些资源是从哪里获取的？<br>预计有多少黑产团伙参与这次欺诈事件？</p>
+<h2 id="实战教程"><a href="#实战教程" class="headerlink" title="实战教程"></a>实战教程</h2><p>落地机器算法的工作主要包括：特征工程、模型选择、模型训练、工程化和业务落地。</p>
+<p>案例一：黑产设备群控网络挖掘<br>总体思路：</p>
+<ol>
+<li>对于所有特征，计算两台设备的相似度，如果相似度超过某一阈值，则将两个顶点相连。</li>
+<li>剪枝，连通图算法，进行图划分</li>
+</ol>
+<p>案例二：黑产用户行为聚类分析</p>
+<p>借用文本的向量空间模型刻画一个用户的动作集合：<br>每一个用户的动作集合可以看作是一篇文章，用户的每个动作（包含动作、场景和源场景，这里我们把动作ID、场景、源场景连接构成一个行为特征串）可以看作一个单词，有些动作可能会重复多次，因而可以看作一个单词的多次出现</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/ai/ml_3.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/ai/ml_3.html" class="post-title-link" itemprop="url">机器学习三要素：模型、策略和算法</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-05-20 16:52:04" itemprop="dateCreated datePublished" datetime="2020-05-20T16:52:04+08:00">2020-05-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-02-16 21:31:50" itemprop="dateModified" datetime="2022-02-16T21:31:50+08:00">2022-02-16</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/ai/ml_3.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/ai/ml_3.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>机器学习在干嘛？就是利用已有数据，找到一些合适的数学模型去描述它，然后做一些预测分析，从而优化企业的流程或者提高决策效率。机器学习的核心是：模型、策略和算法</p>
+<p>机器学习的目的——模型（Model）</p>
+<p>模型就是用来描述客观世界的数学模型，模型是从数据里抽象出来的。在进行数据分析时，我们通常手上只有数据，然后看数据找规律，找到的规律就是模型。就跟我们小时候做猜数字游戏似的，1，4，16…（）…256…括号里面是什么？只有把这串数抽象成模型，我们才能知道括号里面是什么。</p>
+<p>再举个例子，购买产品的顾客到达服务台的时间是什么模型？也许是一个泊松分布。股票价格随时间的变化是什么关系？是基于布朗运动的二项随机分布…</p>
+<p>模型可以是确定的，也可以是随机的，无所谓，总之用数学可以描述，只要数学可以描述的，就可以进行预测分析。所以，我们的根本目的，是找到一个模型区描述我们已经观测到的数据。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/ai/ml_3.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/%E7%A0%94%E5%8F%91%E6%B5%81%E7%A8%8B/maven_site.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/%E7%A0%94%E5%8F%91%E6%B5%81%E7%A8%8B/maven_site.html" class="post-title-link" itemprop="url">如何为Maven配置国内镜像资源</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-05-19 17:44:59" itemprop="dateCreated datePublished" datetime="2020-05-19T17:44:59+08:00">2020-05-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-02-16 21:36:20" itemprop="dateModified" datetime="2022-02-16T21:36:20+08:00">2022-02-16</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/%E7%A0%94%E5%8F%91%E6%B5%81%E7%A8%8B/maven_site.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/%E7%A0%94%E5%8F%91%E6%B5%81%E7%A8%8B/maven_site.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="为什么需要为Maven配置国内镜像资源"><a href="#为什么需要为Maven配置国内镜像资源" class="headerlink" title="为什么需要为Maven配置国内镜像资源"></a>为什么需要为Maven配置国内镜像资源</h2><p>Maven是很流行的项目管理工具，但是由于国外的仓库经常连接不上，即便是连接上，下载速度也很慢。所以，我们需要寻求一个解决方案？</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>为Maven配置国内镜像资源</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/%E7%A0%94%E5%8F%91%E6%B5%81%E7%A8%8B/maven_site.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/ai/recommend/recommend_intro.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/ai/recommend/recommend_intro.html" class="post-title-link" itemprop="url">推荐系统介绍</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-05-19 14:37:55" itemprop="dateCreated datePublished" datetime="2020-05-19T14:37:55+08:00">2020-05-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-02-16 21:28:56" itemprop="dateModified" datetime="2022-02-16T21:28:56+08:00">2022-02-16</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/ai/recommend/recommend_intro.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/ai/recommend/recommend_intro.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>亲爱的读者您好，感谢您在阅读我的文章。<br>出于发布渠道的考虑，我可能在各个渠道更新文章不够及时。<br>因此，如果您喜欢我的文章，想阅读更多我的文字，<br>您可转到我的<a target="_blank" rel="noopener external nofollow noreferrer" href="https://neowei1987.github.io/">个人博客</a>或者公众账号阅读文章：<br><img src="http://graph.baidu.com/resource/22251103dcfcfc1b2c4cf01589605159.png" alt="file"></p>
+<h2 id="推荐系统产生的三个背景"><a href="#推荐系统产生的三个背景" class="headerlink" title="推荐系统产生的三个背景"></a>推荐系统产生的三个背景</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/ai/recommend/recommend_intro.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.b5mang.com/%E5%BA%95%E5%B1%82%E6%80%9D%E7%BB%B4/gap_thinking.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/%E5%BA%95%E5%B1%82%E6%80%9D%E7%BB%B4/gap_thinking.html" class="post-title-link" itemprop="url">跨界思维-各学科核心理论一览</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-05-16 13:03:03" itemprop="dateCreated datePublished" datetime="2020-05-16T13:03:03+08:00">2020-05-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-02-16 21:38:15" itemprop="dateModified" datetime="2022-02-16T21:38:15+08:00">2022-02-16</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/%E5%BA%95%E5%B1%82%E6%80%9D%E7%BB%B4/gap_thinking.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/%E5%BA%95%E5%B1%82%E6%80%9D%E7%BB%B4/gap_thinking.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="物理学"><a href="#物理学" class="headerlink" title="物理学"></a>物理学</h2><h3 id="守恒定律"><a href="#守恒定律" class="headerlink" title="守恒定律"></a>守恒定律</h3><h3 id="熵增定律"><a href="#熵增定律" class="headerlink" title="熵增定律"></a>熵增定律</h3><p>封闭系统，随着时间熵不断增加，且不可逆；</p>
+<h3 id="最小作用量原理"><a href="#最小作用量原理" class="headerlink" title="最小作用量原理"></a>最小作用量原理</h3><h3 id="原子论"><a href="#原子论" class="headerlink" title="原子论"></a>原子论</h3><p>自然界可以分割为不可分割的原子。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/%E5%BA%95%E5%B1%82%E6%80%9D%E7%BB%B4/gap_thinking.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/32/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/32/">32</a><span class="page-number current">33</span>
+  </nav>
+
+
+
+		  </div>
+		  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+		  
+
+		</div>
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">NeoWei</p>
+  <div class="site-description" itemprop="description">我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">325</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">NeoWei</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a>
+  </div>
+
+<br>
+<a href="https://beian.miit.gov.cn/" rel="external nofollow noreferrer"  style="color:#f72b07" target="_blank">沪ICP备2020030798号-1</a>
+<br>
+
+        
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1279618438&web_id=1279618438"></script>
+  </div>
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.js"></script>
+  <script>
+      pbOptions = {};
+        pbOptions.iconStyle = "box";
+        pbOptions.boxForm = "horizontal";
+        pbOptions.position = "bottomCenter";
+        pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+  </script>
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'uE8T6jDhH4vW6BtH143y72nw-gzGzoHsz',
+      appKey     : '3xulfIcqN5mLqRSxptxvnamK',
+      placeholder: "Just go go",
+      avatar     : 'identicon',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

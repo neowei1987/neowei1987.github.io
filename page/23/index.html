@@ -203,7 +203,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_group.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_01.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -217,7 +217,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_group.html" class="post-title-link" itemprop="url">动态规划背包问题-分组背包</a>
+            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_01.html" class="post-title-link" itemprop="url">动态规划背包问题-01背包</a>
         </h2>
 
         <div class="post-meta">
@@ -236,7 +236,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:48:39" itemprop="dateModified" datetime="2022-03-01T22:48:39+08:00">2022-03-01</time>
+                <time title="Modified: 2022-11-10 10:25:29" itemprop="dateModified" datetime="2022-11-10T10:25:29+08:00">2022-11-10</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -257,8 +257,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_group.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_group.html" itemprop="commentCount"></span>
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_01.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_01.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -277,26 +277,26 @@
 <table>
 <thead>
 <tr>
-<th>分组背包问题</th>
+<th>01背包问题</th>
 <th>背包问题系列</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>问题描述</td>
-<td>给定N个物品，其中第i组有$C_i$个物品。第i组的第j个物品的体积为$V_{ij}$，价值为$W_{ij}$。有一个容积为M的背包，要求选择一些物品放入背包，使得每组最多选择一个物品并且总体积不超过M的前提下，物品总价值和最大。</td>
+<td>给定N个物品，其中第i个物品的体积为$V_i$，价值为$W_i$。有一个容积为M的背包，要求选择一些物品放入背包，使得物品总体积不超过M的前提下，物品总价值和最大。<a target="_blank" rel="noopener external nofollow noreferrer" href="https://zhuanlan.zhihu.com/p/30959069">https://zhuanlan.zhihu.com/p/30959069</a></td>
 </tr>
 <tr>
 <td>状态表示</td>
-<td>F[i,j]表示从前i组选出了总体积为j的物品放入背包，物品的最大价值</td>
-</tr>
-<tr>
-<td>转移方程</td>
-<td>$F[i,j]=\begin{cases}F[i-1,j] &amp; \text { 不选第i组的物品} \\ \underset{1 \le k \le C_i}{\mathrm{max}}{F[i - 1,j - V_{ik}] + W_{ik}} &amp;\text{ 选第i个物品} \end{cases}$</td>
+<td>F[i,j]表示从前i个物品中选出了总体积为j的物品放入背包，物品的最大价值</td>
 </tr>
 <tr>
 <td>阶段划分</td>
-<td>主阶段：i物品组数是阶段，i与j共同组成状态，k是决策</td>
+<td>主阶段：已经处理的物品数，以背包中放入到的物品总体积为附加维度</td>
+</tr>
+<tr>
+<td>转移方程</td>
+<td>$F[i,j]=\begin{cases}F[i-1,j] &amp; \text { 不选第i个物品} \\ F[i-1,j-V_i] + W_i &amp; \text{if } j \ge V_i  \text{ 选第i个物品} \end{cases}$</td>
 </tr>
 <tr>
 <td>边界</td>
@@ -308,11 +308,16 @@
 </tr>
 <tr>
 <td>优化</td>
-<td>正循环做空间优化</td>
+<td>仅依赖前一项，可以通过滚动数组或者倒序循环做空间优化</td>
 </tr>
 </tbody>
 </table>
 </div>
+<p>另外，还有一种状态表示：<br>即F[i; v] 表示前i 件物品恰放入一个容量为v 的背包可以获得的最大价值。则其状态转移方程便是：</p>
+<p>F[i,v] = max(F[i -1, v], F[i-1 , v-C[i]] + W[i])</p>
+<p>这样子表示状态后，目标变为F[N, M]</p>
+<p>eg. 划分数组为两个相等的子集</p>
+<p>找sum一半</p>
 
       
     </div>
@@ -465,6 +470,137 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_group.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_group.html" class="post-title-link" itemprop="url">动态规划背包问题-分组背包</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-11 22:54:03" itemprop="dateCreated datePublished" datetime="2021-01-11T22:54:03+08:00">2021-01-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:48:39" itemprop="dateModified" datetime="2022-03-01T22:48:39+08:00">2022-03-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_group.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_group.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <div class="table-container">
+<table>
+<thead>
+<tr>
+<th>分组背包问题</th>
+<th>背包问题系列</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>问题描述</td>
+<td>给定N个物品，其中第i组有$C_i$个物品。第i组的第j个物品的体积为$V_{ij}$，价值为$W_{ij}$。有一个容积为M的背包，要求选择一些物品放入背包，使得每组最多选择一个物品并且总体积不超过M的前提下，物品总价值和最大。</td>
+</tr>
+<tr>
+<td>状态表示</td>
+<td>F[i,j]表示从前i组选出了总体积为j的物品放入背包，物品的最大价值</td>
+</tr>
+<tr>
+<td>转移方程</td>
+<td>$F[i,j]=\begin{cases}F[i-1,j] &amp; \text { 不选第i组的物品} \\ \underset{1 \le k \le C_i}{\mathrm{max}}{F[i - 1,j - V_{ik}] + W_{ik}} &amp;\text{ 选第i个物品} \end{cases}$</td>
+</tr>
+<tr>
+<td>阶段划分</td>
+<td>主阶段：i物品组数是阶段，i与j共同组成状态，k是决策</td>
+</tr>
+<tr>
+<td>边界</td>
+<td>F[0,0]=0，其余为负无穷</td>
+</tr>
+<tr>
+<td>目标</td>
+<td>$\underset{0 \le j \le M}{\mathrm{max}}{F[N,j]}$</td>
+</tr>
+<tr>
+<td>优化</td>
+<td>正循环做空间优化</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_multiple.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -563,142 +699,6 @@
 </tbody>
 </table>
 </div>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_01.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_01.html" class="post-title-link" itemprop="url">动态规划背包问题-01背包</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-11 22:54:03" itemprop="dateCreated datePublished" datetime="2021-01-11T22:54:03+08:00">2021-01-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-10 10:25:29" itemprop="dateModified" datetime="2022-11-10T10:25:29+08:00">2022-11-10</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_01.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_01.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <div class="table-container">
-<table>
-<thead>
-<tr>
-<th>01背包问题</th>
-<th>背包问题系列</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>问题描述</td>
-<td>给定N个物品，其中第i个物品的体积为$V_i$，价值为$W_i$。有一个容积为M的背包，要求选择一些物品放入背包，使得物品总体积不超过M的前提下，物品总价值和最大。<a target="_blank" rel="noopener external nofollow noreferrer" href="https://zhuanlan.zhihu.com/p/30959069">https://zhuanlan.zhihu.com/p/30959069</a></td>
-</tr>
-<tr>
-<td>状态表示</td>
-<td>F[i,j]表示从前i个物品中选出了总体积为j的物品放入背包，物品的最大价值</td>
-</tr>
-<tr>
-<td>阶段划分</td>
-<td>主阶段：已经处理的物品数，以背包中放入到的物品总体积为附加维度</td>
-</tr>
-<tr>
-<td>转移方程</td>
-<td>$F[i,j]=\begin{cases}F[i-1,j] &amp; \text { 不选第i个物品} \\ F[i-1,j-V_i] + W_i &amp; \text{if } j \ge V_i  \text{ 选第i个物品} \end{cases}$</td>
-</tr>
-<tr>
-<td>边界</td>
-<td>F[0,0]=0，其余为负无穷</td>
-</tr>
-<tr>
-<td>目标</td>
-<td>$\underset{0 \le j \le M}{\mathrm{max}}{F[N,j]}$</td>
-</tr>
-<tr>
-<td>优化</td>
-<td>仅依赖前一项，可以通过滚动数组或者倒序循环做空间优化</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>另外，还有一种状态表示：<br>即F[i; v] 表示前i 件物品恰放入一个容量为v 的背包可以获得的最大价值。则其状态转移方程便是：</p>
-<p>F[i,v] = max(F[i -1, v], F[i-1 , v-C[i]] + W[i])</p>
-<p>这样子表示状态后，目标变为F[N, M]</p>
-<p>eg. 划分数组为两个相等的子集</p>
-<p>找sum一半</p>
 
       
     </div>
@@ -989,6 +989,106 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/hash/bloom_filter.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/structures/hash/bloom_filter.html" class="post-title-link" itemprop="url">哈希系列-布隆过滤器</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-11 22:25:03" itemprop="dateCreated datePublished" datetime="2021-01-11T22:25:03+08:00">2021-01-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 23:02:19" itemprop="dateModified" datetime="2022-03-01T23:02:19+08:00">2022-03-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/hash/bloom_filter.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/hash/bloom_filter.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>bloom Filter 布隆过滤器<br>K个hash函数，当写入一个key的时候，设置H1(key), H2(key)…Hk(key)为1。当需要check key是否存在的时候，依次检测H1(key)…Hk(key)是否均为1，如果其中一个不为1，则表示key不存在；否则认为key存在。</p>
+<p>注意：有错误判断的可能性，所以仅仅适用于允许一定错误率的场景。</p>
+<p>应用：</p>
+<ol>
+<li>爬虫程序url是否处理过</li>
+<li>黑名单,垃圾邮件过滤</li>
+<li>是否关注、判断用户关系（如果出现误判，顶多会多回源一次数据库）</li>
+<li>【TODO，没看明白】Bloom filter在重复数据删除中的应用。主流的重复数据删除技术的基本原理是对文件进行定长或变长分块，然后利用hash函数计算数据块指纹，如果两个数据块指纹相同则认为是重复数据块（同样这里存在数据碰撞问题），只保存一个数据块副本即可，其他相同数据块使用该副本索引号表示，从而实现数据缩减存储空间并提高存储效率。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/hash/index.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1084,106 +1184,6 @@
 <h3 id="java数据结构对比"><a href="#java数据结构对比" class="headerlink" title="java数据结构对比"></a>java数据结构对比</h3><p>hashMap 数组 + 链表 （冲突链表过长时，转为红黑树）线程不安全 允许null\null  不可以有序遍历</p>
 <p>hashTable 线程安全，通过synchronized 不允许null\null  不可以有序遍历</p>
 <p>treeMap 红黑树 线程不安全 可以有序遍历</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/hash/bloom_filter.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/structures/hash/bloom_filter.html" class="post-title-link" itemprop="url">哈希系列-布隆过滤器</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-11 22:25:03" itemprop="dateCreated datePublished" datetime="2021-01-11T22:25:03+08:00">2021-01-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 23:02:19" itemprop="dateModified" datetime="2022-03-01T23:02:19+08:00">2022-03-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/hash/bloom_filter.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/hash/bloom_filter.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>bloom Filter 布隆过滤器<br>K个hash函数，当写入一个key的时候，设置H1(key), H2(key)…Hk(key)为1。当需要check key是否存在的时候，依次检测H1(key)…Hk(key)是否均为1，如果其中一个不为1，则表示key不存在；否则认为key存在。</p>
-<p>注意：有错误判断的可能性，所以仅仅适用于允许一定错误率的场景。</p>
-<p>应用：</p>
-<ol>
-<li>爬虫程序url是否处理过</li>
-<li>黑名单,垃圾邮件过滤</li>
-<li>是否关注、判断用户关系（如果出现误判，顶多会多回源一次数据库）</li>
-<li>【TODO，没看明白】Bloom filter在重复数据删除中的应用。主流的重复数据删除技术的基本原理是对文件进行定长或变长分块，然后利用hash函数计算数据块指纹，如果两个数据块指纹相同则认为是重复数据块（同样这里存在数据碰撞问题），只保存一个数据块副本即可，其他相同数据块使用该副本索引号表示，从而实现数据缩减存储空间并提高存储效率。</li>
-</ol>
 
       
     </div>

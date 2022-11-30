@@ -754,6 +754,135 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/load_balance/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/load_balance/index.html" class="post-title-link" itemprop="url">高性能服务器设计-负载均衡模型</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-03 20:08:45" itemprop="dateModified" datetime="2022-11-03T20:08:45+08:00">2022-11-03</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/load_balance/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/load_balance/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="round-robin"><a href="#round-robin" class="headerlink" title="round-robin"></a>round-robin</h3><p>总是选择列表中的下一台服务器，结尾的下一台是开头，无需其他设置。比如有3台机器a,b,c，那么brpc会依次向a, b, c, a, b, c, …发送请求。注意这个算法的前提是服务器的配置，网络条件，负载都是<strong>类似</strong>的</p>
+<h3 id="Weighted-Round-Robin"><a href="#Weighted-Round-Robin" class="headerlink" title="Weighted Round Robin"></a>Weighted Round Robin</h3><p>根据服务器列表配置的权重值来选择服务器。服务器被选到的机会正比于其权重值，并且该算法能保证同一服务器被选到的结果较均衡的散开</p>
+<p>不足：</p>
+<ol>
+<li>无法快速摘除有问题的节点</li>
+<li>无法均衡后端负载</li>
+<li>无法降低总体延迟</li>
+</ol>
+<p>nginx的WRR算法原理如下：</p>
+<p>每个服务器都有两个权重变量：</p>
+<p>a：weight，配置文件中指定的该服务器的权重，这个值是固定不变的；</p>
+<p>b：current_weight，服务器目前的权重。一开始为0，之后会动态调整。</p>
+<p>每次当请求到来，选取服务器时，会遍历数组中所有服务器。对于每个服务器，让它的current_weight增加它的weight；同时累加所有服务器的weight，并保存为total。</p>
+<p>遍历完所有服务器之后，如果该服务器的current_weight是最大的，就选择这个服务器处理本次请求。最后把该服务器的current_weight减去total。</p>
+<p><img src="https://img-blog.csdn.net/20160731092902416?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="nginx_WRR"></p>
+<h3 id="动态感知版的Weighted-Round-Robin"><a href="#动态感知版的Weighted-Round-Robin" class="headerlink" title="动态感知版的Weighted Round Robin"></a>动态感知版的Weighted Round Robin</h3><p>动态感知的WRR<br>peer.score = success_rate /(lantency * cpuUsage)</p>
+<p>具体做法：</p>
+<ol>
+<li>利用每次RPC请求返回的Response夹带CPU使用率</li>
+<li>每隔一段时间整体调整一次节点的权重分数</li>
+</ol>
+<p>不足：</p>
+<p>自动刷新权重值，但是在刷新时无法做到完全的实时，再快也不可能超过一个 RTT，都会存在一些信息延迟差。当后台资源比较稀缺时，遇到网络抖动时，就可能会把该节点炸掉，但是在监控上面是感觉不到的，因为 CPU 已经被平均掉了。</p>
+<h4 id="best-of-two-random-choice"><a href="#best-of-two-random-choice" class="headerlink" title="best of two random choice"></a>best of two random choice</h4><p>repsonse中附带cpu使用率，信息滞后造成了严重的羊群效应</p>
+<p>计算权重分数，每次请求来时我们都会更新延迟，并且把之前获得的时间延迟进行权重的衰减，新获得的时间提高权重，这样就实现了滚动更新</p>
+<p><img src="http://cdn.b5mang.com/2020123022446.png" alt="带系数的滑动平均值"><br>时间衰减系数的滑动平均值：伴随时间，老的均值，权重越来越小，新的response time，越来越高</p>
+<h3 id="randomized"><a href="#randomized" class="headerlink" title="randomized"></a>randomized</h3><p>随机法，是随机选择一台服务器来分配任务。它保证了请求的分散性达到了均衡的目的。同时它是没有状态的不需要维持上次的选择状态和均衡因子。但是随着任务量的增大，它的效果趋向轮询后也会具有轮询算法的部分缺点。</p>
+<p>根据随机算法，将请求随机分配到后端服务器中，请求的均匀请求依赖于随机算法，该实现方式较为简单，常常可以配合处理一些极端的请求，例如热点请求情况。不适合对命中率有要求的场景。</p>
+<h3 id="consistent-hashing"><a href="#consistent-hashing" class="headerlink" title="consistent-hashing"></a>consistent-hashing</h3><p>Hash哈希是根据Source IP、 Destination IP、URL、或者其它，算hash值或者md5，再采用取模，相同的请求会请求到同一个后端服务器中。该算法无法解决热点请求，会把某个时间段的热点请求路由到某个单机上，造成雪崩效应，同时在扩充和节点宕机时发生命中率急剧降低的问题（hash算法导致），该策略适合维护长连接和提高命中率。Consistanct Hash是对Hash 算法的优化，可以有效的解决宕机和扩充造成的命中率急剧降低的问题。</p>
+<p>一致性Hash算法也是使用取模的方法，只是，刚才描述的取模法是对服务器的数量进行取模，而一致性Hash算法是对2^32取模，什么意思呢？简单来说，一致性Hash算法将整个哈希值空间组织成一个虚拟的圆环，如假设某哈希函数H的值空间为0~2^32-1（即哈希值是一个32位无符号整形）。</p>
+<p>整个空间按顺时针方向组织，圆环的正上方的点代表0，0点右侧的第一个点代表1，以此类推，2、3、4、5、6……直到2^32-1，也就是说0点左侧的第一个点代表2^32-1， 0和2^32-1在零点中方向重合，我们把这个由2^32个点组成的圆环称为Hash环。</p>
+<p>下一步将各个服务器使用Hash进行一个哈希，具体可以选择服务器的IP或主机名作为关键字进行哈希，这样每台机器就能确定其在哈希环上的位置。</p>
+<h3 id="brpc-locality-aware"><a href="#brpc-locality-aware" class="headerlink" title="brpc locality-aware"></a>brpc locality-aware</h3><p>优先选择延时低的下游，直到其延时高于其他机器，无需其他设置</p>
+<p>在DP 2.0中我们使用了一种新的算法: Locality-aware load balancing，能根据下游节点的负载分配流量，还能快速规避失效的节点，在很大程度上，这种算法的延时也是全局最优的。基本原理非常简单：</p>
+<p>以下游节点的吞吐除以延时作为分流权值。</p>
+<p>比如只有两台下游节点，W代表权值，QPS代表吞吐，L代表延时，那么W1 = QPS1 / L1和W2 = QPS2 / L2分别是这两个节点的分流权值，分流时随机数落入的权值区间就是流量的目的地了。</p>
+<p>一种分析方法如下：</p>
+<p>稳定状态时的QPS显然和其分流权值W成正比，即W1 / W2 ≈ QPS1 / QPS2。<br>根据分流公式又有：W1 / W2 = QPS1 / QPS2 * (L2 / L1)。<br>故稳定状态时L1和L2应当是趋同的。当L1小于L2时，节点1会更获得相比其QPS1更大的W1，从而在未来获得更多的流量，直到其延时高于平均值或没有更多的流量。</p>
+<p>具体见：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/apache/incubator-brpc/blob/master/docs/cn/lalb.md">Locality-aware</a></p>
+<p>任务：子任务<br>自然任务NatureTask，用户任务, TaskKey 用户邀请别人点赞达到10，自己去下单金额超过100（考虑逆向）</p>
+<p>状态机（根据规则引擎的判定结果，决定状态机往哪边走）</p>
+<p>变与不变，不变的部份，通过代码落地下来；变的部份，通过规则引擎来处理。</p>
+<p>不变的部份：事件是可以枚举的，奖励是可以枚举的；<br>变的部份：任务参数会变，活动周期会变，累加规则会变，事件奖励的各种组合</p>
+<p>写别样的代码…</p>
+<p>PM运营沟通，让他们尽量少提没有通用性的需求；<br>熟悉业务的同时，给出自己的技术方案<br>给大家打鸡血，协同大家一起完成1.0版</p>
+<p>救火案例2<br>B站微博系统，</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/thread_model/thread.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -884,135 +1013,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/load_balance/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/server/load_balance/index.html" class="post-title-link" itemprop="url">高性能服务器设计-负载均衡模型</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-03 20:08:45" itemprop="dateModified" datetime="2022-11-03T20:08:45+08:00">2022-11-03</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/server/load_balance/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/load_balance/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="round-robin"><a href="#round-robin" class="headerlink" title="round-robin"></a>round-robin</h3><p>总是选择列表中的下一台服务器，结尾的下一台是开头，无需其他设置。比如有3台机器a,b,c，那么brpc会依次向a, b, c, a, b, c, …发送请求。注意这个算法的前提是服务器的配置，网络条件，负载都是<strong>类似</strong>的</p>
-<h3 id="Weighted-Round-Robin"><a href="#Weighted-Round-Robin" class="headerlink" title="Weighted Round Robin"></a>Weighted Round Robin</h3><p>根据服务器列表配置的权重值来选择服务器。服务器被选到的机会正比于其权重值，并且该算法能保证同一服务器被选到的结果较均衡的散开</p>
-<p>不足：</p>
-<ol>
-<li>无法快速摘除有问题的节点</li>
-<li>无法均衡后端负载</li>
-<li>无法降低总体延迟</li>
-</ol>
-<p>nginx的WRR算法原理如下：</p>
-<p>每个服务器都有两个权重变量：</p>
-<p>a：weight，配置文件中指定的该服务器的权重，这个值是固定不变的；</p>
-<p>b：current_weight，服务器目前的权重。一开始为0，之后会动态调整。</p>
-<p>每次当请求到来，选取服务器时，会遍历数组中所有服务器。对于每个服务器，让它的current_weight增加它的weight；同时累加所有服务器的weight，并保存为total。</p>
-<p>遍历完所有服务器之后，如果该服务器的current_weight是最大的，就选择这个服务器处理本次请求。最后把该服务器的current_weight减去total。</p>
-<p><img src="https://img-blog.csdn.net/20160731092902416?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="nginx_WRR"></p>
-<h3 id="动态感知版的Weighted-Round-Robin"><a href="#动态感知版的Weighted-Round-Robin" class="headerlink" title="动态感知版的Weighted Round Robin"></a>动态感知版的Weighted Round Robin</h3><p>动态感知的WRR<br>peer.score = success_rate /(lantency * cpuUsage)</p>
-<p>具体做法：</p>
-<ol>
-<li>利用每次RPC请求返回的Response夹带CPU使用率</li>
-<li>每隔一段时间整体调整一次节点的权重分数</li>
-</ol>
-<p>不足：</p>
-<p>自动刷新权重值，但是在刷新时无法做到完全的实时，再快也不可能超过一个 RTT，都会存在一些信息延迟差。当后台资源比较稀缺时，遇到网络抖动时，就可能会把该节点炸掉，但是在监控上面是感觉不到的，因为 CPU 已经被平均掉了。</p>
-<h4 id="best-of-two-random-choice"><a href="#best-of-two-random-choice" class="headerlink" title="best of two random choice"></a>best of two random choice</h4><p>repsonse中附带cpu使用率，信息滞后造成了严重的羊群效应</p>
-<p>计算权重分数，每次请求来时我们都会更新延迟，并且把之前获得的时间延迟进行权重的衰减，新获得的时间提高权重，这样就实现了滚动更新</p>
-<p><img src="http://cdn.b5mang.com/2020123022446.png" alt="带系数的滑动平均值"><br>时间衰减系数的滑动平均值：伴随时间，老的均值，权重越来越小，新的response time，越来越高</p>
-<h3 id="randomized"><a href="#randomized" class="headerlink" title="randomized"></a>randomized</h3><p>随机法，是随机选择一台服务器来分配任务。它保证了请求的分散性达到了均衡的目的。同时它是没有状态的不需要维持上次的选择状态和均衡因子。但是随着任务量的增大，它的效果趋向轮询后也会具有轮询算法的部分缺点。</p>
-<p>根据随机算法，将请求随机分配到后端服务器中，请求的均匀请求依赖于随机算法，该实现方式较为简单，常常可以配合处理一些极端的请求，例如热点请求情况。不适合对命中率有要求的场景。</p>
-<h3 id="consistent-hashing"><a href="#consistent-hashing" class="headerlink" title="consistent-hashing"></a>consistent-hashing</h3><p>Hash哈希是根据Source IP、 Destination IP、URL、或者其它，算hash值或者md5，再采用取模，相同的请求会请求到同一个后端服务器中。该算法无法解决热点请求，会把某个时间段的热点请求路由到某个单机上，造成雪崩效应，同时在扩充和节点宕机时发生命中率急剧降低的问题（hash算法导致），该策略适合维护长连接和提高命中率。Consistanct Hash是对Hash 算法的优化，可以有效的解决宕机和扩充造成的命中率急剧降低的问题。</p>
-<p>一致性Hash算法也是使用取模的方法，只是，刚才描述的取模法是对服务器的数量进行取模，而一致性Hash算法是对2^32取模，什么意思呢？简单来说，一致性Hash算法将整个哈希值空间组织成一个虚拟的圆环，如假设某哈希函数H的值空间为0~2^32-1（即哈希值是一个32位无符号整形）。</p>
-<p>整个空间按顺时针方向组织，圆环的正上方的点代表0，0点右侧的第一个点代表1，以此类推，2、3、4、5、6……直到2^32-1，也就是说0点左侧的第一个点代表2^32-1， 0和2^32-1在零点中方向重合，我们把这个由2^32个点组成的圆环称为Hash环。</p>
-<p>下一步将各个服务器使用Hash进行一个哈希，具体可以选择服务器的IP或主机名作为关键字进行哈希，这样每台机器就能确定其在哈希环上的位置。</p>
-<h3 id="brpc-locality-aware"><a href="#brpc-locality-aware" class="headerlink" title="brpc locality-aware"></a>brpc locality-aware</h3><p>优先选择延时低的下游，直到其延时高于其他机器，无需其他设置</p>
-<p>在DP 2.0中我们使用了一种新的算法: Locality-aware load balancing，能根据下游节点的负载分配流量，还能快速规避失效的节点，在很大程度上，这种算法的延时也是全局最优的。基本原理非常简单：</p>
-<p>以下游节点的吞吐除以延时作为分流权值。</p>
-<p>比如只有两台下游节点，W代表权值，QPS代表吞吐，L代表延时，那么W1 = QPS1 / L1和W2 = QPS2 / L2分别是这两个节点的分流权值，分流时随机数落入的权值区间就是流量的目的地了。</p>
-<p>一种分析方法如下：</p>
-<p>稳定状态时的QPS显然和其分流权值W成正比，即W1 / W2 ≈ QPS1 / QPS2。<br>根据分流公式又有：W1 / W2 = QPS1 / QPS2 * (L2 / L1)。<br>故稳定状态时L1和L2应当是趋同的。当L1小于L2时，节点1会更获得相比其QPS1更大的W1，从而在未来获得更多的流量，直到其延时高于平均值或没有更多的流量。</p>
-<p>具体见：</p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/apache/incubator-brpc/blob/master/docs/cn/lalb.md">Locality-aware</a></p>
-<p>任务：子任务<br>自然任务NatureTask，用户任务, TaskKey 用户邀请别人点赞达到10，自己去下单金额超过100（考虑逆向）</p>
-<p>状态机（根据规则引擎的判定结果，决定状态机往哪边走）</p>
-<p>变与不变，不变的部份，通过代码落地下来；变的部份，通过规则引擎来处理。</p>
-<p>不变的部份：事件是可以枚举的，奖励是可以枚举的；<br>变的部份：任务参数会变，活动周期会变，累加规则会变，事件奖励的各种组合</p>
-<p>写别样的代码…</p>
-<p>PM运营沟通，让他们尽量少提没有通用性的需求；<br>熟悉业务的同时，给出自己的技术方案<br>给大家打鸡血，协同大家一起完成1.0版</p>
-<p>救火案例2<br>B站微博系统，</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/thread_model/libsvrkit.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1111,7 +1111,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/cache/memcache.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/cache/index.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1125,7 +1125,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/backend_knowledge_architecture/cache/memcache.html" class="post-title-link" itemprop="url">MC缓存必知必会</a>
+            <a href="/backend_knowledge_architecture/cache/index.html" class="post-title-link" itemprop="url">缓存简要说明</a>
         </h2>
 
         <div class="post-meta">
@@ -1144,7 +1144,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
+                <time title="Modified: 2022-10-29 09:49:36" itemprop="dateModified" datetime="2022-10-29T09:49:36+08:00">2022-10-29</time>
               </span>
 
           
@@ -1156,8 +1156,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/cache/memcache.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/cache/memcache.html" itemprop="commentCount"></span>
+    <a title="valine" href="/backend_knowledge_architecture/cache/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/cache/index.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -1172,29 +1172,53 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>memcached作为高速运行的分布式缓存服务器，具有以下的特点:</p>
-<p>（1）协议简单，文本协议</p>
-<p>（2）基于libevent的事件处理，对服务器的连接数增加，也能发挥O(1)的性能</p>
-<p>操作：</p>
-<p>（1）set， get， del</p>
-<p>（2）多key查询</p>
-<p>（3）原子自增，自减</p>
-<h3 id="memcache内存分配"><a href="#memcache内存分配" class="headerlink" title="memcache内存分配"></a>memcache内存分配</h3><p>Slab Allocator的基本原理是按照预先规定的大小，将分配的内存分割成特定长度的块，以完全解决内存碎片问题。但是存在内存浪费问题！！（外碎片没有了，但是当分配大小超过实际要用大小时，产生内部碎片）</p>
-<h3 id="memcache删除机制"><a href="#memcache删除机制" class="headerlink" title="memcache删除机制"></a>memcache删除机制</h3><p>Lazy Expiration</p>
-<p>基于LRU(Least Recently Used)算法自动删除不使用的缓存</p>
-<p>memcached内部不会监视记录是否过期，而是在get时查看记录的时间戳，检查记录是否过期。这种技术被称为lazy（惰性）expiration。因此，memcached不会在过期监视上耗费CPU时间。</p>
-<p>当容量存满时，会对缓存中的数据进行剔除，剔除时除了会对过期 key 进行清理，还会按 LRU 策略对数据进行剔除。</p>
-<p>1.4以前：</p>
-<p>维护一个双向链表，当被访问时，移动到head； 当需要淘汰时，从尾巴开始扫描，找到已经过期的item淘汰掉。</p>
-<p>1.5以后：</p>
-<p>维护子LRU（HOT\WARM\COLD),有点类似多级队列。</p>
-<h2 id="哈希算法"><a href="#哈希算法" class="headerlink" title="哈希算法"></a>哈希算法</h2><p>memcached不互相通信的分布式，由客户端来实现</p>
-<h3 id="根据余数计算分散"><a href="#根据余数计算分散" class="headerlink" title="根据余数计算分散"></a>根据余数计算分散</h3><p>数据的分散性也相当优秀，但也有其缺点。那就是当添加或移除服务器时，缓存重组的代价相当巨大。<br>添加服务器后，余数就会产生巨变，这样就无法获取与保存时相同的服务器，从而影响缓存的命中率。</p>
-<h3 id="一致性Hash"><a href="#一致性Hash" class="headerlink" title="一致性Hash"></a>一致性Hash</h3><p>但Consistent Hashing中，只有在continuum（统一连续体）上增加服务器的地点逆时针方向的第一台服务器上的键会受到影响。Consistent Hashing最大限度地抑制了键的重新分布。</p>
-<p>而且，有的Consistent Hashing的实现方法还采用了虚拟节点的思想。使用一般的hash函数的话，服务器的映射地点的分布非常不均匀。</p>
-<p>因此，使用虚拟节点的思想，为每个物理节点（服务器）在continuum上分配100～200个点。这样就能抑制分布不均匀，最大限度地减小服务器增减时的缓存重新分布。</p>
-<h3 id="hash表扩容"><a href="#hash表扩容" class="headerlink" title="hash表扩容"></a>hash表扩容</h3><p>基于双缓冲思想的扩容方案</p>
-<p>启动一个后台线程，监控hash表大小，如果快满了，则拷贝到新的hash表【扩大容量】</p>
+          <p>高速缓存服务器(Cache Server)是软硬件高度集成的专业功能服务器，主要做高速缓存加速服务，一般部署在网络边缘。</p>
+<p>根据加速对象不同，分为客户端加速和服务器加速</p>
+<p>客户端加速Cache部署在网络出口处，把常访问的内容缓存在本地，提高响应速度和节约带宽;</p>
+<p>服务器加速Cache部署在服务器前端，作为Web服务器的前置机，提高Web服务器的性能，加速访问速度。</p>
+<hr>
+<p>缓存有哪些类型？</p>
+<ul>
+<li>服务器LocalCache （有状态）</li>
+</ul>
+<p>将缓存内容放到服务器的本地内存或者磁盘；</p>
+<p>无法及时更新，一般都是设置一个合理的过期时间，让其自动过期；适用于实时性要求不高的场景；</p>
+<p>优缺点：本地缓存是内存访问，没有远程交互开销，性能最好，但是受限于单机容量，一般缓存较小且无法扩展。</p>
+<p>特例：数据库缓存</p>
+<ul>
+<li>分布式缓存（无状态）</li>
+</ul>
+<p>redis\memcache\tair</p>
+<ul>
+<li>客户端缓存（有状态）</li>
+</ul>
+<p>具体有哪些：<br>浏览器cookie；浏览器本地缓存；flash本地存储；html5的本地存储；native app 本地缓存</p>
+<p>缓存系统对比与选型</p>
+<hr>
+<p>在Web应用领域，Web缓存大致可以分为以下几种类型：</p>
+<h4 id="浏览器端缓存"><a href="#浏览器端缓存" class="headerlink" title="浏览器端缓存"></a>浏览器端缓存</h4><p>浏览器缓存根据一套与服务器约定的规则进行工作，在同一个会话过程中会检查一次并确定缓存的副本足够新。如果你浏览过程中，比如前进或后退，访问到同一个图片，这些图片可以从浏览器缓存中调出而即时显现。</p>
+<p>客户端浏览器缓存主要是通过在http头部增加<br>Last-Modified,If-Modified-Since,Expires,Cache-Control等标识，和服务器进行协商，是否是采用客户的本机缓存来实现。</p>
+<p>其中这里面也会分为三种方式</p>
+<p>1 通过Last-Modified，If-Modified-Since方式和服务器通信，客户发出http请求中包含If-Modified-Since，如果服务器端代码没有修改，服务器端返回302响应代码的请求响应头（内容不返回）客户端则直接用本机缓存的内容缓存显示结果。相<br>当于节省了服务器执行代码时间以及数据传输时间。</p>
+<p>2 通过Expires,Cache-Control控制，客户端发现如果上次请求的页面还未过期，通过Expires或者Cache-Control进行辨别，则直接显示本机缓存的内容，不与服务器进行通信。</p>
+<h4 id="服务器端缓存"><a href="#服务器端缓存" class="headerlink" title="服务器端缓存"></a>服务器端缓存</h4><h5 id="CDN缓存"><a href="#CDN缓存" class="headerlink" title="CDN缓存"></a>CDN缓存</h5><p>CDN（Content delivery networks）缓存，也叫网关缓存、反向代理缓存。CDN缓存一般是由网站管理员自己部署，为了让他们的网站更容易扩展并获得更好的性能。浏览器先向CDN网关发起Web请求，网关服务器后面对应着一台或多台负载均衡源服务器，会根据它们的负载请求，动态将请求转发到合适的源服务器上。虽然这种架构负载均衡源服务器之间的缓存没法共享，但却拥有更好的处扩展性。从浏览器角度来看，整个CDN就是一个源服务器，从这个层面来说，本文讨论浏览器和服务器之间的缓存机制，在这种架构下同样适用。</p>
+<h5 id="代理服务器缓存"><a href="#代理服务器缓存" class="headerlink" title="代理服务器缓存"></a>代理服务器缓存</h5><p>代理服务器是浏览器和源服务器之间的中间服务器，浏览器先向这个中间服务器发起Web请求，经过处理后（比如权限验证，缓存匹配等），再将请求转发到源服务器。代理服务器缓存的运作原理跟浏览器的运作原理差不多，只是规模更大。可以把它理解为一个共享缓存，不只为一个用户服务，一般为大量用户提供服务，因此在减少相应时间和带宽使用方面很有效，同一个副本会被重用多次。常见代理服务器缓存解决方案有Squid等</p>
+<h5 id="Web应用层缓存"><a href="#Web应用层缓存" class="headerlink" title="Web应用层缓存"></a>Web应用层缓存</h5><p>应用层缓存指的是从代码层面上，通过代码逻辑和缓存策略，实现对数据，页面，图片等资源的缓存，可以根据实际情况选择将数据存在文件系统或者内存中，减少数据库查询或者读写瓶颈，提高响应效率。</p>
+<h5 id="数据库数据缓存"><a href="#数据库数据缓存" class="headerlink" title="数据库数据缓存"></a>数据库数据缓存</h5><p>Web应用，特别是SNS类型的应用，往往关系比较复杂，数据库表繁多，如果频繁进行数据库查询，很容易导致数据库不堪重荷。为了提供查询的性能，会将查询后的数据放到内存中进行缓存，下次查询时，直接从内存缓存直接返回，提供响应效率。比如常用的缓存方案有memcached等。</p>
+<p>总结一下：<br>一般的高并发的应用程序，都在web层采用了以上几种缓存，一般静态资源（图片，js，css）都会采用nginx反向代理+客户端缓存来实现<br>对于门户网站，尤其是首页的新闻，一般都会缓存起来，可以通过反向代理也可以通过应用程序缓存实现方式<br>对于下载或者视频网站，由于数据传输比较大，直接采用浏览器本地缓存实现。</p>
+<hr>
+<p>业务需求可能涉及的缓存组件要求：</p>
+<h5 id="容量"><a href="#容量" class="headerlink" title="容量"></a>容量</h5><p>需要存储什么类型的内容？ 存储量多大？</p>
+<h5 id="并发（qps"><a href="#并发（qps" class="headerlink" title="并发（qps)"></a>并发（qps)</h5><p>缓存的读写比例以及qps如何？</p>
+<h5 id="响应时间"><a href="#响应时间" class="headerlink" title="响应时间"></a>响应时间</h5><p>更高的qps可以通过扩容来解决，但是一次响应的时间是有限制的，例如跨机房访问延迟0.5ms，就决定了响应时间不可能低于0.5ms;</p>
+<p>反过来，如果业务上要求的resp time必须小于0.5ms， 那么该缓存就一定满足不了我们的要求。</p>
+<h5 id="使用成本"><a href="#使用成本" class="headerlink" title="使用成本"></a>使用成本</h5><p>分为两部分：</p>
+<ol>
+<li>首先服务端，主要包括：运维成本、机器成本</li>
+<li>第二，客户端，主要包括程序员研发成本：单一的库依赖、简洁的配置和人性化的API丰富的文档和技术支持</li>
+</ol>
+<h5 id="扩展性要求"><a href="#扩展性要求" class="headerlink" title="扩展性要求"></a>扩展性要求</h5><p>在某方面出现瓶颈（qps或者容量）时，能否通过增加机器来快速在线扩容；这个主要涉及到系统的负载均衡能力；</p>
+<h5 id="容灾能力"><a href="#容灾能力" class="headerlink" title="容灾能力"></a>容灾能力</h5><p>缓存数据丢失；不同的系统有不同的容灾能力；一定要结合业务需求</p>
 
       
     </div>

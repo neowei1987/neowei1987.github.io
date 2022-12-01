@@ -203,6 +203,110 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/ugly_number.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/ugly_number.html" class="post-title-link" itemprop="url">动态规划系列-丑数</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-26 20:34:03" itemprop="dateCreated datePublished" datetime="2022-02-26T20:34:03+08:00">2022-02-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:50:32" itemprop="dateModified" datetime="2022-03-01T22:50:32+08:00">2022-03-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87Offer/" itemprop="url" rel="index"><span itemprop="name">剑指Offer</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/ugly_number.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/ugly_number.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>我们把只包含质因子2、3和5的数称作丑数（Ugly Number）。</p>
+<p>例如6、8都是丑数，但14不是，因为它包含质因子7。</p>
+<p>求第n个丑数的值。</p>
+<p>样例<br>输入：5</p>
+<p>输出：5<br>注意：习惯上我们把1当做第一个丑数。</p>
+<h4 id="解答思路"><a href="#解答思路" class="headerlink" title="解答思路"></a>解答思路</h4><p>第二种：创建数组保存已经找到丑数，用空间换时间的解法。<br>根据丑数的定义， 丑数应该是另一个丑数乘以 2、3 或者 5 的结果（1 除外）。因此我们可以创建一个数组，里面的数字是排好序的丑数，每一个丑数都是前面的丑数乘以 2、3 或者 5 得到的。</p>
+<p>这种思路的关键在于怎样确保数组里面的丑数是排好序的。假设数组中已经有若干个丑数排好序后存放在数组中，并且把己有最大的丑数记做M，我们接下来分析如何生成下一个丑数。该丑数肯定是前面某一个丑数乘以 2、3 或者 5 的结果， 所以我们首先考虑把已有的每个丑数乘以 2。在乘以 2 的时钝能得到若干个小于或等于 M 的结果。由于是按照顺序生成的，小于或者等于 M 肯定己经在数组中了，我们不需再次考虑：还会得到若干个大于 M 的结果，但我们只需要第一个大于 M 的结果，因为我们希望丑数是按从小到大的顺序生成的，其他更大的结果以后再说。我们把得到的第一个乘以 2 后大于 M 的结果记为 M2，同样，我们把已有的每一个丑数乘以 3 和 5，能得到第一个大于 M 的结果 M3 和 M，那么下一个丑数应该是 M2、M3 和 M5 这 3 个数的最小者。</p>
+<p>前面分析的时候，提到把已有的每个丑数分别都乘以 2、3 和 5。事实上这不是必须的，因为已有的丑数是按顺序存放在数组中的。对乘以 2 而言， 肯定存在某一个丑数 T2，排在它之前的每一个丑数乘以 2 得到的结果都会小于已有最大的丑数，在它之后的每一个丑数乘以 2 得到的结果都会太大。我们只需记下这个丑数的位置， 同时每次生成新的丑数的时候，去更新这个 T2。对乘以 3 和 5 而言， 也存在着同样的 T3 和 T5。</p>
+<p>T2的更新是需要靠遍历来完成的，但是需要明确的是：T2不需要每次都从0开始，他是越来越大的。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/long_path_in_2d_array.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1164,114 +1268,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/mq/kafka.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/mq/kafka.html" class="post-title-link" itemprop="url">消息队列-Kafka</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 13:06:03" itemprop="dateCreated datePublished" datetime="2022-02-25T13:06:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-26 22:26:13" itemprop="dateModified" datetime="2022-11-26T22:26:13+08:00">2022-11-26</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/mq/kafka.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/mq/kafka.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://img-blog.csdn.net/20180317011215184?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2RvZzI1MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="设计思想"></p>
-<h4 id="cosume-group"><a href="#cosume-group" class="headerlink" title="cosume group"></a>cosume group</h4><p>通过cosume group，巧妙的解决了广播问题。</p>
-<h4 id="高性能"><a href="#高性能" class="headerlink" title="高性能"></a>高性能</h4><p>SendFile、zero copy</p>
-<h4 id="索引设计"><a href="#索引设计" class="headerlink" title="索引设计"></a>索引设计</h4><p>Kafka为了卸载MQ本身的复杂性，为了其<strong>真正无状态</strong>的设计，它将状态维护机制这口锅完全甩给了消费者，因此取消息的问题就转化成了<strong>消费者拿着一个offset索引来Kafka存储器里取消息</strong>的问题，这就涉及到了性能。But 如何能查的更快？How？</p>
-<p><img src="https://img-blog.csdn.net/20180317015646335?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2RvZzI1MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="扫描partition文件"></p>
-<p>但实际上，</p>
-<p><img src="https://img-blog.csdn.net/20180317020648952?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2RvZzI1MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="partition"></p>
-<ol>
-<li>partition并不是一根文件，而是一个目录</li>
-<li>目录下面存了很多逻辑上的segment，每一个segment物理上包括两个文件：索引文件、日志文件（每次都append)</li>
-</ol>
-<p>文件的命名相当于查找的稀疏索引，省去索引文件</p>
-<p>每个segment索引又是一个稀疏索引减少索引文件的大小</p>
-<h4 id="replication"><a href="#replication" class="headerlink" title="replication"></a>replication</h4><p>2.1 消息备份</p>
-<p>Kafka允许同个Partition存在多个消息副本(Replica)，每个Partition的副本通常由1个Leader及0个以上的Follower组成，产者将消息直接发往对应Partition的Leader，Follower会周期地向Leader发送同步请求，Kafka的Leader机制在保障数据致性地同时降低了消息备份的复杂度。同Partition的Replica应存储在同一个Broker上，因为一旦该Broker宕机，对应Partition的所有Replica都无法作，这就达不到高可用的效果。为做好负载均衡并提容错能，Kafka会尽将所有的Partition以及各Partition的副本均匀地分配到整个集群上。举个例，当集群中部署3台Broker，TopicA共有4个Partition，每个Partition均有3个Replica时下图就是种合理的分布方式。</p>
-<p><img src="https://pics4.baidu.com/feed/d833c895d143ad4b76bc3f8833f912a7a60f06ef.jpeg" alt=""></p>
-<p>ISR:In-Sync Replicas 副本同步队列</p>
-<p>ISR(In-Sync Replicas)指的是个Partition中与Leader“保持同步”的Replica列表(实际存储的是副本所在Broker的BrokerId)，这的 保持同步是指与Leader数据保持完全一致，只需在replica.lag.time.max.ms时间内与Leader保持有效连接，官方解释如下If a follower hasn’t sent any fetch requests or hasn’t consumed up to the leaders log end offset for at least this time, the leader will remove the follower from isr,( default value =10000 )Follower周期性地向Leader发送FetchRequest请求(数据结构见下)，发送时间间隔配置在replica.fetch.wait.max.ms中，默认值为 500。</p>
-<p>AR:Assigned Replicas 所有副本</p>
-<p>ISR是由leader维护，follower从leader同步数据有一些延迟（包括延迟时间replica.lag.time.max.ms和延迟条数replica.lag.max.messages两个维度, 当前最新的版本0.10.x中只支持replica.lag.time.max.ms这个维度），任意一个超过阈值都会把follower剔除出ISR, 存入OSR（Outof-Sync Replicas）列表，新加入的follower也会先存放在OSR中。AR=ISR+OSR。</p>
-<p>ISR数据同步、ACK选项（全部ack、只有一个ack）</p>
-<p>Kafka的复制机制既不是完全的同步复制，也不是单纯的异步复制。完全同步复制要求All Alive Follower都复制完，这条消息才会被认为commit，这种复制方式极大的影响了吞吐率。而异步复制方式下，Follower异步的从Leader复制数据，数据只要被Leader写入log就被认为已经commit，这种情况下，如果leader挂掉，会丢失数据，kafka使用ISR的方式很好的均衡了确保数据不丢失以及吞吐率。Follower可以批量的从Leader复制数据，而且Leader充分利用磁盘顺序读以及send file(zero copy)机制，这样极大的提高复制性能，内部批量写磁盘，大幅减少了Follower与Leader的消息量差。</p>
-<p>leader会维护一个与其基本保持同步的Replica列表，该列表称为ISR(in-sync Replica)，每个Partition都会有一个ISR，而且是由leader动态维护 ，如果一个follower比一个leader落后太多，或者超过一定时间未发起数据复制请求，则leader将其重ISR中移除 </p>
-<p>参考：</p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/dog250/article/details/79588437">https://blog.csdn.net/dog250/article/details/79588437</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/qq_28900249/article/details/90346599">https://blog.csdn.net/qq_28900249/article/details/90346599</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1344,7 +1340,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">339</span>
+          <span class="site-state-item-count">340</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

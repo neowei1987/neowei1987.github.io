@@ -405,6 +405,105 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/ai/logistic_regression.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/ai/logistic_regression.html" class="post-title-link" itemprop="url">逻辑回归</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-12-01 16:44:59" itemprop="dateCreated datePublished" datetime="2022-12-01T16:44:59+08:00">2022-12-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-12-02 01:10:37" itemprop="dateModified" datetime="2022-12-02T01:10:37+08:00">2022-12-02</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/ai/logistic_regression.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/ai/logistic_regression.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>逻辑回归，是一种分类算法，而并非回归算法。</p>
+<p>逻辑回归要解决的问题是，给你一组样本以及标签，你基于这些数据去训练你的模型。然后我再给你一个新的样本，你告诉我有多大概率的属于某一个分类【二分类问题，黑还是白】</p>
+<p>$Y = \theta * X + \epsilon $</p>
+<p>我们现在的目标是找到一组$\theta$可以让它乘以X之后尽可能的匹配Y</p>
+<p>$\epsilon$为误差，服从均值为0，方差为$\mu^2$的正态分布</p>
+<p>预测值与真实值之间有误差</p>
+<p>学习的关键在于：确定什么样的参数最符合于你的目标</p>
+<p>我们的目标是什么？ 让误差项尽可能的小，接近于0，loss函数等于0</p>
+<p>条件概率：<script type="math/tex">p(y|x;\theta) = p(\epsilon^{(i)})</script> 也服从正态分布。</p>
+<p>对于某一个样本，要找到一个theta， 跟x组合之后，成为真实值y的可能性最大</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/ai/logistic_regression.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/ai/exp_set.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1021,96 +1120,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/ai/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/ai/index.html" class="post-title-link" itemprop="url">机器学习-总体认识</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-12-01 13:03:03 / Modified: 21:09:28" itemprop="dateCreated datePublished" datetime="2022-12-01T13:03:03+08:00">2022-12-01</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/ai/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/ai/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="0-背景介绍，把人吸引过来"><a href="#0-背景介绍，把人吸引过来" class="headerlink" title="0. 背景介绍，把人吸引过来"></a>0. 背景介绍，把人吸引过来</h2><p>之前总有一些年轻人问我，我应该了解哪些知识才能像某某某那么牛B。<br>这句话的意思其实就是：他们特别困惑，想知道一个后端程序员的知识体系，想知道从哪开始学起。</p>
-<p>关于这个问题，琢磨了好久，我不想简单的一句话就敷衍过去了，这个问题我要深思熟虑去回答。<br>因为如果 10 年前有人告诉我这个问题的答案，现在的我将少走很多的弯路，技术水平也会更上一层楼。</p>
-<p>简单说一下全文的结构，全文一共分为四大部分。第一部分，主要从硬件、操作系统、网络、数据结构&amp;算法等几个方面跟大家聊一下计算机科学相关的基础知识。第二部分，讲一下设计一款高性能的服务框架，应该从哪些方面着手；第三部分，讲一下平常工作中使用最频繁的知识-数据库、缓存以及一些相关的经典问题；最后第四部分，讲述的侧重点从第二部分的微观转到相对宏观的内容，跟大家聊一下分布式系统、大型架构设计等相关知识。</p>
-<p>引用古人的一句话，来开始我们的征程！</p>
-<blockquote>
-<p>“路漫漫其修远兮，吾将上下而求索！”</p>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/ai/index.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1183,7 +1192,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">339</span>
+          <span class="site-state-item-count">340</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

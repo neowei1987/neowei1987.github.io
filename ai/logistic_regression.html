@@ -22,20 +22,26 @@
     var CONFIG = {"hostname":"neowei1987.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="跳表是一种随机化数据结构， 其随机化体现在插入元素的时候元素所占有的层数完全是随机的，层数是通过随机算法(随机化思想)产生的。 改变索引构建策略，有效平衡执行效率与内存消耗 使用场景：  Redis ZSET实现 LevelDB选用SkipList来实现memory table  参考：https:&#x2F;&#x2F;segmentfault.com&#x2F;a&#x2F;1190000020596941">
+  <meta name="description" content="逻辑回归，是一种分类算法，而并非回归算法。 逻辑回归要解决的问题是，给你一组样本以及标签，你基于这些数据去训练你的模型。然后我再给你一个新的样本，你告诉我有多大概率的属于某一个分类【二分类问题，黑还是白】 $Y &#x3D; \theta * X + \epsilon $ 我们现在的目标是找到一组$\theta$可以让它乘以X之后尽可能的匹配Y $\epsilon$为误差，服从均值为0，方差为$\mu^2$">
 <meta property="og:type" content="article">
-<meta property="og:title" content="跳表">
-<meta property="og:url" content="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/skip_list.html">
+<meta property="og:title" content="逻辑回归">
+<meta property="og:url" content="https://neowei1987.github.io/ai/logistic_regression.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
-<meta property="og:description" content="跳表是一种随机化数据结构， 其随机化体现在插入元素的时候元素所占有的层数完全是随机的，层数是通过随机算法(随机化思想)产生的。 改变索引构建策略，有效平衡执行效率与内存消耗 使用场景：  Redis ZSET实现 LevelDB选用SkipList来实现memory table  参考：https:&#x2F;&#x2F;segmentfault.com&#x2F;a&#x2F;1190000020596941">
+<meta property="og:description" content="逻辑回归，是一种分类算法，而并非回归算法。 逻辑回归要解决的问题是，给你一组样本以及标签，你基于这些数据去训练你的模型。然后我再给你一个新的样本，你告诉我有多大概率的属于某一个分类【二分类问题，黑还是白】 $Y &#x3D; \theta * X + \epsilon $ 我们现在的目标是找到一组$\theta$可以让它乘以X之后尽可能的匹配Y $\epsilon$为误差，服从均值为0，方差为$\mu^2$">
 <meta property="og:locale">
-<meta property="article:published_time" content="2022-03-01T06:00:03.000Z">
-<meta property="article:modified_time" content="2022-03-01T15:11:38.990Z">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.6a7a9c3m0ak0.jpg">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.2re3lgi8a8o0.jpg">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.6n95l5gksgs0.jpg">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.7gdzrxx0pxw0.webp">
+<meta property="og:image" content="https://img-blog.csdn.net/20171013161617617">
+<meta property="article:published_time" content="2022-12-01T08:44:59.000Z">
+<meta property="article:modified_time" content="2022-12-01T17:10:37.562Z">
 <meta property="article:author" content="NeoWei">
 <meta property="article:tag" content="后端开发知识体系,知识体系构建,刷题技巧,本质思考">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.6a7a9c3m0ak0.jpg">
 
-<link rel="canonical" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/skip_list.html">
+<link rel="canonical" href="https://neowei1987.github.io/ai/logistic_regression.html">
 
 
 <script id="page-configurations">
@@ -61,7 +67,7 @@
   padding: 1px 4px;
 }
 </style>
-  <title>跳表 | Neo's Blog</title>
+  <title>逻辑回归 | Neo's Blog</title>
   
 
 
@@ -206,7 +212,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/skip_list.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/ai/logistic_regression.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -219,7 +225,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          跳表
+          逻辑回归
         </h1>
 
         <div class="post-meta">
@@ -230,19 +236,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2022-03-01 14:00:03 / Modified: 23:11:38" itemprop="dateCreated datePublished" datetime="2022-03-01T14:00:03+08:00">2022-03-01</time>
+              <time title="Created: 2022-12-01 16:44:59" itemprop="dateCreated datePublished" datetime="2022-12-01T16:44:59+08:00">2022-12-01</time>
             </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
                 </span>
-            </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-12-02 01:10:37" itemprop="dateModified" datetime="2022-12-02T01:10:37+08:00">2022-12-02</time>
+              </span>
 
           
   
@@ -253,8 +256,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/skip_list.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/skip_list.html" itemprop="commentCount"></span>
+    <a title="valine" href="/ai/logistic_regression.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/ai/logistic_regression.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -269,15 +272,45 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>跳表是一种随机化数据结构，</p>
-<p>其随机化体现在插入元素的时候元素所占有的层数完全是随机的，层数是通过随机算法(随机化思想)产生的。</p>
-<p>改变索引构建策略，有效平衡执行效率与内存消耗</p>
-<p>使用场景：</p>
-<ol>
-<li>Redis ZSET实现</li>
-<li>LevelDB选用SkipList来实现memory table</li>
-</ol>
-<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://segmentfault.com/a/1190000020596941">https://segmentfault.com/a/1190000020596941</a></p>
+        <p>逻辑回归，是一种分类算法，而并非回归算法。</p>
+<p>逻辑回归要解决的问题是，给你一组样本以及标签，你基于这些数据去训练你的模型。然后我再给你一个新的样本，你告诉我有多大概率的属于某一个分类【二分类问题，黑还是白】</p>
+<p>$Y = \theta * X + \epsilon $</p>
+<p>我们现在的目标是找到一组$\theta$可以让它乘以X之后尽可能的匹配Y</p>
+<p>$\epsilon$为误差，服从均值为0，方差为$\mu^2$的正态分布</p>
+<p>预测值与真实值之间有误差</p>
+<p>学习的关键在于：确定什么样的参数最符合于你的目标</p>
+<p>我们的目标是什么？ 让误差项尽可能的小，接近于0，loss函数等于0</p>
+<p>条件概率：<script type="math/tex">p(y|x;\theta) = p(\epsilon^{(i)})</script> 也服从正态分布。</p>
+<p>对于某一个样本，要找到一个theta， 跟x组合之后，成为真实值y的可能性最大</p>
+<a id="more"></a>
+<h3 id="从误差的正态分布得到"><a href="#从误差的正态分布得到" class="headerlink" title="从误差的正态分布得到"></a>从误差的正态分布得到</h3><p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.6a7a9c3m0ak0.jpg" alt="image"></p>
+<p>上图啥意思呢？上图最后得到了一个概率密度函数，表示在$\theta$，跟$x^{(i)}$组合之后得到$y^{(i)}$的可能性（也就是概率）</p>
+<h3 id="最大似然函数"><a href="#最大似然函数" class="headerlink" title="最大似然函数"></a>最大似然函数</h3><p>上面的概率函数，通俗来讲“要找到一个$\theta$，跟$x^{(i)}$组合之后，成为$y^{(i)}$的可能性，越大越好”</p>
+<p>假设去了赌场（赌场中有一个固定的暗箱操作套路$\theta$),我们现在尝试去猜测这种套路？</p>
+<p>来了一个人，我们按照这个套路去猜，猜对了，概率很高；<br>又来了一个人，我们还是按照这个套路取材，猜对了，概率也很高…<br>最有，我观察的人足够多之后，我们才敢宣称，我猜对了赌场的套路。</p>
+<p>同样的，我们需要找到一组参数，匹配所有样本的概率尽可能的大，也就是说下面的概率最大</p>
+<p>$p(y^{(1)},y^{(2)},…,y^{(n)}|\theta;x^{(1)},x^{(2)},…,x^{(n)})$</p>
+<p>那么这个概率是多少呢？</p>
+<p>又因为每一个样本的误差都是独立同分布的，所以联合概率等于每一个边缘概率的乘积，也就说：</p>
+<script type="math/tex; mode=display">p(y^{(1)},y^{(2)},...,y^{(n)}|\theta;x^{(1)},x^{(2)},...,x^{(n)})=p(y^{(1)}|\theta;x^{(1)}) * p(y^{(2)}|\theta;x^{(2)}) * ... * p(y^{(n)}|\theta;x^{(n)})</script><p>也就是下面的公式</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.2re3lgi8a8o0.jpg" alt="image"></p>
+<p>有了上面的累乘之后呢？我们如何求解到一个合适的$\theta$让上面的概率最大呢？不太容易，因为是乘法。</p>
+<p>【启发思考】对于乘法，我们一般会取log，将其转换为加法，也就变成了上图中的“对数似然函数”</p>
+<h4 id="最小二乘法为啥可以作为线性回归的损失函数"><a href="#最小二乘法为啥可以作为线性回归的损失函数" class="headerlink" title="最小二乘法为啥可以作为线性回归的损失函数"></a>最小二乘法为啥可以作为线性回归的损失函数</h4><p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.6n95l5gksgs0.jpg" alt="image"></p>
+<p>如上图，我们对对数似然函数进行化简得到一个结论，我们想要对数似然函数最大，等价于让$J(\theta)$最小；这也就是我们通常听到的“最小二乘法”，也就是线性规划算法的<strong>目标函数</strong></p>
+<h4 id="最优化常用解法之-梯度下降"><a href="#最优化常用解法之-梯度下降" class="headerlink" title="最优化常用解法之-梯度下降"></a>最优化常用解法之-梯度下降</h4><p>最优化问题有很多解法，我们这里先介绍最常见的梯度下降算法【Gradient Descent】</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.7gdzrxx0pxw0.webp" alt="image"></p>
+<p>梯度，就是函数的导数。如果自变量有多个，我们就针对每一个自变量($\theta_1,\theta_0$)求偏导。</p>
+<p>求导时，你可能需要知道的<strong>求导链式法则</strong>。</p>
+<p>对于要迭代的每一步执行以下步骤：</p>
+<p><img src="https://img-blog.csdn.net/20171013161617617" alt="梯度迭代">，其中$\alpha$为学习率。</p>
+<p>学习率太高，步子迈得太大，容易跑偏，从而错过极值点；学习率太低，步子过小，算法收敛的会特别慢，程序运行会比较慢。</p>
+<ul>
+<li>批量梯度下降</li>
+<li>随机梯度下降</li>
+<li>miniBatch梯度下降</li>
+</ul>
+<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.bilibili.com/video/BV1uM411r7Cv?p=4&amp;vd_source=9a48b33279c3ad3689807d049311d0ee">https://www.bilibili.com/video/BV1uM411r7Cv?p=4&amp;vd_source=9a48b33279c3ad3689807d049311d0ee</a></p>
 
     </div>
 
@@ -293,13 +326,13 @@
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/interview.html">面试技巧</a></li>
+            <li><a href="https://neowei1987.github.io/math/tpl.html">学习机器学习可能用到的数学</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/union_set/longest_consecutive.html">并查集系列之最长连续序列</a></li>
+            <li><a href="https://neowei1987.github.io/ai/exp_set.html">指数分布族</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/union_set/index.html">并查集</a></li>
+            <li><a href="https://neowei1987.github.io/ai/feature.html">特征工程</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/tree/splay.html">Splay Tree</a></li>
+            <li><a href="https://neowei1987.github.io/ai/minimize.html">损失函数最优化</a></li>
         
     </ul>
      
@@ -342,12 +375,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/backend_knowledge_architecture/structure_algorithm/structures/union_set/index.html" rel="prev" title="并查集">
-      <i class="fa fa-chevron-left"></i> 并查集
+    <a href="/ai/exp_set.html" rel="prev" title="指数分布族">
+      <i class="fa fa-chevron-left"></i> 指数分布族
     </a></div>
       <div class="post-nav-item">
-    <a href="/backend_knowledge_architecture/structure_algorithm/structures/union_set/longest_consecutive.html" rel="next" title="并查集系列之最长连续序列">
-      并查集系列之最长连续序列 <i class="fa fa-chevron-right"></i>
+    <a href="/math/tpl.html" rel="next" title="学习机器学习可能用到的数学">
+      学习机器学习可能用到的数学 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -424,6 +457,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E8%AF%AF%E5%B7%AE%E7%9A%84%E6%AD%A3%E6%80%81%E5%88%86%E5%B8%83%E5%BE%97%E5%88%B0"><span class="nav-number">1.</span> <span class="nav-text">从误差的正态分布得到</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%A4%A7%E4%BC%BC%E7%84%B6%E5%87%BD%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">最大似然函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E4%B8%BA%E5%95%A5%E5%8F%AF%E4%BB%A5%E4%BD%9C%E4%B8%BA%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E7%9A%84%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-number">2.1.</span> <span class="nav-text">最小二乘法为啥可以作为线性回归的损失函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%80%E4%BC%98%E5%8C%96%E5%B8%B8%E7%94%A8%E8%A7%A3%E6%B3%95%E4%B9%8B-%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-number">2.2.</span> <span class="nav-text">最优化常用解法之-梯度下降</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

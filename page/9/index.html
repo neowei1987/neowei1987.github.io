@@ -203,6 +203,99 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/os/physical_mem.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/os/physical_mem.html" class="post-title-link" itemprop="url">操作系统 - 物理内存管理</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 10:43:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:43:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-29 12:21:17" itemprop="dateModified" datetime="2022-03-29T12:21:17+08:00">2022-03-29</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/os/physical_mem.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/physical_mem.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://pics3.baidu.com/feed/838ba61ea8d3fd1f0c5a12495ab0521794ca5f7c.jpeg?token=dd0db40934355dcfa5bc35bec53f8b4d" alt="内存访问"></p>
+<p>TLB：MMU工作的过程就是查询页表的过程。如果把页表放在内存中查询的时候开销太大，因此为了提高查找效率，专门用一小片访问更快的区域存放地址转换条目。（当页表内容有变化的时候，需要清除TLB，以防止地址映射出错。）</p>
+<p>Caches：cpu和内存之间的缓存机制，用于提高访问速率，armv8架构的话上图的caches其实是L2 Cache</p>
+<h3 id="内存命中率"><a href="#内存命中率" class="headerlink" title="内存命中率"></a>内存命中率</h3><p>假设在 n 次内存访问中，出现命中的次数是 m，那么 m / n * 100% 就表示命中率，这是衡量内存管理程序好坏的一个很重要的指标。</p>
+<p>如果物理内存不足了，数据会在主存和磁盘之间频繁交换，命中率很低，性能出现急剧下降，我们称这种现象叫<strong>内存颠簸</strong>。这时你会发现系统的 swap 空间利用率开始增高， CPU 利用率中 iowait 占比开始增高。</p>
+<p>大多数情况下，只要物理内存够用，页命中率不会非常低，不会出现内存颠簸的情况。因为大多数程序都有一个特点，就是<strong>局部性</strong>。</p>
+<p>局部性就是说被引用过一次的存储器位置，很可能在后续再被引用多次；而且在该位置附近的其他位置，也很可能会在后续一段时间内被引用。</p>
+<h3 id="物理内存管理"><a href="#物理内存管理" class="headerlink" title="物理内存管理"></a>物理内存管理</h3><p><img src="https://pics7.baidu.com/feed/6609c93d70cf3bc7b0d84842bbfecda9cf112a4e.png?token=4f2dc6e2a73bddf5becd6dd924ebbded" alt="物理内存管理"></p>
+<p><img src="https://pics4.baidu.com/feed/962bd40735fae6cd484f59cc7d4d782c40a70fae.png?token=4296ed176d75fde417a7b04612fe8246" alt="Buddy系统"></p>
+<p>对于Page级别的内存分配，通过Buddy系统来管理；TCMalloc 也是通过这种方式来管理span。</p>
+<p>对于小对象（例如task_struct、mm_struct等）通过SlabAllcator来进行管理分配。这种思路，Memcache会借鉴。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/os/process_thread.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1082,125 +1175,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/distributed_system/index.html" class="post-title-link" itemprop="url">分布式系统介绍</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-24 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-24T10:01:03+08:00">2022-02-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-30 22:32:12" itemprop="dateModified" datetime="2022-10-30T22:32:12+08:00">2022-10-30</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/distributed_system/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="为什么会有分布式"><a href="#为什么会有分布式" class="headerlink" title="为什么会有分布式"></a>为什么会有分布式</h3><p>两点：算得慢（算力不足），存不下（数据分散）。</p>
-<p>无论是线程、进程，还是协程，本质上，目的都是为了计算的并行化，解决的是算的慢的问题。</p>
-<p>因为一个CPU算不过来，而单机扩容CPU数量成本极高（有空间这个刚性限制），所以需要水平扩容，多搞几台机器。</p>
-<p>计算的分布式化：基于分治思想，出现了分布式框架。</p>
-<p>MapReduce: 分布式计算的总体思想。</p>
-<p>分布式计算框架更多尝试对资源的调度做优化。ResourceManager, yarn, k8s;<br>（多租户，隔离，软隔离，租借，抢占等）</p>
-<h3 id="高并发系统的三个目标与挑战"><a href="#高并发系统的三个目标与挑战" class="headerlink" title="高并发系统的三个目标与挑战"></a>高并发系统的三个目标与挑战</h3><p>高并发是一个系统的<strong>挑战</strong></p>
-<p>如何衡量一个系统的并发有多高呢？ 同时在线人数</p>
-<p>高性能、高可用、可扩展是一个牛B系统<strong>目标</strong></p>
-<h4 id="三者的关系"><a href="#三者的关系" class="headerlink" title="三者的关系"></a>三者的关系</h4><p>为了保证高可用，需要冗余更多的相同功能机器（replication)，要求系统可扩展；</p>
-<p>为了保证高性能，必须需要更多的相同功能的机器（存储的replication、应用的无状态）或者服务于不同对象的机器（shard)，也要求可扩展；</p>
-<p>一份完整的数据，分为多个shard的过程需要可扩展；</p>
-<p>一份数据冗余了多份，前端对下游访问时用到的负载均衡策略需要可扩展。</p>
-<h4 id="如何衡量一个吞吐量有多大呢？"><a href="#如何衡量一个吞吐量有多大呢？" class="headerlink" title="如何衡量一个吞吐量有多大呢？"></a>如何衡量一个吞吐量有多大呢？</h4><p>系统的QPS，吞吐量 = 并发进程数 / 响应时间</p>
-<h4 id="如何衡量一个系统的性能有多高呢？"><a href="#如何衡量一个系统的性能有多高呢？" class="headerlink" title="如何衡量一个系统的性能有多高呢？"></a>如何衡量一个系统的性能有多高呢？</h4><p>一旦系统的负载被描述好，就可以研究当负载增加会发生什么。我们可以从两种角度来看：</p>
-<ul>
-<li>增加负载参数并保持系统资源（CPU、内存、网络带宽等）不变时，系统性能将受到什么影响？（接口响应时间，分位耗时）</li>
-<li>增加负载参数并希望保持性能不变时，需要增加多少系统资源？</li>
-</ul>
-<h4 id="如何衡量一个系统的可用性有多高呢？"><a href="#如何衡量一个系统的可用性有多高呢？" class="headerlink" title="如何衡量一个系统的可用性有多高呢？"></a>如何衡量一个系统的可用性有多高呢？</h4><p>平均故障间隔，平均故障恢复时间</p>
-<p><img src="http://cdn.b5mang.com/202132011926.png" alt="不同可用性标准下允许的故障时间"></p>
-<h4 id="如何衡量一个系统的可扩展能力？"><a href="#如何衡量一个系统的可扩展能力？" class="headerlink" title="如何衡量一个系统的可扩展能力？"></a>如何衡量一个系统的可扩展能力？</h4><p>考察一个问题：能够通过增加进程来应对更高的并发？ 如果一直加机器，我一直能线性的提高系统的处理能力吗？</p>
-<h3 id="如何应对系统的挑战"><a href="#如何应对系统的挑战" class="headerlink" title="如何应对系统的挑战"></a>如何应对系统的挑战</h3><p>架构通用原则：“4 要 1 不要”</p>
-<p>(1) 数据要尽量少</p>
-<ul>
-<li>用户请求的数据能少就少</li>
-<li>系统依赖的数据能少就少</li>
-</ul>
-<p>(2) 请求数要尽量少</p>
-<p>例如，静态文件合并</p>
-<p>（3）路径要尽量短</p>
-<p>将强依赖的服务进行单机部署</p>
-<p>（4）依赖要尽量少</p>
-<p>系统服务分级，高等级服务尽量少依赖低等级服务</p>
-<p>（5）不要有单点</p>
-<p>服务无状态，可扩展；存储层做副本备份</p>
-<p><img src="https://vonng.gitbooks.io/ddia-cn/content/img/fig1-1.png" alt="主流系统架构"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1273,7 +1247,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">339</span>
+          <span class="site-state-item-count">340</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

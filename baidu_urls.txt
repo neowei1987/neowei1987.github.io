@@ -1,4 +1,5 @@
 https://neowei1987.github.io/math/tpl.html
+https://neowei1987.github.io/ai/logistic_regression.html
 https://neowei1987.github.io/ai/exp_set.html
 https://neowei1987.github.io/ai/feature.html
 https://neowei1987.github.io/ai/minimize.html

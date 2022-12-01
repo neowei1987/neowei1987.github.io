@@ -24,14 +24,14 @@
 
   <meta name="description" content="寻找数组局部最小值 解答思路： 只要有最小值，那我就可以找到。 a[0] &lt;&#x3D; a[1], 则a0就是极小值；a[n - 2] &gt;&#x3D;  a[n - 1], 则a[n-1]就是极小值 否则，就如图(一定有最小值）：">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Neo&#39;s Blog">
+<meta property="og:title" content="二分-局部最小">
 <meta property="og:url" content="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/local_min.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
 <meta property="og:description" content="寻找数组局部最小值 解答思路： 只要有最小值，那我就可以找到。 a[0] &lt;&#x3D; a[1], 则a0就是极小值；a[n - 2] &gt;&#x3D;  a[n - 1], 则a[n-1]就是极小值 否则，就如图(一定有最小值）：">
 <meta property="og:locale">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/a05469ef1d94408cbba43e2562274c07.png">
-<meta property="article:published_time" content="2022-11-09T12:45:36.022Z">
-<meta property="article:modified_time" content="2022-11-09T13:03:11.972Z">
+<meta property="article:published_time" content="2021-01-03T11:47:03.000Z">
+<meta property="article:modified_time" content="2022-12-01T05:01:56.854Z">
 <meta property="article:author" content="NeoWei">
 <meta property="article:tag" content="后端开发知识体系,知识体系构建,刷题技巧,本质思考">
 <meta name="twitter:card" content="summary">
@@ -63,7 +63,7 @@
   padding: 1px 4px;
 }
 </style>
-  <title> | Neo's Blog</title>
+  <title>二分-局部最小 | Neo's Blog</title>
   
 
 
@@ -221,7 +221,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          二分-局部最小
         </h1>
 
         <div class="post-meta">
@@ -232,10 +232,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2022-11-09 20:45:36 / Modified: 21:03:11" itemprop="dateCreated datePublished" datetime="2022-11-09T20:45:36+08:00">2022-11-09</time>
+              <time title="Created: 2021-01-03 19:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T19:47:03+08:00">2021-01-03</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-12-01 13:01:56" itemprop="dateModified" datetime="2022-12-01T13:01:56+08:00">2022-12-01</time>
+              </span>
 
           
   
@@ -283,13 +289,13 @@
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/intersect.html"></a></li>
+            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/stack/max_kh_len.html">最大括号长度</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/back_tracking/cut_sum.html"></a></li>
+            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/getMissingNumber.html">获取丢失的数字</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/sort/index.html">计算机排序算法</a></li>
+            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/intersect.html">双指针-集合交集</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/network/trace_rt.html"></a></li>
+            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/kthNode.html">二叉搜索树遍历-获取第k个节点</a></li>
         
     </ul>
      
@@ -332,12 +338,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/sort/index.html" rel="prev" title="计算机排序算法">
-      <i class="fa fa-chevron-left"></i> 计算机排序算法
+    <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/intersect.html" rel="prev" title="双指针-集合交集">
+      <i class="fa fa-chevron-left"></i> 双指针-集合交集
     </a></div>
       <div class="post-nav-item">
-    <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/back_tracking/cut_sum.html" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/getMissingNumber.html" rel="next" title="获取丢失的数字">
+      获取丢失的数字 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -427,20 +433,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">328</span>
+          <span class="site-state-item-count">331</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-count">60</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -564,6 +570,59 @@
   
 
   
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

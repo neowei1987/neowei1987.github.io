@@ -22,17 +22,17 @@
     var CONFIG = {"hostname":"neowei1987.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="假设你有一个数组prices，长度为n，其中prices[i]是某只股票在第i天的价格，请根据这个价格数组，返回买卖股票能获得的最大收益  你最多可以对该股票有两笔交易操作，一笔交易代表着一次买入与一次卖出，但是再次购买前必须卖出之前的股票 如果不能获取收益，请返回0 假设买入卖出均无手续费  1234567891011121314151617181920212223242526272829303">
+  <meta name="description" content="假设你有一个数组prices，长度为n，其中prices[i]是某只股票在第i天的价格，请根据这个价格数组，返回买卖股票能获得的最大收益  你最多可以对该股票有两笔交易操作，一笔交易代表着一次买入与一次卖出，但是再次购买前必须卖出之前的股票 如果不能获取收益，请返回0 假设买入卖出均无手续费">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Neo&#39;s Blog">
+<meta property="og:title" content="股票买卖问题-限定两次">
 <meta property="og:url" content="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/stock_k.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
-<meta property="og:description" content="假设你有一个数组prices，长度为n，其中prices[i]是某只股票在第i天的价格，请根据这个价格数组，返回买卖股票能获得的最大收益  你最多可以对该股票有两笔交易操作，一笔交易代表着一次买入与一次卖出，但是再次购买前必须卖出之前的股票 如果不能获取收益，请返回0 假设买入卖出均无手续费  1234567891011121314151617181920212223242526272829303">
+<meta property="og:description" content="假设你有一个数组prices，长度为n，其中prices[i]是某只股票在第i天的价格，请根据这个价格数组，返回买卖股票能获得的最大收益  你最多可以对该股票有两笔交易操作，一笔交易代表着一次买入与一次卖出，但是再次购买前必须卖出之前的股票 如果不能获取收益，请返回0 假设买入卖出均无手续费">
 <meta property="og:locale">
-<meta property="article:published_time" content="2022-11-15T13:46:04.750Z">
-<meta property="article:modified_time" content="2022-11-15T13:46:04.751Z">
+<meta property="article:published_time" content="2022-12-01T05:03:03.000Z">
+<meta property="article:modified_time" content="2022-12-01T04:51:16.812Z">
 <meta property="article:author" content="NeoWei">
-<meta property="article:tag" content="后端开发知识体系,知识体系构建,刷题技巧,本质思考">
+<meta property="article:tag" content="动态规划">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/stock_k.html">
@@ -61,7 +61,7 @@
   padding: 1px 4px;
 }
 </style>
-  <title> | Neo's Blog</title>
+  <title>股票买卖问题-限定两次 | Neo's Blog</title>
   
 
 
@@ -219,7 +219,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          股票买卖问题-限定两次
         </h1>
 
         <div class="post-meta">
@@ -230,8 +230,9 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2022-11-15 21:46:04" itemprop="dateCreated datePublished" datetime="2022-11-15T21:46:04+08:00">2022-11-15</time>
+              <time title="Created: 2022-12-01 13:03:03 / Modified: 12:51:16" itemprop="dateCreated datePublished" datetime="2022-12-01T13:03:03+08:00">2022-12-01</time>
             </span>
 
           
@@ -265,6 +266,7 @@
 <li>如果不能获取收益，请返回0</li>
 <li>假设买入卖出均无手续费</li>
 </ol>
+<a id="more"></a>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">1e5</span> + <span class="number">1</span>;</span><br><span class="line"><span class="comment">//dp[i][k][0]; 第i天时，当前空仓，不持有股票，可交易次数</span></span><br><span class="line"><span class="comment">//dp[i][k][1]，第i天时，当前满仓，持有股票，，可交易次数</span></span><br><span class="line"><span class="keyword">int</span> dp[N][<span class="number">3</span>][<span class="number">2</span>];</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 代码中的类名、方法名、参数名已经指定，请勿修改，直接返回方法规定的值即可</span></span><br><span class="line"><span class="comment">     * 两次交易所能获得的最大收益</span></span><br><span class="line"><span class="comment">     * @param prices int整型vector 股票每一天的价格</span></span><br><span class="line"><span class="comment">     * @return int整型</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; prices)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//状态，选择</span></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        for (int i = 0; i &lt; prices.size(); ++i) &#123;</span></span><br><span class="line"><span class="comment">            dp[i][0][0] = 0;</span></span><br><span class="line"><span class="comment">            dp[i][0][1] = INT32_MIN;</span></span><br><span class="line"><span class="comment">        &#125;*/</span></span><br><span class="line">        <span class="comment">//第-1天，不持仓 == 0</span></span><br><span class="line">        <span class="comment">//第-1天，持仓 === -INF</span></span><br><span class="line">        <span class="comment">//第i天，0交易次数，0 = 0</span></span><br><span class="line">        <span class="comment">//第i天，0交易次数，1 = -INF</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; prices.size(); ++i) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">2</span>; k &gt;= <span class="number">1</span>; k--) &#123;</span><br><span class="line">                <span class="keyword">if</span> (i == <span class="number">0</span>) &#123;</span><br><span class="line">                    dp[i][k][<span class="number">1</span>] = -prices[i]; <span class="comment">/* dp[i - 1][k-1][0] - prices[i] 前半部分等于0*/</span></span><br><span class="line">                    dp[i][k][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="comment">//对于持仓状态，由前一天的买入状态、前一天的rest变化而来；</span></span><br><span class="line">                dp[i][k][<span class="number">1</span>] = max(</span><br><span class="line">                    dp[i - <span class="number">1</span>][k<span class="number">-1</span>][<span class="number">0</span>] - prices[i], <span class="comment">//选择买入</span></span><br><span class="line">                    dp[i - <span class="number">1</span>][k][<span class="number">1</span>]               <span class="comment">//保持不变</span></span><br><span class="line">                );</span><br><span class="line">                <span class="comment">//对于空仓状态，由前一天的卖出状态、前一天的rest变化而来；</span></span><br><span class="line">                dp[i][k][<span class="number">0</span>] = max(</span><br><span class="line">                    dp[i - <span class="number">1</span>][k][<span class="number">1</span>] + prices[i],  <span class="comment">//选择卖出</span></span><br><span class="line">                    dp[i - <span class="number">1</span>][k][<span class="number">0</span>]</span><br><span class="line">                );</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> dp[prices.size() - <span class="number">1</span>][<span class="number">2</span>][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
     </div>
 
@@ -280,13 +282,13 @@
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/store/tair.html"></a></li>
+            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/store/tair.html">Tair介绍</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/sort/quick_sort/qsort.html">快速排序</a></li>
+            <li><a href="https://neowei1987.github.io/work/tpl.html">模版</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/greedy/candy.html">贪心-分糖果问题</a></li>
+            <li><a href="https://neowei1987.github.io/ai/linear_regression.html">线性回归-linear regression</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/array/rotate_90.html"></a></li>
+            <li><a href="https://neowei1987.github.io/ai/sk_learn.html">sk learn介绍</a></li>
         
     </ul>
      
@@ -322,6 +324,9 @@
 
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag"># 动态规划</a>
+          </div>
 
         
 
@@ -329,12 +334,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/greedy/candy.html" rel="prev" title="贪心-分糖果问题">
-      <i class="fa fa-chevron-left"></i> 贪心-分糖果问题
+    <a href="/work/tpl.html" rel="prev" title="模版">
+      <i class="fa fa-chevron-left"></i> 模版
     </a></div>
       <div class="post-nav-item">
-    <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/sort/quick_sort/qsort.html" rel="next" title="快速排序">
-      快速排序 <i class="fa fa-chevron-right"></i>
+    <a href="/backend_knowledge_architecture/store/tair.html" rel="next" title="Tair介绍">
+      Tair介绍 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -424,20 +429,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">328</span>
+          <span class="site-state-item-count">331</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-count">60</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -561,6 +566,59 @@
   
 
   
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 

@@ -203,7 +203,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/heap/index.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/timer/index.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -217,7 +217,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/backend_knowledge_architecture/structure_algorithm/structures/heap/index.html" class="post-title-link" itemprop="url">堆</a>
+            <a href="/backend_knowledge_architecture/server/timer/index.html" class="post-title-link" itemprop="url">高性能服务器设计-定时器</a>
         </h2>
 
         <div class="post-meta">
@@ -229,24 +229,15 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2022-02-28 21:20:03" itemprop="dateCreated datePublished" datetime="2022-02-28T21:20:03+08:00">2022-02-28</time>
+              <time title="Created: 2022-02-25 15:01:03" itemprop="dateCreated datePublished" datetime="2022-02-25T15:01:03+08:00">2022-02-25</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-01 22:17:48" itemprop="dateModified" datetime="2022-11-01T22:17:48+08:00">2022-11-01</time>
+                <time title="Modified: 2022-03-01 22:44:41" itemprop="dateModified" datetime="2022-03-01T22:44:41+08:00">2022-03-01</time>
               </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
 
           
   
@@ -257,8 +248,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/heap/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/heap/index.html" itemprop="commentCount"></span>
+    <a title="valine" href="/backend_knowledge_architecture/server/timer/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/timer/index.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -273,15 +264,18 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>二叉堆，包括最大堆、最小堆</p>
-<p>最大特点：在$O(1)$时间内找到最小（最大）元素</p>
-<p>堆的常见应用：</p>
+          <p>设计目标：</p>
 <ol>
-<li>堆排序</li>
-<li>用两个堆（一个最大堆，一个最小堆）来维护/查询第K大/小的操作</li>
-<li>贪心算法优化</li>
+<li>高性能，更快的找到下一个超时的Task</li>
+<li>高分辨率，例如毫秒定时器</li>
 </ol>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">堆 —— 模板题 AcWing <span class="number">838.</span> 堆排序, AcWing <span class="number">839.</span> 模拟堆</span><br><span class="line"><span class="comment">// h[N]存储堆中的值, h[1]是堆顶，x的左儿子是2x, 右儿子是2x + 1</span></span><br><span class="line"><span class="comment">// ph[k]存储第k个插入的点在堆中的位置</span></span><br><span class="line"><span class="comment">// hp[k]存储堆中下标是k的点是第几个插入的</span></span><br><span class="line"><span class="keyword">int</span> h[N], ph[N], hp[N], size;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 交换两个点，及其映射关系</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">heap_swap</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    swap(ph[hp[a]],ph[hp[b]]);</span><br><span class="line">    swap(hp[a], hp[b]);</span><br><span class="line">    swap(h[a], h[b]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">down</span><span class="params">(<span class="keyword">int</span> u)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> t = u;</span><br><span class="line">    <span class="keyword">if</span> (u * <span class="number">2</span> &lt;= size &amp;&amp; h[u * <span class="number">2</span>] &lt; h[t]) t = u * <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">if</span> (u * <span class="number">2</span> + <span class="number">1</span> &lt;= size &amp;&amp; h[u * <span class="number">2</span> + <span class="number">1</span>] &lt; h[t]) t = u * <span class="number">2</span> + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span> (u != t)</span><br><span class="line">    &#123;</span><br><span class="line">        heap_swap(u, t);</span><br><span class="line">        down(t);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">up</span><span class="params">(<span class="keyword">int</span> u)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (u / <span class="number">2</span> &amp;&amp; h[u] &lt; h[u / <span class="number">2</span>])</span><br><span class="line">    &#123;</span><br><span class="line">        heap_swap(u, u / <span class="number">2</span>);</span><br><span class="line">        u &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// O(n)建堆</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = n / <span class="number">2</span>; i; i -- ) down(i);</span><br></pre></td></tr></table></figure>
+<p>实现方式：</p>
+<ul>
+<li>时间轮、多级时间轮</li>
+<li>堆</li>
+<li>基于排序链表 O(N)</li>
+<li>红黑树</li>
+</ul>
 
       
     </div>
@@ -303,7 +297,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/array/duplicateInArrayNoSpace.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/concurrency_limiter/little_raw.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -317,7 +311,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/backend_knowledge_architecture/structure_algorithm/structures/array/duplicateInArrayNoSpace.html" class="post-title-link" itemprop="url">不使用额外空间，找出数组重复数字</a>
+            <a href="/backend_knowledge_architecture/server/concurrency_limiter/little_raw.html" class="post-title-link" itemprop="url">高性能服务器设计-littile's raw定律</a>
         </h2>
 
         <div class="post-meta">
@@ -329,24 +323,15 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2022-02-28 13:08:03" itemprop="dateCreated datePublished" datetime="2022-02-28T13:08:03+08:00">2022-02-28</time>
+              <time title="Created: 2022-02-25 13:40:03" itemprop="dateCreated datePublished" datetime="2022-02-25T13:40:03+08:00">2022-02-25</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-29 09:49:36" itemprop="dateModified" datetime="2022-10-29T09:49:36+08:00">2022-10-29</time>
+                <time title="Modified: 2022-10-30 18:32:37" itemprop="dateModified" datetime="2022-10-30T18:32:37+08:00">2022-10-30</time>
               </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
 
           
   
@@ -357,8 +342,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/array/duplicateInArrayNoSpace.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/array/duplicateInArrayNoSpace.html" itemprop="commentCount"></span>
+    <a title="valine" href="/backend_knowledge_architecture/server/concurrency_limiter/little_raw.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/concurrency_limiter/little_raw.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -373,13 +358,22 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>给定一个长度为 n+1 的数组nums，数组中所有的数均在 1∼n 的范围内，其中 n≥1。</p>
-<p>请找出数组中任意一个重复的数，但不能修改输入的数组。</p>
-<p>样例<br>给定 nums = [2, 3, 5, 4, 3, 2, 6, 7]。</p>
-<p>返回 2 或 3。</p>
-<p>思考题：如果只能使用 O(1) 的额外空间，该怎么做呢？</p>
-<p>思考： 把肯定不符合条件的一半给忽略掉；</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">duplicateInArray</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> l = <span class="number">1</span>, r = nums.size() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (l &lt; r) &#123;</span><br><span class="line">            <span class="keyword">int</span> mid = (l + r) &gt;&gt; <span class="number">1</span>;  <span class="comment">//[l, mid], [mid + 1, r]</span></span><br><span class="line">            <span class="keyword">int</span> s = <span class="number">0</span>;</span><br><span class="line">            <span class="comment">//注意这里是遍历了所有的元素</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.size(); ++i) s += (nums[i] &gt;= l &amp;&amp; nums[i] &lt;= mid);</span><br><span class="line">            <span class="keyword">if</span> (s &gt; (mid - l + <span class="number">1</span>)) r = mid;</span><br><span class="line">            <span class="keyword">else</span> l = mid + <span class="number">1</span>; <span class="comment">//数量不够，说明这个区间内的某个数肯定被替换掉了，所以肯定在另外一边。</span></span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> r;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+          <p>并发 = rt * qps</p>
+<h4 id="N-X-R"><a href="#N-X-R" class="headerlink" title="N = X * R"></a>N = X * R</h4><p>N表示系统中同时活动的用户，包括正在处理中和队列中的；X表示用户相继到达系统的速率，在平衡状态时即为系统吞吐量（到达=离开）；R表示每个用户在系统中平均的驻留时间</p>
+<p>eg. 一个请求在系统中的停留时间，1s; 一秒钟平均过来100个请求（当然一秒钟也会离开100个请求）那么系统同时处理的请求数是多少？</p>
+<p>应该是1s * 100 (个/s) = 100个。</p>
+<h4 id="Eric的估算公式-C-L-n-T"><a href="#Eric的估算公式-C-L-n-T" class="headerlink" title="Eric的估算公式 C = L * n / T"></a>Eric的估算公式 C = L * n / T</h4><p>n表示同时在线；L表示平均停留时间；T表示高峰期持续时间；C为并发用户数量。</p>
+<p>eg. 一个用户在系统中的停留时间，30分钟；晚高峰5～7点，有500在线；问系统的并发用户是多少？</p>
+<p>假设系统后端维护session，那么这个session的长度即为30分钟，L=30minutes；用户活跃时长已经得知是从5点到7点共2个小时，T=2 hours；那么并发用户数C=n<em>L/T=500</em>30/(5*60)=50</p>
+<h4 id="等价性说明"><a href="#等价性说明" class="headerlink" title="等价性说明"></a>等价性说明</h4><p>我们再来从另外的角度分解Eric的估算公式：</p>
+<p>C=n<em>L/T  可以表示为  C=(n/T)</em>L</p>
+<p>n/T 是不是和我们刚才在上面Little中第一步一样，是计算到达率X的。</p>
+<p>而L（session时长）不就是R（驻留时间）吗？都等同于session时间长度。</p>
+<p>也就是说C=(n/T)<em>L=X</em>R=N</p>
+<p>结论：由以上得知，Eric’s 估算公式跟Little定律是等价的.</p>
+<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.cnblogs.com/hundredsofyears/p/3360305.html">https://www.cnblogs.com/hundredsofyears/p/3360305.html</a></p>
+<p>并发  = 到达率X * 停留时间R</p>
+<p>并发 = （同时在线人数c  / 高峰期持续时长T） * 平均停留时间L</p>
 
       
     </div>
@@ -401,7 +395,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/array/duplicateInArray.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/concurrency_limiter/index.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -415,7 +409,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/backend_knowledge_architecture/structure_algorithm/structures/array/duplicateInArray.html" class="post-title-link" itemprop="url">本地交换系列-数组重复数字</a>
+            <a href="/backend_knowledge_architecture/server/concurrency_limiter/index.html" class="post-title-link" itemprop="url">高性能服务器设计-限流模型</a>
         </h2>
 
         <div class="post-meta">
@@ -427,24 +421,15 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2022-02-28 12:56:03" itemprop="dateCreated datePublished" datetime="2022-02-28T12:56:03+08:00">2022-02-28</time>
+              <time title="Created: 2022-02-25 13:30:03" itemprop="dateCreated datePublished" datetime="2022-02-25T13:30:03+08:00">2022-02-25</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 23:02:03" itemprop="dateModified" datetime="2022-03-01T23:02:03+08:00">2022-03-01</time>
+                <time title="Modified: 2022-11-03 20:08:45" itemprop="dateModified" datetime="2022-11-03T20:08:45+08:00">2022-11-03</time>
               </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
 
           
   
@@ -455,8 +440,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/array/duplicateInArray.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/array/duplicateInArray.html" itemprop="commentCount"></span>
+    <a title="valine" href="/backend_knowledge_architecture/server/concurrency_limiter/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/concurrency_limiter/index.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -471,143 +456,44 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>给定一个长度为 n 的整数数组 nums，数组中所有的数字都在 0∼n−1 的范围内。</p>
-<p>数组中某些数字是重复的，但不知道有几个数字重复了，也不知道每个数字重复了几次。</p>
-<p>请找出数组中任意一个重复的数字。</p>
-<p>注意：如果某些数字不在 0∼n−1 的范围内，或数组中不包含重复数字，则返回 -1；</p>
-<p>样例<br>给定 nums = [2, 3, 5, 4, 3, 2, 6, 7]。</p>
-<p>返回 2 或 3。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">duplicateInArray</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = nums.size();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) </span><br><span class="line">            <span class="keyword">if</span> (nums[i] &lt; <span class="number">0</span> || nums[i] &gt; n - <span class="number">1</span>) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">while</span> (i != nums[i]) &#123;</span><br><span class="line">                <span class="keyword">int</span> x = nums[i];</span><br><span class="line">                <span class="keyword">if</span> (nums[x] == x) <span class="keyword">return</span> x; <span class="comment">//如果坑位已经被占了，说明重复了。</span></span><br><span class="line">                <span class="keyword">else</span> swap(nums[x], nums[i]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        x</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/possibility.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/possibility.html" class="post-title-link" itemprop="url">概率相关问题</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-27 21:11:03" itemprop="dateCreated datePublished" datetime="2022-02-27T21:11:03+08:00">2022-02-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-19 00:25:09" itemprop="dateModified" datetime="2022-11-19T00:25:09+08:00">2022-11-19</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/possibility.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/possibility.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="根据1到m生成1到n随机数"><a href="#根据1到m生成1到n随机数" class="headerlink" title="根据1到m生成1到n随机数"></a>根据1到m生成1到n随机数</h4><p>问题1： 给定一个函数rand()能产生1到m之间的等概率随机数，产生1到n之间等概率的随机数？</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">rand10</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">int</span> x;</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">&#123;</span><br><span class="line">    x = (rand7()<span class="number">-1</span>)*<span class="number">7</span>+rand7();</span><br><span class="line">&#125;<span class="keyword">while</span>(x &gt; <span class="number">40</span>)  <span class="comment">//【1, 40】的范围</span></span><br><span class="line"><span class="keyword">return</span> (x<span class="number">-1</span>） / <span class="number">4</span>+<span class="number">1</span>; <span class="comment">//分为10段，0～9 + 1 =》 1 ～ 10</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>考虑如果rand（）返回的是浮点呢？</p>
-<p>这种情况下可以简化为，如何把[a,b]线段上的点等概率的映射到[c,d]</p>
-<p>另外， 为啥不能考虑rand（） * rand()呢？</p>
-<p>因为不等概率，7<em>6与6</em>7的计算结果都是42，这样子就使得出现42的概率是1/49 + 1/49；出现1的概率是1/49。</p>
+          <p>服务的处理能力是有客观上限的。当请求速度超过服务的处理速度时，服务就会过载。</p>
+<p>如果服务持续过载，会导致越来越多的请求积压，最终所有的请求都必须等待较长时间才能被处理，从而使整个服务处于瘫痪状态。</p>
+<p>与之相对的，如果直接拒绝掉一部分请求，反而能够让服务能够”及时”处理更多的请求。 我们称这种做法为限流。限流是过载保护的手段之一，目的在于保护系统不被超过服务吞吐能力的流量（或突发）打死。</p>
+<p>常见的限流手段有固定窗口、滑动窗口、令牌桶、漏桶、BBR、brpc自适应限流等。</p>
+<p>下面挨个介绍每一种限流算法的原理以及优缺点。</p>
+<h3 id="传统的基于配置的单机限流算法"><a href="#传统的基于配置的单机限流算法" class="headerlink" title="传统的基于配置的单机限流算法"></a>传统的基于配置的单机限流算法</h3><h4 id="第一，固定窗口"><a href="#第一，固定窗口" class="headerlink" title="第一，固定窗口"></a>第一，固定窗口</h4><p>原理：维护一个窗口的两个信息：窗口开始时间、经过窗口的请求数。如果窗口内超出限制数则拒绝。如果已经进入新的窗口，则reset计数。</p>
+<p>不足：存在临界点（窗口reset前后的瞬时）的qps会飙高，从而打死系统。</p>
+<h4 id="第二，滑动窗口"><a href="#第二，滑动窗口" class="headerlink" title="第二，滑动窗口"></a>第二，滑动窗口</h4><p>原理：将总的时间窗口划分为N个小格，并单独维护每一个小格的计数。通过这种方式，可以把过去一段时间内的计数信息也用上，从而让限流的统计更精确一些。</p>
+<p>不足：窗口不可能无限划分</p>
+<h4 id="第三，漏桶"><a href="#第三，漏桶" class="headerlink" title="第三，漏桶"></a>第三，漏桶</h4><p>原理：漏桶具有固定容量，出水速率是固定常量（流出请求）如果桶是空的，则不需流出水滴。可以以任意速率流入水滴到漏桶（流入请求）如果流入水滴超出了桶的容量，则流入的水滴溢出（新请求被拒绝）</p>
+<p>不足：无法应对突发流量</p>
+<p><img src="http://cdn.b5mang.com/20201222223148.png" alt="20201222223148"></p>
+<h4 id="第四，令牌桶"><a href="#第四，令牌桶" class="headerlink" title="第四，令牌桶"></a>第四，令牌桶</h4><p>原理：假如用户配置的平均发送速率为r，则每隔1/r秒一个令牌被加入到桶中。假设桶最多可以存发b个令牌。如果令牌到达时令牌桶已经满了，那么这个令牌会被丢弃。当一个n个字节的数据包到达时，就从令牌桶中删除n个令牌，并且数据包被发送到网络。如果令牌桶中少于n个令牌，那么不会删除令牌，并且认为这个数据包在流量限制之外。</p>
+<p>算法允许最长b个字节的突发，但从长期运行结果看，数据包的速率被限制成常量r。</p>
+<p><img src="http://cdn.b5mang.com/20201222223820.png" alt="20201222223820"></p>
+<h3 id="自适应限流"><a href="#自适应限流" class="headerlink" title="自适应限流"></a>自适应限流</h3><p>上面的几种算法，一定程度上确实能够保护系统不被拖垮, 但不管漏斗桶还是令牌桶, 其防护思路都是设定一个指标, 当超过该指标后就阻止或减少流量的继续进入，当系统负载降低到某一水平后则恢复流量的进入。但其通常都是被动的，其实际效果取决于限流阈值设置是否合理，但往往设置合理不是一件容易的事情。具体有如下几个弊端：</p>
+<ol>
+<li>集群增加机器或者减少机器限流阈值是否要重新设置?</li>
+<li>设置限流阈值的依据是什么?</li>
+<li>人力运维成本是否过高?</li>
+<li>只针对局部服务端的限流，无法掌控全局资源，</li>
+<li>当调用方反馈限流错误时, 这个时候重新设置限流, 其实流量高峰已经过了。重新评估限流是否有意义？</li>
+</ol>
+<h4 id="第五，B站BBR限流"><a href="#第五，B站BBR限流" class="headerlink" title="第五，B站BBR限流"></a>第五，B站BBR限流</h4><p>底层原理：并发 = qps * latency</p>
+<p>自适应限流能动态调整服务的最大并发，在保证服务不过载的前提下，让服务尽可能多的处理请求。</p>
+<p>具体逻辑：如果cpu &gt; 800 &amp;&amp; inflight &gt;  rt * max_qps，则启用限流</p>
+<p>为什么要用 CPU\IOPS 作为启发值呢？</p>
+<p>因为自适应限流与 TCP 拥塞控制还存在不同之处，TCP 中客户端可以控制发送率，从而探测到 maxPass，但是 RPC <strong>线上无法控制流量的速率</strong>，所以必须以 CPU 作为标准，当 CPU 快满载的时候再开启，这时我们认为之前探测到的 maxPass 已经接近了系统的瓶颈，乘以 minRtt 就可以得到 InFlight</p>
+<h4 id="第六，BRPC自适应限流"><a href="#第六，BRPC自适应限流" class="headerlink" title="第六，BRPC自适应限流"></a>第六，BRPC自适应限流</h4><ul>
+<li>peek_qps 峰值qps</li>
+<li>nodelay_latency 系统无负载或者低负载的响应时间，理论值无法计算</li>
+<li>Min_latency 用来替代nodelay_latency</li>
+<li>max_cocurrent  = max_qps * ((2+alpha) * min_latency - latency)</li>
+</ul>
+<p>服务的noload_latency并非是一成不变的，自适应限流必须能够正确的探测noload_latency的变化。当noload_latency下降时，是很容感知到的，因为这个时候latency也会下降。难点在于当latency上涨时，需要能够正确的辨别到底是服务过载了，还是noload_latency上涨了。</p>
 <p>参考：</p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.cnblogs.com/double-win/archive/2014/04/07/3650314.html">https://www.cnblogs.com/double-win/archive/2014/04/07/3650314.html</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://my.oschina.net/u/4401597/blog/4038277">https://my.oschina.net/u/4401597/blog/4038277</a></p>
-<h4 id="p-amp-1-p-生成等概率"><a href="#p-amp-1-p-生成等概率" class="headerlink" title="p &amp; 1 -p 生成等概率"></a>p &amp; 1 -p 生成等概率</h4><p>问题2： 有一个随机生成器randA()，以p的概率返回0，1-p的概率返回1，利用这个randA()构造randB()，使randB()等概率的返回0和1，即0.5的概率返回0，0.5的概率返回1。</p>
-<p>分析比较简单： 出现00的概率是p^2; 出现10的概率是p<em>(1-p)，出现01的概率是p</em>(1-p); 出现11的概率是（1-p）^2;</p>
-<p>以上，只要丢弃掉00，01的结果； 10与01的出现概率就是相等的；也就各为50%。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">randB</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">int</span> x1, x2;</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">&#123;</span><br><span class="line">    x1 = randA();</span><br><span class="line">    x2 = randA();</span><br><span class="line">&#125;<span class="keyword">while</span>(x1+x2 != <span class="number">1</span>)</span><br><span class="line"><span class="keyword">return</span> x1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>已知一随机发生器，产生0的概率是p，产生1的概率是1-p，<br>现在要你构造一个发生器，<br>使得它构造0和1的概率均为 1/2；<br>构造一个发生器，使得它构造1、2、3 的概率均为 1/3； …，<br>构造一个发生器，使得它构造 1、2、3、…n 的概率均为1/n，要求复杂度最低。</p>
-<p>思路：<br>由于需要产生1/2，而用1位0，或1位1无法产生等概率，<br>因此，考虑将随机数扩展成2位：<br>00   p<em>p<br>01  p</em>(1-p)<br>10  (1-p)<em>p<br>11 (1-p)</em>(1-p)<br>有上述分析知道，01和10是等概率的，因此我们只需要产生01和10就行了。<br>于是可以，遇到00和11就丢弃，只记录01和10。可以令，01表示0,10表示1，则等概率1/2产生0和1了。<br>对于n=2，一次性生成两个数字，认为01表示0，10表示1，<br>其它情况放弃，它们的概率都是p<em>(1-p)；<br>对于n=3，一次性生成三个数字，认为001表示0，010表示1，100表示2，<br>其它情况放弃，它们的概率都是p</em>p<em>(1-p)；<br>对于n=4，一次性生成是个数字，认为0001表示0，0010表示1，0100表示2，1000表示3，<br>其它情况放弃，它们的概率都是p</em>p<em>p</em>(1-p)；<br>5为例，此时我们取x=2，因为C(2x,x)=C(4,2)=6是比5大的最小的x，<br>此时我们就是一次性生成4位二进制，把1出现个数不是2的都丢弃，<br>这时候剩下六个:0011,0101,0110,1001,1010,1100，<br>取最小的5个，即丢弃1100，那么我们对于前5个分别编号1到5，<br>这时候他们的概率都是p<em>p</em>(1-p)*(1-p)相等了。<br>关键是找那个最小的x，使得C(2x,x)&gt;=n这样能提升查找效率。<br>因为C(n,i)最大是在i接近n/2的地方取得，此时我有更大比率的序列用于生成，<br>换句话说被抛掉的更少了，这样做是为了避免大量生成了丢弃序列而使得生成速率减慢，<br>实际上我之所以将x取定是为了让我取得的序列生成的概率互相相等，<br>比如C(2x,x)的概率就是[p(1-p)]^x，<br>互等的样例空间内保证了对应的每个值取得的样例等概率。</p>
-<h4 id="Shuffle算法"><a href="#Shuffle算法" class="headerlink" title="Shuffle算法"></a>Shuffle算法</h4><p>一个从1到n的序列，随机打乱，保证每个数出现在任意一个位置的概率相同。</p>
-<p>基于交换，将a[i]与arr[rand(i, n - 1)]随机交换；</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 得到一个在闭区间 [min, max] 内的随机整数</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">randInt</span><span class="params">(<span class="keyword">int</span> min, <span class="keyword">int</span> max)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">shuffle</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = arr.length();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="comment">// 从 i 到最后随机选一个元素</span></span><br><span class="line">        <span class="keyword">int</span> rand = randInt(i, n - <span class="number">1</span>);</span><br><span class="line">        swap(arr[i], arr[rand]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="N个数随机选M"><a href="#N个数随机选M" class="headerlink" title="N个数随机选M"></a>N个数随机选M</h4><p>问题3： 程序的输入包含两个整数m和n，其中$m \lt n $。输出是0~n-1范围内m个随机整数的有序列表，不允许重复。从概率的角度来说，我们希望得到没有重复的选择，其中每个选择出现的概率相等。</p>
-<p>选出这个序列的概率是：$m/n <em> (m-1) / (n-1) </em> … *  (1)/(n-m)$</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">generate</span><span class="params">(<span class="keyword">int</span> m,<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">int</span> t = m;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">    <span class="keyword">if</span>(Rand(<span class="number">0</span>,n<span class="number">-1</span>-i) &lt; t) <span class="comment">//即以t/(n-i)的概率执行下面的语句</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,i); <span class="comment">//这里打印的是i，一直在增长；所以不会重复！！！</span></span><br><span class="line">        t--;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//随着算法继续，i越大，rand（0，n-1-i)得到的数值越小，就容易被选中，</span></span><br><span class="line"><span class="comment">//如果i已经等于n-1-t了，则后面的必然全不都被选中。</span></span><br></pre></td></tr></table></figure>
-<h4 id="蓄水池采样算法"><a href="#蓄水池采样算法" class="headerlink" title="蓄水池采样算法"></a>蓄水池采样算法</h4><p>问题4： 如何数据流中随机选出N个元素</p>
-<p>蓄水池采样算法，具体步骤如下：</p>
-<p>（1）先把N个坑位填上</p>
-<p>（2）对于后面新来的第i元素，做如下概率处理：令X=rand(0, i), i &gt; N</p>
-<p>A. 如果X在[0, N]之间，则用swap(X, i)</p>
-<p>B. 否则啥也不做</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line"><span class="keyword">while</span> (<span class="built_in">cin</span> &gt;&gt; Elem) &#123;</span><br><span class="line">    i++;</span><br><span class="line">    <span class="keyword">if</span> (i &lt; N) &#123;</span><br><span class="line">        res.push(Elem);</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    X = rand(<span class="number">0</span>, i); </span><br><span class="line">    <span class="keyword">if</span> (X &lt; N) &#123;</span><br><span class="line">        swap(res[X], res[i]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>深入一下，分布式蓄水池算法： <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.jianshu.com/p/7a9ea6ece2af">https://www.jianshu.com/p/7a9ea6ece2af</a></p>
-<h3 id="Probability-simulation"><a href="#Probability-simulation" class="headerlink" title="Probability simulation"></a>Probability simulation</h3><p>You are given a fair coin. Can you design a simple game using the fair coin so that your<br>probability of winning is p, 0 &lt; p &lt; 1</p>
-<p>把p表示为2进制小数；例如0.100011100110101</p>
-<p>开始抛硬币，正面1； 反面0，计作s[i]</p>
-<p>如果第i次抛出1，而p[i] = 0, 则win；<br>如果第i次抛出0，而p[i] = 1, 则lose；<br>如果s[i] == p[i]，则继续新的循环</p>
-<h3 id="概率分布"><a href="#概率分布" class="headerlink" title="概率分布"></a>概率分布</h3><p>男孩女孩问题</p>
-<p>如果一个地区所有人都生了女孩就继续生，直到生出男孩立马停下，这个地区会趋于什么样的男女比例？ </p>
-<p>1:1 ，几何分布</p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.zhihu.com/question/355605125">https://www.zhihu.com/question/355605125</a></p>
-<p>一根绳子分三段，能够合成三角形的概率</p>
-<p>线性规划 + 几何概率， 1/4</p>
-<p>如果在高速公路上30分钟内到一辆车开过的几率是0.95，那么在10分钟内看到一辆车开过的几率是多</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="http://www.mianshigee.com/tutorial/incubator-brpc/1778a50865eb3518.md">BRPC开发手册</a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://xueqiu.com/9217191040/139169952">B站在微服务治理中如何探索与实践</a></p>
 
       
     </div>
@@ -629,7 +515,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/sort/merge_sort/merge_k_byte.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/mq/kafka.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -643,7 +529,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/sort/merge_sort/merge_k_byte.html" class="post-title-link" itemprop="url">字节版-多路归并</a>
+            <a href="/backend_knowledge_architecture/mq/kafka.html" class="post-title-link" itemprop="url">消息队列-Kafka</a>
         </h2>
 
         <div class="post-meta">
@@ -655,28 +541,15 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2022-02-27 20:53:03" itemprop="dateCreated datePublished" datetime="2022-02-27T20:53:03+08:00">2022-02-27</time>
+              <time title="Created: 2022-02-25 13:06:03" itemprop="dateCreated datePublished" datetime="2022-02-25T13:06:03+08:00">2022-02-25</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-02 20:24:36" itemprop="dateModified" datetime="2022-03-02T20:24:36+08:00">2022-03-02</time>
+                <time title="Modified: 2022-11-26 22:26:13" itemprop="dateModified" datetime="2022-11-26T22:26:13+08:00">2022-11-26</time>
               </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%BB%8F%E5%85%B8%E9%A2%98%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">经典题目</span></a>
-                </span>
-            </span>
 
           
   
@@ -687,8 +560,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/sort/merge_sort/merge_k_byte.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/sort/merge_sort/merge_k_byte.html" itemprop="commentCount"></span>
+    <a title="valine" href="/backend_knowledge_architecture/mq/kafka.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/mq/kafka.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -703,12 +576,32 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>算法题2：给定k个数组，每个数组都是有序的，且每个数组最大值-最小值&lt;1000，1 &lt; k&lt;1000，求所有数的中位数。</p>
-<p>解答思路：</p>
-<p>定义一个结构体 NumCount {<br>    int number;<br>    int cnt;<br>}</p>
-<p>预处理所有数据，将原来的数据用NumCount nums[k][1000]来保存。</p>
-<p>用一个大顶堆来维护K路的最小值。</p>
-<p>时间复杂度：$O(1000 * k)$</p>
+          <p><img src="https://img-blog.csdn.net/20180317011215184?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2RvZzI1MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="设计思想"></p>
+<h4 id="cosume-group"><a href="#cosume-group" class="headerlink" title="cosume group"></a>cosume group</h4><p>通过cosume group，巧妙的解决了广播问题。</p>
+<h4 id="高性能"><a href="#高性能" class="headerlink" title="高性能"></a>高性能</h4><p>SendFile、zero copy</p>
+<h4 id="索引设计"><a href="#索引设计" class="headerlink" title="索引设计"></a>索引设计</h4><p>Kafka为了卸载MQ本身的复杂性，为了其<strong>真正无状态</strong>的设计，它将状态维护机制这口锅完全甩给了消费者，因此取消息的问题就转化成了<strong>消费者拿着一个offset索引来Kafka存储器里取消息</strong>的问题，这就涉及到了性能。But 如何能查的更快？How？</p>
+<p><img src="https://img-blog.csdn.net/20180317015646335?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2RvZzI1MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="扫描partition文件"></p>
+<p>但实际上，</p>
+<p><img src="https://img-blog.csdn.net/20180317020648952?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2RvZzI1MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="partition"></p>
+<ol>
+<li>partition并不是一根文件，而是一个目录</li>
+<li>目录下面存了很多逻辑上的segment，每一个segment物理上包括两个文件：索引文件、日志文件（每次都append)</li>
+</ol>
+<p>文件的命名相当于查找的稀疏索引，省去索引文件</p>
+<p>每个segment索引又是一个稀疏索引减少索引文件的大小</p>
+<h4 id="replication"><a href="#replication" class="headerlink" title="replication"></a>replication</h4><p>2.1 消息备份</p>
+<p>Kafka允许同个Partition存在多个消息副本(Replica)，每个Partition的副本通常由1个Leader及0个以上的Follower组成，产者将消息直接发往对应Partition的Leader，Follower会周期地向Leader发送同步请求，Kafka的Leader机制在保障数据致性地同时降低了消息备份的复杂度。同Partition的Replica应存储在同一个Broker上，因为一旦该Broker宕机，对应Partition的所有Replica都无法作，这就达不到高可用的效果。为做好负载均衡并提容错能，Kafka会尽将所有的Partition以及各Partition的副本均匀地分配到整个集群上。举个例，当集群中部署3台Broker，TopicA共有4个Partition，每个Partition均有3个Replica时下图就是种合理的分布方式。</p>
+<p><img src="https://pics4.baidu.com/feed/d833c895d143ad4b76bc3f8833f912a7a60f06ef.jpeg" alt=""></p>
+<p>ISR:In-Sync Replicas 副本同步队列</p>
+<p>ISR(In-Sync Replicas)指的是个Partition中与Leader“保持同步”的Replica列表(实际存储的是副本所在Broker的BrokerId)，这的 保持同步是指与Leader数据保持完全一致，只需在replica.lag.time.max.ms时间内与Leader保持有效连接，官方解释如下If a follower hasn’t sent any fetch requests or hasn’t consumed up to the leaders log end offset for at least this time, the leader will remove the follower from isr,( default value =10000 )Follower周期性地向Leader发送FetchRequest请求(数据结构见下)，发送时间间隔配置在replica.fetch.wait.max.ms中，默认值为 500。</p>
+<p>AR:Assigned Replicas 所有副本</p>
+<p>ISR是由leader维护，follower从leader同步数据有一些延迟（包括延迟时间replica.lag.time.max.ms和延迟条数replica.lag.max.messages两个维度, 当前最新的版本0.10.x中只支持replica.lag.time.max.ms这个维度），任意一个超过阈值都会把follower剔除出ISR, 存入OSR（Outof-Sync Replicas）列表，新加入的follower也会先存放在OSR中。AR=ISR+OSR。</p>
+<p>ISR数据同步、ACK选项（全部ack、只有一个ack）</p>
+<p>Kafka的复制机制既不是完全的同步复制，也不是单纯的异步复制。完全同步复制要求All Alive Follower都复制完，这条消息才会被认为commit，这种复制方式极大的影响了吞吐率。而异步复制方式下，Follower异步的从Leader复制数据，数据只要被Leader写入log就被认为已经commit，这种情况下，如果leader挂掉，会丢失数据，kafka使用ISR的方式很好的均衡了确保数据不丢失以及吞吐率。Follower可以批量的从Leader复制数据，而且Leader充分利用磁盘顺序读以及send file(zero copy)机制，这样极大的提高复制性能，内部批量写磁盘，大幅减少了Follower与Leader的消息量差。</p>
+<p>leader会维护一个与其基本保持同步的Replica列表，该列表称为ISR(in-sync Replica)，每个Partition都会有一个ISR，而且是由leader动态维护 ，如果一个follower比一个leader落后太多，或者超过一定时间未发起数据复制请求，则leader将其重ISR中移除 </p>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/dog250/article/details/79588437">https://blog.csdn.net/dog250/article/details/79588437</a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/qq_28900249/article/details/90346599">https://blog.csdn.net/qq_28900249/article/details/90346599</a></p>
 
       
     </div>
@@ -730,7 +623,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/DutchNationalFlag.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/mq/index.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -744,7 +637,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/DutchNationalFlag.html" class="post-title-link" itemprop="url">双指针系列-荷兰旗问题</a>
+            <a href="/backend_knowledge_architecture/mq/index.html" class="post-title-link" itemprop="url">消息队列-概览</a>
         </h2>
 
         <div class="post-meta">
@@ -756,24 +649,15 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2022-02-26 22:00:03" itemprop="dateCreated datePublished" datetime="2022-02-26T22:00:03+08:00">2022-02-26</time>
+              <time title="Created: 2022-02-25 13:03:03" itemprop="dateCreated datePublished" datetime="2022-02-25T13:03:03+08:00">2022-02-25</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:54:14" itemprop="dateModified" datetime="2022-03-01T22:54:14+08:00">2022-03-01</time>
+                <time title="Modified: 2022-03-01 22:40:57" itemprop="dateModified" datetime="2022-03-01T22:40:57+08:00">2022-03-01</time>
               </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
 
           
   
@@ -784,8 +668,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/DutchNationalFlag.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/DutchNationalFlag.html" itemprop="commentCount"></span>
+    <a title="valine" href="/backend_knowledge_architecture/mq/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/mq/index.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -800,10 +684,44 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>0,1,2</p>
-<p>分为三段：0段、未判定段、2段，用三个指针（s0, cur, s2)指向每一段的当前位置。</p>
-<p>s0并不是指向0段的最后一个元素，而是指向最后一个元素的下一个元素。s2类似。</p>
-<p>如果A[cur]=0，则s0（其实指向1）,cur互换位置； s0++; cur++;<br>如果A[cur]=1，则cur++;<br>如果A[cur]=2,则s2，cur互换位置； s2—; cur不变；</p>
+          <p>可能的一些作用：</p>
+<ol>
+<li>非核心逻辑异步化，追求高性能</li>
+<li>解除耦合</li>
+<li>实现广播</li>
+<li>削峰填谷</li>
+</ol>
+<hr>
+<p>具体可以用于：</p>
+<ol>
+<li>分布式事务，单方生产，多个消费业务逻辑</li>
+<li>数据复制：通过消息队列，将数据复制到多个目的地（多维度数据表、ES、Hadoop、搜索等）</li>
+<li>日志同步：多个app生产日志并放入队列，然后消费队列完成日志的离线与实时处理</li>
+<li>延迟队列：可靠的延迟队列，分布式环境定时器</li>
+<li>广播通知：Cache失效通知</li>
+</ol>
+<hr>
+<p>分布式消息队列的评价指标</p>
+<h5 id="可靠"><a href="#可靠" class="headerlink" title="可靠"></a>可靠</h5><p>分布式消息队列提供更好的可靠性，主要体现在：</p>
+<ol>
+<li>消息会被持久化到分布式存储中。这样避免了单台机器存储的消息由于机器问题导致消息的丢失；</li>
+<li>不佳的网络环境中，保证只有当消息的接收者确实收到消息时才从队列中删除消息。</li>
+</ol>
+<h5 id="可扩展"><a href="#可扩展" class="headerlink" title="可扩展"></a>可扩展</h5><p>可扩展性体现在访问量和数据量两个方面：</p>
+<p>访问量：分布式消息队列服务，会随着访问量的增减而自动增减逻辑处理服务器；</p>
+<p>数据量：当数据量扩大时，后端分布式存储会自动扩容。</p>
+<h5 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h5><p>安全体现在以下两个方面：</p>
+<ol>
+<li><p>同时使用消息队列的业务之间不会互相干扰。如果有多个业务同时在使用消息队列，对于单机的消息队列服务，一个业务的消息操作可能会影响其他业务的正常运行。比如，一个业务的消息操作特别频繁，占据了消息队列的绝大部分服务时间，也占据了这台服务器的绝大部分网络IO，导致其他业务无法正常地与消息队列通信。而且甚至可能由于服务控制不当，导致机器崩溃，服务停止，业务也跟着停止。分布式消息队列则不会出现这个问题：<br>（1）监控措施完善，系统性能指数会控制在一定范围之内，而且有任何异常也会报警；<br>（2）当访问量和数据量增大时，分布式消息队列服务可以自动扩展。</p>
+</li>
+<li><p>各业务的消息内容是安全存储的，其他业务不能访问到非自身业务的数据。<br>一方面是业务需要密钥来访问消息队列；另一方面，消息是被加密存储的。</p>
+</li>
+</ol>
+<h5 id="简单实用"><a href="#简单实用" class="headerlink" title="简单实用"></a>简单实用</h5><p>简单实用体现在：</p>
+<ol>
+<li>透明：接收者和发送者无需知道具体的消息队列的服务器地址，服务器的增减对接收者和发送者透明。</li>
+<li>实用：对于两个服务之间不能通信的网络情况，消息队列为他们提供了恰到好处的桥梁。</li>
+</ol>
 
       
     </div>
@@ -825,7 +743,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/remove_b_ac.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/micro_service/discovery.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -839,7 +757,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/remove_b_ac.html" class="post-title-link" itemprop="url">双指针系列-移除AC和B</a>
+            <a href="/backend_knowledge_architecture/micro_service/discovery.html" class="post-title-link" itemprop="url">微服务系列-服务注册与发现</a>
         </h2>
 
         <div class="post-meta">
@@ -851,24 +769,15 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2022-02-26 21:50:03" itemprop="dateCreated datePublished" datetime="2022-02-26T21:50:03+08:00">2022-02-26</time>
+              <time title="Created: 2022-02-25 12:03:03" itemprop="dateCreated datePublished" datetime="2022-02-25T12:03:03+08:00">2022-02-25</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-30 11:59:39" itemprop="dateModified" datetime="2022-10-30T11:59:39+08:00">2022-10-30</time>
+                <time title="Modified: 2022-03-01 22:40:41" itemprop="dateModified" datetime="2022-03-01T22:40:41+08:00">2022-03-01</time>
               </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
 
           
   
@@ -879,8 +788,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/remove_b_ac.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/remove_b_ac.html" itemprop="commentCount"></span>
+    <a title="valine" href="/backend_knowledge_architecture/micro_service/discovery.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/micro_service/discovery.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -895,381 +804,595 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>有字符串,将所有连续的ac跟单独的b去掉后的字符串：如bbbacccccb-&gt;ccc; aacceacdby-&gt;edy</p>
-<p>时间复杂度O(n) 空间复杂度O(n) —&gt; 时间复杂度O(n) 空间复杂度O(1)</p>
-<p>这是本题较好的一种解法，设两个指针cur和loc分别从头开始出发，cur每次移动一格，另一个指针loc保留当前的操作位置，如果cur指向的字符是c且loc指向的是a，则将loc回移一位（ac抵消了），如果遇到其他非b的字符，则将loc处的字符置为cur处的字符（++location），一直进行直到到cur到达字符串尾部，此时取字符串开头到loc指针之间的子串即为本题的解。这种解法妙就妙在loc处的字符是即时更新的，一些边界条件都自动消除了。</p>
-<p>参考：<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.cnblogs.com/SteelArm/p/12773014.html">https://www.cnblogs.com/SteelArm/p/12773014.html</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/skills/moore_majority_vote.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/moore_majority_vote.html" class="post-title-link" itemprop="url">找出次数一半的数</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-26 21:42:03" itemprop="dateCreated datePublished" datetime="2022-02-26T21:42:03+08:00">2022-02-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:56:27" itemprop="dateModified" datetime="2022-03-01T22:56:27+08:00">2022-03-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87Offer/" itemprop="url" rel="index"><span itemprop="name">剑指Offer</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/moore_majority_vote.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/moore_majority_vote.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>输入n个整数，输出出现次数大于等于数组长度一半的数。<br>输入描述:</p>
-<p>每个测试输入包含n个空格分割的n个整数，n不超过100，其中有一个整数出现次数大于等于n/2。<br>输出描述:</p>
-<p>输出出现次数大于等于n/2的数。</p>
-<h4 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h4><p>摩尔投票法的核心就是一一抵消，删除不同的数。</p>
-<p>因为要找过半的数，用一个变量count记录读取每个变量变化的次数，一个变量temp记录可能过半的数。</p>
-<p>先让count = 1，然后让temp = vec[0]，然后往后遍历一遍。<br>碰到和temp相同的数就给count++，否则就count—，如果count变成0，就让temp=vec[i] (v数组遍历过程中的当前值),并让count = 1。</p>
-<p>如此遍历一遍，因为有一个数过半，所以temp最后肯定存储的是过半的数</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">moreThanHalfNum_Solution</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> cnt = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> val = <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.size(); ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!cnt) &#123;val = nums[i];&#125;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> (nums[i] == val) &#123;</span><br><span class="line">                cnt++;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                cnt--;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> val;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>参考：<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.zhihu.com/question/284969980/answer/440979325">https://www.zhihu.com/question/284969980/answer/440979325</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/graph/dfs.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/graph/dfs.html" class="post-title-link" itemprop="url">图论-深度优先遍历</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-26 21:00:03" itemprop="dateCreated datePublished" datetime="2022-02-26T21:00:03+08:00">2022-02-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:51:39" itemprop="dateModified" datetime="2022-03-01T22:51:39+08:00">2022-03-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/graph/dfs.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/graph/dfs.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>给定一个包含了一些 0 和 1 的非空二维数组 grid 。</p>
-<p>一个 岛屿 是由一些相邻的 1 (代表土地) 构成的组合，这里的「相邻」要求两个 1 必须在水平或者竖直方向上相邻。你可以假设 grid 的四个边缘都被 0（代表水）包围着。</p>
-<p>找到给定的二维数组中最大的岛屿面积。(如果没有岛屿，则返回面积为 0 。)</p>
-<p>解题思路：</p>
-<p>DFS</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/graph/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/graph/index.html" class="post-title-link" itemprop="url">图论-基本算法</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-26 21:00:03" itemprop="dateCreated datePublished" datetime="2022-02-26T21:00:03+08:00">2022-02-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:51:34" itemprop="dateModified" datetime="2022-03-01T22:51:34+08:00">2022-03-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/graph/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/graph/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="图的表示"><a href="#图的表示" class="headerlink" title="图的表示"></a>图的表示</h4><p>稠密图，邻接矩阵；</p>
-<p>稀疏图，邻接表</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">(<span class="number">1</span>) 邻接矩阵：g[a][b] 存储边a-&gt;b; a, b是定点的序号，特别浪费空间，适合稠密图。</span><br><span class="line"></span><br><span class="line"><span class="comment">//稀疏图</span></span><br><span class="line">(<span class="number">2</span>) 邻接表：</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对于每个点k，开一个单链表，存储k所有可以走到的点。h[k]存储这个单链表的头结点</span></span><br><span class="line"><span class="keyword">int</span> h[N], e[N], ne[N], idx;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化</span></span><br><span class="line">idx = <span class="number">0</span>;</span><br><span class="line"><span class="built_in">memset</span>(h, <span class="number">-1</span>, <span class="keyword">sizeof</span> h);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加一条边a-&gt;b</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//把b当作value， 插入到链表头</span></span><br><span class="line">    e[idx] = b, ne[idx] = h[a], h[a] = idx ++ ;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h4 id="DFS-amp-amp-BFS"><a href="#DFS-amp-amp-BFS" class="headerlink" title="DFS  &amp;&amp; BFS"></a>DFS  &amp;&amp; BFS</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">树与图的遍历</span><br><span class="line">时间复杂度 O(n+m)O(n+m), nn 表示点数，mm 表示边数</span><br><span class="line">(<span class="number">1</span>) 深度优先遍历 —— 模板题 AcWing <span class="number">846.</span> 树的重心</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> u)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    st[u] = <span class="literal">true</span>; <span class="comment">// st[u] 表示点u已经被遍历过</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = h[u]; i != <span class="number">-1</span>; i = ne[i])</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> j = e[i];</span><br><span class="line">        <span class="keyword">if</span> (!st[j]) dfs(j);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">(<span class="number">2</span>) 宽度优先遍历 —— 模板题 AcWing <span class="number">847.</span> 图中点的层次</span><br><span class="line"></span><br><span class="line"><span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; q;</span><br><span class="line">st[<span class="number">1</span>] = <span class="literal">true</span>; <span class="comment">// 表示1号点已经被遍历过</span></span><br><span class="line">q.push(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> (q.size())</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">int</span> t = q.front();</span><br><span class="line">    q.pop();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = h[t]; i != <span class="number">-1</span>; i = ne[i])</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> j = e[i];</span><br><span class="line">        <span class="keyword">if</span> (!st[j])</span><br><span class="line">        &#123;</span><br><span class="line">            st[j] = <span class="literal">true</span>; <span class="comment">// 表示点j已经被遍历过</span></span><br><span class="line">            q.push(j);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="拓扑排序"><a href="#拓扑排序" class="headerlink" title="拓扑排序"></a>拓扑排序</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">拓扑排序 —— 模板题 AcWing <span class="number">848.</span> 有向图的拓扑序列</span><br><span class="line">时间复杂度 O(n+m)O(n+m), nn 表示点数，mm 表示边数</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">topsort</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> hh = <span class="number">0</span>, tt = <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// d[i] 存储点i的入度</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i ++ )</span><br><span class="line">        <span class="keyword">if</span> (!d[i])</span><br><span class="line">            q[ ++ tt] = i;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (hh &lt;= tt)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> t = q[hh ++ ];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = h[t]; i != <span class="number">-1</span>; i = ne[i])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> j = e[i];</span><br><span class="line">            <span class="keyword">if</span> (-- d[j] == <span class="number">0</span>)</span><br><span class="line">                q[ ++ tt] = j;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果所有点都入队了，说明存在拓扑序列；否则不存在拓扑序列。</span></span><br><span class="line">    <span class="keyword">return</span> tt == n - <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="最短路问题的解法"><a href="#最短路问题的解法" class="headerlink" title="最短路问题的解法"></a>最短路问题的解法</h4><div class="table-container">
+          <p>集成：在服务提供端或者调用端，如何集成注册中心？应用内 OR 应用外</p>
+<p>测活：服务注册之后，如何对服务进行测活以保证服务的可用性</p>
+<p>负载均衡：当存在多个服务提供者时，如何均衡各个提供者的负载？</p>
+<p>运行时依赖：引入注册中心之后，对应用的运行时环境有何影响？</p>
+<p>可用性：如何保证注册中心本身的可用性，特别是消除单点故障？</p>
+<p>状态获取：（1）主动探测（2）心跳上报</p>
+<p>一些可能问题：</p>
+<ul>
+<li>保护机制：如果短时间内摘除的节点数量超过集群的40%，则停止摘除节点</li>
+<li>通知风暴问题（准备更多的注册中心节点；精简通知内容）</li>
+</ul>
+<p>目前比较流行的解决方案包括：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
-<th>算法</th>
-<th>解决的问题</th>
-<th>算法原理</th>
-<th>时间复杂度</th>
+<th>对比维度</th>
+<th>euraka</th>
+<th>consul</th>
+<th>ZK</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>dijkstra</td>
-<td>单源最短路，稠密图， 正权</td>
-<td>找到最小距离，用找到的最小距离更新剩余距离</td>
-<td>$O(N^2)$ N为图点的数量</td>
+<td>实现思路</td>
+<td>去中心化，通过复制来同步数据，但不保证一致性。只要有一个节点可用，系统整体就可用。</td>
+<td>内置了服务注册与发现框架、分布一致性协议实现、健康检查、Key/Value 存储、多数据中心方案</td>
+<td>使用ZK节点临时节点来维护服务器列表,ZK支持watch节点变更通知机制</td>
 </tr>
 <tr>
-<td>堆优化版dijkstra</td>
-<td>单源最短路，稀疏图，正权</td>
-<td>借助堆来优化dijkstra算法中的查找最小值操作</td>
-<td>$O(N^2)$N为图点的数量</td>
+<td>测活</td>
+<td>客户端心跳</td>
+<td>TCP/HTTP/gRPC/Cmd</td>
+<td>自研-客户端心跳</td>
 </tr>
 <tr>
-<td>bellman-ford</td>
-<td>单源最短路，负边权，限制步数的情形</td>
-<td>迭代k次，每次找最小距离</td>
-<td>$O(N^2)$ N为图点的数量</td>
+<td>负载均衡</td>
+<td>Ribbon</td>
+<td>Fabio</td>
+<td>自研-负载均衡</td>
 </tr>
 <tr>
-<td>SPFA</td>
-<td>单源最短路，负边权，判定有没有负环</td>
-<td>队列优化</td>
-<td>$O(N^2)$ N为图点的数量</td>
+<td>雪崩保护</td>
+<td>有，灾难态进入自我保护模式</td>
+<td>无</td>
+<td>自研</td>
 </tr>
 <tr>
-<td>floyd</td>
-<td>多源汇最短路</td>
-<td>动态规划思想，三角不等式</td>
-<td>$O(N^3)$ N为图点的数量</td>
+<td>自动注销实例</td>
+<td>支持</td>
+<td>支持</td>
+<td>进程不可用，临时节点自动销毁</td>
+</tr>
+<tr>
+<td>访问协议</td>
+<td>HTTP</td>
+<td>HTTP/DNS</td>
+<td>自研</td>
+</tr>
+<tr>
+<td>监听支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>WATCH NODE变更</td>
+</tr>
+<tr>
+<td>多数据中心</td>
+<td>支持</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>跨注册中心同步</td>
+<td>支持</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>框架集成</td>
+<td>SpingCloud继承</td>
+<td>Spring、k8s集成</td>
+<td>无</td>
+</tr>
+<tr>
+<td>优点</td>
+<td>去中心化，高可用</td>
+<td>功能相对完善</td>
+<td>简单容易实现，适用于初创期</td>
+</tr>
+<tr>
+<td>不足</td>
+<td>一致性差</td>
+<td>可用性无保证</td>
+<td>服务可用性无保障<br>ZK跨机房集群支持不佳</td>
+</tr>
+<tr>
+<td>CAP</td>
+<td>AP</td>
+<td>CP</td>
+<td>CP</td>
+</tr>
+<tr>
+<td>一致性协议</td>
+<td>仅复制，非强一致</td>
+<td>raft</td>
+<td>zab，一种类paxos协议</td>
 </tr>
 </tbody>
 </table>
 </div>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">朴素dijkstra算法 —— 模板题 AcWing <span class="number">849.</span> Dijkstra求最短路 I</span><br><span class="line">时间复杂是 O(n2+m)O(n2+m), nn 表示点数，mm 表示边数</span><br><span class="line"><span class="keyword">int</span> g[N][N];  <span class="comment">// 存储每条边</span></span><br><span class="line"><span class="keyword">int</span> dist[N];  <span class="comment">// 存储1号点到每个点的最短距离</span></span><br><span class="line"><span class="keyword">bool</span> st[N];   <span class="comment">// 存储每个点的最短路是否已经确定</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 求1号点到n号点的最短路，如果不存在则返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dijkstra</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">memset</span>(dist, <span class="number">0x3f</span>, <span class="keyword">sizeof</span> dist);</span><br><span class="line">    dist[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n - <span class="number">1</span>; i ++ )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> t = <span class="number">-1</span>;     <span class="comment">// 在还未确定最短路的点中，寻找距离最小的点</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j ++ )</span><br><span class="line">            <span class="keyword">if</span> (!st[j] &amp;&amp; (t == <span class="number">-1</span> || dist[t] &gt; dist[j]))</span><br><span class="line">                t = j;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 用t更新其他点的距离</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j ++ )</span><br><span class="line">            dist[j] = min(dist[j], dist[t] + g[t][j]);</span><br><span class="line"></span><br><span class="line">        st[t] = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (dist[n] == <span class="number">0x3f3f3f3f</span>) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> dist[n];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">堆优化版dijkstra —— 模板题 AcWing <span class="number">850.</span> Dijkstra求最短路 II</span><br><span class="line">时间复杂度 O(mlogn)O(mlogn), nn 表示点数，mm 表示边数</span><br><span class="line"><span class="keyword">typedef</span> <span class="built_in">pair</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; PII;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> n;      <span class="comment">// 点的数量</span></span><br><span class="line"><span class="keyword">int</span> h[N], w[N], e[N], ne[N], idx;       <span class="comment">// 邻接表存储所有边</span></span><br><span class="line"><span class="keyword">int</span> dist[N];        <span class="comment">// 存储所有点到1号点的距离</span></span><br><span class="line"><span class="keyword">bool</span> st[N];     <span class="comment">// 存储每个点的最短距离是否已确定</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 求1号点到n号点的最短距离，如果不存在，则返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dijkstra</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">memset</span>(dist, <span class="number">0x3f</span>, <span class="keyword">sizeof</span> dist);</span><br><span class="line">    dist[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">priority_queue</span>&lt;PII, <span class="built_in">vector</span>&lt;PII&gt;, greater&lt;PII&gt;&gt; heap;</span><br><span class="line">    heap.push(&#123;<span class="number">0</span>, <span class="number">1</span>&#125;);      <span class="comment">// first存储距离，second存储节点编号</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (heap.size())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">auto</span> t = heap.top();</span><br><span class="line">        heap.pop();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> ver = t.second, distance = t.first;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (st[ver]) <span class="keyword">continue</span>;</span><br><span class="line">        st[ver] = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = h[ver]; i != <span class="number">-1</span>; i = ne[i])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> j = e[i];</span><br><span class="line">            <span class="keyword">if</span> (dist[j] &gt; distance + w[i])</span><br><span class="line">            &#123;</span><br><span class="line">                dist[j] = distance + w[i];</span><br><span class="line">                heap.push(&#123;dist[j], j&#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (dist[n] == <span class="number">0x3f3f3f3f</span>) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> dist[n];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Bellman-Ford算法 —— 模板题 AcWing <span class="number">853.</span> 有边数限制的最短路</span><br><span class="line">时间复杂度 O(nm)O(nm), nn 表示点数，mm 表示边数</span><br><span class="line">注意在模板题中需要对下面的模板稍作修改，加上备份数组，详情见模板题。</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> n, m;       <span class="comment">// n表示点数，m表示边数</span></span><br><span class="line"><span class="keyword">int</span> dist[N];        <span class="comment">// dist[x]存储1到x的最短路距离</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Edge</span>     // 边，<span class="title">a</span>表示出点，<span class="title">b</span>表示入点，<span class="title">w</span>表示边的权重</span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> a, b, w;</span><br><span class="line">&#125;edges[M];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 求1到n的最短路距离，如果无法从1走到n，则返回-1。</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bellman_ford</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">memset</span>(dist, <span class="number">0x3f</span>, <span class="keyword">sizeof</span> dist);</span><br><span class="line">    dist[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果第n次迭代仍然会松弛三角不等式，就说明存在一条长度是n+1的最短路径，由抽屉原理，路径中至少存在两个相同的点，说明图中存在负权回路。</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i ++ )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; m; j ++ )</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> a = edges[j].a, b = edges[j].b, w = edges[j].w;</span><br><span class="line">            <span class="keyword">if</span> (dist[b] &gt; dist[a] + w)</span><br><span class="line">                dist[b] = dist[a] + w;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (dist[n] &gt; <span class="number">0x3f3f3f3f</span> / <span class="number">2</span>) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> dist[n];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">spfa 算法（队列优化的Bellman-Ford算法） —— 模板题 AcWing <span class="number">851.</span> spfa求最短路</span><br><span class="line">时间复杂度 平均情况下 O(m)O(m)，最坏情况下 O(nm)O(nm), nn 表示点数，mm 表示边数</span><br><span class="line"><span class="keyword">int</span> n;      <span class="comment">// 总点数</span></span><br><span class="line"><span class="keyword">int</span> h[N], w[N], e[N], ne[N], idx;       <span class="comment">// 邻接表存储所有边</span></span><br><span class="line"><span class="keyword">int</span> dist[N];        <span class="comment">// 存储每个点到1号点的最短距离</span></span><br><span class="line"><span class="keyword">bool</span> st[N];     <span class="comment">// 存储每个点是否在队列中</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 求1号点到n号点的最短路距离，如果从1号点无法走到n号点则返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">spfa</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">memset</span>(dist, <span class="number">0x3f</span>, <span class="keyword">sizeof</span> dist);</span><br><span class="line">    dist[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; q;</span><br><span class="line">    q.push(<span class="number">1</span>);</span><br><span class="line">    st[<span class="number">1</span>] = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (q.size())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">auto</span> t = q.front();</span><br><span class="line">        q.pop();</span><br><span class="line"></span><br><span class="line">        st[t] = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = h[t]; i != <span class="number">-1</span>; i = ne[i])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> j = e[i];</span><br><span class="line">            <span class="keyword">if</span> (dist[j] &gt; dist[t] + w[i])</span><br><span class="line">            &#123;</span><br><span class="line">                dist[j] = dist[t] + w[i];</span><br><span class="line">                <span class="keyword">if</span> (!st[j])     <span class="comment">// 如果队列中已存在j，则不需要将j重复插入</span></span><br><span class="line">                &#123;</span><br><span class="line">                    q.push(j);</span><br><span class="line">                    st[j] = <span class="literal">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (dist[n] == <span class="number">0x3f3f3f3f</span>) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> dist[n];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">spfa判断图中是否存在负环 —— 模板题 AcWing <span class="number">852.</span> spfa判断负环</span><br><span class="line">时间复杂度是 O(nm)O(nm), nn 表示点数，mm 表示边数</span><br><span class="line"><span class="keyword">int</span> n;      <span class="comment">// 总点数</span></span><br><span class="line"><span class="keyword">int</span> h[N], w[N], e[N], ne[N], idx;       <span class="comment">// 邻接表存储所有边</span></span><br><span class="line"><span class="keyword">int</span> dist[N], cnt[N];        <span class="comment">// dist[x]存储1号点到x的最短距离，cnt[x]存储1到x的最短路中经过的点数</span></span><br><span class="line"><span class="keyword">bool</span> st[N];     <span class="comment">// 存储每个点是否在队列中</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 如果存在负环，则返回true，否则返回false。</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">spfa</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 不需要初始化dist数组</span></span><br><span class="line">    <span class="comment">// 原理：如果某条最短路径上有n个点（除了自己），那么加上自己之后一共有n+1个点，由抽屉原理一定有两个点相同，所以存在环。</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; q;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i ++ )</span><br><span class="line">    &#123;</span><br><span class="line">        q.push(i);</span><br><span class="line">        st[i] = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (q.size())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">auto</span> t = q.front();</span><br><span class="line">        q.pop();</span><br><span class="line"></span><br><span class="line">        st[t] = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = h[t]; i != <span class="number">-1</span>; i = ne[i])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> j = e[i];</span><br><span class="line">            <span class="keyword">if</span> (dist[j] &gt; dist[t] + w[i])</span><br><span class="line">            &#123;</span><br><span class="line">                dist[j] = dist[t] + w[i];</span><br><span class="line">                cnt[j] = cnt[t] + <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">if</span> (cnt[j] &gt;= n) <span class="keyword">return</span> <span class="literal">true</span>;       <span class="comment">// 如果从1号点到x的最短路中包含至少n个点（不包括自己），则说明存在环</span></span><br><span class="line">                <span class="keyword">if</span> (!st[j])</span><br><span class="line">                &#123;</span><br><span class="line">                    q.push(j);</span><br><span class="line">                    st[j] = <span class="literal">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">floyd算法 —— 模板题 AcWing <span class="number">854.</span> Floyd求最短路</span><br><span class="line">时间复杂度是 O(n3)O(n3), nn 表示点数</span><br><span class="line">初始化：</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i ++ )</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j ++ )</span><br><span class="line">            <span class="keyword">if</span> (i == j) d[i][j] = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">else</span> d[i][j] = INF;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 算法结束后，d[a][b]表示a到b的最短距离</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">floyd</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">1</span>; k &lt;= n; k ++ )</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i ++ )</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j ++ )</span><br><span class="line">     </span><br><span class="line">                d[i][j] = min(d[i][j], d[i][k] + d[k][j]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h4 id="最小生成树问题的解法"><a href="#最小生成树问题的解法" class="headerlink" title="最小生成树问题的解法"></a>最小生成树问题的解法</h4><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>算法</th>
-<th>解决的问题</th>
-<th>算法原理</th>
-<th>时间复杂度</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>prim算法</td>
-<td>单源最短路，稠密图， 正权</td>
-<td>找到最小距离，用找到的最小距离更新剩余距离</td>
-<td>$O(N^2)$ N为图点的数量</td>
-</tr>
-<tr>
-<td>kraskal算法</td>
-<td>单源最短路，稀疏图，正权</td>
-<td>并查集</td>
-<td>$O(N^2)$ N为图点的数量</td>
-</tr>
-</tbody>
-</table>
-</div>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">朴素版prim算法 —— 模板题 AcWing <span class="number">858.</span> Prim算法求最小生成树</span><br><span class="line">时间复杂度是 O(n2+m)O(n2+m), nn 表示点数，mm 表示边数</span><br><span class="line"><span class="keyword">int</span> n;      <span class="comment">// n表示点数</span></span><br><span class="line"><span class="keyword">int</span> g[N][N];        <span class="comment">// 稠密图 邻接矩阵，存储所有边</span></span><br><span class="line"><span class="keyword">int</span> dist[N];        <span class="comment">// 存储其他点到当前最小生成树的距离</span></span><br><span class="line"><span class="keyword">bool</span> st[N];     <span class="comment">// 存储每个点是否已经在生成树中</span></span><br><span class="line"></span><br><span class="line">稠密图，朴素版prim N^<span class="number">2</span></span><br><span class="line">稀疏图，heap优化版 mlgn 很少用，用kruakal替代</span><br><span class="line"></span><br><span class="line">kruskal mlgm</span><br><span class="line"><span class="comment">// 如果图不连通，则返回INF(值是0x3f3f3f3f), 否则返回最小生成树的树边权重之和</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">prim</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">memset</span>(dist, <span class="number">0x3f</span>, <span class="keyword">sizeof</span> dist);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i ++ )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> t = <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j ++ )</span><br><span class="line">            <span class="keyword">if</span> (!st[j] &amp;&amp; (t == <span class="number">-1</span> || dist[t] &gt; dist[j]))</span><br><span class="line">                t = j;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (i &amp;&amp; dist[t] == INF) <span class="keyword">return</span> INF;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (i) res += dist[t];</span><br><span class="line">        st[t] = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j ++ ) dist[j] = min(dist[j], g[t][j]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Kruskal算法 —— 模板题 AcWing <span class="number">859.</span> Kruskal算法求最小生成树</span><br><span class="line">时间复杂度是 O(mlogm)O(mlogm), nn 表示点数，mm 表示边数</span><br><span class="line"><span class="keyword">int</span> n, m;       <span class="comment">// n是点数，m是边数</span></span><br><span class="line"><span class="keyword">int</span> p[N];       <span class="comment">// 并查集的父节点数组</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Edge</span>     // 存储边</span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> a, b, w;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">bool</span> <span class="keyword">operator</span>&lt; (<span class="keyword">const</span> Edge &amp;W)<span class="keyword">const</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> w &lt; W.w;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;edges[M];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> x)</span>     <span class="comment">// 并查集核心操作</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (p[x] != x) p[x] = find(p[x]);</span><br><span class="line">    <span class="keyword">return</span> p[x];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">kruskal</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    sort(edges, edges + m);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i ++ ) p[i] = i;    <span class="comment">// 初始化并查集</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">0</span>, cnt = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; i ++ )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> a = edges[i].a, b = edges[i].b, w = edges[i].w;</span><br><span class="line"></span><br><span class="line">        a = find(a), b = find(b);</span><br><span class="line">        <span class="keyword">if</span> (a != b)     <span class="comment">// 如果两个连通块不连通，则将这两个连通块合并</span></span><br><span class="line">        &#123;</span><br><span class="line">            p[a] = b;</span><br><span class="line">            res += w;</span><br><span class="line">            cnt ++ ;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (cnt &lt; n - <span class="number">1</span>) <span class="keyword">return</span> INF;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>如何判定图是不是二分图：DFS遍历，奇数环</p>
-<p>二分图匹配：匈牙利算法</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">染色法判别二分图 —— 模板题 AcWing <span class="number">860.</span> 染色法判定二分图</span><br><span class="line">时间复杂度是 O(n+m)O(n+m), nn 表示点数，mm 表示边数</span><br><span class="line"><span class="keyword">int</span> n;      <span class="comment">// n表示点数</span></span><br><span class="line"><span class="keyword">int</span> h[N], e[M], ne[M], idx;     <span class="comment">// 邻接表存储图</span></span><br><span class="line"><span class="keyword">int</span> color[N];       <span class="comment">// 表示每个点的颜色，-1表示未染色，0表示白色，1表示黑色</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 参数：u表示当前节点，c表示当前点的颜色</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> u, <span class="keyword">int</span> c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    color[u] = c;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = h[u]; i != <span class="number">-1</span>; i = ne[i])</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> j = e[i];</span><br><span class="line">        <span class="keyword">if</span> (color[j] == <span class="number">-1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (!dfs(j, !c)) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (color[j] == c) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">check</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">memset</span>(color, <span class="number">-1</span>, <span class="keyword">sizeof</span> color);</span><br><span class="line">    <span class="keyword">bool</span> flag = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i ++ )</span><br><span class="line">        <span class="keyword">if</span> (color[i] == <span class="number">-1</span>)</span><br><span class="line">            <span class="keyword">if</span> (!dfs(i, <span class="number">0</span>))</span><br><span class="line">            &#123;</span><br><span class="line">                flag = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">    <span class="keyword">return</span> flag;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">匈牙利算法 —— 模板题 AcWing <span class="number">861.</span> 二分图的最大匹配</span><br><span class="line">时间复杂度是 O(nm)O(nm), nn 表示点数，mm 表示边数</span><br><span class="line"><span class="keyword">int</span> n1, n2;     <span class="comment">// n1表示第一个集合中的点数，n2表示第二个集合中的点数</span></span><br><span class="line"><span class="keyword">int</span> h[N], e[M], ne[M], idx;     <span class="comment">// 邻接表存储所有边，匈牙利算法中只会用到从第一个集合指向第二个集合的边，所以这里只用存一个方向的边</span></span><br><span class="line"><span class="keyword">int</span> match[N];       <span class="comment">// 存储第二个集合中的每个点当前匹配的第一个集合中的点是哪个</span></span><br><span class="line"><span class="keyword">bool</span> st[N];     <span class="comment">// 表示第二个集合中的每个点是否已经被遍历过</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = h[x]; i != <span class="number">-1</span>; i = ne[i])</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> j = e[i];</span><br><span class="line">        <span class="keyword">if</span> (!st[j])</span><br><span class="line">        &#123;</span><br><span class="line">            st[j] = <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">if</span> (match[j] == <span class="number">0</span> || find(match[j]))</span><br><span class="line">            &#123;</span><br><span class="line">                match[j] = x;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 求最大匹配数，依次枚举第一个集合中的每个点能否匹配第二个集合中的点</span></span><br><span class="line"><span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n1; i ++ )</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">memset</span>(st, <span class="literal">false</span>, <span class="keyword">sizeof</span> st);</span><br><span class="line">    <span class="keyword">if</span> (find(i)) res ++ ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="http://cdn.b5mang.com/20201222213947.png" alt="20201222213947"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/micro_service/micro_service.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/micro_service/micro_service.html" class="post-title-link" itemprop="url">微服务系列-概览</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 12:01:03" itemprop="dateCreated datePublished" datetime="2022-02-25T12:01:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/micro_service/micro_service.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/micro_service/micro_service.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="单体到微服务"><a href="#单体到微服务" class="headerlink" title="单体到微服务"></a>单体到微服务</h4><p>为什么要转向微服务架构（收益）</p>
+<ol>
+<li>系统扩展性不足（例如，因为DB连接问题导致无法持续扩容）</li>
+<li>迭代效率低。如果是预估到业务在飞速增长，那就别犹豫，一定要提前考虑微服务的拆分。</li>
+<li>系统编译、部署成本高</li>
+<li>如果在设计架构的时候，发现需要很多异构的技术栈，那也要考虑下微服务。</li>
+</ol>
+<p>转向微服务架构需要克服什么困难（成本）</p>
+<ol>
+<li>技术基础设施要求比较高（如果公司技术基础设施非常完备，对应的业务起初就设计的非常复杂，那么也别犹豫，起手就上微服务。）</li>
+<li>工程拆分挑战比较大，实现时容易为了拆分而拆分。</li>
+</ol>
+<h4 id="拆分原则"><a href="#拆分原则" class="headerlink" title="拆分原则"></a>拆分原则</h4><p>从单体到微服务，也许可以有一个过度：工程的拆分</p>
+<p>微服务拆分的大原则</p>
+<ol>
+<li>单一服务内的高内聚、低耦合，单一职责</li>
+<li>拆分粒度：先粗拆，后细拆（伴随业务复杂度的变多，或者对业务的理解程度加深）</li>
+<li>拆分过程中，要避免影响业务的日常功能迭代—按照依赖顺序，挨个拆分</li>
+<li>确保服务接口定义有可扩展性</li>
+<li>避免环形依赖问题（通过分层，例如业务层、数据访问层）</li>
+</ol>
+<p>业务优先，组织结构，质量维度</p>
+<p>SRP Single Responsibilty 单一指责原则<br>CCP Common Closure Principle 共同闭包原则，包中包含的所有类应该是同类的变化的一个集合，也就是说，如果对包作出修改，需要调整的类应该都在这个包之内。</p>
+<p>你的团队成员结构是什么样的，你的架构就会长成啥样。</p>
+<p>团队按照业务边界来拆分；确保团队不要太大</p>
+<p>因为微服务就是为了减少研发成本，而包括沟通成本。</p>
+<p>服务拆分带来的问题</p>
+<ol>
+<li>接口调用耗时增加</li>
+<li>如何知道调用哪个服务？服务注册中心</li>
+<li>服务治理体系：熔断、限流、降级、超时控制等</li>
+<li>问题排查困难（分布式链路追踪）</li>
+</ol>
+<h4 id="微服务组件"><a href="#微服务组件" class="headerlink" title="微服务组件"></a>微服务组件</h4><h5 id="API网关"><a href="#API网关" class="headerlink" title="API网关"></a>API网关</h5><p>入口网关：隔离客户端与微服务，协议转换、安全策略、认证、限流、熔断等</p>
+<p>出口网关：调用外部API，统一认证，授权、授权、访问控制等</p>
+<p>性能：IO多路复用、异步非阻塞、线程池</p>
+<p>设计要点：性能、扩展性（责任链模式）</p>
+<p>隔离性：针对接口对线程池进行分类</p>
+<h5 id="服务注册与发现"><a href="#服务注册与发现" class="headerlink" title="服务注册与发现"></a>服务注册与发现</h5><p>zookeeper, consul, euraker</p>
+<h5 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h5><p>RoundRobin, Hash, Weight</p>
+<h5 id="熔断、限流"><a href="#熔断、限流" class="headerlink" title="熔断、限流"></a>熔断、限流</h5><h5 id="配置实时下发"><a href="#配置实时下发" class="headerlink" title="配置实时下发"></a>配置实时下发</h5><h6 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h6><p>配置项的读取-变更推送如何实现：</p>
+<ol>
+<li>轮询 + 摘要 （简单，实时性略差）</li>
+<li>长轮询 + 版本号（复杂，实时性好一些）</li>
+</ol>
+<p>client的高性能实现逻辑：</p>
+<ol>
+<li>DoubleBufferedData， 数据分前台和后台</li>
+<li>读拿到自己所在线程的thread-local读写锁，执行查询逻辑后释放锁。</li>
+<li>同时只有一个写：修改后台数据，切换前后台，挨个获得所有thread-local锁并立刻释放，结束后再改一遍新后台（老前台）。</li>
+</ol>
+<p>一个小原则：配置系统的旁路化，不要因为配置系统挂了，你的程序启动不了；<br>可以做两层缓存：内存缓存、文件保存</p>
+<h6 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h6><p>不同的配置类型：节点类型 》机房类型 》 全局配置</p>
+<p>配置项的存储-配置系统的高可用</p>
+<p>核心指标在于可用性！！！5个9？</p>
+<h5 id="对接调用链追踪-（Jager"><a href="#对接调用链追踪-（Jager" class="headerlink" title="对接调用链追踪 （Jager)"></a>对接调用链追踪 （Jager)</h5><p>trace_id + span_id来标识链路的调用关系。</p>
+<p>对trace_id采样，而不要随机采样。</p>
+<p>span 基本工作单元，一次链路调用（可以是RPC，DB等没有特定的限制）创建一个span，通过一个64位ID标识它，uuid较为方便，span中还有其他的数据，例如描述信息，时间戳，key-value对的（Annotation）tag信息，<strong>parent_id</strong>(基于parent_span_id来维护树形结构）等,其中parent-id可以表示span调用链路来源。</p>
+<p>trace_id 类似于 树结构的Span集合，表示一次完整的跟踪，从请求到服务器开始，服务器返回response结束，跟踪每次rpc调用的耗时，存在唯一标识trace_id。比如：你运行的分布式大数据存储一次Trace就由你的一次请求组成。</p>
+<p>Annotation 注解，用来记录请求特定事件相关信息（例如时间），一个span中会有多个annotation注解描述。通常包含四个注解信息：</p>
+<h5 id="监控系统"><a href="#监控系统" class="headerlink" title="监控系统"></a>监控系统</h5><p><img src="http://cdn.b5mang.com/2021320212041.png" alt="监控哪些内容"></p>
+<p><img src="http://cdn.b5mang.com/2021320212155.png" alt="监控系统架构"></p>
+<p>方案：普罗米修斯、Graphna</p>
+<p>APM：端到端的监控体系</p>
+<p>如何防止消息被篡改：对消息体 + 消息头 进行加密，生成一个签名<br>如何对数据进行加密：</p>
+<p>使用非对称加密的公钥对 “对称加密的私钥-OriginPrivate“ 进行加密，得到SecretPrivate<br>然后服务端利用非对称加密的私钥，对 SecretPrivate进行解密，得到OriginPrivate</p>
+<p>然后再使用OriginPrivate对加密之后的消息体（SecretContext)进行解密，得到Contenxt</p>
+<p>监控哪些东西：网络卡顿率、做某件事情的失败率等</p>
+<p>考虑暂存 + retry来应对网络状况不佳的情况</p>
+<h5 id="自动化全链路压测系统"><a href="#自动化全链路压测系统" class="headerlink" title="自动化全链路压测系统"></a>自动化全链路压测系统</h5><p>压测的原则-尽量模拟真实情况；压测的注意点：<br>（1）使用线上数据与线上数据<br>（2）使用线上流量（流量拷贝）<br>（3）流量应该从尽量靠近用户的CDN发起</p>
+<p>如何搭建：<br>（1）流量的隔离（区分压测流量与正式流量）<br>（2）风险控制（尽量避免压测对正常用户的影响）</p>
+<p><img src="http://cdn.b5mang.com/2021320214129.png" alt="自动化全链路压测系统"></p>
+<p>压测数据的产生：<br>  拷贝真实流量（可以从访问日志、可以抓取某个端口的数据等）<br>  打上压测标签<br>  放在合适的机房（尽量接近用户）<br>数据隔离：<br>  针对读请求，针对某些不能压测（例如推荐、数据分析等）的组件进行mock<br>  对于写请求，把流量产生的数据写入影子库（数据库-拷贝一份库表和数据；缓存-加压测前缀；ES-多搞一份索引）<br>压力测试的实施<br>  持续放大，做好系统过载的识别（例如超时率、resp time等）</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/breaker/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/breaker/index.html" class="post-title-link" itemprop="url">高性能服务器设计-熔断模型</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 11:56:03" itemprop="dateCreated datePublished" datetime="2022-02-25T11:56:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:43:15" itemprop="dateModified" datetime="2022-03-01T22:43:15+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/breaker/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/breaker/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="熔断简单说明"><a href="#熔断简单说明" class="headerlink" title="熔断简单说明"></a>熔断简单说明</h2><p>在分布式系统中，一次完整的请求可能需要经过多个服务模块的调用，请求在多个服务中传递，服务对服务的调用会产生新的请求，这些请求共同组成了这次请求的调用链。当调用链中的某个环节，特别是下游服务不可用时，将会导致上游服务调用方不可用，最终将这种不可用的影响扩大到整个系统，导致整个分布式的不可用，引起服务雪崩现象。</p>
+<p>为了避免这种情况，在下游服务不可用时，保护上游服务的可用性显得极其重要。对此我们可以通过熔断的方式，通过及时熔断服务调用方和服务提供方的调用链，保护服务调用方资源，防止服务雪崩现象的出现。</p>
+<p>使用服务熔断，能够有效地保护服务调用方的稳定性，它能够避免服务调用者频繁调用可能失败的服务提供者，防止服务调用者浪费cpu、线程和IO资源等，提高服务整体的可用性。</p>
+<p>所以，熔断设计的目的是在服务提供方不可用时保护服务调用方的资源，减少服务调用中无用的远程调用。</p>
+<h2 id="常见熔断策略"><a href="#常见熔断策略" class="headerlink" title="常见熔断策略"></a>常见熔断策略</h2><h3 id="google-SRE-自适应熔断"><a href="#google-SRE-自适应熔断" class="headerlink" title="google SRE 自适应熔断"></a>google SRE 自适应熔断</h3><p>基于失败率</p>
+<p>drop_ratio = $max(0, （requests - K * accepts） / (requests + 1))$</p>
+<p>算法参数：</p>
+<ul>
+<li>requests：窗口时间内的请求总数</li>
+<li>accepts：正常请求数量</li>
+<li>K：敏感度，K 越小越容易丢请求，一般推荐 1.5-2 之间</li>
+</ul>
+<p>算法解释：</p>
+<ul>
+<li>正常情况下 requests=accepts，所以概率是 0。</li>
+<li>随着正常请求数量减少，当达到 requests == K* accepts 继续请求时，概率 P 会逐渐比 0 大开始按照概率逐渐丢弃一些请求，如果故障严重则丢包会越来越多，假如窗口时间内 accepts==0 则完全熔断。</li>
+<li>当应用逐渐恢复正常时，accepts、requests 同时都在增加，但是 K*accepts 会比 requests 增加的更快，所以概率很快就会归 0，关闭熔断。</li>
+</ul>
+<h3 id="brpc熔断策略"><a href="#brpc熔断策略" class="headerlink" title="brpc熔断策略"></a>brpc熔断策略</h3><p>在开启了熔断之后，CircuitBreaker会记录每一个请求的处理结果，并维护一个累计出错时长，记为acc_error_cost，当acc_error_cost &gt; max_error_cost时，熔断该节点。</p>
+<p>两个小技巧：</p>
+<ol>
+<li>利用EMA（移动平均值）策略计算接口的平均响应时间</li>
+<li>利用双时间窗口统计来平衡短期抖动与长期错误率过高；</li>
+</ol>
+<p>具体见：<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/apache/incubator-brpc/blob/master/docs/cn/circuit_breaker.md">CircuitBreaker</a></p>
+<h3 id="netflix-断路器"><a href="#netflix-断路器" class="headerlink" title="netflix 断路器"></a>netflix 断路器</h3><p><img src="https://img-blog.csdnimg.cn/20201201181047280.png" alt="熔断器策略"></p>
+<p>三种断路器状态：关闭、打开、半开</p>
+<p>最近一段时间内的错误率 = 错误数 / 总数</p>
+<p>最近一段时间内的错误数与总数，通过<strong>滑动窗口</strong>来实现，而滑动窗口又通过<strong>环形队列</strong>来实现。</p>
+<p>错误率超过多少，则进入打开状态，持续一段时间。</p>
+<p>持续一段时间后，进入半开状态，允许定量的请求通过，如果成功的比例足够大，则进入关闭状态，否则重新加入打开状态。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/parallel/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/parallel/index.html" class="post-title-link" itemprop="url">并行算法 - 概览</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 11:31:03" itemprop="dateCreated datePublished" datetime="2022-02-25T11:31:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:42:17" itemprop="dateModified" datetime="2022-03-01T22:42:17+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/parallel/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/parallel/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>并行排序（并行归并排序、并行快速排序）</p>
+<p>并行查找（并行的散列表，随机分为K份）</p>
+<p>并行字符串匹配（任何算法都可以，只是分割后，需要补上2m个char）</p>
+<p>并行搜索（对于BFS，使用两个队列，循环使用）</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/os/sync.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/os/sync.html" class="post-title-link" itemprop="url">操作系统 - 线程同步</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 11:12:03" itemprop="dateCreated datePublished" datetime="2022-02-25T11:12:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-10-30 21:10:19" itemprop="dateModified" datetime="2022-10-30T21:10:19+08:00">2022-10-30</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/os/sync.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/sync.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>多线程问题的本质：有序性，可见性，原子性</p>
+<p>我们处理线程安全可以有几个层次：</p>
+<ol>
+<li>能否做成无状态的不变对象。无状态是最安全的。</li>
+<li>能否线程封闭<br>（1）栈封闭，多采用局部变量<br>（2）线程局部存储（用空间换性能）<br>（3）程序控制线程封闭（Hash，将同一hash val的的请求丢给同一个线程去处理）</li>
+<li>采用何种同步技术</li>
+</ol>
+<h4 id="多线程同步的方式"><a href="#多线程同步的方式" class="headerlink" title="多线程同步的方式"></a>多线程同步的方式</h4><p>线程同步</p>
+<p>多个线程间的一种协作机制。谈到线程我们经常想到的是线程间的竞争，比如去争夺锁，但这并不是故事的全部，线程间也会有协作机制。就是在一个线程进行了规定操作后，就进入等待状态， 等待其他线程执行完他们的指定代码过后 再将其唤醒;<br>（在有多个线程进行等待时， 如果需要，可以使用 notifyAll()来唤醒所有的等待线程。）</p>
+<p>(1) 信号量 semphore</p>
+<p>(2) 共享内存 shared_memory</p>
+<p>(3) 读写锁 rw_lock</p>
+<p>(4) 条件变量 condition</p>
+<p>线程间存在依赖</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/edb8f67325ff3f693d58f635eeff9650.jpeg" alt="条件变量的使用"></p>
+<p>(5) 互斥量 mutex</p>
+<h4 id="互斥锁"><a href="#互斥锁" class="headerlink" title="互斥锁"></a>互斥锁</h4><p>对于互斥锁，如果资源已经被占用，资源申请者只能进入睡眠状态。</p>
+<ol>
+<li>临界区：通过对多线程的串行化来访问公共资源或一段代码，速度快，适合控制数据访问。</li>
+<li>互斥量：为协调共同对一个共享资源的单独访问而设计的。</li>
+<li>信号量：为控制一个具有有限数量用户资源而设计。</li>
+<li>读写锁</li>
+</ol>
+<h5 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a>自旋锁</h5><p>但是自旋锁不会引起调用者睡眠，如果自旋锁已经被别的执行单元保持，调用者就一直循环在那里看是否该自旋锁的保持者已经释放了锁。如果等待的时间比较短，适合使用自旋锁，占用大量的CPU资源</p>
+<h4 id="锁的实现机制"><a href="#锁的实现机制" class="headerlink" title="锁的实现机制"></a>锁的实现机制</h4><p>在硬件层面，CPU提供了原子操作、关中断、锁内存总线的机制。</p>
+<h4 id="禁中断"><a href="#禁中断" class="headerlink" title="禁中断"></a>禁中断</h4><p>既然只有中断才能把上锁过程打断，造成多线程操作失败。我先关中断不就得了，在加锁操作完成后再开中断。</p>
+<h4 id="普通的原子指令"><a href="#普通的原子指令" class="headerlink" title="普通的原子指令"></a>普通的原子指令</h4><p>上面这个手段太笨重了，能不能硬件做一种加锁的原子操作呢？能，大名鼎鼎的“test and set”指令就是做这个事情的。</p>
+<h5 id="锁内存总线-原子指令"><a href="#锁内存总线-原子指令" class="headerlink" title="锁内存总线 + 原子指令"></a>锁内存总线 + 原子指令</h5><p>通过上面的手段，单核环境下，锁的实现问题得到了圆满的解决。</p>
+<p>那么多核环境呢？简单嘛，还是“test and set”不就得了，这是一条指令，原子的，不会有问题的。</p>
+<p>真的吗，单独一条指令能够保证该指令在单个核上执行过程中不会被中断打断，但是两个核同时执行这个指令呢？。。。</p>
+<p>我再想想，硬件执行时还是得从内存中读取lock，判断并设置状态到内存，貌似这个过程也不是那么原子嘛。对，多个核执行确实会存在这个问题。怎么办呢？首先我们得明白这个地方的关键点，关键点是两个核会并行操作内存而且从操作内存这个调度来看“test and set”不是原子的，需要先读内存然后再写内存，如果我们保证这个内存操作是原子的，就能保证锁的正确性了。</p>
+<p>确实，硬件提供了锁内存总线的机制，我们在锁内存总线的状态下执行test and set操作，就能保证同时只有一个核来test and set，从而避免了多核下发生的问题。</p>
+<h4 id="无锁"><a href="#无锁" class="headerlink" title="无锁"></a>无锁</h4><ol>
+<li>无锁算法的底层实现 — CAS</li>
+<li>借助内存访问WORD的原子性</li>
+</ol>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="http://jm.taobao.org/2011/12/07/1347/">http://jm.taobao.org/2011/12/07/1347/</a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/heiyeshuwu/article/details/9722443">https://blog.csdn.net/heiyeshuwu/article/details/9722443</a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.cnblogs.com/jing99/p/11984966.html">https://www.cnblogs.com/jing99/p/11984966.html</a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.qbitai.com/2019/12/9895.html">https://www.qbitai.com/2019/12/9895.html</a><br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.jianshu.com/p/d585b3938dea">https://www.jianshu.com/p/d585b3938dea</a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/ITer_ZC/article/details/40392787">https://blog.csdn.net/ITer_ZC/article/details/40392787</a></p>
 
       
     </div>
@@ -1290,7 +1413,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/33/">33</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/34/">34</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1359,20 +1482,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">328</span>
+          <span class="site-state-item-count">331</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-count">60</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

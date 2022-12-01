@@ -203,7 +203,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/concurrency_limiter/index.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/hardware/tlb.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -217,7 +217,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/backend_knowledge_architecture/server/concurrency_limiter/index.html" class="post-title-link" itemprop="url">高性能服务器设计-限流模型</a>
+            <a href="/backend_knowledge_architecture/hardware/tlb.html" class="post-title-link" itemprop="url">计算机硬件-TLB</a>
         </h2>
 
         <div class="post-meta">
@@ -229,14 +229,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2022-02-25 13:30:03" itemprop="dateCreated datePublished" datetime="2022-02-25T13:30:03+08:00">2022-02-25</time>
+              <time title="Created: 2022-02-25 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:01:03+08:00">2022-02-25</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-03 20:08:45" itemprop="dateModified" datetime="2022-11-03T20:08:45+08:00">2022-11-03</time>
+                <time title="Modified: 2022-03-01 22:40:21" itemprop="dateModified" datetime="2022-03-01T22:40:21+08:00">2022-03-01</time>
               </span>
 
           
@@ -248,8 +248,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/server/concurrency_limiter/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/concurrency_limiter/index.html" itemprop="commentCount"></span>
+    <a title="valine" href="/backend_knowledge_architecture/hardware/tlb.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/hardware/tlb.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -264,44 +264,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>服务的处理能力是有客观上限的。当请求速度超过服务的处理速度时，服务就会过载。</p>
-<p>如果服务持续过载，会导致越来越多的请求积压，最终所有的请求都必须等待较长时间才能被处理，从而使整个服务处于瘫痪状态。</p>
-<p>与之相对的，如果直接拒绝掉一部分请求，反而能够让服务能够”及时”处理更多的请求。 我们称这种做法为限流。限流是过载保护的手段之一，目的在于保护系统不被超过服务吞吐能力的流量（或突发）打死。</p>
-<p>常见的限流手段有固定窗口、滑动窗口、令牌桶、漏桶、BBR、brpc自适应限流等。</p>
-<p>下面挨个介绍每一种限流算法的原理以及优缺点。</p>
-<h3 id="传统的基于配置的单机限流算法"><a href="#传统的基于配置的单机限流算法" class="headerlink" title="传统的基于配置的单机限流算法"></a>传统的基于配置的单机限流算法</h3><h4 id="第一，固定窗口"><a href="#第一，固定窗口" class="headerlink" title="第一，固定窗口"></a>第一，固定窗口</h4><p>原理：维护一个窗口的两个信息：窗口开始时间、经过窗口的请求数。如果窗口内超出限制数则拒绝。如果已经进入新的窗口，则reset计数。</p>
-<p>不足：存在临界点（窗口reset前后的瞬时）的qps会飙高，从而打死系统。</p>
-<h4 id="第二，滑动窗口"><a href="#第二，滑动窗口" class="headerlink" title="第二，滑动窗口"></a>第二，滑动窗口</h4><p>原理：将总的时间窗口划分为N个小格，并单独维护每一个小格的计数。通过这种方式，可以把过去一段时间内的计数信息也用上，从而让限流的统计更精确一些。</p>
-<p>不足：窗口不可能无限划分</p>
-<h4 id="第三，漏桶"><a href="#第三，漏桶" class="headerlink" title="第三，漏桶"></a>第三，漏桶</h4><p>原理：漏桶具有固定容量，出水速率是固定常量（流出请求）如果桶是空的，则不需流出水滴。可以以任意速率流入水滴到漏桶（流入请求）如果流入水滴超出了桶的容量，则流入的水滴溢出（新请求被拒绝）</p>
-<p>不足：无法应对突发流量</p>
-<p><img src="http://cdn.b5mang.com/20201222223148.png" alt="20201222223148"></p>
-<h4 id="第四，令牌桶"><a href="#第四，令牌桶" class="headerlink" title="第四，令牌桶"></a>第四，令牌桶</h4><p>原理：假如用户配置的平均发送速率为r，则每隔1/r秒一个令牌被加入到桶中。假设桶最多可以存发b个令牌。如果令牌到达时令牌桶已经满了，那么这个令牌会被丢弃。当一个n个字节的数据包到达时，就从令牌桶中删除n个令牌，并且数据包被发送到网络。如果令牌桶中少于n个令牌，那么不会删除令牌，并且认为这个数据包在流量限制之外。</p>
-<p>算法允许最长b个字节的突发，但从长期运行结果看，数据包的速率被限制成常量r。</p>
-<p><img src="http://cdn.b5mang.com/20201222223820.png" alt="20201222223820"></p>
-<h3 id="自适应限流"><a href="#自适应限流" class="headerlink" title="自适应限流"></a>自适应限流</h3><p>上面的几种算法，一定程度上确实能够保护系统不被拖垮, 但不管漏斗桶还是令牌桶, 其防护思路都是设定一个指标, 当超过该指标后就阻止或减少流量的继续进入，当系统负载降低到某一水平后则恢复流量的进入。但其通常都是被动的，其实际效果取决于限流阈值设置是否合理，但往往设置合理不是一件容易的事情。具体有如下几个弊端：</p>
-<ol>
-<li>集群增加机器或者减少机器限流阈值是否要重新设置?</li>
-<li>设置限流阈值的依据是什么?</li>
-<li>人力运维成本是否过高?</li>
-<li>只针对局部服务端的限流，无法掌控全局资源，</li>
-<li>当调用方反馈限流错误时, 这个时候重新设置限流, 其实流量高峰已经过了。重新评估限流是否有意义？</li>
-</ol>
-<h4 id="第五，B站BBR限流"><a href="#第五，B站BBR限流" class="headerlink" title="第五，B站BBR限流"></a>第五，B站BBR限流</h4><p>底层原理：并发 = qps * latency</p>
-<p>自适应限流能动态调整服务的最大并发，在保证服务不过载的前提下，让服务尽可能多的处理请求。</p>
-<p>具体逻辑：如果cpu &gt; 800 &amp;&amp; inflight &gt;  rt * max_qps，则启用限流</p>
-<p>为什么要用 CPU\IOPS 作为启发值呢？</p>
-<p>因为自适应限流与 TCP 拥塞控制还存在不同之处，TCP 中客户端可以控制发送率，从而探测到 maxPass，但是 RPC <strong>线上无法控制流量的速率</strong>，所以必须以 CPU 作为标准，当 CPU 快满载的时候再开启，这时我们认为之前探测到的 maxPass 已经接近了系统的瓶颈，乘以 minRtt 就可以得到 InFlight</p>
-<h4 id="第六，BRPC自适应限流"><a href="#第六，BRPC自适应限流" class="headerlink" title="第六，BRPC自适应限流"></a>第六，BRPC自适应限流</h4><ul>
-<li>peek_qps 峰值qps</li>
-<li>nodelay_latency 系统无负载或者低负载的响应时间，理论值无法计算</li>
-<li>Min_latency 用来替代nodelay_latency</li>
-<li>max_cocurrent  = max_qps * ((2+alpha) * min_latency - latency)</li>
-</ul>
-<p>服务的noload_latency并非是一成不变的，自适应限流必须能够正确的探测noload_latency的变化。当noload_latency下降时，是很容感知到的，因为这个时候latency也会下降。难点在于当latency上涨时，需要能够正确的辨别到底是服务过载了，还是noload_latency上涨了。</p>
-<p>参考：</p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="http://www.mianshigee.com/tutorial/incubator-brpc/1778a50865eb3518.md">BRPC开发手册</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://xueqiu.com/9217191040/139169952">B站在微服务治理中如何探索与实践</a></p>
+          <p>TLB（Translation Lookaside Buffer）是一块高速缓存。</p>
+<p>TLB缓存虚拟地址和其映射的物理地址。</p>
+<p>数据cache缓存地址(虚拟地址或者物理地址)和数据。</p>
+<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://zhuanlan.zhihu.com/p/108425561">https://zhuanlan.zhihu.com/p/108425561</a></p>
 
       
     </div>
@@ -323,7 +289,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/mq/kafka.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/fs.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -337,7 +303,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/backend_knowledge_architecture/mq/kafka.html" class="post-title-link" itemprop="url">消息队列-Kafka</a>
+            <a href="/backend_knowledge_architecture/distributed_system/fs.html" class="post-title-link" itemprop="url">分布式文件系统</a>
         </h2>
 
         <div class="post-meta">
@@ -349,7 +315,561 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2022-02-25 13:06:03" itemprop="dateCreated datePublished" datetime="2022-02-25T13:06:03+08:00">2022-02-25</time>
+              <time title="Created: 2022-02-24 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-24T10:01:03+08:00">2022-02-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/distributed_system/fs.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/fs.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>存储的分布式化</p>
+<p>高效存储的一些考虑：</p>
+<ol>
+<li>很长时间没有人访问的老数据，怎么办？</li>
+<li>是不是减少副本的同时，还能还原出数据？（例如，RAID）</li>
+<li>数据压缩，平成好压缩效果与压缩/解压速度</li>
+<li>数据的分层存储：根据数据的冷热来选择不同的存储介质（局部性原理），内存、硬盘（SSD、SATA)</li>
+<li>存储与计算分离（底层基础：网络IO不再是瓶颈，而CPU性能、磁盘IO性能跟不上）</li>
+</ol>
+<h4 id="分布式存储引擎"><a href="#分布式存储引擎" class="headerlink" title="分布式存储引擎"></a>分布式存储引擎</h4><p>主要解决数据如何拆分、数据如何冗余、数据如何定位的问题。</p>
+<p>（1）parititioning 方式，即数据在逻辑上怎么切分</p>
+<p>（2）localization 方式，即数据在物理上怎么分布</p>
+<p>一个系统要想拥有高可用性，有且只有一个办法 — 副本（replication），因为物理故障是无法避免的，只能花钱做备份。</p>
+<p>主从和时效性是 replication 要考虑的两个重要问题。</p>
+<p>主从主要有单主、多主和无主三种方式。</p>
+<p>时效性主要有同步、异步、半同步三种方式。</p>
+<p>（3）rebalance 方式，即在节点数变化后，数据在物理上怎么重新分布.</p>
+<h4 id="分布式文件系统"><a href="#分布式文件系统" class="headerlink" title="分布式文件系统"></a>分布式文件系统</h4><p>按照Block拆分文件，然后通过一个管理员来管理Block到对应及其的映射关系。</p>
+<p>新的问题：<br>如果存储block的机器挂了怎么办？ 如果管理员挂了怎么办？</p>
+<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://zhuanlan.zhihu.com/p/141775358">https://zhuanlan.zhihu.com/p/141775358</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/high_consistency.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/distributed_system/high_consistency.html" class="post-title-link" itemprop="url">分布式系统-一致性</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-24 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-24T10:01:03+08:00">2022-02-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 23:20:26" itemprop="dateModified" datetime="2022-03-01T23:20:26+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/distributed_system/high_consistency.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/high_consistency.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="CAP-VS-BASE"><a href="#CAP-VS-BASE" class="headerlink" title="CAP VS BASE"></a>CAP VS BASE</h4><h4 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h4><h5 id="强一致性"><a href="#强一致性" class="headerlink" title="强一致性"></a>强一致性</h5><p>保证手段：单机落磁盘、数据库事务、分布式事务等</p>
+<h5 id="弱一致性"><a href="#弱一致性" class="headerlink" title="弱一致性"></a>弱一致性</h5><p>可能丢失一定的数据：异步复制、PageCache的write back</p>
+<h5 id="最终一致性"><a href="#最终一致性" class="headerlink" title="最终一致性"></a>最终一致性</h5><p>带TTL的缓存</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/distributed_system/index.html" class="post-title-link" itemprop="url">分布式系统介绍</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-24 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-24T10:01:03+08:00">2022-02-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-10-30 22:32:12" itemprop="dateModified" datetime="2022-10-30T22:32:12+08:00">2022-10-30</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/distributed_system/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="为什么会有分布式"><a href="#为什么会有分布式" class="headerlink" title="为什么会有分布式"></a>为什么会有分布式</h3><p>两点：算得慢（算力不足），存不下（数据分散）。</p>
+<p>无论是线程、进程，还是协程，本质上，目的都是为了计算的并行化，解决的是算的慢的问题。</p>
+<p>因为一个CPU算不过来，而单机扩容CPU数量成本极高（有空间这个刚性限制），所以需要水平扩容，多搞几台机器。</p>
+<p>计算的分布式化：基于分治思想，出现了分布式框架。</p>
+<p>MapReduce: 分布式计算的总体思想。</p>
+<p>分布式计算框架更多尝试对资源的调度做优化。ResourceManager, yarn, k8s;<br>（多租户，隔离，软隔离，租借，抢占等）</p>
+<h3 id="高并发系统的三个目标与挑战"><a href="#高并发系统的三个目标与挑战" class="headerlink" title="高并发系统的三个目标与挑战"></a>高并发系统的三个目标与挑战</h3><p>高并发是一个系统的<strong>挑战</strong></p>
+<p>如何衡量一个系统的并发有多高呢？ 同时在线人数</p>
+<p>高性能、高可用、可扩展是一个牛B系统<strong>目标</strong></p>
+<h4 id="三者的关系"><a href="#三者的关系" class="headerlink" title="三者的关系"></a>三者的关系</h4><p>为了保证高可用，需要冗余更多的相同功能机器（replication)，要求系统可扩展；</p>
+<p>为了保证高性能，必须需要更多的相同功能的机器（存储的replication、应用的无状态）或者服务于不同对象的机器（shard)，也要求可扩展；</p>
+<p>一份完整的数据，分为多个shard的过程需要可扩展；</p>
+<p>一份数据冗余了多份，前端对下游访问时用到的负载均衡策略需要可扩展。</p>
+<h4 id="如何衡量一个吞吐量有多大呢？"><a href="#如何衡量一个吞吐量有多大呢？" class="headerlink" title="如何衡量一个吞吐量有多大呢？"></a>如何衡量一个吞吐量有多大呢？</h4><p>系统的QPS，吞吐量 = 并发进程数 / 响应时间</p>
+<h4 id="如何衡量一个系统的性能有多高呢？"><a href="#如何衡量一个系统的性能有多高呢？" class="headerlink" title="如何衡量一个系统的性能有多高呢？"></a>如何衡量一个系统的性能有多高呢？</h4><p>一旦系统的负载被描述好，就可以研究当负载增加会发生什么。我们可以从两种角度来看：</p>
+<ul>
+<li>增加负载参数并保持系统资源（CPU、内存、网络带宽等）不变时，系统性能将受到什么影响？（接口响应时间，分位耗时）</li>
+<li>增加负载参数并希望保持性能不变时，需要增加多少系统资源？</li>
+</ul>
+<h4 id="如何衡量一个系统的可用性有多高呢？"><a href="#如何衡量一个系统的可用性有多高呢？" class="headerlink" title="如何衡量一个系统的可用性有多高呢？"></a>如何衡量一个系统的可用性有多高呢？</h4><p>平均故障间隔，平均故障恢复时间</p>
+<p><img src="http://cdn.b5mang.com/202132011926.png" alt="不同可用性标准下允许的故障时间"></p>
+<h4 id="如何衡量一个系统的可扩展能力？"><a href="#如何衡量一个系统的可扩展能力？" class="headerlink" title="如何衡量一个系统的可扩展能力？"></a>如何衡量一个系统的可扩展能力？</h4><p>考察一个问题：能够通过增加进程来应对更高的并发？ 如果一直加机器，我一直能线性的提高系统的处理能力吗？</p>
+<h3 id="如何应对系统的挑战"><a href="#如何应对系统的挑战" class="headerlink" title="如何应对系统的挑战"></a>如何应对系统的挑战</h3><p>架构通用原则：“4 要 1 不要”</p>
+<p>(1) 数据要尽量少</p>
+<ul>
+<li>用户请求的数据能少就少</li>
+<li>系统依赖的数据能少就少</li>
+</ul>
+<p>(2) 请求数要尽量少</p>
+<p>例如，静态文件合并</p>
+<p>（3）路径要尽量短</p>
+<p>将强依赖的服务进行单机部署</p>
+<p>（4）依赖要尽量少</p>
+<p>系统服务分级，高等级服务尽量少依赖低等级服务</p>
+<p>（5）不要有单点</p>
+<p>服务无状态，可扩展；存储层做副本备份</p>
+<p><img src="https://vonng.gitbooks.io/ddia-cn/content/img/fig1-1.png" alt="主流系统架构"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/design_pattern/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/design_pattern/index.html" class="post-title-link" itemprop="url">设计模式-概览</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-24 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-24T10:01:03+08:00">2022-02-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/design_pattern/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/design_pattern/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>软件设计模式的几种分类</p>
+<h4 id="创建型"><a href="#创建型" class="headerlink" title="创建型"></a>创建型</h4><p>创建对象时，不再由我们直接实例化对象；而是根据特定场景，由程序来确定创建对象的方式，从而保证更大的性能、更好的架构优势。</p>
+<p>创建型模式主要有：</p>
+<h5 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h5><h5 id="工厂方法"><a href="#工厂方法" class="headerlink" title="工厂方法"></a>工厂方法</h5><p>意图：定义一个创建对象的接口，让其子类自己决定实例化哪一个工厂类，工厂模式使其创建过程延迟到子类进行。</p>
+<p>主要解决：主要解决接口选择的问题。</p>
+<p>何时使用：我们明确地计划不同条件下创建不同实例时。</p>
+<p>如何解决：让其子类实现工厂接口，返回的也是一个抽象的产品。</p>
+<p>关键代码：创建过程在其子类执行。</p>
+<p>应用实例：<br> 1、您需要一辆汽车，可以直接从工厂里面提货，而不用去管这辆汽车是怎么做出来的，以及这个汽车里面的具体实现。<br> 2、Hibernate 换数据库只需换方言和驱动就可以。</p>
+<p>优点：<br>1、一个调用者想创建一个对象，只要知道其名称就可以了。<br>2、扩展性高，如果想增加一个产品，只要扩展一个工厂类就可以。<br>3、屏蔽产品的具体实现，调用者只关心产品的接口。</p>
+<p>缺点：每次增加一个产品时，都需要增加一个具体类和对象实现工厂，使得系统中类的个数成倍增加，在一定程度上增加了系统的复杂度，同时也增加了系统具体类的依赖。这并不是什么好事。</p>
+<p>使用场景：<br>1、日志记录器：记录可能记录到本地硬盘、系统事件、远程服务器等，用户可以选择记录日志到什么地方。<br>2、数据库访问，当用户不知道最后系统采用哪一类数据库，以及数据库可能有变化时。<br>3、设计一个连接服务器的框架，需要三个协议，”POP3”、”IMAP”、”HTTP”，可以把这三个作为产品类，共同实现一个接口。</p>
+<p>注意事项：作为一种创建类模式，在任何需要生成复杂对象的地方，都可以使用工厂方法模式。有一点需要注意的地方就是复杂对象适合使用工厂模式，而简单对象，特别是只需要通过 new 就可以完成创建的对象，无需使用工厂模式。如果使用工厂模式，就需要引入一个工厂类，会增加系统的复杂度。</p>
+<h5 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h5><p>就是建立一个工厂类，对实现了同一接口的一些类进行实例的创建。简单工厂模式的实质是由一个工厂类根据传入的参数，动态决定应该创建哪一个产品类（这些产品类继承自一个父类或接口）的实例。</p>
+<p>意图：提供一个创建一系列相关或相互依赖对象的接口，而无需指定它们具体的类。</p>
+<p>主要解决：主要解决接口选择的问题。</p>
+<p>何时使用：系统的产品有多于一个的产品族，而系统只消费其中某一族的产品。</p>
+<p>如何解决：在一个产品族里面，定义多个产品。</p>
+<p>关键代码：在一个工厂里聚合多个同类产品。</p>
+<p>应用实例：</p>
+<p>优点：当一个产品族中的多个对象被设计成一起工作时，它能保证客户端始终只使用同一个产品族中的对象。</p>
+<p>缺点：产品族扩展非常困难，要增加一个系列的某一产品，既要在抽象的 Creator 里加代码，又要在具体的里面加代码。</p>
+<p>使用场景： 1、QQ 换皮肤，一整套一起换。 2、生成不同操作系统的程序。</p>
+<p>注意事项：产品族难扩展，产品等级易扩展。</p>
+<h5 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h5><p>全局资源管理，简化访问。</p>
+<p>意图：保证一个类仅有一个实例，并提供一个访问它的全局访问点。</p>
+<p>主要解决：一个全局使用的类频繁地创建与销毁。</p>
+<p>何时使用：当您想控制实例数目，节省系统资源的时候。</p>
+<p>如何解决：判断系统是否已经有这个单例，如果有则返回，如果没有则创建。</p>
+<p>关键代码：构造函数是私有的。</p>
+<p>应用实例：</p>
+<p>1、一个班级只有一个班主任。<br>2、Windows 是多进程多线程的，在操作一个文件的时候，就不可避免地出现多个进程或线程同时操作一个文件的现象，所以所有文件的处理必须通过唯一的实例来进行。<br>3、一些设备管理器常常设计为单例模式，比如一个电脑有两台打印机，在输出的时候就要处理不能两台打印机打印同一个文件。</p>
+<p>优点：<br>1、在内存里只有一个实例，减少了内存的开销，尤其是频繁的创建和销毁实例（比如管理学院首页页面缓存）。<br>2、避免对资源的多重占用（比如写文件操作）。</p>
+<p>缺点：没有接口，不能继承，与单一职责原则冲突，一个类应该只关心内部逻辑，而不关心外面怎么样来实例化。</p>
+<p>使用场景：</p>
+<p>1、要求生产唯一序列号。<br>2、WEB 中的计数器，不用每次刷新都在数据库里加一次，用单例先缓存起来。<br>3、创建的一个对象需要消耗的资源过多，比如 I/O 与数据库的连接等。</p>
+<p>注意事项：getInstance() 方法中需要使用同步锁 synchronized (Singleton.class) 防止多线程同时进入造成 instance 被多次实例化。</p>
+<h5 id="建造者模式"><a href="#建造者模式" class="headerlink" title="建造者模式"></a>建造者模式</h5><p>意图：将一个复杂的构建与其表示相分离，使得同样的构建过程可以创建不同的表示。</p>
+<p>主要解决：主要解决在软件系统中，有时候面临着”一个复杂对象”的创建工作，其通常由各个部分的子对象用一定的算法构成；由于需求的变化，这个复杂对象的各个部分经常面临着剧烈的变化，但是将它们组合在一起的算法却相对稳定。</p>
+<p>何时使用：一些基本部件不会变，而其组合经常变化的时候。</p>
+<p>如何解决：将变与不变分离开。</p>
+<p>关键代码：建造者：创建和提供实例，导演：管理建造出来的实例的依赖关系。</p>
+<p>应用实例：<br>1、去肯德基，汉堡、可乐、薯条、炸鸡翅等是不变的，而其组合是经常变化的，生成出所谓的”套餐”。<br>2、JAVA 中的 StringBuilder。</p>
+<p>优点： 1、建造者独立，易扩展。 2、便于控制细节风险。</p>
+<p>缺点： 1、产品必须有共同点，范围有限制。 2、如内部变化复杂，会有很多的建造类。</p>
+<p>使用场景： 1、需要生成的对象具有复杂的内部结构。 2、需要生成的对象内部属性本身相互依赖。</p>
+<p>一个类的各个组成部分的具体实现类或者算法经常面临着变化，但是将他们组合在一起的算法却相对稳定。提供一种封装机制 将稳定的组合算法于易变的各个组成部分隔离开来。</p>
+<p>注意事项：与工厂模式的区别是：建造者模式更加关注与零件装配的顺序</p>
+<h5 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h5><p>意图：用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象。</p>
+<p>主要解决：在运行期建立和删除原型。</p>
+<p>何时使用：<br>1、当一个系统应该独立于它的产品创建，构成和表示时。<br>2、当要实例化的类是在运行时刻指定时，例如，通过动态装载。<br>3、为了避免创建一个与产品类层次平行的工厂类层次时。<br>4、当一个类的实例只能有几个不同状态组合中的一种时。建立相应数目的原型并克隆它们可能比每次用合适的状态手工实例化该类更方便一些。</p>
+<p>如何解决：利用已有的一个原型对象，快速地生成和原型对象一样的实例。</p>
+<p>关键代码：<br> 1、实现克隆操作，在 JAVA 实现 Cloneable 接口，重写 clone()，在 .NET 中可以使用 Object 类的 MemberwiseClone() 方法来实现对象的浅拷贝或通过序列化的方式来实现深拷贝。<br>2、原型模式同样用于隔离类对象的使用者和具体类型（易变类）之间的耦合关系，它同样要求这些”易变类”拥有稳定的接口。</p>
+<p>应用实例： 1、细胞分裂。 2、JAVA 中的 Object clone() 方法。</p>
+<p>优点： 1、性能提高。 2、逃避构造函数的约束。</p>
+<p>缺点： 1、配备克隆方法需要对类的功能进行通盘考虑，这对于全新的类不是很难，但对于已有的类不一定很容易，特别当一个类引用不支持串行化的间接对象，或者引用含有循环结构的时候。 2、必须实现 Cloneable 接口。</p>
+<p>使用场景： 1、资源优化场景。 2、类初始化需要消化非常多的资源，这个资源包括数据、硬件资源等。 3、性能和安全要求的场景。 4、通过 new 产生一个对象需要非常繁琐的数据准备或访问权限，则可以使用原型模式。 5、一个对象多个修改者的场景。 6、一个对象需要提供给其他对象访问，而且各个调用者可能都需要修改其值时，可以考虑使用原型模式拷贝多个对象供调用者使用。 7、在实际项目中，原型模式很少单独出现，一般是和工厂方法模式一起出现，通过 clone 的方法创建一个对象，然后由工厂方法提供给调用者。原型模式已经与 Java 融为浑然一体，大家可以随手拿来使用。</p>
+<p>注意事项：与通过对一个类进行实例化来构造新对象不同的是，原型模式是通过拷贝一个现有对象生成新对象的。浅拷贝实现 Cloneable，重写，深拷贝是通过实现 Serializable 读取二进制流。</p>
+<h4 id="结构型"><a href="#结构型" class="headerlink" title="结构型"></a>结构型</h4><p>用于帮助将多个对象组织成更大的结构。</p>
+<p>结构型模式主要有：</p>
+<h5 id="适配器模式adapter"><a href="#适配器模式adapter" class="headerlink" title="适配器模式adapter"></a>适配器模式adapter</h5><p>适配器模式（Adapter Pattern）是作为两个不兼容的接口之间的桥梁。这种类型的设计模式属于结构型模式，它结合了两个独立接口的功能。</p>
+<p>意图：将一个类的接口转换成客户希望的另外一个接口。适配器模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。</p>
+<p>主要解决：主要解决在软件系统中，常常要将一些”现存的对象”放到新的环境中，而新环境要求的接口是现对象不能满足的。</p>
+<p>何时使用：<br>1、系统需要使用现有的类，而此类的接口不符合系统的需要。<br>2、想要建立一个可以重复使用的类，用于与一些彼此之间没有太大关联的一些类，包括一些可能在将来引进的类一起工作，这些源类不一定有一致的接口。<br>3、通过接口转换，将一个类插入另一个类系中。（比如老虎和飞禽，现在多了一个飞虎，在不增加实体的需求下，增加一个适配器，在里面包容一个虎对象，实现飞的接口。）</p>
+<p>如何解决：继承或依赖（推荐）。</p>
+<p>关键代码：适配器继承或依赖已有的对象，实现想要的目标接口。</p>
+<p>应用实例：<br>1、美国电器 110V，中国 220V，就要有一个适配器将 110V 转化为 220V。<br>2、JAVA JDK 1.1 提供了 Enumeration 接口，而在 1.2 中提供了 Iterator 接口，想要使用 1.2 的 JDK，则要将以前系统的 Enumeration 接口转化为 Iterator 接口，这时就需要适配器模式。<br>3、在 LINUX 上运行 WINDOWS 程序。 4、JAVA 中的 jdbc。</p>
+<p>优点： 1、可以让任何两个没有关联的类一起运行。 2、提高了类的复用。 3、增加了类的透明度。 4、灵活性好。</p>
+<p>缺点： 1、过多地使用适配器，会让系统非常零乱，不易整体进行把握。比如，明明看到调用的是 A 接口，其实内部被适配成了 B 接口的实现，一个系统如果太多出现这种情况，无异于一场灾难。因此如果不是很有必要，可以不使用适配器，而是直接对系统进行重构。 2.由于 JAVA 至多继承一个类，所以至多只能适配一个适配者类，而且目标类必须是抽象类。</p>
+<p>使用场景：有动机地修改一个正常运行的系统的接口，这时应该考虑使用适配器模式。</p>
+<p>注意事项：适配器不是在详细设计时添加的，而是解决正在服役的项目的问题。</p>
+<h5 id="桥接模式bridge"><a href="#桥接模式bridge" class="headerlink" title="桥接模式bridge"></a>桥接模式bridge</h5><p>意图：将抽象部分与实现部分分离，使它们都可以独立的变化。</p>
+<p>主要解决：在有多种可能会变化的情况下，用继承会造成类爆炸问题，扩展起来不灵活。</p>
+<p>何时使用：实现系统可能有多个角度分类，每一种角度都可能变化。</p>
+<p>如何解决：把这种多角度分类分离出来，让它们独立变化，减少它们之间耦合。</p>
+<p>关键代码：抽象类依赖实现类。</p>
+<p>应用实例： </p>
+<p>1、猪八戒从天蓬元帅转世投胎到猪，转世投胎的机制将尘世划分为两个等级，即：灵魂和肉体，前者相当于抽象化，后者相当于实现化。生灵通过功能的委派，调用肉体对象的功能，使得生灵可以动态地选择。 </p>
+<p>2、墙上的开关，可以看到的开关是抽象的，不用管里面具体怎么实现的。</p>
+<p>优点： </p>
+<p>1、抽象和实现的分离。<br>2、优秀的扩展能力。<br>3、实现细节对客户透明。</p>
+<p>缺点：桥接模式的引入会增加系统的理解与设计难度，由于聚合关联关系建立在抽象层，要求开发者针对抽象进行设计与编程。</p>
+<p>使用场景： 1、如果一个系统需要在构件的抽象化角色和具体化角色之间增加更多的灵活性，避免在两个层次之间建立静态的继承联系，通过桥接模式可以使它们在抽象层建立一个关联关系。 2、对于那些不希望使用继承或因为多层次继承导致系统类的个数急剧增加的系统，桥接模式尤为适用。 3、一个类存在两个独立变化的维度，且这两个维度都需要进行扩展。</p>
+<p>注意事项：对于两个独立变化的维度，使用桥接模式再适合不过了。</p>
+<h5 id="组合器模式component"><a href="#组合器模式component" class="headerlink" title="组合器模式component"></a>组合器模式component</h5><p>意图：将对象组合成树形结构以表示”部分-整体”的层次结构。组合模式使得用户对单个对象和组合对象的使用具有一致性。</p>
+<p>主要解决：它在我们树型结构的问题中，模糊了简单元素和复杂元素的概念，客户程序可以像处理简单元素一样来处理复杂元素，从而使得客户程序与复杂元素的内部结构解耦。</p>
+<p>何时使用： </p>
+<p>1、您想表示对象的部分-整体层次结构（树形结构）。<br>2、您希望用户忽略组合对象与单个对象的不同，用户将统一地使用组合结构中的所有对象。</p>
+<p>如何解决：树枝和叶子实现统一接口，树枝内部组合该接口。</p>
+<p>关键代码：树枝内部组合该接口，并且含有内部属性 List，里面放 Component。</p>
+<p>应用实例：<br>1、算术表达式包括操作数、操作符和另一个操作数，其中，另一个操作数也可以是操作数、操作符和另一个操作数。<br>2、在 JAVA AWT 和 SWING 中，对于 Button 和 Checkbox 是树叶，Container 是树枝。</p>
+<p>优点： </p>
+<p>1、高层模块调用简单。 2、节点自由增加。</p>
+<p>缺点：在使用组合模式时，其叶子和树枝的声明都是实现类，而不是接口，违反了依赖倒置原则。</p>
+<p>使用场景：部分、整体场景，如树形菜单，文件、文件夹的管理。</p>
+<p>注意事项：定义时为具体类。</p>
+<h5 id="外观门面模式Facade"><a href="#外观门面模式Facade" class="headerlink" title="外观门面模式Facade"></a>外观门面模式Facade</h5><p>意图：为子系统中的一组接口提供一个一致的界面，外观模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。</p>
+<p>主要解决：降低访问复杂系统的内部子系统时的复杂度，简化客户端之间的接口。</p>
+<p>何时使用： 1、客户端不需要知道系统内部的复杂联系，整个系统只需提供一个”接待员”即可。 2、定义系统的入口。</p>
+<p>如何解决：客户端不与系统耦合，外观类与系统耦合。</p>
+<p>关键代码：在客户端和复杂系统之间再加一层，这一层将调用顺序、依赖关系等处理好。</p>
+<p>应用实例： </p>
+<p>1、去医院看病，可能要去挂号、门诊、划价、取药，让患者或患者家属觉得很复杂，如果有提供接待人员，只让接待人员来处理，就很方便。<br>2、JAVA 的三层开发模式。</p>
+<p>优点： 1、减少系统相互依赖。 2、提高灵活性。 3、提高了安全性。</p>
+<p>缺点：不符合开闭原则，如果要改东西很麻烦，继承重写都不合适。</p>
+<p>使用场景：<br>1、为复杂的模块或子系统提供外界访问的模块。<br>2、子系统相对独立。 3、预防低水平人员带来的风险。</p>
+<p>注意事项：在层次化结构中，可以使用外观模式定义系统中每一层的入口。</p>
+<h5 id="亨元模式flyweight"><a href="#亨元模式flyweight" class="headerlink" title="亨元模式flyweight"></a>亨元模式flyweight</h5><p>意图：运用共享技术有效地支持大量细粒度的对象。</p>
+<p>主要解决：在有大量对象时，有可能会造成内存溢出，我们把其中共同的部分抽象出来，如果有相同的业务请求，直接返回在内存中已有的对象，避免重新创建。</p>
+<p>何时使用： </p>
+<p>1、系统中有大量对象。<br>2、这些对象消耗大量内存。<br>3、这些对象的状态大部分可以外部化。<br>4、这些对象可以按照内蕴状态分为很多组，当把外蕴对象从对象中剔除出来时，每一组对象都可以用一个对象来代替。<br>5、系统不依赖于这些对象身份，这些对象是不可分辨的。</p>
+<p>如何解决：用唯一标识码判断，如果在内存中有，则返回这个唯一标识码所标识的对象。</p>
+<p>关键代码：用 HashMap 存储这些对象。</p>
+<p>应用实例：<br>1、JAVA 中的 String，如果有则返回，如果没有则创建一个字符串保存在字符串缓存池里面。<br>2、数据库的数据池。</p>
+<p>优点：大大减少对象的创建，降低系统的内存，使效率提高。</p>
+<p>缺点：提高了系统的复杂度，需要分离出外部状态和内部状态，而且外部状态具有固有化的性质，不应该随着内部状态的变化而变化，否则会造成系统的混乱。</p>
+<p>使用场景： 1、系统有大量相似对象。 2、需要缓冲池的场景。</p>
+<p>注意事项： 1、注意划分外部状态和内部状态，否则可能会引起线程安全问题。 2、这些类必须有一个工厂对象加以控制。</p>
+<h5 id="装饰器模式decorator"><a href="#装饰器模式decorator" class="headerlink" title="装饰器模式decorator"></a>装饰器模式decorator</h5><p>对已有的业务逻辑进一步的封装，使其增加额外的功能，如java中的<strong>IO流</strong>就使用了装饰者模式，用户在使用的时候，可以任意组装，达到自己想要的效果。</p>
+<h5 id="代理模式proxy"><a href="#代理模式proxy" class="headerlink" title="代理模式proxy"></a>代理模式proxy</h5><p>代理模式是给某一个对象提供一个代理，并由代理对象控制对原对象的引用。</p>
+<p>优点：代理模式能够协调调用者和被调用者，在一定程度上降低了系统的耦合度；可以灵活地隐藏被代理对象的部分功能和服务，也增加额外的功能和服务。</p>
+<p>缺点：</p>
+<p>由于使用了代理模式，因此程序的性能没有直接调用性能高；使用代理模式提高了代码的复杂度。</p>
+<p>举一个生活中的例子：比如买飞机票，由于离飞机场太远，直接去飞机场买票不太现实，这个时候我们就可以上携程 App 上购买飞机票，这个时候携程 App 就相当于是飞机票的代理商。</p>
+<h4 id="行为型"><a href="#行为型" class="headerlink" title="行为型"></a>行为型</h4><p>用于帮助系统间各对象的通信，以及如何控制复杂系统中流程。</p>
+<p>行为型模式主要有：</p>
+<h5 id="解释器模式"><a href="#解释器模式" class="headerlink" title="解释器模式"></a>解释器模式</h5><p>用的比较少，可能出现的地方：<strong>语法解析</strong></p>
+<h5 id="中介者模式"><a href="#中介者模式" class="headerlink" title="中介者模式"></a>中介者模式</h5><p>作用：<br>通过使用一个中间对象来进行消息分发以及减少类之间的直接依赖。</p>
+<p>本质：</p>
+<p>ComponentA,ComponentB,ComponentC 都拥有一个Mediator（拥有一个方法notify)</p>
+<p>当某一个Component执行某一个操作的时候, 除了做完自己的事情，还需要Mediator::Notify</p>
+<p>Mediator有一个具体的子类叫：ConcreteMediator，他拥有所有的Component，并overwrite了Notify接口</p>
+<h5 id="命令模式command"><a href="#命令模式command" class="headerlink" title="命令模式command"></a>命令模式command</h5><p>命令模式：将一个请求封装为一个对象，从而使你可以用不同的请求对客户进行参数化，对请求排队和记录请求日志，以及支持可撤销的操作。</p>
+<p>应用场景：将命令者与执行者完全解耦。</p>
+<p>Java中的Runnable就是命令模式</p>
+<h5 id="迭代器模式"><a href="#迭代器模式" class="headerlink" title="迭代器模式"></a>迭代器模式</h5><p>STL::iterator</p>
+<h5 id="备忘录模式"><a href="#备忘录模式" class="headerlink" title="备忘录模式"></a>备忘录模式</h5><p>Originator 发起者；<br>CareTaker 备忘录管理者，管理所有的备忘录快照<br>Memoto 备忘录，有getState, setState两个方法</p>
+<p>一个游戏，玩一会儿，自动存档，再玩一会，自动存档。就可以考虑用备忘录模式</p>
+<h5 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h5><p>发布订阅模式</p>
+<p>对象间一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。Android中的<strong>各种Listener</strong>就使用到了这一设计模式，只要用户对手机进行操作，对应的listener就会被通知，并作出响应的处理。</p>
+<h5 id="状态模式state"><a href="#状态模式state" class="headerlink" title="状态模式state"></a>状态模式state</h5><p>状态模式：允许对象在其内部状态改变时改变他的行为。对象看起来似乎改变了他的类。</p>
+<p>应用场景：一个对象的内部状态改变时，他的行为剧烈的变化。</p>
+<p>context 使用 State</p>
+<p>concreteStateA，B，C继承自State</p>
+<p>concreteStateA 可以在实现时切换状态到B</p>
+<h5 id="模板模式"><a href="#模板模式" class="headerlink" title="模板模式"></a>模板模式</h5><p>模板方法模式是指定义一个模板结构，将具体内容延迟到子类去实现。</p>
+<p>让子类可以重写方法的一部分，而不是整个重写，你可以控制子类需要重写那些操作。</p>
+<p>做一件事情需要1，2，3三步，父类提供了基本实现，子类也可以选择overwrite。</p>
+<h5 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h5><p>答：策略模式是指定义一系列算法，将每个算法都封装起来，并且使他们之间可以相互替换。</p>
+<p>优点：遵循了开闭原则，扩展性良好。</p>
+<p>缺点：随着策略的增加，对外暴露越来越多。</p>
+<p>策略模式则是以接口形式提供抽象接口。由具体实现类提供不同算法。</p>
+<p>策略模式一般由3部分组成</p>
+<ul>
+<li>一个Context持有所有策略实现类引用，提供给客户端运行</li>
+<li>一个策略接口提供</li>
+<li>具体的策略实现类</li>
+</ul>
+<p>通过上面可以看到，策略模式和模板模式有一个最重要的区别，即模板模式一般只针对一套算法，注重对<strong>同一个算法的不同细节进行抽象提供不同的实现</strong>。而策略模式注重多套算法多套实现，在算法中间不应该有交集，因此算法和算法只间一般不会有冗余代码！因为不同算法之间的实现一般不同很相近。</p>
+<p>因此我们可以看到，策略模式的关注点更广，模板模式的关注点更深。而且两种模式可以一起使用，即具体某个策略下可以通过模板减少不同步骤的冗余代码。</p>
+<p>例如：限流是服务器要实现的功能，但是实现策略有基于滑动窗口的限流策略、基于令牌桶的限流策略等。</p>
+<h5 id="访问者模式"><a href="#访问者模式" class="headerlink" title="访问者模式"></a>访问者模式</h5><p>用途：文件遍历<br>java.nio.file.FileVisitor接口<br>类功能：一个用于访问文件的接口。这一接口的实现类通过Files.walkFileTree方法实现对文件树中每一个文件的访问。<br>public static Path walkFileTree(Path start,Set options,<br>int maxDepth,FileVisitor&lt; super Path&gt; visitor) ，这一方法中回调了visitor的方法。<br>方法实现上：访问者对每一个被访问者都有一个实现方法。每一个被访问者都有一个通用方法，输入参数为访问者，此方法用于调用访问者的方法。</p>
+<h5 id="责任链"><a href="#责任链" class="headerlink" title="责任链"></a>责任链</h5><p>webserver的filter</p>
+<p>通过把请求从一个对象传递到链条中下一个对象的方式来解除对象之间的耦合，直到请求被处理完毕。链中的对象是同一接口或抽象类的不同实现。</p>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/sinat_34166518/article/details/89206059">https://blog.csdn.net/sinat_34166518/article/details/89206059</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/high_availability.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/distributed_system/high_availability.html" class="post-title-link" itemprop="url">分布式系统-可用性</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-24 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-24T10:01:03+08:00">2022-02-24</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
@@ -368,8 +888,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/mq/kafka.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/mq/kafka.html" itemprop="commentCount"></span>
+    <a title="valine" href="/backend_knowledge_architecture/distributed_system/high_availability.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/high_availability.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -384,613 +904,160 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><img src="https://img-blog.csdn.net/20180317011215184?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2RvZzI1MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="设计思想"></p>
-<h4 id="cosume-group"><a href="#cosume-group" class="headerlink" title="cosume group"></a>cosume group</h4><p>通过cosume group，巧妙的解决了广播问题。</p>
-<h4 id="高性能"><a href="#高性能" class="headerlink" title="高性能"></a>高性能</h4><p>SendFile、zero copy</p>
-<h4 id="索引设计"><a href="#索引设计" class="headerlink" title="索引设计"></a>索引设计</h4><p>Kafka为了卸载MQ本身的复杂性，为了其<strong>真正无状态</strong>的设计，它将状态维护机制这口锅完全甩给了消费者，因此取消息的问题就转化成了<strong>消费者拿着一个offset索引来Kafka存储器里取消息</strong>的问题，这就涉及到了性能。But 如何能查的更快？How？</p>
-<p><img src="https://img-blog.csdn.net/20180317015646335?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2RvZzI1MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="扫描partition文件"></p>
-<p>但实际上，</p>
-<p><img src="https://img-blog.csdn.net/20180317020648952?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2RvZzI1MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="partition"></p>
-<ol>
-<li>partition并不是一根文件，而是一个目录</li>
-<li>目录下面存了很多逻辑上的segment，每一个segment物理上包括两个文件：索引文件、日志文件（每次都append)</li>
+          <p>系统在困境（adversity）（硬件故障、软件故障、人为错误）中仍可正常工作（正确完成功能，并能达到期望的性能水准）。</p>
+<p>plan挂了之后，系统能不能活下来？ 有没有负责兜底的PlanB。</p>
+<p>造成错误的原因叫做故障（fault），能预料并应对故障的系统特性可称为容错（fault-tolerant）或韧性（resilient）。</p>
+<p>注意故障（fault）不同于失效（failure）【2】。故障通常定义为系统的<strong>一部分</strong>状态偏离其标准，而失效则是系统作为一个<strong>整体</strong>停止向用户提供服务。故障的概率不可能降到零，因此最好设计容错机制以防因故障而导致失效。</p>
+<h2 id="影响可用性的因素"><a href="#影响可用性的因素" class="headerlink" title="影响可用性的因素"></a>影响可用性的因素</h2><p>首先我们先梳理一下影响系统稳定性的一些常见的问题场景，大致可分为三类：</p>
+<h3 id="人为因素"><a href="#人为因素" class="headerlink" title="人为因素"></a>人为因素</h3><p>不合理的变更、外部攻击等等</p>
+<h3 id="软件因素"><a href="#软件因素" class="headerlink" title="软件因素"></a>软件因素</h3><p>代码bug、设计漏洞、GC问题、线程池异常、上下游异常</p>
+<h3 id="硬件因素"><a href="#硬件因素" class="headerlink" title="硬件因素"></a>硬件因素</h3><p>网络故障、机器故障等 </p>
+<h3 id="可用性速降到最低的表现-雪崩"><a href="#可用性速降到最低的表现-雪崩" class="headerlink" title="可用性速降到最低的表现-雪崩"></a>可用性速降到最低的表现-雪崩</h3><p>两个导火索：</p>
+<ul>
+<li>下游或者本身机器故障导致latency增加</li>
+<li>上游请求qps变高</li>
+</ul>
+<p>实际的并发超过了最大能支持的并发（当下游变慢后，该值迅速会下降），过载就发生了。过载不可怕，如果上游不重试，系统终将恢复。</p>
+<h2 id="如何提高可用性"><a href="#如何提高可用性" class="headerlink" title="如何提高可用性"></a>如何提高可用性</h2><h3 id="系统拆分"><a href="#系统拆分" class="headerlink" title="系统拆分"></a>系统拆分</h3><p>拆分不是以减少不可用时间为目的，而是以减少故障影响面为目的。因为一个大的系统拆分成了几个小的独立模块，一个模块出了问题不会影响到其他的模块，从而降低故障的影响面。系统拆分又包括接入层拆分、服务拆分、数据库拆分。</p>
+<h4 id="接入层-amp-服务层"><a href="#接入层-amp-服务层" class="headerlink" title="接入层&amp;服务层"></a>接入层&amp;服务层</h4><p>【轻重分离】<br>一般是按照业务模块、重要程度、变更频次等维度拆分。</p>
+<h4 id="数据层"><a href="#数据层" class="headerlink" title="数据层"></a>数据层</h4><p>【轻重分离】、【冷热分离】、【读写分离】<br>一般先按照业务拆分后，如果有需要还可以做垂直拆分也就是数据分片、读写分离、数据冷热分离等。</p>
+<h3 id="解耦"><a href="#解耦" class="headerlink" title="解耦"></a>解耦</h3><p>系统进行拆分之后，会分成多个模块。模块之间的依赖有强弱之分。</p>
+<p>如果是强依赖的，那么如果依赖方出问题了，也会受到牵连出问题。</p>
+<p>这时可以梳理整个流程的调用关系，做成弱依赖调用。</p>
+<p>弱依赖调用可以用MQ的方式来实现解耦。即使下游出现问题，也不会影响当前模块。</p>
+<h3 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h3><p>可以在适用性、优缺点、产品口碑、社区活跃度、实战案例、扩展性等多个方面进行全量评估，挑选出<strong>适合当前业务场景的中间件&amp;数据库</strong>。前期的调研一定要充分，先对比、测试、研究，再决定，磨刀不误砍柴工。</p>
+<h3 id="冗余部署-amp-故障自动转移"><a href="#冗余部署-amp-故障自动转移" class="headerlink" title="冗余部署&amp;故障自动转移"></a>冗余部署&amp;故障自动转移</h3><p>服务层的冗余部署很好理解，一个服务部署多个节点，有了冗余之后还不够，每次出现故障需要人工介入恢复势必会增加系统的不可服务时间。</p>
+<p>所以，又往往是通过“自动故障转移”来实现系统的高可用。即某个节点宕机后需要能自动摘除上游流量，这些能力基本上都可以通过<strong>负载均衡的探活机制</strong>来实现。</p>
+<p>涉及到数据层就比较复杂了，但是一般都有成熟的方案可以做参考。</p>
+<p>一般分为一主一从、一主多从、多主多从。不过大致的原理都是数据同步实现多从，数据分片实现多主，故障转移时都是通过选举算法选出新的主节点后在对外提供服务（这里如果写入的时候不做强一致同步，故障转移时会丢失一部分数据）。具体可以参考Redis Cluster、ZK、Kafka等集群架构。</p>
+<h3 id="容量评估"><a href="#容量评估" class="headerlink" title="容量评估"></a>容量评估</h3><ol>
+<li>每个系统，自己的最大处理能力是多少要做到清清楚楚。</li>
 </ol>
-<p>文件的命名相当于查找的稀疏索引，省去索引文件</p>
-<p>每个segment索引又是一个稀疏索引减少索引文件的大小</p>
-<h4 id="replication"><a href="#replication" class="headerlink" title="replication"></a>replication</h4><p>2.1 消息备份</p>
-<p>Kafka允许同个Partition存在多个消息副本(Replica)，每个Partition的副本通常由1个Leader及0个以上的Follower组成，产者将消息直接发往对应Partition的Leader，Follower会周期地向Leader发送同步请求，Kafka的Leader机制在保障数据致性地同时降低了消息备份的复杂度。同Partition的Replica应存储在同一个Broker上，因为一旦该Broker宕机，对应Partition的所有Replica都无法作，这就达不到高可用的效果。为做好负载均衡并提容错能，Kafka会尽将所有的Partition以及各Partition的副本均匀地分配到整个集群上。举个例，当集群中部署3台Broker，TopicA共有4个Partition，每个Partition均有3个Replica时下图就是种合理的分布方式。</p>
-<p><img src="https://pics4.baidu.com/feed/d833c895d143ad4b76bc3f8833f912a7a60f06ef.jpeg" alt=""></p>
-<p>ISR:In-Sync Replicas 副本同步队列</p>
-<p>ISR(In-Sync Replicas)指的是个Partition中与Leader“保持同步”的Replica列表(实际存储的是副本所在Broker的BrokerId)，这的 保持同步是指与Leader数据保持完全一致，只需在replica.lag.time.max.ms时间内与Leader保持有效连接，官方解释如下If a follower hasn’t sent any fetch requests or hasn’t consumed up to the leaders log end offset for at least this time, the leader will remove the follower from isr,( default value =10000 )Follower周期性地向Leader发送FetchRequest请求(数据结构见下)，发送时间间隔配置在replica.fetch.wait.max.ms中，默认值为 500。</p>
-<p>AR:Assigned Replicas 所有副本</p>
-<p>ISR是由leader维护，follower从leader同步数据有一些延迟（包括延迟时间replica.lag.time.max.ms和延迟条数replica.lag.max.messages两个维度, 当前最新的版本0.10.x中只支持replica.lag.time.max.ms这个维度），任意一个超过阈值都会把follower剔除出ISR, 存入OSR（Outof-Sync Replicas）列表，新加入的follower也会先存放在OSR中。AR=ISR+OSR。</p>
-<p>ISR数据同步、ACK选项（全部ack、只有一个ack）</p>
-<p>Kafka的复制机制既不是完全的同步复制，也不是单纯的异步复制。完全同步复制要求All Alive Follower都复制完，这条消息才会被认为commit，这种复制方式极大的影响了吞吐率。而异步复制方式下，Follower异步的从Leader复制数据，数据只要被Leader写入log就被认为已经commit，这种情况下，如果leader挂掉，会丢失数据，kafka使用ISR的方式很好的均衡了确保数据不丢失以及吞吐率。Follower可以批量的从Leader复制数据，而且Leader充分利用磁盘顺序读以及send file(zero copy)机制，这样极大的提高复制性能，内部批量写磁盘，大幅减少了Follower与Leader的消息量差。</p>
-<p>leader会维护一个与其基本保持同步的Replica列表，该列表称为ISR(in-sync Replica)，每个Partition都会有一个ISR，而且是由leader动态维护 ，如果一个follower比一个leader落后太多，或者超过一定时间未发起数据复制请求，则leader将其重ISR中移除 </p>
-<p>参考：</p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/dog250/article/details/79588437">https://blog.csdn.net/dog250/article/details/79588437</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/qq_28900249/article/details/90346599">https://blog.csdn.net/qq_28900249/article/details/90346599</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/mq/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/mq/index.html" class="post-title-link" itemprop="url">消息队列-概览</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 13:03:03" itemprop="dateCreated datePublished" datetime="2022-02-25T13:03:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:40:57" itemprop="dateModified" datetime="2022-03-01T22:40:57+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/mq/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/mq/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>可能的一些作用：</p>
+<p>在系统上线前需要对整个服务用到的机器、DB、cache都要做容量评估，机器容量的容量可以采用以下方式评估：</p>
 <ol>
-<li>非核心逻辑异步化，追求高性能</li>
-<li>解除耦合</li>
-<li>实现广播</li>
-<li>削峰填谷</li>
+<li>明确预期流量指标-QPS；</li>
+<li>明确可接受的时延和安全水位指标（比如CPU%≤40%，核心链路RT≤50ms）；</li>
 </ol>
-<hr>
-<p>具体可以用于：</p>
+<p>通过压测评估单机在安全水位以下能支持的最高QPS（建议通过混合场景来验证，比如按照预估流量配比同时压测多个核心接口）；</p>
+<p>最后就可以估算出具体的机器数量了。</p>
+<p>DB和cache评估除了QPS之外还需要评估数据量，方法大致相同，等到系统上线后就可以根据监控指标做扩缩容了。</p>
+<h3 id="服务快速扩容能力-amp-泄洪能力"><a href="#服务快速扩容能力-amp-泄洪能力" class="headerlink" title="服务快速扩容能力&amp;泄洪能力"></a>服务快速扩容能力&amp;泄洪能力</h3><p>现阶段不论是容器还是ECS，单纯的节点复制扩容是很容易的，扩容的重点需要评估的是服务本身是不是无状态的，比如：</p>
 <ol>
-<li>分布式事务，单方生产，多个消费业务逻辑</li>
-<li>数据复制：通过消息队列，将数据复制到多个目的地（多维度数据表、ES、Hadoop、搜索等）</li>
-<li>日志同步：多个app生产日志并放入队列，然后消费队列完成日志的离线与实时处理</li>
-<li>延迟队列：可靠的延迟队列，分布式环境定时器</li>
-<li>广播通知：Cache失效通知</li>
-</ol>
-<hr>
-<p>分布式消息队列的评价指标</p>
-<h5 id="可靠"><a href="#可靠" class="headerlink" title="可靠"></a>可靠</h5><p>分布式消息队列提供更好的可靠性，主要体现在：</p>
-<ol>
-<li>消息会被持久化到分布式存储中。这样避免了单台机器存储的消息由于机器问题导致消息的丢失；</li>
-<li>不佳的网络环境中，保证只有当消息的接收者确实收到消息时才从队列中删除消息。</li>
-</ol>
-<h5 id="可扩展"><a href="#可扩展" class="headerlink" title="可扩展"></a>可扩展</h5><p>可扩展性体现在访问量和数据量两个方面：</p>
-<p>访问量：分布式消息队列服务，会随着访问量的增减而自动增减逻辑处理服务器；</p>
-<p>数据量：当数据量扩大时，后端分布式存储会自动扩容。</p>
-<h5 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h5><p>安全体现在以下两个方面：</p>
-<ol>
-<li><p>同时使用消息队列的业务之间不会互相干扰。如果有多个业务同时在使用消息队列，对于单机的消息队列服务，一个业务的消息操作可能会影响其他业务的正常运行。比如，一个业务的消息操作特别频繁，占据了消息队列的绝大部分服务时间，也占据了这台服务器的绝大部分网络IO，导致其他业务无法正常地与消息队列通信。而且甚至可能由于服务控制不当，导致机器崩溃，服务停止，业务也跟着停止。分布式消息队列则不会出现这个问题：<br>（1）监控措施完善，系统性能指数会控制在一定范围之内，而且有任何异常也会报警；<br>（2）当访问量和数据量增大时，分布式消息队列服务可以自动扩展。</p>
+<li><p>下游DB的连接数最多支持当前服务扩容几台？</p>
 </li>
-<li><p>各业务的消息内容是安全存储的，其他业务不能访问到非自身业务的数据。<br>一方面是业务需要密钥来访问消息队列；另一方面，消息是被加密存储的。</p>
+<li><p>扩容后缓存是否需要预热？</p>
+</li>
+<li><p>放量策略</p>
 </li>
 </ol>
-<h5 id="简单实用"><a href="#简单实用" class="headerlink" title="简单实用"></a>简单实用</h5><p>简单实用体现在：</p>
+<p>这些因素都是需要提前做好准备，整理出完备的SOP文档，当然最好的方式是进行演练，实际上手操作，有备无患。</p>
+<p><strong>泄洪能力</strong>一般是指冗余部署的情况下，选择几个节点作为备用节点，平时承担很小一部分流量，当流量洪峰来临时，通过调整流量路由策略把热节点的一部分流量转移到备用节点上。</p>
+<p>对比扩容方案这种成本相对较高，但是好处就是响应快，风险小。</p>
+<h3 id="限流-amp-熔断降级"><a href="#限流-amp-熔断降级" class="headerlink" title="限流&amp;熔断降级"></a>限流&amp;熔断降级</h3><p><img src="http://images.elecfans.top/uploads/20221109/491f36c6-6037-11ed-8abf-dac502259ad0.png" alt="限流"></p>
 <ol>
-<li>透明：接收者和发送者无需知道具体的消息队列的服务器地址，服务器的增减对接收者和发送者透明。</li>
-<li>实用：对于两个服务之间不能通信的网络情况，消息队列为他们提供了恰到好处的桥梁。</li>
+<li><p>每个系统要有能力发现哪些是有效的请求，哪些是无效的请求。</p>
+</li>
+<li><p>前端系统有保护后端系统的义务，sla中承诺多大的能力，就只给到后端多大的压力。这就要求每一个前后端接口的地方，都有明确的负载约定，一环扣一环。</p>
+</li>
+<li><p>当过载发生时，该拒绝的请求（1、超出整个系统处理能力范围的；2、已经超时的无效请求）越早拒绝越好</p>
+</li>
+<li><p>中间层server对后端发送请求，重试机制要慎用，一定要用的话要有严格频率控制。</p>
+</li>
+<li><p>对于用户的重试行为，要适当的延缓。例如登录发现后端响应失败，再重新展现登录页面前，可以适当延时几秒钟，并展现进度条等友好界面。当多次重试还失败的情况下，要安抚用户。</p>
+</li>
+<li><p>当雪球发生了，直接清空雪球队列（例如重启进程可以清空socket缓冲区）可能是快速恢复的有效方法。</p>
+</li>
+<li><p>过载保护很重要的一点，不是说要加强系统性能、容量，成功应答所有请求，而是保证在高压下，系统的服务能力不要陡降到0，而是顽强的对外展现最大有效处理能力。</p>
+</li>
 </ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/micro_service/discovery.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/micro_service/discovery.html" class="post-title-link" itemprop="url">微服务系列-服务注册与发现</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 12:03:03" itemprop="dateCreated datePublished" datetime="2022-02-25T12:03:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:40:41" itemprop="dateModified" datetime="2022-03-01T22:40:41+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/micro_service/discovery.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/micro_service/discovery.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>集成：在服务提供端或者调用端，如何集成注册中心？应用内 OR 应用外</p>
-<p>测活：服务注册之后，如何对服务进行测活以保证服务的可用性</p>
-<p>负载均衡：当存在多个服务提供者时，如何均衡各个提供者的负载？</p>
-<p>运行时依赖：引入注册中心之后，对应用的运行时环境有何影响？</p>
-<p>可用性：如何保证注册中心本身的可用性，特别是消除单点故障？</p>
-<p>状态获取：（1）主动探测（2）心跳上报</p>
-<p>一些可能问题：</p>
+<p>流量整形也就是常说的限流，主要是防止超过预期外的流量把服务打垮，熔断则是为了自身组件或者依赖下游故障时，可以快速失败防止长期阻塞导致雪崩。</p>
+<p>关于限流熔断的能力，开源组件Sentinel基本上都具备了，用起来也很简单方便，但是有一些点需要注意。</p>
+<p>【自适应限流】限流阈值一般是配置为服务的某个资源能支撑的最高水位，这个需要通过压测摸底来评估。随着系统的迭代，这个值可能是需要持续调整的。如果配置的过高，会导致系统崩溃时还没触发保护，配置的过低会导致误伤。</p>
+<p>熔断降级-某个接口或者某个资源熔断后，要根据业务场景跟熔断资源的重要程度来评估应该抛出异常还是返回一个兜底结果。</p>
+<p>比如下单场景如果扣减库存接口发生熔断，由于扣减库存在下单接口是必要条件，所以熔断后只能抛出异常让整个链路失败回滚，如果是获取商品评论相关的接口发生熔断，那么可以选择返回一个空，不影响整个链路。</p>
+<h3 id="资源隔离"><a href="#资源隔离" class="headerlink" title="资源隔离"></a>资源隔离</h3><p>如果一个服务的多个下游同时出现阻塞，单个下游接口一直达不到熔断标准（比如异常比例跟慢请求比例没达到阈值），那么将会导致整个服务的吞吐量下降和更多的线程数占用，极端情况下甚至导致线程池耗尽。引入资源隔离后，可以限制单个下游接口可使用的最大线程资源，确保在未熔断前尽可能小的影响整个服务的吞吐量。</p>
+<p>说到隔离机制，这里可以扩展说一下，由于每个接口的流量跟ResponseTime都不一样，很难去设置一个比较合理的可用最大线程数，并且随着业务迭代，这个阈值也难以维护。</p>
+<p>这里可以采用<strong>共享加独占</strong>来解决这个问题，每个接口有自己的独占线程资源，当独占资源占满后，使用共享资源，共享池在达到一定水位后，强制使用独占资源，排队等待。</p>
+<p>这种机制优点比较明显就是可以在资源利用最大化的同时保证隔离性。</p>
+<p>这里的线程数只是资源的一种，资源也可以是连接数、内存等等。</p>
+<h3 id="系统性保护"><a href="#系统性保护" class="headerlink" title="系统性保护"></a>系统性保护</h3><p><img src="http://images.elecfans.top/uploads/20221109/494d16cc-6037-11ed-8abf-dac502259ad0.png" alt=""></p>
+<p>系统性保护是一种无差别限流，一句话概念就是在系统快要崩溃之前对所有流量入口进行无差别限流，当系统恢复到健康水位后停止限流。具体一点就是结合应用的 Load、总体平均 RT、入口 QPS 和线程数等几个维度的监控指标，让系统的入口流量和系统的负载达到一个平衡，让系统尽可能跑在最大吞吐量的同时保证系统整体的稳定性。</p>
+<h3 id="4-10-可观测性-amp-告警"><a href="#4-10-可观测性-amp-告警" class="headerlink" title="4.10 可观测性&amp;告警"></a>4.10 可观测性&amp;告警</h3><p><img src="http://images.elecfans.top/uploads/20221109/496b13ca-6037-11ed-8abf-dac502259ad0.png" alt=""></p>
+<p>当系统出现故障时，我们首先需找到故障的原因，然后才是解决问题，最后让系统恢复。排障的速度很大程度上决定了整个故障恢复的时长，而可观测性的最大价值在于快速排障。其次基于Metrics、Traces、Logs三大支柱配置告警规则，可以提前发现系统可能存在的风险&amp;问题，避免故障的发生。</p>
+<h3 id="4-11-变更流程三板斧"><a href="#4-11-变更流程三板斧" class="headerlink" title="4.11 变更流程三板斧"></a>4.11 变更流程三板斧</h3><p>变更是可用性最大的敌人，99%的故障都是来自于变更，可能是配置变更，代码变更，机器变更等等。那么如何减少变更带来的故障呢？</p>
+<h4 id="可灰度"><a href="#可灰度" class="headerlink" title="可灰度"></a>可灰度</h4><p>用小比例的一部分流量来验证变更后的内容，减小影响用户群。</p>
+<p>产品特性设计和发布上，要尽量避免某个时刻导致大量用户集体触发某些请求的设计。发布的时候注意灰度。</p>
+<h4 id="可回滚"><a href="#可回滚" class="headerlink" title="可回滚"></a>可回滚</h4><p>出现问题后，能有有效的回滚机制。涉及到数据修改的，发布后会引起脏数据的写入，需要有可靠的回滚流程，保证脏数据的清除。</p>
+<h4 id="可观测"><a href="#可观测" class="headerlink" title="可观测"></a>可观测</h4><p>通过观察变更前后的指标变化，很大程度上可以提前发现问题。 除了以上三板斧外，还应该在其他开发流程上做规范，比如代码控制，集成编译、自动化测试、静态代码扫描等。</p>
+<p>五、总结</p>
+<p>对于一个动态演进的系统而言，我们没有办法将故障发生的概率降为0，能做的只有尽可能的预防和缩短故障时的恢复时间。当然我们也不用一味的追求可用性，毕竟提升稳定性的同时，维护成本、机器成本等也会跟着上涨，所以需要结合系统的业务SLO要求，适合的才是最好的。</p>
+<h3 id="冗余"><a href="#冗余" class="headerlink" title="冗余"></a>冗余</h3><p>解决高可用，只有一个方法，就是冗余。</p>
+<p>通过冗余更多的机器，来应对机器的硬件故障或者彼此之间的网络故障。</p>
+<h4 id="多机房部署"><a href="#多机房部署" class="headerlink" title="多机房部署"></a>多机房部署</h4><p>通过多机房部署来增加冗余。</p>
+<p>多活的好处</p>
+<ol>
+<li>响应时间短、提升用户体验</li>
+<li>服务高可用</li>
+<li>降低成本</li>
+</ol>
 <ul>
-<li>保护机制：如果短时间内摘除的节点数量超过集群的40%，则停止摘除节点</li>
-<li>通知风暴问题（准备更多的注册中心节点；精简通知内容）</li>
+<li>廉价的机器（非洲用户访问非洲的机器）</li>
+<li>流量的分摊（西方节日时，流量通过亚洲来分摊）</li>
 </ul>
-<p>目前比较流行的解决方案包括：</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>对比维度</th>
-<th>euraka</th>
-<th>consul</th>
-<th>ZK</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>实现思路</td>
-<td>去中心化，通过复制来同步数据，但不保证一致性。只要有一个节点可用，系统整体就可用。</td>
-<td>内置了服务注册与发现框架、分布一致性协议实现、健康检查、Key/Value 存储、多数据中心方案</td>
-<td>使用ZK节点临时节点来维护服务器列表,ZK支持watch节点变更通知机制</td>
-</tr>
-<tr>
-<td>测活</td>
-<td>客户端心跳</td>
-<td>TCP/HTTP/gRPC/Cmd</td>
-<td>自研-客户端心跳</td>
-</tr>
-<tr>
-<td>负载均衡</td>
-<td>Ribbon</td>
-<td>Fabio</td>
-<td>自研-负载均衡</td>
-</tr>
-<tr>
-<td>雪崩保护</td>
-<td>有，灾难态进入自我保护模式</td>
-<td>无</td>
-<td>自研</td>
-</tr>
-<tr>
-<td>自动注销实例</td>
-<td>支持</td>
-<td>支持</td>
-<td>进程不可用，临时节点自动销毁</td>
-</tr>
-<tr>
-<td>访问协议</td>
-<td>HTTP</td>
-<td>HTTP/DNS</td>
-<td>自研</td>
-</tr>
-<tr>
-<td>监听支持</td>
-<td>支持</td>
-<td>支持</td>
-<td>WATCH NODE变更</td>
-</tr>
-<tr>
-<td>多数据中心</td>
-<td>支持</td>
-<td>支持</td>
-<td>不支持</td>
-</tr>
-<tr>
-<td>跨注册中心同步</td>
-<td>支持</td>
-<td>支持</td>
-<td>不支持</td>
-</tr>
-<tr>
-<td>框架集成</td>
-<td>SpingCloud继承</td>
-<td>Spring、k8s集成</td>
-<td>无</td>
-</tr>
-<tr>
-<td>优点</td>
-<td>去中心化，高可用</td>
-<td>功能相对完善</td>
-<td>简单容易实现，适用于初创期</td>
-</tr>
-<tr>
-<td>不足</td>
-<td>一致性差</td>
-<td>可用性无保证</td>
-<td>服务可用性无保障<br>ZK跨机房集群支持不佳</td>
-</tr>
-<tr>
-<td>CAP</td>
-<td>AP</td>
-<td>CP</td>
-<td>CP</td>
-</tr>
-<tr>
-<td>一致性协议</td>
-<td>仅复制，非强一致</td>
-<td>raft</td>
-<td>zab，一种类paxos协议</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><img src="http://cdn.b5mang.com/20201222213947.png" alt="20201222213947"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/micro_service/micro_service.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/micro_service/micro_service.html" class="post-title-link" itemprop="url">微服务系列-概览</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 12:01:03" itemprop="dateCreated datePublished" datetime="2022-02-25T12:01:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/micro_service/micro_service.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/micro_service/micro_service.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="单体到微服务"><a href="#单体到微服务" class="headerlink" title="单体到微服务"></a>单体到微服务</h4><p>为什么要转向微服务架构（收益）</p>
+<p>如何做到异地多活（必须要解决的一些问题）</p>
 <ol>
-<li>系统扩展性不足（例如，因为DB连接问题导致无法持续扩容）</li>
-<li>迭代效率低。如果是预估到业务在飞速增长，那就别犹豫，一定要提前考虑微服务的拆分。</li>
-<li>系统编译、部署成本高</li>
-<li>如果在设计架构的时候，发现需要很多异构的技术栈，那也要考虑下微服务。</li>
+<li><p>接入层流量控制：用户默认访问哪个DC？什么时候做切换？ 如何控制这个切换过程？</p>
+</li>
+<li><p>各DC业务逻辑一致：对于用户来说， 他的流量被调度前后，业务逻辑是一致的。 比如facebook上有一些内容对于亚洲用户是不可见的，不能因为亚洲用户的流量被迁移到了美洲机房，这个限制就失效了。</p>
+</li>
+<li><p>跨DC的实时数据同步与冲突处理：还是以fb为例， 如果访问非洲机房的用户A给访问南美洲机房的用户B的一个帖子点了赞， 那么B应该能及时收到相关的通知。这背后就依赖数据的实时同步。<br>在多活情况下， 多DC的数据写入势必会引入数据的冲突， 比如facebook位于美东的的审核系统和位于东南亚的用户同时操作了一条帖子， 就会产生数据的冲突。</p>
+</li>
+<li><p>提供全球级别的强一致性<br>对于大多数业务而言， 我们只需要最终一致性即可（比如点赞之类的计数）。 但是某些业务，需要全球的强一致保障(比如下<br>单、支付之类的操作）。</p>
+</li>
 </ol>
-<p>转向微服务架构需要克服什么困难（成本）</p>
-<ol>
-<li>技术基础设施要求比较高（如果公司技术基础设施非常完备，对应的业务起初就设计的非常复杂，那么也别犹豫，起手就上微服务。）</li>
-<li>工程拆分挑战比较大，实现时容易为了拆分而拆分。</li>
-</ol>
-<h4 id="拆分原则"><a href="#拆分原则" class="headerlink" title="拆分原则"></a>拆分原则</h4><p>从单体到微服务，也许可以有一个过度：工程的拆分</p>
-<p>微服务拆分的大原则</p>
-<ol>
-<li>单一服务内的高内聚、低耦合，单一职责</li>
-<li>拆分粒度：先粗拆，后细拆（伴随业务复杂度的变多，或者对业务的理解程度加深）</li>
-<li>拆分过程中，要避免影响业务的日常功能迭代—按照依赖顺序，挨个拆分</li>
-<li>确保服务接口定义有可扩展性</li>
-<li>避免环形依赖问题（通过分层，例如业务层、数据访问层）</li>
-</ol>
-<p>业务优先，组织结构，质量维度</p>
-<p>SRP Single Responsibilty 单一指责原则<br>CCP Common Closure Principle 共同闭包原则，包中包含的所有类应该是同类的变化的一个集合，也就是说，如果对包作出修改，需要调整的类应该都在这个包之内。</p>
-<p>你的团队成员结构是什么样的，你的架构就会长成啥样。</p>
-<p>团队按照业务边界来拆分；确保团队不要太大</p>
-<p>因为微服务就是为了减少研发成本，而包括沟通成本。</p>
-<p>服务拆分带来的问题</p>
-<ol>
-<li>接口调用耗时增加</li>
-<li>如何知道调用哪个服务？服务注册中心</li>
-<li>服务治理体系：熔断、限流、降级、超时控制等</li>
-<li>问题排查困难（分布式链路追踪）</li>
-</ol>
-<h4 id="微服务组件"><a href="#微服务组件" class="headerlink" title="微服务组件"></a>微服务组件</h4><h5 id="API网关"><a href="#API网关" class="headerlink" title="API网关"></a>API网关</h5><p>入口网关：隔离客户端与微服务，协议转换、安全策略、认证、限流、熔断等</p>
-<p>出口网关：调用外部API，统一认证，授权、授权、访问控制等</p>
-<p>性能：IO多路复用、异步非阻塞、线程池</p>
-<p>设计要点：性能、扩展性（责任链模式）</p>
-<p>隔离性：针对接口对线程池进行分类</p>
-<h5 id="服务注册与发现"><a href="#服务注册与发现" class="headerlink" title="服务注册与发现"></a>服务注册与发现</h5><p>zookeeper, consul, euraker</p>
-<h5 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h5><p>RoundRobin, Hash, Weight</p>
-<h5 id="熔断、限流"><a href="#熔断、限流" class="headerlink" title="熔断、限流"></a>熔断、限流</h5><h5 id="配置实时下发"><a href="#配置实时下发" class="headerlink" title="配置实时下发"></a>配置实时下发</h5><h6 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h6><p>配置项的读取-变更推送如何实现：</p>
-<ol>
-<li>轮询 + 摘要 （简单，实时性略差）</li>
-<li>长轮询 + 版本号（复杂，实时性好一些）</li>
-</ol>
-<p>client的高性能实现逻辑：</p>
-<ol>
-<li>DoubleBufferedData， 数据分前台和后台</li>
-<li>读拿到自己所在线程的thread-local读写锁，执行查询逻辑后释放锁。</li>
-<li>同时只有一个写：修改后台数据，切换前后台，挨个获得所有thread-local锁并立刻释放，结束后再改一遍新后台（老前台）。</li>
-</ol>
-<p>一个小原则：配置系统的旁路化，不要因为配置系统挂了，你的程序启动不了；<br>可以做两层缓存：内存缓存、文件保存</p>
-<h6 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h6><p>不同的配置类型：节点类型 》机房类型 》 全局配置</p>
-<p>配置项的存储-配置系统的高可用</p>
-<p>核心指标在于可用性！！！5个9？</p>
-<h5 id="对接调用链追踪-（Jager"><a href="#对接调用链追踪-（Jager" class="headerlink" title="对接调用链追踪 （Jager)"></a>对接调用链追踪 （Jager)</h5><p>trace_id + span_id来标识链路的调用关系。</p>
-<p>对trace_id采样，而不要随机采样。</p>
-<p>span 基本工作单元，一次链路调用（可以是RPC，DB等没有特定的限制）创建一个span，通过一个64位ID标识它，uuid较为方便，span中还有其他的数据，例如描述信息，时间戳，key-value对的（Annotation）tag信息，<strong>parent_id</strong>(基于parent_span_id来维护树形结构）等,其中parent-id可以表示span调用链路来源。</p>
-<p>trace_id 类似于 树结构的Span集合，表示一次完整的跟踪，从请求到服务器开始，服务器返回response结束，跟踪每次rpc调用的耗时，存在唯一标识trace_id。比如：你运行的分布式大数据存储一次Trace就由你的一次请求组成。</p>
-<p>Annotation 注解，用来记录请求特定事件相关信息（例如时间），一个span中会有多个annotation注解描述。通常包含四个注解信息：</p>
-<h5 id="监控系统"><a href="#监控系统" class="headerlink" title="监控系统"></a>监控系统</h5><p><img src="http://cdn.b5mang.com/2021320212041.png" alt="监控哪些内容"></p>
-<p><img src="http://cdn.b5mang.com/2021320212155.png" alt="监控系统架构"></p>
-<p>方案：普罗米修斯、Graphna</p>
-<p>APM：端到端的监控体系</p>
-<p>如何防止消息被篡改：对消息体 + 消息头 进行加密，生成一个签名<br>如何对数据进行加密：</p>
-<p>使用非对称加密的公钥对 “对称加密的私钥-OriginPrivate“ 进行加密，得到SecretPrivate<br>然后服务端利用非对称加密的私钥，对 SecretPrivate进行解密，得到OriginPrivate</p>
-<p>然后再使用OriginPrivate对加密之后的消息体（SecretContext)进行解密，得到Contenxt</p>
-<p>监控哪些东西：网络卡顿率、做某件事情的失败率等</p>
-<p>考虑暂存 + retry来应对网络状况不佳的情况</p>
-<h5 id="自动化全链路压测系统"><a href="#自动化全链路压测系统" class="headerlink" title="自动化全链路压测系统"></a>自动化全链路压测系统</h5><p>压测的原则-尽量模拟真实情况；压测的注意点：<br>（1）使用线上数据与线上数据<br>（2）使用线上流量（流量拷贝）<br>（3）流量应该从尽量靠近用户的CDN发起</p>
-<p>如何搭建：<br>（1）流量的隔离（区分压测流量与正式流量）<br>（2）风险控制（尽量避免压测对正常用户的影响）</p>
-<p><img src="http://cdn.b5mang.com/2021320214129.png" alt="自动化全链路压测系统"></p>
-<p>压测数据的产生：<br>  拷贝真实流量（可以从访问日志、可以抓取某个端口的数据等）<br>  打上压测标签<br>  放在合适的机房（尽量接近用户）<br>数据隔离：<br>  针对读请求，针对某些不能压测（例如推荐、数据分析等）的组件进行mock<br>  对于写请求，把流量产生的数据写入影子库（数据库-拷贝一份库表和数据；缓存-加压测前缀；ES-多搞一份索引）<br>压力测试的实施<br>  持续放大，做好系统过载的识别（例如超时率、resp time等）</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/breaker/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/server/breaker/index.html" class="post-title-link" itemprop="url">高性能服务器设计-熔断模型</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 11:56:03" itemprop="dateCreated datePublished" datetime="2022-02-25T11:56:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:43:15" itemprop="dateModified" datetime="2022-03-01T22:43:15+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/server/breaker/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/breaker/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="熔断简单说明"><a href="#熔断简单说明" class="headerlink" title="熔断简单说明"></a>熔断简单说明</h2><p>在分布式系统中，一次完整的请求可能需要经过多个服务模块的调用，请求在多个服务中传递，服务对服务的调用会产生新的请求，这些请求共同组成了这次请求的调用链。当调用链中的某个环节，特别是下游服务不可用时，将会导致上游服务调用方不可用，最终将这种不可用的影响扩大到整个系统，导致整个分布式的不可用，引起服务雪崩现象。</p>
-<p>为了避免这种情况，在下游服务不可用时，保护上游服务的可用性显得极其重要。对此我们可以通过熔断的方式，通过及时熔断服务调用方和服务提供方的调用链，保护服务调用方资源，防止服务雪崩现象的出现。</p>
-<p>使用服务熔断，能够有效地保护服务调用方的稳定性，它能够避免服务调用者频繁调用可能失败的服务提供者，防止服务调用者浪费cpu、线程和IO资源等，提高服务整体的可用性。</p>
-<p>所以，熔断设计的目的是在服务提供方不可用时保护服务调用方的资源，减少服务调用中无用的远程调用。</p>
-<h2 id="常见熔断策略"><a href="#常见熔断策略" class="headerlink" title="常见熔断策略"></a>常见熔断策略</h2><h3 id="google-SRE-自适应熔断"><a href="#google-SRE-自适应熔断" class="headerlink" title="google SRE 自适应熔断"></a>google SRE 自适应熔断</h3><p>基于失败率</p>
-<p>drop_ratio = $max(0, （requests - K * accepts） / (requests + 1))$</p>
-<p>算法参数：</p>
+<p><strong>同城多机房</strong>：延迟1～3ms</p>
+<p>主要看接口的实现（如果有几十次的跨机房交互，这种是不可接受的）</p>
+<p>实现相对比较简单</p>
+<p>单机房写入；每一个机房近读取本机房的缓存与数据</p>
+<p>如果数据发生变更，需要做两边机房缓存的清理，一般通过canal订阅数据库变更</p>
+<p><img src="http://cdn.b5mang.com/202132021118.png" alt="同城多活示意图"></p>
+<p><strong>国内异地多机房</strong>:延迟50ms以内</p>
+<p>尽量减少跨机房的调用；而应该避免跨机房的数据库与缓存操作</p>
+<p>多机房写入，按照用户或者其他业务维度来进行流量分割，使得一部分流量总是请求A机房，而另外的总是请求B机房。</p>
+<p>根据业务需要，选择满足：<br>(1）一致性（如果选择了一致性，那么可用性便得不到100%保障）<br>(2）可用性（如果选择了可用性，那么一致性需要事后做补偿）</p>
+<p>数据同步方式有两种：<br>（1）基于存储系统主从复制：同步redis、Mysql等<br>（2）基于消息队列：同步缓存、HBase的数据</p>
+<p><img src="http://cdn.b5mang.com/20213202149.png" alt="异步多活示意图"></p>
+<p><strong>跨国多机房</strong>：延迟在100～200ms</p>
+<p>避免跨机房的调用，而只能做异步同步</p>
+<hr>
+<p>除此以外，我们还需要提一点，就是防止系统被瞬间的异常拖死，也就是系统能够自己保护好自己。</p>
+<h3 id="过载保护"><a href="#过载保护" class="headerlink" title="过载保护"></a>过载保护</h3><p>异常有内外两种，一种是外部流量特别高，一种是某一个依赖故障导致系统响应变慢。</p>
+<p>这里的课题应该包括：熔断、限流、超时控制、全局超时控制、服务降级（区分核心流程与非核心流程）</p>
+<h4 id="过载保护方案"><a href="#过载保护方案" class="headerlink" title="过载保护方案"></a>过载保护方案</h4><p>这里推荐一种方案：在该系统每个机器上新增一个进程：interface进程。</p>
+<p>Interface进程能够快速的从socket缓冲区中取得请求，打上当前时间戳，压入channel。</p>
+<p>业务处理进程从channel中获取请求和该请求的时间戳，如果发现时间戳早于当前时间减去超时时间（即已经超时，处理也没有意义），就直接丢弃该请求，或者应答一个失败报文。</p>
+<p>Channel是一个先进先出的通信方式，可以是socket，也可以是共享内存、消息队列、或者管道，不限。</p>
+<p>Socket缓冲区要设置合理，如果过大，导致及时interface进程都需要处理长时间才能清空该队列，就不合适了。</p>
+<p>建议的大小上限是：缓存住超时时间内interface进程能够处理掉的请求个数（注意考虑网络通讯中的元数据）。</p>
+<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.sohu.com/a/211248633_472869">https://www.sohu.com/a/211248633_472869</a></p>
+<h2 id="每个SLA级别需要做的事情"><a href="#每个SLA级别需要做的事情" class="headerlink" title="每个SLA级别需要做的事情"></a>每个SLA级别需要做的事情</h2><p>感觉一下提高1个9，难度有多大。</p>
+<p>三个9: 非核心业务可以容忍</p>
+<p>四个9: 核心业务</p>
+<p>运维值班体系、业务变更流程、故障处理流程、更加完善的系统故障排查工具、灰度发布（确保服务可回滚）</p>
+<p>五个9: 必须让机器来自动处理恢复！</p>
+<p>尽量思考故障发生后应该怎么办</p>
+<p>考虑点：如何自动的发现故障、如何自动化的应对故障、系统运维-尽量避免故障发生</p>
+<p>具体方法：failover(故障转移)、超时控制、服务降级、熔断限流</p>
+<p>failover:</p>
 <ul>
-<li>requests：窗口时间内的请求总数</li>
-<li>accepts：正常请求数量</li>
-<li>K：敏感度，K 越小越容易丢请求，一般推荐 1.5-2 之间</li>
+<li>完全对等</li>
+<li>非完全对等（例如存在主备节点，心跳，选择paxos, raft等）</li>
 </ul>
-<p>算法解释：</p>
-<ul>
-<li>正常情况下 requests=accepts，所以概率是 0。</li>
-<li>随着正常请求数量减少，当达到 requests == K* accepts 继续请求时，概率 P 会逐渐比 0 大开始按照概率逐渐丢弃一些请求，如果故障严重则丢包会越来越多，假如窗口时间内 accepts==0 则完全熔断。</li>
-<li>当应用逐渐恢复正常时，accepts、requests 同时都在增加，但是 K*accepts 会比 requests 增加的更快，所以概率很快就会归 0，关闭熔断。</li>
-</ul>
-<h3 id="brpc熔断策略"><a href="#brpc熔断策略" class="headerlink" title="brpc熔断策略"></a>brpc熔断策略</h3><p>在开启了熔断之后，CircuitBreaker会记录每一个请求的处理结果，并维护一个累计出错时长，记为acc_error_cost，当acc_error_cost &gt; max_error_cost时，熔断该节点。</p>
-<p>两个小技巧：</p>
-<ol>
-<li>利用EMA（移动平均值）策略计算接口的平均响应时间</li>
-<li>利用双时间窗口统计来平衡短期抖动与长期错误率过高；</li>
-</ol>
-<p>具体见：<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/apache/incubator-brpc/blob/master/docs/cn/circuit_breaker.md">CircuitBreaker</a></p>
-<h3 id="netflix-断路器"><a href="#netflix-断路器" class="headerlink" title="netflix 断路器"></a>netflix 断路器</h3><p><img src="https://img-blog.csdnimg.cn/20201201181047280.png" alt="熔断器策略"></p>
-<p>三种断路器状态：关闭、打开、半开</p>
-<p>最近一段时间内的错误率 = 错误数 / 总数</p>
-<p>最近一段时间内的错误数与总数，通过<strong>滑动窗口</strong>来实现，而滑动窗口又通过<strong>环形队列</strong>来实现。</p>
-<p>错误率超过多少，则进入打开状态，持续一段时间。</p>
-<p>持续一段时间后，进入半开状态，允许定量的请求通过，如果成功的比例足够大，则进入关闭状态，否则重新加入打开状态。</p>
+<p>系统分层<br>（1）接入层、服务层、数据层</p>
+<p>服务本身<br>（1）容量预估、合理的超时<br>（2）服务拆分、异步化解耦</p>
+<p>基础架构层面需要支持：<br>（1）监控&amp;告警<br>（2）自动化（快速）扩容&amp;泄洪能力<br>（1）熔断、限流、负载均衡、降级<br>（2）资源隔离（线程池、内存池、连接池）</p>
+<p>中间件&amp;存储，综合考虑业务场景、可运维性来进行技术选型</p>
+<p>控制变更流程<br>（1）可回滚、可灰度、可观测</p>
 
       
     </div>
@@ -1012,7 +1079,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/parallel/index.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/memory_pool/index.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1026,7 +1093,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/backend_knowledge_architecture/parallel/index.html" class="post-title-link" itemprop="url">并行算法 - 概览</a>
+            <a href="/backend_knowledge_architecture/server/memory_pool/index.html" class="post-title-link" itemprop="url">内存池系列｜概览</a>
         </h2>
 
         <div class="post-meta">
@@ -1038,14 +1105,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2022-02-25 11:31:03" itemprop="dateCreated datePublished" datetime="2022-02-25T11:31:03+08:00">2022-02-25</time>
+              <time title="Created: 2022-02-23 22:41:32" itemprop="dateCreated datePublished" datetime="2022-02-23T22:41:32+08:00">2022-02-23</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:42:17" itemprop="dateModified" datetime="2022-03-01T22:42:17+08:00">2022-03-01</time>
+                <time title="Modified: 2022-10-30 18:50:38" itemprop="dateModified" datetime="2022-10-30T18:50:38+08:00">2022-10-30</time>
               </span>
 
           
@@ -1057,8 +1124,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/parallel/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/parallel/index.html" itemprop="commentCount"></span>
+    <a title="valine" href="/backend_knowledge_architecture/server/memory_pool/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/memory_pool/index.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -1073,10 +1140,79 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>并行排序（并行归并排序、并行快速排序）</p>
-<p>并行查找（并行的散列表，随机分为K份）</p>
-<p>并行字符串匹配（任何算法都可以，只是分割后，需要补上2m个char）</p>
-<p>并行搜索（对于BFS，使用两个队列，循环使用）</p>
+          <h2 id="什么是内存池"><a href="#什么是内存池" class="headerlink" title="什么是内存池"></a>什么是内存池</h2><p>1.1 池化是在计算技术中经常使用的一种设计模式，其内涵在于：将程序中需要经常使用的核心资源先申请出来，放到一个池内，由程序自管理，这样可以提高资源的利用率，也可以保证本程序占有的资源数量，经常使用的池化技术包括内存池，线程池，和连接池等，其中尤以内存池和线程池使用最多。</p>
+<p>1.2 内存池（Memory Pool）是一种动态内存分配与管理技术，通常情况下，程序员习惯直接使用new，delete，malloc,free等API申请和释放内存，这样导致的后果就是：当程序运行的时间很长的时候，由于所申请的内存块的大小不定，频繁使用时会造成大量的内存碎片从而降低程序和操作系统的性能。</p>
+<p>内存池则是在真正使用内存之前，先申请分配一大块内存（内存池）留作备用。当程序员申请内存时，从池中取出一块动态分配，当程序员释放时，将释放的内存放回到池内，再次申请，就可以从池里取出来使用，并尽量与周边的空闲内存块合并。若内存池不够时，则自动扩大内存池，从操作系统中申请更大的内存池。</p>
+<h2 id="内存池解决什么问题？"><a href="#内存池解决什么问题？" class="headerlink" title="内存池解决什么问题？"></a>内存池解决什么问题？</h2><ol>
+<li>内存碎片问题（解决glib、操作系统层面的内存碎片问题，提供内存利用率）</li>
+<li>加速了内存的分配与回收，增加了系统性能。</li>
+</ol>
+<p>先说第一个，</p>
+<p>造成堆利用率很低的一个主要原因就是<strong>内存碎片化</strong>。如果有未使用的存储器，但是这块存储器不能用来满足分配的请求，这时候就会产生内存碎片化问题。内存碎片化分为内部碎片和外部碎片。</p>
+<p>内碎片内部碎片是指一个已分配的块比有效载荷大时发生的。(假设以前分配了10个大小的字节，现在只用了5个字节，则剩下的5个字节就会内碎片)。内部碎片的大小就是已经分配的块的大小和他们的有效载荷之差的和。因此内部碎片取决于以前请求内存的模式和分配器实现(对齐的规则)的模式。</p>
+<p><img src="https://images2015.cnblogs.com/blog/163084/201606/163084-20160602211318383-2024258119.png" alt="内部碎片问题"></p>
+<p>外碎片假设系统依次分配了16byte、8byte、16byte、4byte，还剩余8byte未分配。这时要分配一个24byte的空间，操作系统回收了一个上面的两个16byte，总的剩余空间有40byte，但是却不能分配出一个连续24byte的空间，这就是外碎片问题。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-fb5aef66f1ec634afa6999641f24da85_1440w.jpg" alt="外部碎片问题"></p>
+<p>每一个场景都通用的解决方案 VS 为某一个场景的定制方案</p>
+<p><img src="https://pic2.zhimg.com/80/v2-77c340491489371f7ff19532a5dd67fe_1440w.jpg" alt="底层逻辑"></p>
+<h2 id="内存池设计"><a href="#内存池设计" class="headerlink" title="内存池设计"></a>内存池设计</h2><p>总体思路：</p>
+<p>一次性向底层内存系统（依次为glibc、操作系统）申请一块大的内存慢慢使用，避免了频繁的向内存请求内存操作，提高内存分配的效率；由于向底层内存系统申请的内存块都是比较大的，所以能够降低（下一级别内存系统的）外碎片问题。</p>
+<p>值得一提是的：内碎片问题无法避免，只能尽可能的降低。甚至，本层内存池需要通过额外的内存来管理内存，从宏观上讲（对于底层内存分配系统来讲），这是对内存的一种浪费，也可以称之为一种内部碎片。</p>
+<p>例如，我每次只需要存储8个字节的数据，一共存储了1000次；显然这种的有效数据是8k; 但是实际上我管理着8k的数据，却使用了底层16k的内存，内存使用率只有50%。</p>
+<p>所以，衡量一个内存池系统很重要的一方面就是：他的内存使用效率，他多大程度上降低了内存内碎片的产生。</p>
+<ol>
+<li>内存池只能分配特定对象(数据结构)</li>
+<li>充分考虑释考虑内存对象的生命周期（例如apache webserver)</li>
+<li>考虑内存地址的对齐</li>
+<li>考虑线程局部存储来避免不必要的锁冲突</li>
+<li>除了考虑从大块内存上高效地将小内存划分出去，还要注意内存碎片问题。</li>
+<li>当回收内存时要注意是否需要将相邻的空闲内存块进行合并管理。<br>当内存池的空闲内存到达一定的阈值时，要合理地返还系统。</li>
+<li>在多核处理器能够 scale</li>
+</ol>
+<h2 id="内存池的演变"><a href="#内存池的演变" class="headerlink" title="内存池的演变"></a>内存池的演变</h2><h3 id="最简单的内存分配器"><a href="#最简单的内存分配器" class="headerlink" title="最简单的内存分配器"></a>最简单的内存分配器</h3><p>做一个链表指向空闲内存，分配就是取出一块来，改写链表，返回，释放就是放回到链表里面，并做好归并。</p>
+<p>注意做好标记和保护，避免二次释放，还可以花点力气在如何查找最适合大小的内存快的搜索上，减少内存碎片，有空你还可以把链表换成伙伴算法。</p>
+<p>优点： 实现简单</p>
+<p>缺点： 分配时搜索合适的内存块效率低，释放回归内存后归并消耗大，实际中不实用。</p>
+<h3 id="定长内存分配器"><a href="#定长内存分配器" class="headerlink" title="定长内存分配器"></a>定长内存分配器</h3><p>定长内存分配器即实现一个 FreeList，每个 FreeList 用于分配固定大小的内存块，比如用于分配 32字节对象的固定内存分配器，之类的。每个固定内存分配器里面有两个链表，OpenList 用于存储未分配的空闲对象，CloseList用于存储已分配的内存对象，那么所谓的分配就是从 OpenList 中取出一个对象放到 CloseList 里并且返回给用户，释放又是从 CloseList 移回到 OpenList。分配时如果不够，那么就需要增长 OpenList：申请一个大一点的内存块，切割成比如 64 个相同大小的对象添加到 OpenList中。这个固定内存分配器回收的时候，统一把先前向系统申请的内存块全部还给系统。</p>
+<p>优点： 简单粗暴，分配和释放的效率高，解决实际中特定场景下的问题有效。</p>
+<p>缺点： 功能单一，只能解决定长的内存需求，另外占着内存没有释放。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-9b82fa3f6d8649c4574760981dc0e772_1440w.jpg" alt="定长内存分配器"></p>
+<h3 id="哈希映射的FreeList"><a href="#哈希映射的FreeList" class="headerlink" title="哈希映射的FreeList"></a>哈希映射的FreeList</h3><p>池在定长分配器的基础上，按照不同对象大小(8，16，32，64，128，256，512，1k…64K),构造十多个固定内存分配器，分配内存时根据要申请内存大小进行对齐然后查H表，决定到底由哪个分配器负责，分配后要在内存头部的 header 处写上 cookie，表示由该块内存哪一个分配器分配的，这样释放时候你才能正确归还。如果大于64K，则直接用系统的 malloc作为分配，如此以浪费内存为代价你得到了一个分配时间近似O(1)的内存分配器。这种内存池的缺点是假设某个 FreeList 如果高峰期占用了大量内存即使后面不用，也无法支援到其他内存不够的 FreeList，达不到分配均衡的效果。</p>
+<p>优点：这个本质是定长内存池的改进，分配和释放的效率高。可以解决一定长度内的问题。</p>
+<p>缺点：存在内碎片的问题，且将一块大内存切小以后，申请大内存无法使用。多线程并发场景下，锁竞争激烈，效率降低。</p>
+<p>范例：sgi stl 六大组件中的空间配置器就是这种设计实现的。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-0aa79060ce43db2408093746182f4d0e_1440w.jpg" alt="哈希映射的FreeList"></p>
+<h3 id="并发内存池"><a href="#并发内存池" class="headerlink" title="并发内存池"></a>并发内存池</h3><p>第一层是Thread Cache，线程缓存是每个线程独有的，在这里设计的是用于小于64k的内存分配，线程在这里申请不需要加锁，每一个线程都有自己独立的cache，这也就是这个项目并发高效的地方。</p>
+<p>第二层是Central Cache，在这里是所有线程共享的，它起着承上启下的作用，Thread Cache是按需要从Central Cache中获取对象，它就要起着平衡多个线程按需调度的作用，既可以将内存对象分配给Thread Cache来的每个线程，又可以将线程归还回来的内存进行管理。Central Cache是存在竞争的，所以在这里取内存对象的时候是需要加锁的，但是锁的力度可以控制得很小。</p>
+<p>第三层是Page Cache，存储的是以页为单位存储及分配的，Central Cache没有内存对象(Span)时，从Page cache分配出一定数量的Page，并切割成定长大小的小块内存，分配给Central Cache。Page Cache会回收Central Cache满足条件的Span(使用计数为0)对象，并且合并相邻的页，组成更大的页，缓解内存碎片的问题。</p>
+<p><img src="https://pic2.zhimg.com/80/v2-59285244475d89d156c0900126926192_1440w.jpg" alt="并发内存池"></p>
+<h3 id="一些常见的内存分配策略"><a href="#一些常见的内存分配策略" class="headerlink" title="一些常见的内存分配策略"></a>一些常见的内存分配策略</h3><h4 id="如何分配定长记录"><a href="#如何分配定长记录" class="headerlink" title="如何分配定长记录"></a>如何分配定长记录</h4><p>最大化内存使用率，最小化分配时间</p>
+<ul>
+<li>bitmap来管理定长记录</li>
+</ul>
+<p>内存使用率：bitmap需要额外内存，有一定浪费</p>
+<p>时间分配效率：$O(1)$</p>
+<ul>
+<li>FreeList来管理定长记录</li>
+</ul>
+<p>内存使用率：100%<br>时间分配效率：$O(1)$</p>
+<h4 id="如何分配变长记录"><a href="#如何分配变长记录" class="headerlink" title="如何分配变长记录"></a>如何分配变长记录</h4><p>变长记录进行“取整”操作，带来了内存碎片问题，我们只能减少，而无可避免。</p>
+<p>为了减少内部碎片，分配规则按照 8, 16, 32, 48, 64, 80，并非2的幂次级</p>
+<p>FreeList来管理“取整”之后的定长记录</p>
+<p>内存使用率：有一定的内存碎片</p>
+<p>时间分配效率：$O(1)$</p>
+<p>以上分配方式都是基于page，当分配小于page的对象时会使用。</p>
+<h4 id="大的对象如何分配"><a href="#大的对象如何分配" class="headerlink" title="大的对象如何分配"></a>大的对象如何分配</h4><p>首先，每一个线程有一块ThreadCache来管理从CentralCache分配的内存</p>
+<p>由于ThreadLocal，所以从ThreadCache分配内存不需要加锁。</p>
+<p>CentralCache通过page以及span来管理内存，当需要分配内存时，会通过spinlock来加锁保护。</p>
+<p>span关键属性：是否空闲、startPageId, pageNum</p>
+<p>page关键属性：是否空闲</p>
+<p>通过Buddy系统来管理所有空闲的page, 而分配出去的Page通过RadixTree来管理起来。</p>
+<p>通过RadixTree管理有两个好处：</p>
+<ol>
+<li>节省内存，按需分配</li>
+<li>查询性能也还不错，等价于树高度</li>
+</ol>
 
       
     </div>
@@ -1098,7 +1234,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/os/sync.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/memory_pool/memcahce_for_tcmalloc.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1112,7 +1248,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/backend_knowledge_architecture/os/sync.html" class="post-title-link" itemprop="url">操作系统 - 线程同步</a>
+            <a href="/backend_knowledge_architecture/server/memory_pool/memcahce_for_tcmalloc.html" class="post-title-link" itemprop="url">内存池系列｜TCMalloc分析</a>
         </h2>
 
         <div class="post-meta">
@@ -1124,14 +1260,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2022-02-25 11:12:03" itemprop="dateCreated datePublished" datetime="2022-02-25T11:12:03+08:00">2022-02-25</time>
+              <time title="Created: 2022-02-23 22:41:04" itemprop="dateCreated datePublished" datetime="2022-02-23T22:41:04+08:00">2022-02-23</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-30 21:10:19" itemprop="dateModified" datetime="2022-10-30T21:10:19+08:00">2022-10-30</time>
+                <time title="Modified: 2022-10-30 18:53:45" itemprop="dateModified" datetime="2022-10-30T18:53:45+08:00">2022-10-30</time>
               </span>
 
           
@@ -1143,8 +1279,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/os/sync.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/sync.html" itemprop="commentCount"></span>
+    <a title="valine" href="/backend_knowledge_architecture/server/memory_pool/memcahce_for_tcmalloc.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/memory_pool/memcahce_for_tcmalloc.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -1159,48 +1295,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>多线程问题的本质：有序性，可见性，原子性</p>
-<p>我们处理线程安全可以有几个层次：</p>
+          <p>实现要点</p>
 <ol>
-<li>能否做成无状态的不变对象。无状态是最安全的。</li>
-<li>能否线程封闭<br>（1）栈封闭，多采用局部变量<br>（2）线程局部存储（用空间换性能）<br>（3）程序控制线程封闭（Hash，将同一hash val的的请求丢给同一个线程去处理）</li>
-<li>采用何种同步技术</li>
+<li>分层（ThreadCache, CentralCache, PageCache)</li>
+<li>线程局部存储来管理ThreadCache</li>
+<li>通过基于hash的freelist来管理小对象</li>
+<li>通过radix tree来管理分配出来的obj到span的映射，如此来方便做回收【对象地址到span的映射】</li>
+<li>通过buddy算法来管理span, 保证用来分配内存的span尽可能的大（大的<strong>总是</strong>可以通过分裂成为小的，小的只有在<strong>合适的时机-内存连续</strong>才能合并成为大的）</li>
 </ol>
-<h4 id="多线程同步的方式"><a href="#多线程同步的方式" class="headerlink" title="多线程同步的方式"></a>多线程同步的方式</h4><p>线程同步</p>
-<p>多个线程间的一种协作机制。谈到线程我们经常想到的是线程间的竞争，比如去争夺锁，但这并不是故事的全部，线程间也会有协作机制。就是在一个线程进行了规定操作后，就进入等待状态， 等待其他线程执行完他们的指定代码过后 再将其唤醒;<br>（在有多个线程进行等待时， 如果需要，可以使用 notifyAll()来唤醒所有的等待线程。）</p>
-<p>(1) 信号量 semphore</p>
-<p>(2) 共享内存 shared_memory</p>
-<p>(3) 读写锁 rw_lock</p>
-<p>(4) 条件变量 condition</p>
-<p>线程间存在依赖</p>
-<p><img src="https://img-blog.csdnimg.cn/img_convert/edb8f67325ff3f693d58f635eeff9650.jpeg" alt="条件变量的使用"></p>
-<p>(5) 互斥量 mutex</p>
-<h4 id="互斥锁"><a href="#互斥锁" class="headerlink" title="互斥锁"></a>互斥锁</h4><p>对于互斥锁，如果资源已经被占用，资源申请者只能进入睡眠状态。</p>
-<ol>
-<li>临界区：通过对多线程的串行化来访问公共资源或一段代码，速度快，适合控制数据访问。</li>
-<li>互斥量：为协调共同对一个共享资源的单独访问而设计的。</li>
-<li>信号量：为控制一个具有有限数量用户资源而设计。</li>
-<li>读写锁</li>
-</ol>
-<h5 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a>自旋锁</h5><p>但是自旋锁不会引起调用者睡眠，如果自旋锁已经被别的执行单元保持，调用者就一直循环在那里看是否该自旋锁的保持者已经释放了锁。如果等待的时间比较短，适合使用自旋锁，占用大量的CPU资源</p>
-<h4 id="锁的实现机制"><a href="#锁的实现机制" class="headerlink" title="锁的实现机制"></a>锁的实现机制</h4><p>在硬件层面，CPU提供了原子操作、关中断、锁内存总线的机制。</p>
-<h4 id="禁中断"><a href="#禁中断" class="headerlink" title="禁中断"></a>禁中断</h4><p>既然只有中断才能把上锁过程打断，造成多线程操作失败。我先关中断不就得了，在加锁操作完成后再开中断。</p>
-<h4 id="普通的原子指令"><a href="#普通的原子指令" class="headerlink" title="普通的原子指令"></a>普通的原子指令</h4><p>上面这个手段太笨重了，能不能硬件做一种加锁的原子操作呢？能，大名鼎鼎的“test and set”指令就是做这个事情的。</p>
-<h5 id="锁内存总线-原子指令"><a href="#锁内存总线-原子指令" class="headerlink" title="锁内存总线 + 原子指令"></a>锁内存总线 + 原子指令</h5><p>通过上面的手段，单核环境下，锁的实现问题得到了圆满的解决。</p>
-<p>那么多核环境呢？简单嘛，还是“test and set”不就得了，这是一条指令，原子的，不会有问题的。</p>
-<p>真的吗，单独一条指令能够保证该指令在单个核上执行过程中不会被中断打断，但是两个核同时执行这个指令呢？。。。</p>
-<p>我再想想，硬件执行时还是得从内存中读取lock，判断并设置状态到内存，貌似这个过程也不是那么原子嘛。对，多个核执行确实会存在这个问题。怎么办呢？首先我们得明白这个地方的关键点，关键点是两个核会并行操作内存而且从操作内存这个调度来看“test and set”不是原子的，需要先读内存然后再写内存，如果我们保证这个内存操作是原子的，就能保证锁的正确性了。</p>
-<p>确实，硬件提供了锁内存总线的机制，我们在锁内存总线的状态下执行test and set操作，就能保证同时只有一个核来test and set，从而避免了多核下发生的问题。</p>
-<h4 id="无锁"><a href="#无锁" class="headerlink" title="无锁"></a>无锁</h4><ol>
-<li>无锁算法的底层实现 — CAS</li>
-<li>借助内存访问WORD的原子性</li>
-</ol>
-<p>参考：</p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="http://jm.taobao.org/2011/12/07/1347/">http://jm.taobao.org/2011/12/07/1347/</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/heiyeshuwu/article/details/9722443">https://blog.csdn.net/heiyeshuwu/article/details/9722443</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.cnblogs.com/jing99/p/11984966.html">https://www.cnblogs.com/jing99/p/11984966.html</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.qbitai.com/2019/12/9895.html">https://www.qbitai.com/2019/12/9895.html</a><br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.jianshu.com/p/d585b3938dea">https://www.jianshu.com/p/d585b3938dea</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/ITer_ZC/article/details/40392787">https://blog.csdn.net/ITer_ZC/article/details/40392787</a></p>
 
       
     </div>
@@ -1222,7 +1324,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/hardware/cpu_cache.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/memory_pool/memcache_for_go.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1236,7 +1338,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/backend_knowledge_architecture/hardware/cpu_cache.html" class="post-title-link" itemprop="url">计算机硬件-CPU高速缓存</a>
+            <a href="/backend_knowledge_architecture/server/memory_pool/memcache_for_go.html" class="post-title-link" itemprop="url">内存池系列｜Go内存分配</a>
         </h2>
 
         <div class="post-meta">
@@ -1248,14 +1350,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2022-02-25 11:01:03" itemprop="dateCreated datePublished" datetime="2022-02-25T11:01:03+08:00">2022-02-25</time>
+              <time title="Created: 2022-02-23 22:41:04" itemprop="dateCreated datePublished" datetime="2022-02-23T22:41:04+08:00">2022-02-23</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
+                <time title="Modified: 2022-03-01 22:44:05" itemprop="dateModified" datetime="2022-03-01T22:44:05+08:00">2022-03-01</time>
               </span>
 
           
@@ -1267,8 +1369,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/hardware/cpu_cache.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/hardware/cpu_cache.html" itemprop="commentCount"></span>
+    <a title="valine" href="/backend_knowledge_architecture/server/memory_pool/memcache_for_go.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/memory_pool/memcache_for_go.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -1283,36 +1385,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h4 id="高速缓存"><a href="#高速缓存" class="headerlink" title="高速缓存"></a>高速缓存</h4><p>思想：索引思想、折中思想</p>
-<ul>
-<li>直接映射ByHash</li>
-</ul>
-<p>主存中的一个块只能映射到Cache的某一特定块中去。例如，主存的第0块、第16块、……、第2032块，只能映射到Cache的第0块；而主存的第1块、第17块、……、第2033块，只能映射到Cache的第1块……</p>
-<p><img src="https://static.oschina.net/uploads/img/201803/07163540_dO4M.gif" alt="直接映射"></p>
-<p>直接映射是最简单的地址映射方式，它的硬件简单，成本低，地址变换速度快，而且不涉及替换算法问题。</p>
-<p>但是这种方式不够灵活，Cache的存储空间得不到充分利用，每个主存块只有一个固定位置可存放，容易产生冲突，使Cache效率下降，</p>
-<p>因此只适合大容量Cache采用。</p>
-<p>例如，如果一个程序需要重复引用主存中第0块与第16块，最好将主存第0块与第16块同时复制到Cache中，但由于它们都只能复制到Cache的第0块中去，即使Cache中别的存储空间空着也不能占用，因此这两个块会不断地交替装入Cache中，导致命中率降低</p>
-<ul>
-<li>全相连映射ByAll</li>
-</ul>
-<p>图3-15 是全相联映射的Cache组织，主存中任何一块都可以映射到Cache中的任何一块位置上</p>
-<p><img src="https://static.oschina.net/uploads/img/201803/07163541_oEp6.gif" alt="全相连映射"></p>
-<p>全相联映射方式比较灵活，主存的各块可以映射到Cache的任一块中，Cache的利用率高，块冲突概率低，只要淘汰Cache中的某一块，即可调入主存的任一块。</p>
-<p>但是，由于Cache比较电路的设计和实现比较困难，这种方式只适合于小容量Cache采用。</p>
-<ul>
-<li>组相连映射ByGroup</li>
-</ul>
-<p>组间直接相连，组内全相连</p>
-<p> 组相联映射实际上是直接映射和全相联映射的折中方案，其组织结构如图3-16所示。主存和Cache都分组，主存中一个组内的块数与Cache中的分组数相同，组间采用直接映射，组内采用全相联映射。也就是说，将Cache分成u组，每组v块，主存块存放到哪个组是固定的，至于存到该组哪一块则是灵活的。例如，主存分为256组，每组8块，Cache分为8组，每组2块。</p>
-<p> <img src="https://static.oschina.net/uploads/img/201803/07163541_YspG.gif" alt="组相连映射"></p>
-<p>主存中的各块与Cache的组号之间有固定的映射关系，但可自由映射到对应Cache组中的任何一块。例如，主存中的第0块、第8块……均映射于Cache的第0组，但可映射到Cache第0组中的第0块或第1块；主存的第1块、第9块……均映射于Cache的第1组，但可映射到Cache第1组中的第2块或第3块。</p>
-<p>常采用的组相联结构Cache，每组内有2、4、8、16块，称为2路、4路、8路、16路组相联Cache。</p>
-<p>组相联结构Cache是前两种方法的折中方案，适度兼顾二者的优点，尽量避免二者的缺点，因而得到普遍采用。</p>
-<p>具体参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/weixin_34319111/article/details/92562285">https://blog.csdn.net/weixin_34319111/article/details/92562285</a></p>
-<h4 id="一致性协议"><a href="#一致性协议" class="headerlink" title="一致性协议"></a>一致性协议</h4><p>MESI 缓存一致性协议</p>
-<p>Modified、Exclusive、Shared、Invalid</p>
-
+          
       
     </div>
 
@@ -1333,7 +1406,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/os/vm_mem.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/memory_pool/memcache_for_mc.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1347,7 +1420,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/backend_knowledge_architecture/os/vm_mem.html" class="post-title-link" itemprop="url">操作系统系列｜虚拟内存</a>
+            <a href="/backend_knowledge_architecture/server/memory_pool/memcache_for_mc.html" class="post-title-link" itemprop="url">内存池系列｜MC内存分配</a>
         </h2>
 
         <div class="post-meta">
@@ -1359,14 +1432,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2022-02-25 10:55:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:55:03+08:00">2022-02-25</time>
+              <time title="Created: 2022-02-23 22:41:04" itemprop="dateCreated datePublished" datetime="2022-02-23T22:41:04+08:00">2022-02-23</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-30 21:15:33" itemprop="dateModified" datetime="2022-10-30T21:15:33+08:00">2022-10-30</time>
+                <time title="Modified: 2022-03-01 22:44:10" itemprop="dateModified" datetime="2022-03-01T22:44:10+08:00">2022-03-01</time>
               </span>
 
           
@@ -1378,8 +1451,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/os/vm_mem.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/vm_mem.html" itemprop="commentCount"></span>
+    <a title="valine" href="/backend_knowledge_architecture/server/memory_pool/memcache_for_mc.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/memory_pool/memcache_for_mc.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -1394,28 +1467,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><img src="https://pics7.baidu.com/feed/95eef01f3a292df5ed263835cecf2b6835a8732b.png?token=d3599f2975744c1d572bd6e62b2daf04" alt="虚拟地址转换为物理地址的本质"></p>
-<p>我们知道linux采用了分页机制，通常采用四级页表，页全局目录(PGD)，页上级目录(PUD)，页中间目录(PMD)，页表(PTE)。如下：</p>
-<p><img src="https://pics2.baidu.com/feed/728da9773912b31b18d3813af7e64172dbb4e169.png?token=c455dcb1766f6df26c45bc14d987b355" alt="虚拟地址转换为物理地址硬件过程"></p>
-<ol>
-<li>从CR3寄存器中读取页目录所在物理页面的基址(即所谓的页目录基址)，从线性地址的第一部分获取页目录项的索引，两者相加得到页目录项的物理地址。</li>
-<li>第一次读取内存得到pgd_t结构的目录项，从中取出物理页基址取出，即页上级页目录的物理基地址。</li>
-<li>从线性地址的第二部分中取出页上级目录项的索引，与页上级目录基地址相加得到页上级目录项的物理地址。</li>
-<li>第二次读取内存得到pud_t结构的目录项，从中取出页中间目录的物理基地址。</li>
-<li>从线性地址的第三部分中取出页中间目录项的索引，与页中间目录基址相加得到页中间目录项的物理地址。</li>
-<li>第三次读取内存得到pmd_t结构的目录项，从中取出页表的物理基地址。</li>
-<li>从线性地址的第四部分中取出页表项的索引，与页表基址相加得到页表项的物理地址。</li>
-<li>第四次读取内存得到pte_t结构的目录项，从中取出物理页的基地址。</li>
-<li>从线性地址的第五部分中取出物理页内偏移量，与物理页基址相加得到最终的物理地址。</li>
-<li>第五次读取内存得到最终要访问的数据。</li>
-</ol>
-<p>整个过程是比较机械的，每次转换先获取物理页基地址，再从线性地址中获取索引，合成物理地址后再访问内存。不管是页表还是要访问的数据都是以页为单位存放在主存中的，因此每次访问内存时都要先获得基址，再通过索引(或偏移)在页内访问数据，因此可以将线性地址看作是若干个索引的集合。</p>
-<h3 id="虚拟内存管理"><a href="#虚拟内存管理" class="headerlink" title="虚拟内存管理"></a>虚拟内存管理</h3><h4 id="Linux通过红黑树管理"><a href="#Linux通过红黑树管理" class="headerlink" title="Linux通过红黑树管理"></a>Linux通过红黑树管理</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">task_struct</span> &#123;</span></span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span> *<span class="title">mm</span>;</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">vm_area_struct</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span> * <span class="title">vm_mm</span>;</span>    <span class="comment">/* 所属的内存描述符 */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> vm_start;    <span class="comment">/* vma的起始地址 */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> vm_end;        <span class="comment">/* vma的结束地址 */</span></span><br><span class="line"> </span><br><span class="line">    <span class="comment">/* 该vma的在一个进程的vma链表中的前驱vma和后驱vma指针，链表中的vma都是按地址来排序的*/</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">vm_area_struct</span> *<span class="title">vm_next</span>, *<span class="title">vm_prev</span>;</span></span><br><span class="line"> </span><br><span class="line">    <span class="keyword">pgprot_t</span> vm_page_prot;        <span class="comment">/* vma的访问权限 */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> vm_flags;    <span class="comment">/* 标识集 */</span></span><br><span class="line"> </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">rb_node</span> <span class="title">vm_rb</span>;</span>      <span class="comment">/* 红黑树中对应的节点 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>该结构体是一段虚拟内存，从vm_start到vm_end，他们拥有相同的权限；<br>vm_prev 、vm_next 是双向链表的next与pre；<br>vm_rb 是红黑树节点</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span> &#123;</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">vm_area_struct</span> * <span class="title">mmap</span>;</span>       <span class="comment">/* list of VMAs */</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">rb_root</span> <span class="title">mm_rb</span>;</span><span class="comment">/*又是红黑树的根节点*/</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">vm_area_struct</span> * <span class="title">mmap_cache</span>;</span>      <span class="comment">/* last find_vma result */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>mmap是双向链表；按照地址大小来顺序管理所有的area</p>
-<p>mm_rb是红黑树的根节点</p>
-<p>红黑树的Key-Value: 虚拟地址 =&gt; 对应的area.</p>
+          <p>slab allcator的机制</p>
+<p><img src="http://cdn.b5mang.com/2021320115717.png" alt="memcache内存分配示意图"></p>
+<p>综合上面的介绍，memcached的内存分配策略就是：按slab需求分配page，各slab按需使用chunk存储。</p>
+<p>这里有几个特点要注意，</p>
+<p>Memcached分配出去的page不会被回收或者重新分配</p>
+<p>Memcached申请的内存不会被释放</p>
+<p>slab空闲的chunk不会借给任何其他slab使用</p>
 
       
     </div>
@@ -1436,7 +1494,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/33/">33</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/34/">34</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1505,20 +1563,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">328</span>
+          <span class="site-state-item-count">331</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-count">60</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

@@ -203,7 +203,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/max_sum_no_adj.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/hardware/cpu_cache.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -217,7 +217,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/max_sum_no_adj.html" class="post-title-link" itemprop="url">动态规划系列-不相邻序列最大和</a>
+            <a href="/backend_knowledge_architecture/hardware/cpu_cache.html" class="post-title-link" itemprop="url">计算机硬件-CPU高速缓存</a>
         </h2>
 
         <div class="post-meta">
@@ -229,24 +229,15 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2022-02-26 20:34:03" itemprop="dateCreated datePublished" datetime="2022-02-26T20:34:03+08:00">2022-02-26</time>
+              <time title="Created: 2022-02-25 11:01:03" itemprop="dateCreated datePublished" datetime="2022-02-25T11:01:03+08:00">2022-02-25</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-03 19:40:16" itemprop="dateModified" datetime="2022-03-03T19:40:16+08:00">2022-03-03</time>
+                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
               </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
 
           
   
@@ -257,8 +248,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/max_sum_no_adj.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/max_sum_no_adj.html" itemprop="commentCount"></span>
+    <a title="valine" href="/backend_knowledge_architecture/hardware/cpu_cache.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/hardware/cpu_cache.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -273,867 +264,35 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>Maximum sum such that no two elements are adjacent<br>Given an array of positive numbers, find the maximum sum of a subsequence with the constraint that no 2 numbers in the sequence should be adjacent in the array. So 3 2 7 10 should return 13 (sum of 3 and 10) or 3 2 5 10 7 should return 15 (sum of 3, 5 and 7).Answer the question in most efficient way.<br>Examples :<br>Input : arr[] = {5, 5, 10, 100, 10, 5}<br>Output : 110</p>
-<p>Input : arr[] = {1, 2, 3}<br>Output : 4</p>
-<p>Input : arr[] = {1, 20, 3}<br>Output : 20</p>
-<h2 id="不相邻序列最大和—思路"><a href="#不相邻序列最大和—思路" class="headerlink" title="不相邻序列最大和—思路"></a>不相邻序列最大和—思路</h2><p>遍历array 中的所有元素，设置两个变量：</p>
-<p>excl[i]: 不包含i元素的最大和</p>
-<p>incl[i]: 包含i元素的最大和</p>
-<p>更新当前元素的 excl 和 incl：</p>
-<p>不包含当前元素的最大和 excl[i] = max(incl[i-1]， excl[i-1])</p>
-<p>包含当前元素的最大和 incl = excl[i-1]+A[i] (元素不能相邻)</p>
-<p>因为只与前一项有关，所以可以用空间压缩。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/ugly_number.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/ugly_number.html" class="post-title-link" itemprop="url">动态规划系列-丑数</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-26 20:34:03" itemprop="dateCreated datePublished" datetime="2022-02-26T20:34:03+08:00">2022-02-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:50:32" itemprop="dateModified" datetime="2022-03-01T22:50:32+08:00">2022-03-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87Offer/" itemprop="url" rel="index"><span itemprop="name">剑指Offer</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/ugly_number.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/ugly_number.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>我们把只包含质因子2、3和5的数称作丑数（Ugly Number）。</p>
-<p>例如6、8都是丑数，但14不是，因为它包含质因子7。</p>
-<p>求第n个丑数的值。</p>
-<p>样例<br>输入：5</p>
-<p>输出：5<br>注意：习惯上我们把1当做第一个丑数。</p>
-<h4 id="解答思路"><a href="#解答思路" class="headerlink" title="解答思路"></a>解答思路</h4><p>第二种：创建数组保存已经找到丑数，用空间换时间的解法。<br>根据丑数的定义， 丑数应该是另一个丑数乘以 2、3 或者 5 的结果（1 除外）。因此我们可以创建一个数组，里面的数字是排好序的丑数，每一个丑数都是前面的丑数乘以 2、3 或者 5 得到的。</p>
-<p>这种思路的关键在于怎样确保数组里面的丑数是排好序的。假设数组中已经有若干个丑数排好序后存放在数组中，并且把己有最大的丑数记做M，我们接下来分析如何生成下一个丑数。该丑数肯定是前面某一个丑数乘以 2、3 或者 5 的结果， 所以我们首先考虑把已有的每个丑数乘以 2。在乘以 2 的时钝能得到若干个小于或等于 M 的结果。由于是按照顺序生成的，小于或者等于 M 肯定己经在数组中了，我们不需再次考虑：还会得到若干个大于 M 的结果，但我们只需要第一个大于 M 的结果，因为我们希望丑数是按从小到大的顺序生成的，其他更大的结果以后再说。我们把得到的第一个乘以 2 后大于 M 的结果记为 M2，同样，我们把已有的每一个丑数乘以 3 和 5，能得到第一个大于 M 的结果 M3 和 M，那么下一个丑数应该是 M2、M3 和 M5 这 3 个数的最小者。</p>
-<p>前面分析的时候，提到把已有的每个丑数分别都乘以 2、3 和 5。事实上这不是必须的，因为已有的丑数是按顺序存放在数组中的。对乘以 2 而言， 肯定存在某一个丑数 T2，排在它之前的每一个丑数乘以 2 得到的结果都会小于已有最大的丑数，在它之后的每一个丑数乘以 2 得到的结果都会太大。我们只需记下这个丑数的位置， 同时每次生成新的丑数的时候，去更新这个 T2。对乘以 3 和 5 而言， 也存在着同样的 T3 和 T5。</p>
-<p>T2的更新是需要靠遍历来完成的，但是需要明确的是：T2不需要每次都从0开始，他是越来越大的。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/long_path_in_2d_array.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/long_path_in_2d_array.html" class="post-title-link" itemprop="url">动态规划系列-矩阵中找一条最长的递增路径</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-26 19:42:03" itemprop="dateCreated datePublished" datetime="2022-02-26T19:42:03+08:00">2022-02-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:49:15" itemprop="dateModified" datetime="2022-03-01T22:49:15+08:00">2022-03-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/long_path_in_2d_array.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/long_path_in_2d_array.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>求解一个矩阵中找一条最长的递增路径？</p>
-<p>可能解法：有向图DFS和记忆化搜索处理</p>
-<p>dp[i][j]表示以(i,j)出发的最长路径。</p>
-<p>该题目用常规的DP很难完成，因为他没有base condition，不知道从何处开始计算。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/maxProductAfterCutting.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/maxProductAfterCutting.html" class="post-title-link" itemprop="url">动态规划系列-切绳子问题</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-26 19:42:03" itemprop="dateCreated datePublished" datetime="2022-02-26T19:42:03+08:00">2022-02-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:49:24" itemprop="dateModified" datetime="2022-03-01T22:49:24+08:00">2022-03-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/maxProductAfterCutting.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/maxProductAfterCutting.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>给你一根长度为 n 绳子，请把绳子剪成 m 段（m、n 都是整数，2≤n≤58 并且 m≥2）。</p>
-<p>每段的绳子的长度记为k[0]、k[1]、……、k[m]。k[0]k[1] … k[m] 可能的最大乘积是多少？</p>
-<p>例如当绳子的长度是8时，我们把它剪成长度分别为2、3、3的三段，此时得到最大的乘积18。</p>
-<p>样例<br>输入：8</p>
-<p>输出：18</p>
-<p>自上而下 + 备忘录解法</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; dp;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (dp[n] &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> dp[n];</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (n &lt;= <span class="number">3</span>) &#123;</span><br><span class="line">            dp[n] = n - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">return</span> n - <span class="number">1</span>; </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (n == <span class="number">4</span>) &#123;</span><br><span class="line">            dp[n] = <span class="number">4</span>;</span><br><span class="line">            <span class="keyword">return</span> dp[n];</span><br><span class="line">        &#125;</span><br><span class="line">         <span class="keyword">if</span> (n == <span class="number">5</span>) &#123;</span><br><span class="line">            dp[n] = <span class="number">6</span>;</span><br><span class="line">            <span class="keyword">return</span> dp[n];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> max_score = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= n - <span class="number">2</span>; ++i) &#123;</span><br><span class="line">            <span class="comment">//分为两种情况：第一刀减在i处；剩下的那一部分可以有两种选择：不剪，或者继续剪</span></span><br><span class="line">            max_score = max(max_score, max(i * (n - i), i * dfs(n - i)));</span><br><span class="line">        &#125;</span><br><span class="line">        dp[n] = max_score;</span><br><span class="line">        <span class="keyword">return</span> dp[n];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxProductAfterCutting</span><span class="params">(<span class="keyword">int</span> length)</span> </span>&#123;</span><br><span class="line">        dp = <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(length + <span class="number">5</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span> dfs(length);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/getMaxValue.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/getMaxValue.html" class="post-title-link" itemprop="url">动态规划系列-礼物最大价值</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-26 18:44:03" itemprop="dateCreated datePublished" datetime="2022-02-26T18:44:03+08:00">2022-02-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:48:55" itemprop="dateModified" datetime="2022-03-01T22:48:55+08:00">2022-03-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/getMaxValue.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/getMaxValue.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在一个m×n的棋盘的每一格都放有一个礼物，每个礼物都有一定的价值（价值大于0）。</p>
-<p>你可以从棋盘的左上角开始拿格子里的礼物，并每次向右或者向下移动一格直到到达棋盘的右下角。</p>
-<p>给定一个棋盘及其上面的礼物，请计算你最多能拿到多少价值的礼物？</p>
-<p>注意：</p>
-<p>m,n&gt;0<br>样例：</p>
-<p>输入：<br>[<br>[2,3,1],<br>[1,7,1],<br>[4,6,1]<br>]</p>
-<p>输出：19</p>
-<p>解释：沿着路径 2→3→7→6→1 可以得到拿到最大价值礼物。</p>
-<p>解题思路：</p>
-<ol>
-<li>自上而下 + 记忆化搜索</li>
-<li>动态规划</li>
-</ol>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">typedef</span> <span class="built_in">pair</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; PII;</span><br><span class="line">    <span class="keyword">int</span> res;</span><br><span class="line">    <span class="keyword">int</span> m;</span><br><span class="line">    <span class="keyword">int</span> n;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; grid;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; dp;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    void dfs(int x, int y, int sum) &#123;</span></span><br><span class="line"><span class="comment">        if (x == m - 1 &amp;&amp; y == n -1) &#123;</span></span><br><span class="line"><span class="comment">            res = max(res, sum);</span></span><br><span class="line"><span class="comment">            return;</span></span><br><span class="line"><span class="comment">        &#125;</span></span><br><span class="line"><span class="comment">        </span></span><br><span class="line"><span class="comment">        int dx[] = &#123;0, 1&#125;;</span></span><br><span class="line"><span class="comment">        int dy[] = &#123;1, 0&#125;;</span></span><br><span class="line"><span class="comment">        for (int k = 0; k &lt; 2; ++k) &#123;</span></span><br><span class="line"><span class="comment">            int nx = x + dx[k], ny = y + dy[k];</span></span><br><span class="line"><span class="comment">            if (nx &gt;= 0 &amp;&amp; nx &lt; m &amp;&amp; ny &gt;= 0 &amp;&amp; ny &lt; n &amp;&amp; grid[nx][ny] &gt;= 0) &#123;</span></span><br><span class="line"><span class="comment">                int b = grid[nxa][ny];</span></span><br><span class="line"><span class="comment">                grid[nx][ny] = -1;</span></span><br><span class="line"><span class="comment">                dfs(nx, ny, sum + b);</span></span><br><span class="line"><span class="comment">                grid[nx][ny] = b;</span></span><br><span class="line"><span class="comment">            &#125;</span></span><br><span class="line"><span class="comment">        &#125;</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">    </span></span><br><span class="line"><span class="comment">    int getMaxValue(vector&lt;vector&lt;int&gt;&gt;&amp; _grid) &#123;</span></span><br><span class="line"><span class="comment">        grid = _grid;</span></span><br><span class="line"><span class="comment">        m = grid.size();</span></span><br><span class="line"><span class="comment">        n = grid[0].size();</span></span><br><span class="line"><span class="comment">        dfs(0, 0, grid[0][0]);</span></span><br><span class="line"><span class="comment">        return res;</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">     <span class="function"><span class="keyword">int</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (dp[i][i] &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> dp[i][j];</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (i == <span class="number">0</span> &amp;&amp; j == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> dp[i][j] = grid[i][j];</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        dp[i][j] = grid[i][j] + max(</span><br><span class="line">                                j - <span class="number">1</span> &gt;= <span class="number">0</span> ? dfs(i, j - <span class="number">1</span>) : INT_MIN, </span><br><span class="line">                                i - <span class="number">1</span> &gt;= <span class="number">0</span> ? dfs(i - <span class="number">1</span>, j) : INT_MIN);</span><br><span class="line">        <span class="keyword">return</span> dp[i][j];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getMaxValue</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; _grid)</span> </span>&#123;</span><br><span class="line">        grid = _grid;</span><br><span class="line">        m = grid.size();</span><br><span class="line">        n = grid[<span class="number">0</span>].size();</span><br><span class="line">        dp = <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;(m, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n, <span class="number">-1</span>));</span><br><span class="line">        dfs(m - <span class="number">1</span>, n - <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> dp[m - <span class="number">1</span>][n - <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/search_2d_array.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/search_2d_array.html" class="post-title-link" itemprop="url">有序矩阵查找</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 23:34:03" itemprop="dateCreated datePublished" datetime="2022-02-25T23:34:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:48:10" itemprop="dateModified" datetime="2022-03-01T22:48:10+08:00">2022-03-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87Offer/" itemprop="url" rel="index"><span itemprop="name">剑指Offer</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/search_2d_array.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/search_2d_array.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在一个二维数组中，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。</p>
-<p>请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。</p>
-<p>样例<br>输入数组：</p>
-<p>[<br>[1,2,8,9]，<br>[2,4,9,12]，<br>[4,7,10,13]，<br>[6,8,11,15]<br>]</p>
-<p>如果输入查找数值为7，则返回true，</p>
-<p>如果输入查找数值为5，则返回false。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">searchArray</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="built_in">array</span>, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">array</span>.empty() || <span class="built_in">array</span>[<span class="number">0</span>].empty()) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="built_in">array</span>[<span class="number">0</span>].size() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (i &lt; <span class="built_in">array</span>.size() &amp;&amp; j &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">array</span>[i][j] == target) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">array</span>[i][j] &gt; target) j--;</span><br><span class="line">            <span class="keyword">else</span> i++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/index.html" class="post-title-link" itemprop="url">二分系列-概览</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 22:47:03" itemprop="dateCreated datePublished" datetime="2022-02-25T22:47:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-03 19:40:16" itemprop="dateModified" datetime="2022-03-03T19:40:16+08:00">2022-03-03</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="关于二分"><a href="#关于二分" class="headerlink" title="关于二分"></a>关于二分</h3><p>二分是分治的一种；问题收敛速度最快的一种。</p>
-<p>通过每次把问题搜索空间排除一半，进而得到lgN的时间复杂度。</p>
-<p>将区间分为两部分，第一部分满足某一个特征；第二部分满足另一个特征</p>
-<p>通过二分来解决的问题包括：</p>
-<ol>
-<li>二分查找一个数组</li>
-<li>通过二分的方式，遍历所有可能的结果。然后判定结果是否ok。也就是把查找问题转换为判定问题。</li>
-</ol>
-<p>二分答案：答案具有“单调性”，外层花费$logN$的时间转化为判定性问题.</p>
-<p>答案具有“单调性”：注意是先0后1函数，还是先1后0函数，和二分的实现形式，是一直保持小于，还是能累加就累加？</p>
-<p>一般定义判定是“是否存在一个小于等于、是否存在一个大于等于”，这么定义是显然有单调性的</p>
-<p>二分出的答案一般对check的进行有所帮助</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//整数二分算法模板 https://www.cnblogs.com/smallocean/p/11913963.html</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">check</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;<span class="keyword">return</span> <span class="literal">true</span>;<span class="comment">/* ... */</span>&#125; <span class="comment">// 检查x是否满足某种性质</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 区间[l, r]被划分成[l, mid]和[mid + 1, r]时使用：</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bsearch_1</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (l &lt; r)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> mid = l + r &gt;&gt; <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (check(mid)) r = mid;    <span class="comment">// check()判断mid是否满足性质</span></span><br><span class="line">        <span class="keyword">else</span> l = mid + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> l;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 区间[l, r]被划分成[l, mid - 1]和[mid, r]时使用：</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bsearch_2</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (l &lt; r)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> mid = l + r + <span class="number">1</span> &gt;&gt; <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (check(mid)) l = mid;</span><br><span class="line">        <span class="keyword">else</span> r = mid - <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> l;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//浮点数二分算法模板 —— 模板题 AcWing 790. 数的三次方根</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">check</span><span class="params">(<span class="keyword">double</span> x)</span> </span>&#123;<span class="comment">/* ... */</span>&#125; <span class="comment">// 检查x是否满足某种性质</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">bsearch_3</span><span class="params">(<span class="keyword">double</span> l, <span class="keyword">double</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">double</span> eps = <span class="number">1e-6</span>;   <span class="comment">// eps 表示精度，取决于题目对精度的要求</span></span><br><span class="line">    <span class="keyword">while</span> (r - l &gt; eps)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">double</span> mid = (l + r) / <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">if</span> (check(mid)) r = mid;</span><br><span class="line">        <span class="keyword">else</span> l = mid;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> l;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="二分相关题目索引"><a href="#二分相关题目索引" class="headerlink" title="二分相关题目索引"></a>二分相关题目索引</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>题目分类</th>
-<th>题目名称</th>
-<th>考察点</th>
-<th>其他说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-<td><a href="getNumberOfK.html">查第一个出现的位置</a></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td><a href="getNumberSameAsIndex.html">递增找number与index相等</a></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td><a href="moving_cnt.html">重复数字出现次数</a></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td><a href="find_min_in_rotated_array.html">旋转数组找最值</a></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>求两个有序数组前K大的数</td>
-<td>考虑A的中间元素m/2和B的中间元素n/2</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>多路归并</td>
-<td>求m个有序数组前K大的数</td>
-<td>维护一个大小为m的堆</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>参考：</p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://zhuanlan.zhihu.com/p/157779732">https://zhuanlan.zhihu.com/p/157779732</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.dazhuanlan.com/2019/12/16/5df6e82127d88/">https://www.dazhuanlan.com/2019/12/16/5df6e82127d88/</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/weixin_34355715/article/details/94465888">https://blog.csdn.net/weixin_34355715/article/details/94465888</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/weixin_43626741/article/details/104364387">https://blog.csdn.net/weixin_43626741/article/details/104364387</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/system_design/distributed_lock.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/system_design/distributed_lock.html" class="post-title-link" itemprop="url">常见系统设计题系列-分布式锁</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-02-25 17:29:03 / Modified: 17:29:41" itemprop="dateCreated datePublished" datetime="2022-02-25T17:29:03+08:00">2022-02-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">系统设计</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/system_design/distributed_lock.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/system_design/distributed_lock.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="分布式锁应该具备哪些条件"><a href="#分布式锁应该具备哪些条件" class="headerlink" title="分布式锁应该具备哪些条件"></a>分布式锁应该具备哪些条件</h3><ol>
-<li>在分布式系统环境下，一个方法在同一时间只能被一个机器的一个线程执行</li>
-<li>高可用的获取锁与释放锁</li>
-<li>高性能的获取锁与释放锁</li>
-<li>具备可重入特性（可理解为重新进入，由多于一个任务并发使用，而不必担心数据错误）</li>
-<li>具备锁失效机制，防止死锁</li>
-<li>具备非阻塞锁特性，即没有获取到锁将直接返回获取锁失败</li>
-</ol>
-<p>ps. 考虑幂等性</p>
-<h3 id="分布式锁实现"><a href="#分布式锁实现" class="headerlink" title="分布式锁实现"></a>分布式锁实现</h3><p>基于数据库</p>
-<p>基于Redis SET命令</p>
-<p>基于Memcache CAS命令</p>
-<p>基于Zookeeper</p>
-<h3 id="具体参考"><a href="#具体参考" class="headerlink" title="具体参考"></a>具体参考</h3><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.jianshu.com/p/a1ebab8ce78a">https://www.jianshu.com/p/a1ebab8ce78a</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/timer/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/server/timer/index.html" class="post-title-link" itemprop="url">高性能服务器设计-定时器</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 15:01:03" itemprop="dateCreated datePublished" datetime="2022-02-25T15:01:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:44:41" itemprop="dateModified" datetime="2022-03-01T22:44:41+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/server/timer/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/timer/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>设计目标：</p>
-<ol>
-<li>高性能，更快的找到下一个超时的Task</li>
-<li>高分辨率，例如毫秒定时器</li>
-</ol>
-<p>实现方式：</p>
+          <h4 id="高速缓存"><a href="#高速缓存" class="headerlink" title="高速缓存"></a>高速缓存</h4><p>思想：索引思想、折中思想</p>
 <ul>
-<li>时间轮、多级时间轮</li>
-<li>堆</li>
-<li>基于排序链表 O(N)</li>
-<li>红黑树</li>
+<li>直接映射ByHash</li>
 </ul>
+<p>主存中的一个块只能映射到Cache的某一特定块中去。例如，主存的第0块、第16块、……、第2032块，只能映射到Cache的第0块；而主存的第1块、第17块、……、第2033块，只能映射到Cache的第1块……</p>
+<p><img src="https://static.oschina.net/uploads/img/201803/07163540_dO4M.gif" alt="直接映射"></p>
+<p>直接映射是最简单的地址映射方式，它的硬件简单，成本低，地址变换速度快，而且不涉及替换算法问题。</p>
+<p>但是这种方式不够灵活，Cache的存储空间得不到充分利用，每个主存块只有一个固定位置可存放，容易产生冲突，使Cache效率下降，</p>
+<p>因此只适合大容量Cache采用。</p>
+<p>例如，如果一个程序需要重复引用主存中第0块与第16块，最好将主存第0块与第16块同时复制到Cache中，但由于它们都只能复制到Cache的第0块中去，即使Cache中别的存储空间空着也不能占用，因此这两个块会不断地交替装入Cache中，导致命中率降低</p>
+<ul>
+<li>全相连映射ByAll</li>
+</ul>
+<p>图3-15 是全相联映射的Cache组织，主存中任何一块都可以映射到Cache中的任何一块位置上</p>
+<p><img src="https://static.oschina.net/uploads/img/201803/07163541_oEp6.gif" alt="全相连映射"></p>
+<p>全相联映射方式比较灵活，主存的各块可以映射到Cache的任一块中，Cache的利用率高，块冲突概率低，只要淘汰Cache中的某一块，即可调入主存的任一块。</p>
+<p>但是，由于Cache比较电路的设计和实现比较困难，这种方式只适合于小容量Cache采用。</p>
+<ul>
+<li>组相连映射ByGroup</li>
+</ul>
+<p>组间直接相连，组内全相连</p>
+<p> 组相联映射实际上是直接映射和全相联映射的折中方案，其组织结构如图3-16所示。主存和Cache都分组，主存中一个组内的块数与Cache中的分组数相同，组间采用直接映射，组内采用全相联映射。也就是说，将Cache分成u组，每组v块，主存块存放到哪个组是固定的，至于存到该组哪一块则是灵活的。例如，主存分为256组，每组8块，Cache分为8组，每组2块。</p>
+<p> <img src="https://static.oschina.net/uploads/img/201803/07163541_YspG.gif" alt="组相连映射"></p>
+<p>主存中的各块与Cache的组号之间有固定的映射关系，但可自由映射到对应Cache组中的任何一块。例如，主存中的第0块、第8块……均映射于Cache的第0组，但可映射到Cache第0组中的第0块或第1块；主存的第1块、第9块……均映射于Cache的第1组，但可映射到Cache第1组中的第2块或第3块。</p>
+<p>常采用的组相联结构Cache，每组内有2、4、8、16块，称为2路、4路、8路、16路组相联Cache。</p>
+<p>组相联结构Cache是前两种方法的折中方案，适度兼顾二者的优点，尽量避免二者的缺点，因而得到普遍采用。</p>
+<p>具体参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/weixin_34319111/article/details/92562285">https://blog.csdn.net/weixin_34319111/article/details/92562285</a></p>
+<h4 id="一致性协议"><a href="#一致性协议" class="headerlink" title="一致性协议"></a>一致性协议</h4><p>MESI 缓存一致性协议</p>
+<p>Modified、Exclusive、Shared、Invalid</p>
 
       
     </div>
@@ -1155,7 +314,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/concurrency_limiter/little_raw.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/os/vm_mem.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1169,7 +328,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/backend_knowledge_architecture/server/concurrency_limiter/little_raw.html" class="post-title-link" itemprop="url">高性能服务器设计-littile's raw定律</a>
+            <a href="/backend_knowledge_architecture/os/vm_mem.html" class="post-title-link" itemprop="url">操作系统系列｜虚拟内存</a>
         </h2>
 
         <div class="post-meta">
@@ -1181,14 +340,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2022-02-25 13:40:03" itemprop="dateCreated datePublished" datetime="2022-02-25T13:40:03+08:00">2022-02-25</time>
+              <time title="Created: 2022-02-25 10:55:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:55:03+08:00">2022-02-25</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-30 18:32:37" itemprop="dateModified" datetime="2022-10-30T18:32:37+08:00">2022-10-30</time>
+                <time title="Modified: 2022-10-30 21:15:33" itemprop="dateModified" datetime="2022-10-30T21:15:33+08:00">2022-10-30</time>
               </span>
 
           
@@ -1200,8 +359,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/server/concurrency_limiter/little_raw.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/concurrency_limiter/little_raw.html" itemprop="commentCount"></span>
+    <a title="valine" href="/backend_knowledge_architecture/os/vm_mem.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/vm_mem.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -1216,22 +375,832 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>并发 = rt * qps</p>
-<h4 id="N-X-R"><a href="#N-X-R" class="headerlink" title="N = X * R"></a>N = X * R</h4><p>N表示系统中同时活动的用户，包括正在处理中和队列中的；X表示用户相继到达系统的速率，在平衡状态时即为系统吞吐量（到达=离开）；R表示每个用户在系统中平均的驻留时间</p>
-<p>eg. 一个请求在系统中的停留时间，1s; 一秒钟平均过来100个请求（当然一秒钟也会离开100个请求）那么系统同时处理的请求数是多少？</p>
-<p>应该是1s * 100 (个/s) = 100个。</p>
-<h4 id="Eric的估算公式-C-L-n-T"><a href="#Eric的估算公式-C-L-n-T" class="headerlink" title="Eric的估算公式 C = L * n / T"></a>Eric的估算公式 C = L * n / T</h4><p>n表示同时在线；L表示平均停留时间；T表示高峰期持续时间；C为并发用户数量。</p>
-<p>eg. 一个用户在系统中的停留时间，30分钟；晚高峰5～7点，有500在线；问系统的并发用户是多少？</p>
-<p>假设系统后端维护session，那么这个session的长度即为30分钟，L=30minutes；用户活跃时长已经得知是从5点到7点共2个小时，T=2 hours；那么并发用户数C=n<em>L/T=500</em>30/(5*60)=50</p>
-<h4 id="等价性说明"><a href="#等价性说明" class="headerlink" title="等价性说明"></a>等价性说明</h4><p>我们再来从另外的角度分解Eric的估算公式：</p>
-<p>C=n<em>L/T  可以表示为  C=(n/T)</em>L</p>
-<p>n/T 是不是和我们刚才在上面Little中第一步一样，是计算到达率X的。</p>
-<p>而L（session时长）不就是R（驻留时间）吗？都等同于session时间长度。</p>
-<p>也就是说C=(n/T)<em>L=X</em>R=N</p>
-<p>结论：由以上得知，Eric’s 估算公式跟Little定律是等价的.</p>
-<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.cnblogs.com/hundredsofyears/p/3360305.html">https://www.cnblogs.com/hundredsofyears/p/3360305.html</a></p>
-<p>并发  = 到达率X * 停留时间R</p>
-<p>并发 = （同时在线人数c  / 高峰期持续时长T） * 平均停留时间L</p>
+          <p><img src="https://pics7.baidu.com/feed/95eef01f3a292df5ed263835cecf2b6835a8732b.png?token=d3599f2975744c1d572bd6e62b2daf04" alt="虚拟地址转换为物理地址的本质"></p>
+<p>我们知道linux采用了分页机制，通常采用四级页表，页全局目录(PGD)，页上级目录(PUD)，页中间目录(PMD)，页表(PTE)。如下：</p>
+<p><img src="https://pics2.baidu.com/feed/728da9773912b31b18d3813af7e64172dbb4e169.png?token=c455dcb1766f6df26c45bc14d987b355" alt="虚拟地址转换为物理地址硬件过程"></p>
+<ol>
+<li>从CR3寄存器中读取页目录所在物理页面的基址(即所谓的页目录基址)，从线性地址的第一部分获取页目录项的索引，两者相加得到页目录项的物理地址。</li>
+<li>第一次读取内存得到pgd_t结构的目录项，从中取出物理页基址取出，即页上级页目录的物理基地址。</li>
+<li>从线性地址的第二部分中取出页上级目录项的索引，与页上级目录基地址相加得到页上级目录项的物理地址。</li>
+<li>第二次读取内存得到pud_t结构的目录项，从中取出页中间目录的物理基地址。</li>
+<li>从线性地址的第三部分中取出页中间目录项的索引，与页中间目录基址相加得到页中间目录项的物理地址。</li>
+<li>第三次读取内存得到pmd_t结构的目录项，从中取出页表的物理基地址。</li>
+<li>从线性地址的第四部分中取出页表项的索引，与页表基址相加得到页表项的物理地址。</li>
+<li>第四次读取内存得到pte_t结构的目录项，从中取出物理页的基地址。</li>
+<li>从线性地址的第五部分中取出物理页内偏移量，与物理页基址相加得到最终的物理地址。</li>
+<li>第五次读取内存得到最终要访问的数据。</li>
+</ol>
+<p>整个过程是比较机械的，每次转换先获取物理页基地址，再从线性地址中获取索引，合成物理地址后再访问内存。不管是页表还是要访问的数据都是以页为单位存放在主存中的，因此每次访问内存时都要先获得基址，再通过索引(或偏移)在页内访问数据，因此可以将线性地址看作是若干个索引的集合。</p>
+<h3 id="虚拟内存管理"><a href="#虚拟内存管理" class="headerlink" title="虚拟内存管理"></a>虚拟内存管理</h3><h4 id="Linux通过红黑树管理"><a href="#Linux通过红黑树管理" class="headerlink" title="Linux通过红黑树管理"></a>Linux通过红黑树管理</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">task_struct</span> &#123;</span></span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span> *<span class="title">mm</span>;</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">vm_area_struct</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span> * <span class="title">vm_mm</span>;</span>    <span class="comment">/* 所属的内存描述符 */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> vm_start;    <span class="comment">/* vma的起始地址 */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> vm_end;        <span class="comment">/* vma的结束地址 */</span></span><br><span class="line"> </span><br><span class="line">    <span class="comment">/* 该vma的在一个进程的vma链表中的前驱vma和后驱vma指针，链表中的vma都是按地址来排序的*/</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">vm_area_struct</span> *<span class="title">vm_next</span>, *<span class="title">vm_prev</span>;</span></span><br><span class="line"> </span><br><span class="line">    <span class="keyword">pgprot_t</span> vm_page_prot;        <span class="comment">/* vma的访问权限 */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> vm_flags;    <span class="comment">/* 标识集 */</span></span><br><span class="line"> </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">rb_node</span> <span class="title">vm_rb</span>;</span>      <span class="comment">/* 红黑树中对应的节点 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该结构体是一段虚拟内存，从vm_start到vm_end，他们拥有相同的权限；<br>vm_prev 、vm_next 是双向链表的next与pre；<br>vm_rb 是红黑树节点</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span> &#123;</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">vm_area_struct</span> * <span class="title">mmap</span>;</span>       <span class="comment">/* list of VMAs */</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">rb_root</span> <span class="title">mm_rb</span>;</span><span class="comment">/*又是红黑树的根节点*/</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">vm_area_struct</span> * <span class="title">mmap_cache</span>;</span>      <span class="comment">/* last find_vma result */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>mmap是双向链表；按照地址大小来顺序管理所有的area</p>
+<p>mm_rb是红黑树的根节点</p>
+<p>红黑树的Key-Value: 虚拟地址 =&gt; 对应的area.</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/os/page_cache.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/os/page_cache.html" class="post-title-link" itemprop="url">操作系统 - PageCache</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 10:43:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:43:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:41:50" itemprop="dateModified" datetime="2022-03-01T22:41:50+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/os/page_cache.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/page_cache.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://img-blog.csdnimg.cn/img_convert/af14c365336b91762e0818c657b29b2f.png" alt="linux-io"></p>
+<p>Page Cache 用于缓存文件的页数据，</p>
+<p>buffer cache 用于缓存块设备（如磁盘）的块数据。</p>
+<p>页是逻辑上的概念，因此 Page Cache 是与文件系统同级的；</p>
+<p>块是物理上的概念，因此 buffer cache 是与块设备驱动程序同级的。</p>
+<hr>
+<p>Page Cache 与 buffer cache 的共同目的都是加速数据 I/O</p>
+<p>写数据时首先写到缓存，将写入的页标记为 dirty，然后向外部存储 flush，也就是缓存写机制中的 write-back（另一种是 write-through，Linux 默认情况下不采用）；</p>
+<p>读数据时首先读取缓存，如果未命中，再去外部存储读取，并且将读取来的数据也加入缓存。</p>
+<p>操作系统总是积极地将所有空闲内存都用作 Page Cache 和 buffer cache，当内存不够用时也会用 LRU 等算法淘汰缓存页。</p>
+<hr>
+<p>在 Linux 2.4 版本的内核之前，Page Cache 与 buffer cache 是完全分离的。但是，块设备大多是磁盘，磁盘上的数据又大多通过文件系统来组织，这种设计导致很多数据被缓存了两次，浪费内存。</p>
+<p>所以在 2.4 版本内核之后，两块缓存近似融合在了一起：如果一个文件的页加载到了 Page Cache，那么同时 buffer cache 只需要维护块指向页的指针就可以了。</p>
+<p>只有那些没有文件表示的块，或者绕过了文件系统直接操作（如dd命令）的块，才会真正放到 buffer cache 里。</p>
+<p>因此，我们现在提起 Page Cache，基本上都同时指 Page Cache 和 buffer cache 两者，本文之后也不再区分，直接统称为 Page Cache。</p>
+<p>下图近似地示出 32-bit Linux 系统中可能的一种 Page Cache 结构，其中 block size 大小为 1KB，page size 大小为 4KB。</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/38d0c14994613a0342e0158ec82d04eb.png" alt="page_cache_and_buffer_cache"></p>
+<p>Page Cache 中的每个文件都是一棵<strong>基数树</strong>（radix tree，本质上是Trie、多叉搜索树），树的每个节点都是一个页。根据文件内的偏移量就可以快速定位到所在的页，如下图所示。关于基数树的原理可以参见英文维基，这里就不细说了。</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/a4763bd4d3d093dc7fee3da90247ba5d.png" alt="page_cache_radix_tree"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/os/physical_mem.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/os/physical_mem.html" class="post-title-link" itemprop="url">操作系统 - 物理内存管理</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 10:43:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:43:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-29 12:21:17" itemprop="dateModified" datetime="2022-03-29T12:21:17+08:00">2022-03-29</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/os/physical_mem.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/physical_mem.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://pics3.baidu.com/feed/838ba61ea8d3fd1f0c5a12495ab0521794ca5f7c.jpeg?token=dd0db40934355dcfa5bc35bec53f8b4d" alt="内存访问"></p>
+<p>TLB：MMU工作的过程就是查询页表的过程。如果把页表放在内存中查询的时候开销太大，因此为了提高查找效率，专门用一小片访问更快的区域存放地址转换条目。（当页表内容有变化的时候，需要清除TLB，以防止地址映射出错。）</p>
+<p>Caches：cpu和内存之间的缓存机制，用于提高访问速率，armv8架构的话上图的caches其实是L2 Cache</p>
+<h3 id="内存命中率"><a href="#内存命中率" class="headerlink" title="内存命中率"></a>内存命中率</h3><p>假设在 n 次内存访问中，出现命中的次数是 m，那么 m / n * 100% 就表示命中率，这是衡量内存管理程序好坏的一个很重要的指标。</p>
+<p>如果物理内存不足了，数据会在主存和磁盘之间频繁交换，命中率很低，性能出现急剧下降，我们称这种现象叫<strong>内存颠簸</strong>。这时你会发现系统的 swap 空间利用率开始增高， CPU 利用率中 iowait 占比开始增高。</p>
+<p>大多数情况下，只要物理内存够用，页命中率不会非常低，不会出现内存颠簸的情况。因为大多数程序都有一个特点，就是<strong>局部性</strong>。</p>
+<p>局部性就是说被引用过一次的存储器位置，很可能在后续再被引用多次；而且在该位置附近的其他位置，也很可能会在后续一段时间内被引用。</p>
+<h3 id="物理内存管理"><a href="#物理内存管理" class="headerlink" title="物理内存管理"></a>物理内存管理</h3><p><img src="https://pics7.baidu.com/feed/6609c93d70cf3bc7b0d84842bbfecda9cf112a4e.png?token=4f2dc6e2a73bddf5becd6dd924ebbded" alt="物理内存管理"></p>
+<p><img src="https://pics4.baidu.com/feed/962bd40735fae6cd484f59cc7d4d782c40a70fae.png?token=4296ed176d75fde417a7b04612fe8246" alt="Buddy系统"></p>
+<p>对于Page级别的内存分配，通过Buddy系统来管理；TCMalloc 也是通过这种方式来管理span。</p>
+<p>对于小对象（例如task_struct、mm_struct等）通过SlabAllcator来进行管理分配。这种思路，Memcache会借鉴。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/os/process_thread.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/os/process_thread.html" class="post-title-link" itemprop="url">操作系统 - 进程与线程</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 10:43:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:43:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-08 22:11:20" itemprop="dateModified" datetime="2022-11-08T22:11:20+08:00">2022-11-08</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/os/process_thread.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/process_thread.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h3><ul>
+<li>进程线程的区别</li>
+</ul>
+<p>线程独享：线程局部存储TLS、errno、寄存器、栈空间</p>
+<ul>
+<li><p>进程间通信方式</p>
+</li>
+<li><p>线程的状态</p>
+</li>
+<li><p>介绍死锁和如何避免</p>
+</li>
+</ul>
+<p>线程安全</p>
+<p>（1）synchronized 方法 + 代码块</p>
+<p>（2）互斥锁lock</p>
+<p>（3） 线程局部存储</p>
+<p>（4）乐观锁</p>
+<h3 id="进程调度算法"><a href="#进程调度算法" class="headerlink" title="进程调度算法"></a>进程调度算法</h3><p>多级反馈队列调度算法</p>
+<h3 id="分离thread"><a href="#分离thread" class="headerlink" title="分离thread"></a>分离thread</h3><p>非分离线程在终止后，必须要有一个线程用 join 来等待它。否则，不会释放该线程的资源以供新线程使用，而这通常会导致内存泄漏。因此，如果不希望线程被等待，请将该线程作为分离线程来创建。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/os/os_structure.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/os/os_structure.html" class="post-title-link" itemprop="url">操作系统中碰到的数据结构汇总</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 10:35:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:35:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:41:33" itemprop="dateModified" datetime="2022-03-01T22:41:33+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/os/os_structure.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/os_structure.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="hash"><a href="#hash" class="headerlink" title="hash"></a>hash</h4><p>hlist_head hlist_node 散列表拉链</p>
+<p>根据PID定位task：PID哈希表</p>
+<h4 id="双向链表"><a href="#双向链表" class="headerlink" title="双向链表"></a>双向链表</h4><p>list_head 双向链表</p>
+<p>提高调度程序运行速度：建立多个可运行程序链表</p>
+<p>等待队列（双向链表）：用自旋锁加保护的等待队列头、等待队列链表的元素</p>
+<p>等待队列中睡眠进程的唤醒：互斥进程，非互斥进程</p>
+<p>链表维护节点；节点包括管理区【硬件限制，ZONE_DMA, ZONE_NORMAL, ZONE_HIGHMEM】+ page数组</p>
+<p>动态定时器的链表组（将同一时间段内即将到时的定时器归入一组）</p>
+<h4 id="bitmap"><a href="#bitmap" class="headerlink" title="bitmap"></a>bitmap</h4><p>pid分配管理：bitmap pidmap_array</p>
+<p>inode、磁盘文件数据块</p>
+<h4 id="并发与同步"><a href="#并发与同步" class="headerlink" title="并发与同步"></a>并发与同步</h4><h5 id="每CPU变量"><a href="#每CPU变量" class="headerlink" title="每CPU变量"></a>每CPU变量</h5><p>不需要同步的内核数组，为每个cpu分配数组一元素</p>
+<h5 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a>自旋锁</h5><h5 id="RCU机制"><a href="#RCU机制" class="headerlink" title="RCU机制"></a>RCU机制</h5><p>RCU(读取-拷贝-更新)：只保护被动态分配并通过指针引用的数据结构</p>
+<p>何时释放旧副本？ CPU经过静止状态后，定期检测！！</p>
+<h4 id="原子变量"><a href="#原子变量" class="headerlink" title="原子变量"></a>原子变量</h4><h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>thread 与 thread_info 紧密挨着；根据esp 屏蔽 低13位 可以最快的获取thread_info;<br>同时进程描述符指针在thread_info中的偏移为0!</p>
+<p>也就是将： OS将task_struct指针存放到了栈上（可以通过esp做简单的AND操作即可）</p>
+<p>jiffies:子系统启动的节拍总数</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/os/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/os/index.html" class="post-title-link" itemprop="url">操作系统 - 概览</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 10:33:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:33:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:41:24" itemprop="dateModified" datetime="2022-03-01T22:41:24+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/os/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="操作系统智慧"><a href="#操作系统智慧" class="headerlink" title="操作系统智慧"></a>操作系统智慧</h4><p>懒人哲学：越简单、越傻瓜、用户使用的学习成本越低越好</p>
+<p>让困于人：当我们遇到困难时，搞不定的或者我们自己搞成本很大的，交给别人来搞(一般让操作系统来搞，其实操作系统也是别人完成的软件系统)</p>
+<p>留有余地: 可扩展性，让系统有可扩展性</p>
+<p>足够智能：一个系统最好能解决所有的问题，跟人的感觉是一个万能的解决方案，也就是操作系统的魔术师的角色</p>
+<p>时空转换：在一个纬度遇到的瓶颈，那就改变方案把瓶颈移到另外一个纬度 【内存页表太大，占用内存资源；那就页表分级，不活跃的放到磁盘】</p>
+<p>策机分离和权利分离：一个系统或者平台在主要指定规则、提供通用化的插件即可</p>
+<p>简单与美：苛求于简，归于永恒</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/network/http.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/network/http.html" class="post-title-link" itemprop="url">计算机网络 - HTTP协议</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 10:20:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:20:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-10-30 21:27:50" itemprop="dateModified" datetime="2022-10-30T21:27:50+08:00">2022-10-30</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/network/http.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/network/http.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://pic.rmb.bdstatic.com/bjh/news/6722dbdf63eabaa62b59486f2c51df6e.png" alt="HTTP对比"></p>
+<h3 id="HTTP1-0"><a href="#HTTP1-0" class="headerlink" title="HTTP1.0"></a>HTTP1.0</h3><p>301: 永久重定向<br>302: 临时重定向</p>
+<h3 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h3><p>可以参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/xiaoming100001/article/details/81109617">https://blog.csdn.net/xiaoming100001/article/details/81109617</a></p>
+<p>对称加密与非对称加密相结合</p>
+<p>通信内容，通过对称加密算法来加解密；其中有一个重要的东西叫：密钥</p>
+<p><strong>密钥</strong>是通过<strong>非对称加密</strong>算法来加密传输，客户端使用服务器的public key来加密，服务端通过自己的private key来解密。</p>
+<p>服务器的public key，浏览器如何得知呢？ <strong>通过SSL证书</strong>。</p>
+<p>SSL证书组织是一个树形组织，最上面的几层是hardcode在系统中的。</p>
+<p>当需要验证证书有效性时，浏览器会通过根认证组织逐层认证！</p>
+<h3 id="HTTP2-0"><a href="#HTTP2-0" class="headerlink" title="HTTP2.0"></a>HTTP2.0</h3><p>服务器推送、头信息压缩、等</p>
+<h4 id="二进制分帧"><a href="#二进制分帧" class="headerlink" title="二进制分帧"></a>二进制分帧</h4><p>先来理解几个概念：</p>
+<p>帧：HTTP/2 数据通信的最小单位消息：指 HTTP/2 中逻辑上的 HTTP 消息。例如请求和响应等，消息由一个或多个帧组成。</p>
+<p>流：存在于连接中的一个虚拟通道。流可以承载双向消息，每个流都有一个唯一的整数ID。</p>
+<p>HTTP/2 采用二进制格式传输数据，而非 HTTP 1.x 的文本格式，二进制协议解析起来更高效。 HTTP / 1 的请求和响应报文，都是由起始行，首部和实体正文（可选）组成，各部分之间以文本换行符分隔。HTTP/2 将请求和响应数据分割为更小的帧，并且它们采用二进制编码。</p>
+<p>HTTP/2 中，同域名下所有通信都在单个连接上完成，该连接可以承载任意数量的双向数据流。每个数据流都以消息的形式发送，而消息又由一个或多个帧组成。多个帧之间可以乱序发送，根据帧首部的流标识可以重新组装。</p>
+<h4 id="多路复用"><a href="#多路复用" class="headerlink" title="多路复用"></a>多路复用</h4><p>在 HTTP/2 中，有了二进制分帧之后，HTTP /2 不再依赖 TCP 链接去实现多流并行了，在 HTTP/2中：</p>
+<p>同域名下所有通信都在单个连接上完成。<br>单个连接可以承载任意数量的双向数据流。<br>数据流以消息的形式发送，而消息又由一个或多个帧组成，多个帧之间可以乱序发送，因为根据帧首部的流标识可以重新组装。</p>
+<h4 id="服务器推送"><a href="#服务器推送" class="headerlink" title="服务器推送"></a>服务器推送</h4><p>服务端可以在发送页面HTML时主动推送其它资源，而不用等到浏览器解析到相应位置，发起请求再响应。例如服务端可以主动把JS和CSS文件推送给客户端，而不需要客户端解析HTML时再发送这些请求。</p>
+<p>服务端可以主动推送，客户端也有权利选择是否接收。如果服务端推送的资源已经被浏览器缓存过，浏览器可以通过发送RST_STREAM帧来拒收。主动推送也遵守同源策略，服务器不会随便推送第三方资源给客户端。</p>
+<h4 id="头部压缩"><a href="#头部压缩" class="headerlink" title="头部压缩"></a>头部压缩</h4><p>HTTP 1.1请求的大小变得越来越大，有时甚至会大于TCP窗口的初始大小，因为它们需要等待带着ACK的响应回来以后才能继续被发送。HTTP/2对消息头采用HPACK（专为http/2头部设计的压缩格式）进行压缩传输，能够节省消息头占用的网络的流量。而HTTP/1.x每次请求，都会携带大量冗余头信息，浪费了很多带宽资源。</p>
+<p>为了减少这块的资源消耗并提升性能， HTTP/2对这些首部采取了压缩策略：</p>
+<p>HTTP/2在客户端和服务器端使用“首部表”来跟踪和存储之前发送的键－值对，对于相同的数据，不再通过每次请求和响应发送；</p>
+<p>首部表在HTTP/2的连接存续期内始终存在，由客户端和服务器共同渐进地更新;</p>
+<p>每个新的首部键－值对要么被追加到当前表的末尾，要么替换表中之前的值。</p>
+<h3 id="HTTP3-0"><a href="#HTTP3-0" class="headerlink" title="HTTP3.0"></a>HTTP3.0</h3><p><img src="https://s3.51cto.com/images/blog/202107/01/2d9b80a4cd6fadcf1e08fee31669d61a.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt="HTTP23对比"></p>
+<p>QUIC（Quick UDP Internet Connections）基于 UDP 实现，是 HTTP/3 中的底层支撑协议，该协议基于 UDP，又取了 TCP 中的精华，实现了即快又可靠的协议</p>
+<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.51cto.com/u_6315133/3122045">https://blog.51cto.com/u_6315133/3122045</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/hardware/cpu.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/hardware/cpu.html" class="post-title-link" itemprop="url">计算机硬件-CPU寄存器简介</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:01:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-02 09:04:18" itemprop="dateModified" datetime="2022-03-02T09:04:18+08:00">2022-03-02</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/hardware/cpu.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/hardware/cpu.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="CPU寄存器"><a href="#CPU寄存器" class="headerlink" title="CPU寄存器"></a>CPU寄存器</h2><p>在用途方面，他们有各自默认的用途：</p>
+<ul>
+<li>Eax用来保存所有API函数的返回值。寄存器AX和AL通常称为累加器(Accumulator)，用累加器进行的操作可能需要更少时间。累加器可用于乘、除、输入/输出等操作，它们的使用频率很高；</li>
+<li>寄存器BX称为基地址寄存器(Base Register)。它可作为存储器指针来使用；</li>
+<li>寄存器CX称为计数寄存器(Count Register)。在循环和字符串操作时，要用它来控制循环次数；在位操作中，当移多位时，要用CL来指明移位的位数；</li>
+<li>寄存器DX称为数据寄存器(Data Register)。在进行乘、除运算时，它可作为默认的操作数参与运算，也可用于存放I/O的端口地址。</li>
+</ul>
+<p>寄存器ESI、EDI、SI和DI称为变址寄存器(Index Register)，</p>
+<p>它们主要用于存放存储单元在段内的偏移量，用它们可实现多种存储器操作数的寻址方式，为以不同的地址形式访问存储单元提供方便。</p>
+<p>那么ESP和EBP指的分别是什么呢？</p>
+<ul>
+<li>ESP：栈指针寄存器(extended stack pointer)，其内存放着一个指针，该指针永远指向系统栈最上面一个栈帧的栈顶。</li>
+<li>EBP：基址指针寄存器(extended base pointer)，其内存放着一个指针，该指针永远指向系统栈最上面一个栈帧的底部。</li>
+</ul>
+<h3 id="CPU指令的执行"><a href="#CPU指令的执行" class="headerlink" title="CPU指令的执行"></a>CPU指令的执行</h3><p>一个基本的CPU执行计算的过程如下：</p>
+<ol>
+<li>程序以及数据被加载到主内存</li>
+<li>指令和数据被加载到CPU的高速缓存</li>
+<li>CPU执行指令，把结果写到高速缓存</li>
+<li>高速缓存中的数据写回主内存</li>
+</ol>
+<h3 id="一次函数调用"><a href="#一次函数调用" class="headerlink" title="一次函数调用"></a>一次函数调用</h3><p>栈的增长方向：向下增长，ESP越来愈小、ESP比EBP小</p>
+<p>一个函数执行步骤：</p>
+<ol>
+<li>函数参数压入stack中<br> push p1<br> push p2</li>
+<li>CPU<strong>自己</strong>把返回地址压入stack中<br> push eip</li>
+<li>CPU自己跳转到新的函数地址(call func)，开始执行（先保存EBP，然后让EBP指向当前ESP）<br> push ebp 保存老函数的EBP到新的stack中<br> mov esp =&gt; ebp  让ebp保存新函数的stack base</li>
+<li>分配局部变量<br> sub esp 100 分配100字节的局部变量</li>
+<li>局部变量赋值与访问<br> 通过ebp - $Offset$ 来访问局部变量</li>
+<li>访问参数<br> 通过ebp + $Offset$ 来访问参数</li>
+<li>函数返回<br> add esp 100<br> mov ebp =&gt; esp<br> 注意：上面这一句应该是重复的，理论上只要对esp进行了完成逆操作，esp应该等于ebp了。是不需要额外通过ebp来还原的；当然如果要通过ebp来还原，也就不需要去显示操作esp了。<br> pop ebp 还原ebp<br> ret（pop eip）</li>
+<li>将压入的参数POP出来<br> pop p2<br> pop p1</li>
+</ol>
+<h2 id="co-实现"><a href="#co-实现" class="headerlink" title="co 实现"></a>co 实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">co_ctx&#123;</span><br><span class="line"><span class="keyword">void</span>* regs[<span class="number">14</span>]; <span class="comment">//用于保存或者设定特定寄存器</span></span><br><span class="line"><span class="keyword">size_t</span> ss_size; <span class="comment">//栈帧区域大小</span></span><br><span class="line"><span class="keyword">char</span>* ss_sp; <span class="comment">// 协程栈帧内存区域，这个区域一般在堆上分配</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">co_make (co_ctx* co, func* p, p1, p2)</span><br><span class="line">    使用p, p1, p2把co填充起来</span><br><span class="line">    co.ss_sp都是分配在堆上</span><br><span class="line">    co的EIP与ESP需要被单独赋值</span><br><span class="line">&#125;</span><br><span class="line">co_swap（）&#123;</span><br><span class="line">    主要要保存当前寄存器到要swap_out的co_ctx中</span><br><span class="line">    将要swap_in的co_ctx设置到寄存器中</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>具体参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://vinsflyfish.github.io/posts/thinking-in-libco/">https://vinsflyfish.github.io/posts/thinking-in-libco/</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/hardware/number.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/hardware/number.html" class="post-title-link" itemprop="url">计算机硬件-数字的表示</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:01:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/hardware/number.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/hardware/number.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="负数"><a href="#负数" class="headerlink" title="负数"></a>负数</h2><p>负数用补码来表示，补码等于数的反码 + 1</p>
+<h2 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h2><p>两种表示小数的数据类型，分别是双精度浮点数和单精度浮点数</p>
+<p>双精度浮点数类型用64位:符号位（1位） + 阶码（11位） + 尾数（52位）</p>
+<p>单精度浮点数类型用32位:符号位（1位） + 阶码（8位） + 尾数（23位）</p>
+<p>符号位：正数为0，负数为1；</p>
+<p>指数位：<strong>阶数+偏移量</strong>，阶数是2^(e-1)-1，e为阶码的位数，也就是指数位的位数。偏移量是把小数点移动到整数位只有1时移动的位数，正数表示向左移，负数表示向右移；</p>
+<p>小数位：即二进制小数点后面的数。</p>
+<h3 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h3><p>把0.1(10)转成的二进制0.00011 0011 0011 …(2)转成浮点数形式的二进制：</p>
+<p>（能够<strong>精确表示</strong>的小数为：0.5，0.25，0.125…等的自由组合）</p>
+<p>转化过程见：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://cloud.tencent.com/developer/article/1856972">https://cloud.tencent.com/developer/article/1856972</a></p>
+<p>1、先要把小数点移动到整数位只有1，要向右移动4位，故偏移量为-4，通过指数位的计算公式2^(e-1)-1+偏移量 = 2^(11-1)-1-4 = 1019，把1019转成二进制为1111111011，不够11位要补零，最终得出指数位位01111111011；</p>
+<p>2、移位后的小数位为.1 0011 0011 …，因为小数位只能保留52位，第50、51、52位、53位分别为0011，故对第52位进1使第51位为1，使第50、51、52位为010。</p>
+<p>注意：此处的<strong>精度丢失</strong>问题，有很多小数（例如本例中的0.1）在转二进制时会出现无限循环的情况，所以在位数有限的境况下，肯定需要舍弃后面的精度。这一点，就与1/3这种小数是在十进制下无限循环类似。</p>
+<h2 id="定点数"><a href="#定点数" class="headerlink" title="定点数"></a>定点数</h2><p>只能表示纯小数，例如0.999991212</p>
 
       
     </div>
@@ -1252,7 +1221,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/33/">33</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/34/">34</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1321,20 +1290,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">328</span>
+          <span class="site-state-item-count">331</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-count">60</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

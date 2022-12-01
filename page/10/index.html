@@ -203,7 +203,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/os/page_cache.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/memory_pool/memcache_for_nginx.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -217,7 +217,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/backend_knowledge_architecture/os/page_cache.html" class="post-title-link" itemprop="url">操作系统 - PageCache</a>
+            <a href="/backend_knowledge_architecture/server/memory_pool/memcache_for_nginx.html" class="post-title-link" itemprop="url">内存池系列｜nginx内存分配</a>
         </h2>
 
         <div class="post-meta">
@@ -229,14 +229,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2022-02-25 10:43:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:43:03+08:00">2022-02-25</time>
+              <time title="Created: 2022-02-23 22:41:04" itemprop="dateCreated datePublished" datetime="2022-02-23T22:41:04+08:00">2022-02-23</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:41:50" itemprop="dateModified" datetime="2022-03-01T22:41:50+08:00">2022-03-01</time>
+                <time title="Modified: 2022-03-01 22:44:13" itemprop="dateModified" datetime="2022-03-01T22:44:13+08:00">2022-03-01</time>
               </span>
 
           
@@ -248,8 +248,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/os/page_cache.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/page_cache.html" itemprop="commentCount"></span>
+    <a title="valine" href="/backend_knowledge_architecture/server/memory_pool/memcache_for_nginx.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/memory_pool/memcache_for_nginx.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -264,916 +264,842 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><img src="https://img-blog.csdnimg.cn/img_convert/af14c365336b91762e0818c657b29b2f.png" alt="linux-io"></p>
-<p>Page Cache 用于缓存文件的页数据，</p>
-<p>buffer cache 用于缓存块设备（如磁盘）的块数据。</p>
-<p>页是逻辑上的概念，因此 Page Cache 是与文件系统同级的；</p>
-<p>块是物理上的概念，因此 buffer cache 是与块设备驱动程序同级的。</p>
-<hr>
-<p>Page Cache 与 buffer cache 的共同目的都是加速数据 I/O</p>
-<p>写数据时首先写到缓存，将写入的页标记为 dirty，然后向外部存储 flush，也就是缓存写机制中的 write-back（另一种是 write-through，Linux 默认情况下不采用）；</p>
-<p>读数据时首先读取缓存，如果未命中，再去外部存储读取，并且将读取来的数据也加入缓存。</p>
-<p>操作系统总是积极地将所有空闲内存都用作 Page Cache 和 buffer cache，当内存不够用时也会用 LRU 等算法淘汰缓存页。</p>
-<hr>
-<p>在 Linux 2.4 版本的内核之前，Page Cache 与 buffer cache 是完全分离的。但是，块设备大多是磁盘，磁盘上的数据又大多通过文件系统来组织，这种设计导致很多数据被缓存了两次，浪费内存。</p>
-<p>所以在 2.4 版本内核之后，两块缓存近似融合在了一起：如果一个文件的页加载到了 Page Cache，那么同时 buffer cache 只需要维护块指向页的指针就可以了。</p>
-<p>只有那些没有文件表示的块，或者绕过了文件系统直接操作（如dd命令）的块，才会真正放到 buffer cache 里。</p>
-<p>因此，我们现在提起 Page Cache，基本上都同时指 Page Cache 和 buffer cache 两者，本文之后也不再区分，直接统称为 Page Cache。</p>
-<p>下图近似地示出 32-bit Linux 系统中可能的一种 Page Cache 结构，其中 block size 大小为 1KB，page size 大小为 4KB。</p>
-<p><img src="https://img-blog.csdnimg.cn/img_convert/38d0c14994613a0342e0158ec82d04eb.png" alt="page_cache_and_buffer_cache"></p>
-<p>Page Cache 中的每个文件都是一棵<strong>基数树</strong>（radix tree，本质上是Trie、多叉搜索树），树的每个节点都是一个页。根据文件内的偏移量就可以快速定位到所在的页，如下图所示。关于基数树的原理可以参见英文维基，这里就不细说了。</p>
-<p><img src="https://img-blog.csdnimg.cn/img_convert/a4763bd4d3d093dc7fee3da90247ba5d.png" alt="page_cache_radix_tree"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/os/physical_mem.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/os/physical_mem.html" class="post-title-link" itemprop="url">操作系统 - 物理内存管理</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 10:43:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:43:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-29 12:21:17" itemprop="dateModified" datetime="2022-03-29T12:21:17+08:00">2022-03-29</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/os/physical_mem.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/physical_mem.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://pics3.baidu.com/feed/838ba61ea8d3fd1f0c5a12495ab0521794ca5f7c.jpeg?token=dd0db40934355dcfa5bc35bec53f8b4d" alt="内存访问"></p>
-<p>TLB：MMU工作的过程就是查询页表的过程。如果把页表放在内存中查询的时候开销太大，因此为了提高查找效率，专门用一小片访问更快的区域存放地址转换条目。（当页表内容有变化的时候，需要清除TLB，以防止地址映射出错。）</p>
-<p>Caches：cpu和内存之间的缓存机制，用于提高访问速率，armv8架构的话上图的caches其实是L2 Cache</p>
-<h3 id="内存命中率"><a href="#内存命中率" class="headerlink" title="内存命中率"></a>内存命中率</h3><p>假设在 n 次内存访问中，出现命中的次数是 m，那么 m / n * 100% 就表示命中率，这是衡量内存管理程序好坏的一个很重要的指标。</p>
-<p>如果物理内存不足了，数据会在主存和磁盘之间频繁交换，命中率很低，性能出现急剧下降，我们称这种现象叫<strong>内存颠簸</strong>。这时你会发现系统的 swap 空间利用率开始增高， CPU 利用率中 iowait 占比开始增高。</p>
-<p>大多数情况下，只要物理内存够用，页命中率不会非常低，不会出现内存颠簸的情况。因为大多数程序都有一个特点，就是<strong>局部性</strong>。</p>
-<p>局部性就是说被引用过一次的存储器位置，很可能在后续再被引用多次；而且在该位置附近的其他位置，也很可能会在后续一段时间内被引用。</p>
-<h3 id="物理内存管理"><a href="#物理内存管理" class="headerlink" title="物理内存管理"></a>物理内存管理</h3><p><img src="https://pics7.baidu.com/feed/6609c93d70cf3bc7b0d84842bbfecda9cf112a4e.png?token=4f2dc6e2a73bddf5becd6dd924ebbded" alt="物理内存管理"></p>
-<p><img src="https://pics4.baidu.com/feed/962bd40735fae6cd484f59cc7d4d782c40a70fae.png?token=4296ed176d75fde417a7b04612fe8246" alt="Buddy系统"></p>
-<p>对于Page级别的内存分配，通过Buddy系统来管理；TCMalloc 也是通过这种方式来管理span。</p>
-<p>对于小对象（例如task_struct、mm_struct等）通过SlabAllcator来进行管理分配。这种思路，Memcache会借鉴。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/os/process_thread.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/os/process_thread.html" class="post-title-link" itemprop="url">操作系统 - 进程与线程</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 10:43:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:43:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-08 22:11:20" itemprop="dateModified" datetime="2022-11-08T22:11:20+08:00">2022-11-08</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/os/process_thread.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/process_thread.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h3><ul>
-<li>进程线程的区别</li>
-</ul>
-<p>线程独享：线程局部存储TLS、errno、寄存器、栈空间</p>
-<ul>
-<li><p>进程间通信方式</p>
-</li>
-<li><p>线程的状态</p>
-</li>
-<li><p>介绍死锁和如何避免</p>
-</li>
-</ul>
-<p>线程安全</p>
-<p>（1）synchronized 方法 + 代码块</p>
-<p>（2）互斥锁lock</p>
-<p>（3） 线程局部存储</p>
-<p>（4）乐观锁</p>
-<h3 id="进程调度算法"><a href="#进程调度算法" class="headerlink" title="进程调度算法"></a>进程调度算法</h3><p>多级反馈队列调度算法</p>
-<h3 id="分离thread"><a href="#分离thread" class="headerlink" title="分离thread"></a>分离thread</h3><p>非分离线程在终止后，必须要有一个线程用 join 来等待它。否则，不会释放该线程的资源以供新线程使用，而这通常会导致内存泄漏。因此，如果不希望线程被等待，请将该线程作为分离线程来创建。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/os/os_structure.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/os/os_structure.html" class="post-title-link" itemprop="url">操作系统中碰到的数据结构汇总</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 10:35:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:35:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:41:33" itemprop="dateModified" datetime="2022-03-01T22:41:33+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/os/os_structure.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/os_structure.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="hash"><a href="#hash" class="headerlink" title="hash"></a>hash</h4><p>hlist_head hlist_node 散列表拉链</p>
-<p>根据PID定位task：PID哈希表</p>
-<h4 id="双向链表"><a href="#双向链表" class="headerlink" title="双向链表"></a>双向链表</h4><p>list_head 双向链表</p>
-<p>提高调度程序运行速度：建立多个可运行程序链表</p>
-<p>等待队列（双向链表）：用自旋锁加保护的等待队列头、等待队列链表的元素</p>
-<p>等待队列中睡眠进程的唤醒：互斥进程，非互斥进程</p>
-<p>链表维护节点；节点包括管理区【硬件限制，ZONE_DMA, ZONE_NORMAL, ZONE_HIGHMEM】+ page数组</p>
-<p>动态定时器的链表组（将同一时间段内即将到时的定时器归入一组）</p>
-<h4 id="bitmap"><a href="#bitmap" class="headerlink" title="bitmap"></a>bitmap</h4><p>pid分配管理：bitmap pidmap_array</p>
-<p>inode、磁盘文件数据块</p>
-<h4 id="并发与同步"><a href="#并发与同步" class="headerlink" title="并发与同步"></a>并发与同步</h4><h5 id="每CPU变量"><a href="#每CPU变量" class="headerlink" title="每CPU变量"></a>每CPU变量</h5><p>不需要同步的内核数组，为每个cpu分配数组一元素</p>
-<h5 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a>自旋锁</h5><h5 id="RCU机制"><a href="#RCU机制" class="headerlink" title="RCU机制"></a>RCU机制</h5><p>RCU(读取-拷贝-更新)：只保护被动态分配并通过指针引用的数据结构</p>
-<p>何时释放旧副本？ CPU经过静止状态后，定期检测！！</p>
-<h4 id="原子变量"><a href="#原子变量" class="headerlink" title="原子变量"></a>原子变量</h4><h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>thread 与 thread_info 紧密挨着；根据esp 屏蔽 低13位 可以最快的获取thread_info;<br>同时进程描述符指针在thread_info中的偏移为0!</p>
-<p>也就是将： OS将task_struct指针存放到了栈上（可以通过esp做简单的AND操作即可）</p>
-<p>jiffies:子系统启动的节拍总数</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/os/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/os/index.html" class="post-title-link" itemprop="url">操作系统 - 概览</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 10:33:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:33:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:41:24" itemprop="dateModified" datetime="2022-03-01T22:41:24+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/os/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="操作系统智慧"><a href="#操作系统智慧" class="headerlink" title="操作系统智慧"></a>操作系统智慧</h4><p>懒人哲学：越简单、越傻瓜、用户使用的学习成本越低越好</p>
-<p>让困于人：当我们遇到困难时，搞不定的或者我们自己搞成本很大的，交给别人来搞(一般让操作系统来搞，其实操作系统也是别人完成的软件系统)</p>
-<p>留有余地: 可扩展性，让系统有可扩展性</p>
-<p>足够智能：一个系统最好能解决所有的问题，跟人的感觉是一个万能的解决方案，也就是操作系统的魔术师的角色</p>
-<p>时空转换：在一个纬度遇到的瓶颈，那就改变方案把瓶颈移到另外一个纬度 【内存页表太大，占用内存资源；那就页表分级，不活跃的放到磁盘】</p>
-<p>策机分离和权利分离：一个系统或者平台在主要指定规则、提供通用化的插件即可</p>
-<p>简单与美：苛求于简，归于永恒</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/network/http.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/network/http.html" class="post-title-link" itemprop="url">计算机网络 - HTTP协议</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 10:20:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:20:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-30 21:27:50" itemprop="dateModified" datetime="2022-10-30T21:27:50+08:00">2022-10-30</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/network/http.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/network/http.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://pic.rmb.bdstatic.com/bjh/news/6722dbdf63eabaa62b59486f2c51df6e.png" alt="HTTP对比"></p>
-<h3 id="HTTP1-0"><a href="#HTTP1-0" class="headerlink" title="HTTP1.0"></a>HTTP1.0</h3><p>301: 永久重定向<br>302: 临时重定向</p>
-<h3 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h3><p>可以参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/xiaoming100001/article/details/81109617">https://blog.csdn.net/xiaoming100001/article/details/81109617</a></p>
-<p>对称加密与非对称加密相结合</p>
-<p>通信内容，通过对称加密算法来加解密；其中有一个重要的东西叫：密钥</p>
-<p><strong>密钥</strong>是通过<strong>非对称加密</strong>算法来加密传输，客户端使用服务器的public key来加密，服务端通过自己的private key来解密。</p>
-<p>服务器的public key，浏览器如何得知呢？ <strong>通过SSL证书</strong>。</p>
-<p>SSL证书组织是一个树形组织，最上面的几层是hardcode在系统中的。</p>
-<p>当需要验证证书有效性时，浏览器会通过根认证组织逐层认证！</p>
-<h3 id="HTTP2-0"><a href="#HTTP2-0" class="headerlink" title="HTTP2.0"></a>HTTP2.0</h3><p>服务器推送、头信息压缩、等</p>
-<h4 id="二进制分帧"><a href="#二进制分帧" class="headerlink" title="二进制分帧"></a>二进制分帧</h4><p>先来理解几个概念：</p>
-<p>帧：HTTP/2 数据通信的最小单位消息：指 HTTP/2 中逻辑上的 HTTP 消息。例如请求和响应等，消息由一个或多个帧组成。</p>
-<p>流：存在于连接中的一个虚拟通道。流可以承载双向消息，每个流都有一个唯一的整数ID。</p>
-<p>HTTP/2 采用二进制格式传输数据，而非 HTTP 1.x 的文本格式，二进制协议解析起来更高效。 HTTP / 1 的请求和响应报文，都是由起始行，首部和实体正文（可选）组成，各部分之间以文本换行符分隔。HTTP/2 将请求和响应数据分割为更小的帧，并且它们采用二进制编码。</p>
-<p>HTTP/2 中，同域名下所有通信都在单个连接上完成，该连接可以承载任意数量的双向数据流。每个数据流都以消息的形式发送，而消息又由一个或多个帧组成。多个帧之间可以乱序发送，根据帧首部的流标识可以重新组装。</p>
-<h4 id="多路复用"><a href="#多路复用" class="headerlink" title="多路复用"></a>多路复用</h4><p>在 HTTP/2 中，有了二进制分帧之后，HTTP /2 不再依赖 TCP 链接去实现多流并行了，在 HTTP/2中：</p>
-<p>同域名下所有通信都在单个连接上完成。<br>单个连接可以承载任意数量的双向数据流。<br>数据流以消息的形式发送，而消息又由一个或多个帧组成，多个帧之间可以乱序发送，因为根据帧首部的流标识可以重新组装。</p>
-<h4 id="服务器推送"><a href="#服务器推送" class="headerlink" title="服务器推送"></a>服务器推送</h4><p>服务端可以在发送页面HTML时主动推送其它资源，而不用等到浏览器解析到相应位置，发起请求再响应。例如服务端可以主动把JS和CSS文件推送给客户端，而不需要客户端解析HTML时再发送这些请求。</p>
-<p>服务端可以主动推送，客户端也有权利选择是否接收。如果服务端推送的资源已经被浏览器缓存过，浏览器可以通过发送RST_STREAM帧来拒收。主动推送也遵守同源策略，服务器不会随便推送第三方资源给客户端。</p>
-<h4 id="头部压缩"><a href="#头部压缩" class="headerlink" title="头部压缩"></a>头部压缩</h4><p>HTTP 1.1请求的大小变得越来越大，有时甚至会大于TCP窗口的初始大小，因为它们需要等待带着ACK的响应回来以后才能继续被发送。HTTP/2对消息头采用HPACK（专为http/2头部设计的压缩格式）进行压缩传输，能够节省消息头占用的网络的流量。而HTTP/1.x每次请求，都会携带大量冗余头信息，浪费了很多带宽资源。</p>
-<p>为了减少这块的资源消耗并提升性能， HTTP/2对这些首部采取了压缩策略：</p>
-<p>HTTP/2在客户端和服务器端使用“首部表”来跟踪和存储之前发送的键－值对，对于相同的数据，不再通过每次请求和响应发送；</p>
-<p>首部表在HTTP/2的连接存续期内始终存在，由客户端和服务器共同渐进地更新;</p>
-<p>每个新的首部键－值对要么被追加到当前表的末尾，要么替换表中之前的值。</p>
-<h3 id="HTTP3-0"><a href="#HTTP3-0" class="headerlink" title="HTTP3.0"></a>HTTP3.0</h3><p><img src="https://s3.51cto.com/images/blog/202107/01/2d9b80a4cd6fadcf1e08fee31669d61a.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt="HTTP23对比"></p>
-<p>QUIC（Quick UDP Internet Connections）基于 UDP 实现，是 HTTP/3 中的底层支撑协议，该协议基于 UDP，又取了 TCP 中的精华，实现了即快又可靠的协议</p>
-<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.51cto.com/u_6315133/3122045">https://blog.51cto.com/u_6315133/3122045</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/hardware/cpu.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/hardware/cpu.html" class="post-title-link" itemprop="url">计算机硬件-CPU寄存器简介</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:01:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-02 09:04:18" itemprop="dateModified" datetime="2022-03-02T09:04:18+08:00">2022-03-02</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/hardware/cpu.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/hardware/cpu.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="CPU寄存器"><a href="#CPU寄存器" class="headerlink" title="CPU寄存器"></a>CPU寄存器</h2><p>在用途方面，他们有各自默认的用途：</p>
-<ul>
-<li>Eax用来保存所有API函数的返回值。寄存器AX和AL通常称为累加器(Accumulator)，用累加器进行的操作可能需要更少时间。累加器可用于乘、除、输入/输出等操作，它们的使用频率很高；</li>
-<li>寄存器BX称为基地址寄存器(Base Register)。它可作为存储器指针来使用；</li>
-<li>寄存器CX称为计数寄存器(Count Register)。在循环和字符串操作时，要用它来控制循环次数；在位操作中，当移多位时，要用CL来指明移位的位数；</li>
-<li>寄存器DX称为数据寄存器(Data Register)。在进行乘、除运算时，它可作为默认的操作数参与运算，也可用于存放I/O的端口地址。</li>
-</ul>
-<p>寄存器ESI、EDI、SI和DI称为变址寄存器(Index Register)，</p>
-<p>它们主要用于存放存储单元在段内的偏移量，用它们可实现多种存储器操作数的寻址方式，为以不同的地址形式访问存储单元提供方便。</p>
-<p>那么ESP和EBP指的分别是什么呢？</p>
-<ul>
-<li>ESP：栈指针寄存器(extended stack pointer)，其内存放着一个指针，该指针永远指向系统栈最上面一个栈帧的栈顶。</li>
-<li>EBP：基址指针寄存器(extended base pointer)，其内存放着一个指针，该指针永远指向系统栈最上面一个栈帧的底部。</li>
-</ul>
-<h3 id="CPU指令的执行"><a href="#CPU指令的执行" class="headerlink" title="CPU指令的执行"></a>CPU指令的执行</h3><p>一个基本的CPU执行计算的过程如下：</p>
+          <p><img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.it610.com%2Fimage%2Finfo5%2F7488f6235cda4dabaa7beed536bac0ba.jpg&amp;refer=http%3A%2F%2Fimg.it610.com&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=jpeg" alt="nginx内存池"></p>
+<p>有几个：</p>
 <ol>
-<li>程序以及数据被加载到主内存</li>
-<li>指令和数据被加载到CPU的高速缓存</li>
-<li>CPU执行指令，把结果写到高速缓存</li>
-<li>高速缓存中的数据写回主内存</li>
+<li>nginx_pool_s 虽然包含了 ngx_pool_data，但是nginx_pool_s本身的内存管理还是通过ngx_pool_data来进行分配的</li>
+<li>可以理解为：nginx_pool_s是一种特殊类型的ngx_pool_data。</li>
+<li>nginx_pool_s 维护了current指针，来指向下一个用来分配内存的小内存块链表节点</li>
+<li>nginx_pool_s 维护了large指针，来指向下一个用来分配内存的d大内存块链表节点</li>
+<li>ngx_pool_data 维护了next指针 来指向下一个nginx_pool_s</li>
 </ol>
-<h3 id="一次函数调用"><a href="#一次函数调用" class="headerlink" title="一次函数调用"></a>一次函数调用</h3><p>栈的增长方向：向下增长，ESP越来愈小、ESP比EBP小</p>
-<p>一个函数执行步骤：</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/memory_pool/memcache_for_stl.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/memory_pool/memcache_for_stl.html" class="post-title-link" itemprop="url">内存池系列｜STL内存分配</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-23 22:41:04" itemprop="dateCreated datePublished" datetime="2022-02-23T22:41:04+08:00">2022-02-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:44:16" itemprop="dateModified" datetime="2022-03-01T22:44:16+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/memory_pool/memcache_for_stl.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/memory_pool/memcache_for_stl.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ol>
+<li>基于hash的freelist</li>
+<li>由于STL知道分配出去的内存对象大小，所以他技巧性地用了union来减少内碎片。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/design_pattern/reactor.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/design_pattern/reactor.html" class="post-title-link" itemprop="url">设计模式-reactor模式</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 23:23:36" itemprop="dateModified" datetime="2022-03-01T23:23:36+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/design_pattern/reactor.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/design_pattern/reactor.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Reactor 模式首先是事件驱动的，有一个或多个并发输入源，有一个Service Handler，有多个Request Handlers；这个Service Handler会同步的将输入的请求（Event）多路复用的分发给相应的Request Handler。如果用图表示的如下：</p>
+<p><img src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/4/5/169ed823caf32d30~tplv-t2oaga2asx-watermark.awebp" alt="Reactor模式"></p>
+<p>其实在设计模式层面，IO多路复用也是采用 Reactor 模式的。</p>
+<p>IO 多路复用模型可以看成是 Reactor 模式在 IO 模型上的应用。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/high_perfermance.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/distributed_system/high_perfermance.html" class="post-title-link" itemprop="url">分布式系统-低延迟，高性能</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-02 08:54:55" itemprop="dateModified" datetime="2022-03-02T08:54:55+08:00">2022-03-02</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/distributed_system/high_perfermance.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/high_perfermance.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在我看来，高性能指的是，我们的系统能够在尽可能短的时间内完成用户的请求，也就是说latency尽可能的低。</p>
+<p>如果说系统能够支撑更大的吞吐量，能够承载更多的同时在线。我们除了降低latency，还可以考虑加机器（如果还没有reach到某个系统平瓶颈的前提下）</p>
+<h3 id="提高吞吐量"><a href="#提高吞吐量" class="headerlink" title="提高吞吐量"></a>提高吞吐量</h3><h4 id="增加并发进程数"><a href="#增加并发进程数" class="headerlink" title="增加并发进程数"></a>增加并发进程数</h4><p>注意：无限增加，不会无限提升性能(对系统的扩展性有要求)</p>
+<p><img src="http://cdn.b5mang.com/202132011337.png" alt="性能拐点模型"></p>
+<h4 id="减少响应时间"><a href="#减少响应时间" class="headerlink" title="减少响应时间"></a>减少响应时间</h4><p>IO密集型：优化数据库索引、加缓存</p>
+<p>CPU密集型：优化算法时间复杂度、减少不必要运算等</p>
+<p>并发读的核心优化理念是尽量减少用户到服务端来“读”数据，或者让他们读更少的数据；</p>
+<p>并发写的处理原则也一样，它要求我们在数据库层面独立出来一个库，做特殊的处理。</p>
+<p>从一个架构师的角度来看，要想打造并维护一个超大流量并发读写、高性能、高可用的系统，在整个用户请求路径上从浏览器到服务端我们要遵循几个原则，就是要保证</p>
 <ol>
-<li>函数参数压入stack中<br> push p1<br> push p2</li>
-<li>CPU<strong>自己</strong>把返回地址压入stack中<br> push eip</li>
-<li>CPU自己跳转到新的函数地址(call func)，开始执行（先保存EBP，然后让EBP指向当前ESP）<br> push ebp 保存老函数的EBP到新的stack中<br> mov esp =&gt; ebp  让ebp保存新函数的stack base</li>
-<li>分配局部变量<br> sub esp 100 分配100字节的局部变量</li>
-<li>局部变量赋值与访问<br> 通过ebp - $Offset$ 来访问局部变量</li>
-<li>访问参数<br> 通过ebp + $Offset$ 来访问参数</li>
-<li>函数返回<br> add esp 100<br> mov ebp =&gt; esp<br> 注意：上面这一句应该是重复的，理论上只要对esp进行了完成逆操作，esp应该等于ebp了。是不需要额外通过ebp来还原的；当然如果要通过ebp来还原，也就不需要去显示操作esp了。<br> pop ebp 还原ebp<br> ret（pop eip）</li>
-<li>将压入的参数POP出来<br> pop p2<br> pop p1</li>
+<li>用户请求的数据尽量少</li>
+<li>完成这个请求的路径尽量短、依赖尽量少 =》 上游到下游的请求数尽量少</li>
 </ol>
-<h2 id="co-实现"><a href="#co-实现" class="headerlink" title="co 实现"></a>co 实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">co_ctx&#123;</span><br><span class="line"><span class="keyword">void</span>* regs[<span class="number">14</span>]; <span class="comment">//用于保存或者设定特定寄存器</span></span><br><span class="line"><span class="keyword">size_t</span> ss_size; <span class="comment">//栈帧区域大小</span></span><br><span class="line"><span class="keyword">char</span>* ss_sp; <span class="comment">// 协程栈帧内存区域，这个区域一般在堆上分配</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">co_make (co_ctx* co, func* p, p1, p2)</span><br><span class="line">    使用p, p1, p2把co填充起来</span><br><span class="line">    co.ss_sp都是分配在堆上</span><br><span class="line">    co的EIP与ESP需要被单独赋值</span><br><span class="line">&#125;</span><br><span class="line">co_swap（）&#123;</span><br><span class="line">    主要要保存当前寄存器到要swap_out的co_ctx中</span><br><span class="line">    将要swap_in的co_ctx设置到寄存器中</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>具体参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://vinsflyfish.github.io/posts/thinking-in-libco/">https://vinsflyfish.github.io/posts/thinking-in-libco/</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/hardware/number.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/hardware/number.html" class="post-title-link" itemprop="url">计算机硬件-数字的表示</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:01:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/hardware/number.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/hardware/number.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="负数"><a href="#负数" class="headerlink" title="负数"></a>负数</h2><p>负数用补码来表示，补码等于数的反码 + 1</p>
-<h2 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h2><p>两种表示小数的数据类型，分别是双精度浮点数和单精度浮点数</p>
-<p>双精度浮点数类型用64位:符号位（1位） + 阶码（11位） + 尾数（52位）</p>
-<p>单精度浮点数类型用32位:符号位（1位） + 阶码（8位） + 尾数（23位）</p>
-<p>符号位：正数为0，负数为1；</p>
-<p>指数位：<strong>阶数+偏移量</strong>，阶数是2^(e-1)-1，e为阶码的位数，也就是指数位的位数。偏移量是把小数点移动到整数位只有1时移动的位数，正数表示向左移，负数表示向右移；</p>
-<p>小数位：即二进制小数点后面的数。</p>
-<h3 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h3><p>把0.1(10)转成的二进制0.00011 0011 0011 …(2)转成浮点数形式的二进制：</p>
-<p>（能够<strong>精确表示</strong>的小数为：0.5，0.25，0.125…等的自由组合）</p>
-<p>转化过程见：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://cloud.tencent.com/developer/article/1856972">https://cloud.tencent.com/developer/article/1856972</a></p>
-<p>1、先要把小数点移动到整数位只有1，要向右移动4位，故偏移量为-4，通过指数位的计算公式2^(e-1)-1+偏移量 = 2^(11-1)-1-4 = 1019，把1019转成二进制为1111111011，不够11位要补零，最终得出指数位位01111111011；</p>
-<p>2、移位后的小数位为.1 0011 0011 …，因为小数位只能保留52位，第50、51、52位、53位分别为0011，故对第52位进1使第51位为1，使第50、51、52位为010。</p>
-<p>注意：此处的<strong>精度丢失</strong>问题，有很多小数（例如本例中的0.1）在转二进制时会出现无限循环的情况，所以在位数有限的境况下，肯定需要舍弃后面的精度。这一点，就与1/3这种小数是在十进制下无限循环类似。</p>
-<h2 id="定点数"><a href="#定点数" class="headerlink" title="定点数"></a>定点数</h2><p>只能表示纯小数，例如0.999991212</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/hardware/tlb.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/hardware/tlb.html" class="post-title-link" itemprop="url">计算机硬件-TLB</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:01:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:40:21" itemprop="dateModified" datetime="2022-03-01T22:40:21+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/hardware/tlb.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/hardware/tlb.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>TLB（Translation Lookaside Buffer）是一块高速缓存。</p>
-<p>TLB缓存虚拟地址和其映射的物理地址。</p>
-<p>数据cache缓存地址(虚拟地址或者物理地址)和数据。</p>
-<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://zhuanlan.zhihu.com/p/108425561">https://zhuanlan.zhihu.com/p/108425561</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/fs.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/distributed_system/fs.html" class="post-title-link" itemprop="url">分布式文件系统</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-24 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-24T10:01:03+08:00">2022-02-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/distributed_system/fs.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/fs.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>存储的分布式化</p>
-<p>高效存储的一些考虑：</p>
+<p>也就两个大的方向：提升单次效率、减少不必要的请求</p>
 <ol>
-<li>很长时间没有人访问的老数据，怎么办？</li>
-<li>是不是减少副本的同时，还能还原出数据？（例如，RAID）</li>
-<li>数据压缩，平成好压缩效果与压缩/解压速度</li>
-<li>数据的分层存储：根据数据的冷热来选择不同的存储介质（局部性原理），内存、硬盘（SSD、SATA)</li>
-<li>存储与计算分离（底层基础：网络IO不再是瓶颈，而CPU性能、磁盘IO性能跟不上）</li>
+<li>动静分离方案（移除无关依赖、减少请求）</li>
+<li>热点的发现与隔离（缩短热点的服务路径）</li>
+<li>请求的削峰与分层过滤（异步化，减少无必要的依赖）</li>
+<li>服务端的极致优化（缩短热点的服务路径）</li>
 </ol>
-<h4 id="分布式存储引擎"><a href="#分布式存储引擎" class="headerlink" title="分布式存储引擎"></a>分布式存储引擎</h4><p>主要解决数据如何拆分、数据如何冗余、数据如何定位的问题。</p>
-<p>（1）parititioning 方式，即数据在逻辑上怎么切分</p>
-<p>（2）localization 方式，即数据在物理上怎么分布</p>
-<p>一个系统要想拥有高可用性，有且只有一个办法 — 副本（replication），因为物理故障是无法避免的，只能花钱做备份。</p>
-<p>主从和时效性是 replication 要考虑的两个重要问题。</p>
-<p>主从主要有单主、多主和无主三种方式。</p>
-<p>时效性主要有同步、异步、半同步三种方式。</p>
-<p>（3）rebalance 方式，即在节点数变化后，数据在物理上怎么重新分布.</p>
-<h4 id="分布式文件系统"><a href="#分布式文件系统" class="headerlink" title="分布式文件系统"></a>分布式文件系统</h4><p>按照Block拆分文件，然后通过一个管理员来管理Block到对应及其的映射关系。</p>
-<p>新的问题：<br>如果存储block的机器挂了怎么办？ 如果管理员挂了怎么办？</p>
-<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://zhuanlan.zhihu.com/p/141775358">https://zhuanlan.zhihu.com/p/141775358</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/high_scalability.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/distributed_system/high_scalability.html" class="post-title-link" itemprop="url">分布式系统-可扩展</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-04 22:55:48" itemprop="dateModified" datetime="2022-03-04T22:55:48+08:00">2022-03-04</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/distributed_system/high_scalability.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/high_scalability.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h2><p>有合理的办法应对系统的增长（数据量、流量、复杂性）</p>
+<p>一个良好适配应用的可扩展架构，是围绕着<strong>假设</strong>（assumption）建立的：哪些操作是常见的？哪些操作是罕见的？这就是所谓负载参数。如果假设最终是错误的，那么为扩展所做的工程投入就白费了，最糟糕的是适得其反。</p>
+<p>数据库、缓存、依赖的第三方、复杂均衡、交换机带宽都是系统扩展时需要考虑的点</p>
+<h3 id="分层"><a href="#分层" class="headerlink" title="分层"></a>分层</h3><p>首先要分层，分层是实现扩展的必要条件；分了层才能让系统有更好的可扩展能力；</p>
+<p><img src="http://cdn.b5mang.com/2021320104242.png" alt="架构分层"></p>
+<p>我们将系统分为如下几层：</p>
+<h4 id="接入层"><a href="#接入层" class="headerlink" title="接入层"></a>接入层</h4><p>主要负责负载均衡，要求负载均衡策略的时间复杂度要尽量简单，追求$O(lgn)$的时间复杂度，最坏不能超过$O(n)$。对于更坏时间复杂度的均衡策略，性能上会扛不住。</p>
+<h4 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h4><p>业务层：按照业务拆分、按照重要性拆分（轻重分离，核心、非核心）、按照请求来源（客户端、web、内网等）—这个跑偏了，这些点主要服务于可用性。</p>
+<p>这里侧重点在于无状态，我们一定要确保我们的服务无状态。</p>
+<h4 id="存储层"><a href="#存储层" class="headerlink" title="存储层"></a>存储层</h4><p>存储层做扩展会更麻烦一些。</p>
+<p>一般情况下，要求我们根据业务量提前估计好存储容量。根据计算出来的总的存储量，提前做足够的数据分片。</p>
+<p>换言之，对于存储层，我们的一种思路是：早做扩展，以确保将来不做扩展；</p>
+<p>另外一种思路是，添加必要的路由层（数据访问路由层）或者路由算法（数据表倍增法），来确保将来的扩展对上层不可见。</p>
+<h4 id="manager层"><a href="#manager层" class="headerlink" title="manager层"></a>manager层</h4><ol>
+<li>抽象service层可能提供的一些原子能力</li>
+<li>封装对第三方接口的调用</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/server.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/server.html" class="post-title-link" itemprop="url">高性能服务器设计-总览</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:44:49" itemprop="dateModified" datetime="2022-03-01T22:44:49+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/server.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/server.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>池化技术<br>核心思想：用空间换时间，期望使用预先创建好的对象来减少频繁创建对象的性能开销，同时还统一管理了对象，降低了对象的使用成本。<br>例子：<br>（1）数据库连接池-最小数量、最大数量、如果超过最大则等待<br>（2）线程池-最小数量、最大数量、有界队列（监控队列中元素的个数）<br>线程池大小：区分IO密集、CPU密集<br>（3）内存池</p>
+<p>超时事件管理</p>
+<p>IO模型</p>
+<p>线程模型，一般会综合考虑IO模型、超时事件如何管理、线程池、消息队列等</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/store/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/store/index.html" class="post-title-link" itemprop="url">存储系列-概览</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-12-01 11:36:40" itemprop="dateModified" datetime="2022-12-01T11:36:40+08:00">2022-12-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/store/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/store/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>存储模型有哪些？</p>
+<p>关系模型</p>
+<p>文档模型：数据通常是自我包含的，而且文档之间的关系非常稀少</p>
+<p>图数据模型：任意事物都可能与任何事物相关联</p>
+<p>参考：<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/heiyeshuwu/article/details/9722443">https://blog.csdn.net/heiyeshuwu/article/details/9722443</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/io_model/io_model.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/io_model/io_model.html" class="post-title-link" itemprop="url">高性能服务器设计-IO模型</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:43:39" itemprop="dateModified" datetime="2022-03-01T22:43:39+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/io_model/io_model.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/io_model/io_model.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="5种IO模型"><a href="#5种IO模型" class="headerlink" title="5种IO模型"></a>5种IO模型</h2><p>当应用程序需要通过操作系统进行IO通信时，一共有下面5种IO模型供选择。</p>
+<h3 id="（同步）阻塞IO"><a href="#（同步）阻塞IO" class="headerlink" title="（同步）阻塞IO"></a>（同步）阻塞IO</h3><h3 id="（同步）非阻塞IO"><a href="#（同步）非阻塞IO" class="headerlink" title="（同步）非阻塞IO"></a>（同步）非阻塞IO</h3><h3 id="（同步）IO多路复用"><a href="#（同步）IO多路复用" class="headerlink" title="（同步）IO多路复用"></a>（同步）IO多路复用</h3><p>复用IO的基本思路就是通过slect或poll、epoll 来监控多fd ，来达到不必为每个fd创建一个对应的监控线程，从而减少线程资源创建的目的。</p>
+<h3 id="（异步）信号驱动IO"><a href="#（异步）信号驱动IO" class="headerlink" title="（异步）信号驱动IO"></a>（异步）信号驱动IO</h3><p>FATAL缺点：信号I/O在大量IO操作时可能会因为信号队列溢出导致没法通知。</p>
+<h3 id="异步（非阻塞）IO"><a href="#异步（非阻塞）IO" class="headerlink" title="异步（非阻塞）IO"></a>异步（非阻塞）IO</h3><p>缺点：技术比较新，可能还有些坑没有填完；另外就是异步IO会让应用比较复杂，代码变得难以理解（异步不符合人的思考习惯）</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/io_model/io_model_for_nginx.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/io_model/io_model_for_nginx.html" class="post-title-link" itemprop="url">高性能服务器设计-Nginx IO模型</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-10-30 18:33:31" itemprop="dateModified" datetime="2022-10-30T18:33:31+08:00">2022-10-30</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/io_model/io_model_for_nginx.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/io_model/io_model_for_nginx.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>端口复用，通过互斥锁来避免<strong>惊群</strong>效应</p>
+<p>为什么不采用多线程模型管理连接</p>
+<ol>
+<li>无状态服务，无需共享进程内存</li>
+<li>采用独立的进程，可以让互相之间不会影响。一个进程异常崩溃，其他进程的服务不会中断，提升了架构的可靠性。</li>
+<li>进程之间不共享资源，不需要加锁，所以省掉了锁带来的开销。</li>
+</ol>
+<p>为什么不采用多线程处理逻辑业务？</p>
+<ol>
+<li>进程数已经等于核心数，再新建线程处理任务，只会抢占现有进程，增加切换代价。</li>
+<li>作为接入层，基本上都是数据转发业务，网络 IO 任务的等待耗时部分，已经被处理为非阻塞/全异步/事件驱动模式，在没有更多 CPU 的情况下，再利用多线程处理，意义不大。</li>
+<li>并且如果进程中有阻塞的处理逻辑，应该由各个业务进行解决，比如 openResty 中利用了 Lua 协程，对阻塞业务进行了优化。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/io_model/multiplex_io.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/io_model/multiplex_io.html" class="post-title-link" itemprop="url">高性能服务器设计-常见IO多路复用技术介绍</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:43:43" itemprop="dateModified" datetime="2022-03-01T22:43:43+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/io_model/multiplex_io.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/io_model/multiplex_io.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="select"><a href="#select" class="headerlink" title="select"></a>select</h2><p>不足：</p>
+<ol>
+<li>通过数组来管理fd，数量限制</li>
+<li>触发方式单一，仅支持水平触发（LT)</li>
+</ol>
+<h2 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h2><p>优点：通过链条来管理fd，突破数量限制</p>
+<p>不足：</p>
+<ol>
+<li>当你拥有一个很大的socket集合，不过由于网络延时，任一时间只有部分socket是“活跃”的，但是select/poll每次调用都会线性扫描全部的集合（时间复杂度是$O(n)$，导致效率呈线性下降。</li>
+<li>内核与用户态的数据拷贝</li>
+</ol>
+<h2 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h2><p>特点：</p>
+<ol>
+<li>没有最大并发连接的限制</li>
+<li>通过红黑树管理所有的fd，时间复杂度为$O(lgn)$</li>
+<li>使用mmap加速内核与用户空间的消息传递</li>
+<li>更丰富的触发方式，同时支持水平触发（LT)与边缘触发（ET)</li>
+</ol>
 
       
     </div>
@@ -1194,7 +1120,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/9/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/33/">33</a><a class="extend next" rel="next" href="/page/11/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/9/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/34/">34</a><a class="extend next" rel="next" href="/page/11/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1263,20 +1189,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">328</span>
+          <span class="site-state-item-count">331</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-count">60</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

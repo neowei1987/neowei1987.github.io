@@ -303,6 +303,269 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/store/tair.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/store/tair.html" class="post-title-link" itemprop="url">Tair介绍</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-12-01 13:03:03 / Modified: 12:51:12" itemprop="dateCreated datePublished" datetime="2022-12-01T13:03:03+08:00">2022-12-01</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/store/tair.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/store/tair.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在高吞吐、大连接数、热点请求、异常流量、复杂计算逻辑、弹性伸缩这些真实场景下保持稳定的低延时，是 Tair 能够在低延时场景被选择的关键因素。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/backend_knowledge_architecture/store/tair.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/stock_k.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/stock_k.html" class="post-title-link" itemprop="url">股票买卖问题-限定两次</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-12-01 13:03:03 / Modified: 12:51:16" itemprop="dateCreated datePublished" datetime="2022-12-01T13:03:03+08:00">2022-12-01</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/stock_k.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/stock_k.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>假设你有一个数组prices，长度为n，其中prices[i]是某只股票在第i天的价格，请根据这个价格数组，返回买卖股票能获得的最大收益</p>
+<ol>
+<li>你最多可以对该股票有两笔交易操作，一笔交易代表着一次买入与一次卖出，但是再次购买前必须卖出之前的股票</li>
+<li>如果不能获取收益，请返回0</li>
+<li>假设买入卖出均无手续费</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/stock_k.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/work/tpl.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/work/tpl.html" class="post-title-link" itemprop="url">模版</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-12-01 13:03:03 / Modified: 12:48:08" itemprop="dateCreated datePublished" datetime="2022-12-01T13:03:03+08:00">2022-12-01</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/work/tpl.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/work/tpl.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="0-背景介绍，把人吸引过来"><a href="#0-背景介绍，把人吸引过来" class="headerlink" title="0. 背景介绍，把人吸引过来"></a>0. 背景介绍，把人吸引过来</h2><p>之前总有一些年轻人问我，我应该了解哪些知识才能像某某某那么牛B。<br>这句话的意思其实就是：他们特别困惑，想知道一个后端程序员的知识体系，想知道从哪开始学起。</p>
+<p>关于这个问题，琢磨了好久，我不想简单的一句话就敷衍过去了，这个问题我要深思熟虑去回答。<br>因为如果 10 年前有人告诉我这个问题的答案，现在的我将少走很多的弯路，技术水平也会更上一层楼。</p>
+<p>简单说一下全文的结构，全文一共分为四大部分。第一部分，主要从硬件、操作系统、网络、数据结构&amp;算法等几个方面跟大家聊一下计算机科学相关的基础知识。第二部分，讲一下设计一款高性能的服务框架，应该从哪些方面着手；第三部分，讲一下平常工作中使用最频繁的知识-数据库、缓存以及一些相关的经典问题；最后第四部分，讲述的侧重点从第二部分的微观转到相对宏观的内容，跟大家聊一下分布式系统、大型架构设计等相关知识。</p>
+<p>引用古人的一句话，来开始我们的征程！</p>
+<blockquote>
+<p>“路漫漫其修远兮，吾将上下而求索！”</p>
+</blockquote>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/work/tpl.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/ai/linear_regression.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -694,112 +957,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/store/tair.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/store/tair.html" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-11-26 22:26:13" itemprop="dateCreated datePublished" datetime="2022-11-26T22:26:13+08:00">2022-11-26</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/store/tair.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/store/tair.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Tair"><a href="#Tair" class="headerlink" title="Tair"></a>Tair</h1><p>在高吞吐、大连接数、热点请求、异常流量、复杂计算逻辑、弹性伸缩这些真实场景下保持稳定的低延时，是 Tair 能够在低延时场景被选择的关键因素。</p>
-<h2 id="低延时"><a href="#低延时" class="headerlink" title="低延时"></a>低延时</h2><h3 id="存储介质"><a href="#存储介质" class="headerlink" title="存储介质"></a>存储介质</h3><p>索引数据，与 真实数据 采用不同的存储介质</p>
-<p>除了存储介质的延时，通常我们还需要关心的是介质的成本。成本一方面是从硬件上，Tair 是率先采用 SCM 的云产品，相对于 DRAM，SCM 的密度更高能支持持久化，且成本更低。上面提到的三部分数据结构中， Tuple 和 String Pool 是主要占用数据的空间，存放在空间更大的 SCM 上，Index 需要频繁访问且占用空间更低，存放在空间较小延时更低的 DRAM 上。</p>
-<p>索引数据，全内存，延时&lt;100ns<br>真实数据，云存储,延时 &lt;=300ns</p>
-<p>另外一方面是从<strong>数据结构</strong>上去降低成本，这里的技术手段包括，设计更友好的数据结构和碎片整理的机制、进行透明的数据压缩。Tair 中会以 Page 为单位来管理 Tuple，随着数据的删除，每个 Page 会有一些空闲的 Tuple，存储引擎会按照空闲率来对 Page 分组，当整体的空闲率高于一定阈值（默认是 10%）时，就会试图根据空闲率进行页的合并</p>
-<p>Tair 目前在使用的索引主要有 HashTable、SkipList、RBTree、RTree、Number Tree、Inverted index 等，分别应用于不同的场景。索引和需要服务的模型是相关联的，比如如果服务的主要模型是 Key-Value，那么主索引使用 HashTable 来达到 O（1）的时间复杂度，ZSet 涉及到数据排序和排名的获取，所以 Zset 使用了一个可以在查找时同时获取 Rank 的 Skiplist 作为索引。排序场景使用 SkipList 作为索引是内存数据库中比较常见的方案，相较于 BTree 来说，由于没有 Structure Modification，更易于实现并发和无锁，当然，也会增加一些 Footprint。在 Table 存储中，使用 RBTree 作为排序索引，在数据量达到 10k 的场景下，RBTree 能够提供更稳定的访问延时和更低的内存占用。</p>
-<p>在数据库系统中，索引能力的增强还可以让执行器对外暴露更强的算子，比如 Tair 中的 RBTree 提供了快速计算两个值之间 Count 的能力，对外提供了 IndexCountOperator，这样类似于 Select count(*) from person where age &gt;= 8 and age &lt;= 25 的查询就可以直接使用 IndexCountOperator 来获取结果，无需朴素地调用 IndexScanOperator -&gt; AggregateOperator对索引进行扫描才得出结果。</p>
-<h3 id="高并发"><a href="#高并发" class="headerlink" title="高并发"></a>高并发</h3><p>并发是低延时场景一个关键挑战。</p>
-<p>解法通常分为两种，</p>
-<p>一种是在存储引擎内部支持更细粒度的锁或者无锁的并发请求；还有一种是在存储引擎外部来进行线程模型的优化，</p>
-<p>保证某一部分数据（一般来说是一个分区）只被一个线程处理，这样就能够在单线程引擎之上构建出高吞吐的能力。【使用这种方式需要满足一些假设：对每个 Partition 的访问是均衡的；跨 Partition 的访问比较少】</p>
-<p>为了提升单机的处理能力，Tair 引入了 RCU 无锁引擎，实现内存 KV 引擎的无锁化访问，成倍提升了内存引擎的性能</p>
-<h3 id="超大连接数"><a href="#超大连接数" class="headerlink" title="超大连接数"></a>超大连接数</h3><p>连接数的限制是一个比较容易被忽略的约束。但在一个真实的系统中，连接数过多会给系统带来巨大的压力。比如说 Redis，即使在 6.0 支持了多 io 之后，能够支持的连接数也是有限的。而目前直接访问 Tair 的应用动辄有 100k 规模的容器数目，所以支持超多连接数是一个必选项。</p>
-<p>其中涉及到的技术主要是几方面：</p>
-<p>a. 提高多线程 io 的能力，目前成熟的网络框架基本都有这个能力；<br>b. 把 io 线程和 worker 线程解耦，这样可以独立增强 worker 的处理能力，避免对 io 产生阻塞，当然这个策略取决于 worker 的工作负载，对于单次处理延时稳定较小的场景，支持无锁并发后，整个链路使用 io 线程处理避免线程切换是更优的方案；<br>c. 轻量化连接，把关联到连接上的业务逻辑和 io 功能剥离开，可以更加灵活地做针对性的优化，一些系统中连接对资源的消耗较大，一个连接需要消耗 ~10M 的内存资源，这样连接数就比较难以扩展了。</p>
-<h3 id="水平扩展"><a href="#水平扩展" class="headerlink" title="水平扩展"></a>水平扩展</h3><p>HA-Group 同一个进程处理好几个分段，对于[0~1023]分段，该进程是leader， 而对于[1024~2047]分段，该进程是follower。从而实现整个集群负载相对比较均衡。</p>
-<h2 id="稳定性"><a href="#稳定性" class="headerlink" title="稳定性"></a>稳定性</h2><h3 id="热点"><a href="#热点" class="headerlink" title="热点"></a>热点</h3><p>热点访问是商品维度、卖家维度的数据常常会遇到的一个挑战，热点方案也是 Tair 能够服务于低延时场景的关键能力。</p>
-<p>前面讲了水平扩展之后，用户的某个请求就会根据一定的规则（Hash、Range、List 等）路由到某一个分区上，如果存在热点访问，就会造成这一个分区的访问拥塞。</p>
-<p>处理热点有很多方案，比如<strong>二级散列</strong>，这种方案对于热点的读写可以做进一步拆分的场景是有用的，比如现在我们有一个卖家订单表，然后卖家 id 是分区列，则我们可以再以订单 id 做一次二级散列，解决一个大卖家导致的热点问题；目前淘宝大规模使用的 Tair 的 KV 引擎不满足使用二级散列的前提，一般来说商品的信息映射到 Tair 内就是某一个 Value，更新和读取都是原子的。</p>
-<p>所以 Tair 目前使用的方案是在一层进行散列，借助于和客户端的交互，将热点数据分散到集群当中的其它节点，共同来处理这个热点请求，当然这种方案需要应用接受热点在一定时间内的延迟更新。另外这种方案需要客户端和服务端协同，需要应用升级到对应的客户端才能使用。</p>
-<p>所以最新的 Tair 热点策略在兼容社区 Redis 的服务时使用了不同的方案，应用能够直接使用任一流行的开源客户端进行访问，因此需要在服务端提供独立的热点处理能力。目前的 Tair 热点能力是由 Proxy 来提供的，相对于 Tair 之前的方案，这种方案拥有更强大的弹性和更好的通用性。</p>
-<h3 id="流控"><a href="#流控" class="headerlink" title="流控"></a>流控</h3><p>服务于多租户的数据库系统，解决资源隔离的问题通常需要对进行容量或者访问量的配额管理来保证 QoS。</p>
-<p>即使服务于单租户的系统，也需要在用户有突发异常流量时，保证系统的稳定性，识别出异常流量进行限制，保证正常流量不受影响，比如 Tair 中对于 慢 SQL 识别和阻断。</p>
-<p>再退一步，即使面对无法识别的异常流量，如果判断请求流量已经超过了服务的极限，按照正常的行为进行响应会对服务端造成风险，需要进行 Fast Fail，并保证服务端的可用性，达到可用性防御的目的，比如 Tair 在判断有客户端的 Output Buffer 超过一定内存阈值之后，就会强制 Kill 掉客户端连接；</p>
-<p>在判断目前排队的请求个数或者回包占用的内存超过一定阈值之后，就会构造一个流控的回包并回复给客户端。</p>
-<p>流控一般包含以下几部分内容：请求资源消耗的统计，这部分是为流控策略和行为提供数据支撑；流控的触发，一般是给资源消耗设定一个阈值，如果超过阈值就触发；流控的行为，这部分各个系统根据服务的场景会有较大的不同；最后的流控的恢复，也是就是资源消耗到达什么情况下解除流控。</p>
-<p>流控一般包含以下几部分内容：请求资源消耗的统计，这部分是为流控策略和行为提供数据支撑；流控的触发，一般是给资源消耗设定一个阈值，如果超过阈值就触发；流控的行为，这部分各个系统根据服务的场景会有较大的不同；最后的流控的恢复，也是就是资源消耗到达什么情况下解除流控。</p>
-<h3 id="执行流程优化"><a href="#执行流程优化" class="headerlink" title="执行流程优化"></a>执行流程优化</h3><p>经典的 NoSQL 系统，提供的 API 都是和服务端的处理流程非常耦合的，比如说 Redis 提供了很多 API，光是 List 就有 20 多个接口。在服务端其实很多接口的执行过程中的步骤是比较类似的，比如说有一些 GenericXXX 的函数定义。我们再看看一般的 RDBMS 中的处理 SQL 的流程，一般是 解析（从 SQL 文本到 AST），然后是优化器编译 （把 AST 编译成算子，TableScan、Filter、Aggregate），然后是执行器来执行。</p>
-<p>类比到 Redis 中，用户传进来的就是 AST，且服务端已经预定了执行计划，直接执行就行了。如果我想使用 SQL，不想学习这么多 API，同时由于我的访问场景是比较固定的，比如进行<strong>模板化</strong>之后，只有十多种 SQL 语句，且访问的数据比较均衡，某一条特定的语句所有的参数用一条特定的索引就足够了，有没有办法在执行过程中省去解析、编译的开销来提高运行的效率？</p>
-<p>有很多同学可能已经想到了存储过程。是的，存储过程很多场景是在扩充表达能力，比如多条语句组成的存储过程，需要进行比较复杂的逻辑判断，单条语句存储过程本质上是在灵活性和性能上进行折衷。Tair 所有线上运行的 SQL 都是<strong>预先创建存储过程</strong>的，这样进行访问就类似于调用 Redis 的一个 API 了，这是在复杂计算逻辑的场景下保证低延时的一种方案。</p>
-<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://mp.weixin.qq.com/s/kQ-U9eGHmeFiwLf_BO-ykA">https://mp.weixin.qq.com/s/kQ-U9eGHmeFiwLf_BO-ykA</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/sort/quick_sort/qsort.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -877,87 +1034,6 @@
 <p>对于有序数组，上面把start作为Pivot的方法，会让算法时间复杂度退化为O(N^2),导致超时。<br>对数组进行shuffle，能解决有序数组的问题，但是无法解决所有元素全部相同的问题。当所有元素都一样时，shuffle无用，时间复杂度还是O(N^2)<br>于是就有了下面的解法。这种方法，返回了中间区域的左右边界，让问题迅速简化！</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">quick_sort_3part</span><span class="params">(<span class="keyword">int</span> q[], <span class="keyword">int</span> l, <span class="keyword">int</span> r)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (l &gt;= r) <span class="keyword">return</span>;</span><br><span class="line">    </span><br><span class="line">    swap(q[l], q[l + rand() % (r - l + <span class="number">1</span>)]); <span class="comment">//随机化</span></span><br><span class="line">    <span class="keyword">int</span> lt = l, gt = r, i = l + <span class="number">1</span>, x = q[l];</span><br><span class="line">    <span class="comment">// 6,4,1,3,6,6,6,6,4,3,10,45,32</span></span><br><span class="line">    <span class="comment">// |     |       |     |</span></span><br><span class="line">    <span class="comment">// l    lt      i     gt</span></span><br><span class="line">    <span class="comment">// 三路快排，确定等于主元pivot的左右边界</span></span><br><span class="line">    <span class="keyword">while</span> (i &lt;= gt) &#123;</span><br><span class="line">        <span class="keyword">if</span> (q[i] &lt; x) swap(q[i++], q[++lt]);  <span class="comment">//gt左边的元素都比x大，但是gt指向的不一定大</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (q[i] &gt; x) swap(q[i], q[gt--]);<span class="comment">//把比x大的元素，换到后面了；但换回来的元素不一定“满足条件”，所以i不能变，需要再比较一次！</span></span><br><span class="line">        <span class="keyword">else</span> i++;<span class="comment">// 等于主元，则继续</span></span><br><span class="line">    &#125;</span><br><span class="line">    swap(q[l], q[lt]);</span><br><span class="line"></span><br><span class="line">    quick_sort_3part(q, l, lt - <span class="number">1</span>);</span><br><span class="line">    quick_sort_3part(q, gt + <span class="number">1</span>, r);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/stock_k.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/stock_k.html" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-11-15 21:46:04" itemprop="dateCreated datePublished" datetime="2022-11-15T21:46:04+08:00">2022-11-15</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/stock_k.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/stock_k.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>假设你有一个数组prices，长度为n，其中prices[i]是某只股票在第i天的价格，请根据这个价格数组，返回买卖股票能获得的最大收益</p>
-<ol>
-<li>你最多可以对该股票有两笔交易操作，一笔交易代表着一次买入与一次卖出，但是再次购买前必须卖出之前的股票</li>
-<li>如果不能获取收益，请返回0</li>
-<li>假设买入卖出均无手续费</li>
-</ol>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">1e5</span> + <span class="number">1</span>;</span><br><span class="line"><span class="comment">//dp[i][k][0]; 第i天时，当前空仓，不持有股票，可交易次数</span></span><br><span class="line"><span class="comment">//dp[i][k][1]，第i天时，当前满仓，持有股票，，可交易次数</span></span><br><span class="line"><span class="keyword">int</span> dp[N][<span class="number">3</span>][<span class="number">2</span>];</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 代码中的类名、方法名、参数名已经指定，请勿修改，直接返回方法规定的值即可</span></span><br><span class="line"><span class="comment">     * 两次交易所能获得的最大收益</span></span><br><span class="line"><span class="comment">     * @param prices int整型vector 股票每一天的价格</span></span><br><span class="line"><span class="comment">     * @return int整型</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; prices)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//状态，选择</span></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        for (int i = 0; i &lt; prices.size(); ++i) &#123;</span></span><br><span class="line"><span class="comment">            dp[i][0][0] = 0;</span></span><br><span class="line"><span class="comment">            dp[i][0][1] = INT32_MIN;</span></span><br><span class="line"><span class="comment">        &#125;*/</span></span><br><span class="line">        <span class="comment">//第-1天，不持仓 == 0</span></span><br><span class="line">        <span class="comment">//第-1天，持仓 === -INF</span></span><br><span class="line">        <span class="comment">//第i天，0交易次数，0 = 0</span></span><br><span class="line">        <span class="comment">//第i天，0交易次数，1 = -INF</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; prices.size(); ++i) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">2</span>; k &gt;= <span class="number">1</span>; k--) &#123;</span><br><span class="line">                <span class="keyword">if</span> (i == <span class="number">0</span>) &#123;</span><br><span class="line">                    dp[i][k][<span class="number">1</span>] = -prices[i]; <span class="comment">/* dp[i - 1][k-1][0] - prices[i] 前半部分等于0*/</span></span><br><span class="line">                    dp[i][k][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="comment">//对于持仓状态，由前一天的买入状态、前一天的rest变化而来；</span></span><br><span class="line">                dp[i][k][<span class="number">1</span>] = max(</span><br><span class="line">                    dp[i - <span class="number">1</span>][k<span class="number">-1</span>][<span class="number">0</span>] - prices[i], <span class="comment">//选择买入</span></span><br><span class="line">                    dp[i - <span class="number">1</span>][k][<span class="number">1</span>]               <span class="comment">//保持不变</span></span><br><span class="line">                );</span><br><span class="line">                <span class="comment">//对于空仓状态，由前一天的卖出状态、前一天的rest变化而来；</span></span><br><span class="line">                dp[i][k][<span class="number">0</span>] = max(</span><br><span class="line">                    dp[i - <span class="number">1</span>][k][<span class="number">1</span>] + prices[i],  <span class="comment">//选择卖出</span></span><br><span class="line">                    dp[i - <span class="number">1</span>][k][<span class="number">0</span>]</span><br><span class="line">                );</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> dp[prices.size() - <span class="number">1</span>][<span class="number">2</span>][<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -1072,87 +1148,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/array/rotate_90.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/structures/array/rotate_90.html" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-11-14 21:12:04 / Modified: 21:22:34" itemprop="dateCreated datePublished" datetime="2022-11-14T21:12:04+08:00">2022-11-14</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/array/rotate_90.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/array/rotate_90.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>矩阵90度旋转</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &gt; <span class="title">rotateMatrix</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &gt; mat, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//水平翻转</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n / <span class="number">2</span>; ++i) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; ++j) &#123;</span><br><span class="line">                swap(mat[i][j], mat[n - <span class="number">1</span> - i][j]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//对角线翻转</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; ++j) &#123;</span><br><span class="line">                swap(mat[i][j], mat[j][i]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> mat;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/33/">33</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/34/">34</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1221,20 +1220,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">328</span>
+          <span class="site-state-item-count">331</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-count">60</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

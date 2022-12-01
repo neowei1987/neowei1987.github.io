@@ -203,7 +203,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/rain_trap.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/getTranslationCount.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -217,7 +217,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/rain_trap.html" class="post-title-link" itemprop="url">一题目多解系列-接雨水问题</a>
+            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/getTranslationCount.html" class="post-title-link" itemprop="url">动态规划系列-获取不同的翻译方法次数</a>
         </h2>
 
         <div class="post-meta">
@@ -229,14 +229,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2021-01-05 18:56:03" itemprop="dateCreated datePublished" datetime="2021-01-05T18:56:03+08:00">2021-01-05</time>
+              <time title="Created: 2021-01-04 11:42:03" itemprop="dateCreated datePublished" datetime="2021-01-04T11:42:03+08:00">2021-01-04</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-15 21:46:04" itemprop="dateModified" datetime="2022-11-15T21:46:04+08:00">2022-11-15</time>
+                <time title="Modified: 2022-03-01 22:49:11" itemprop="dateModified" datetime="2022-03-01T22:49:11+08:00">2022-03-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -257,8 +257,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/rain_trap.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/rain_trap.html" itemprop="commentCount"></span>
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/getTranslationCount.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/getTranslationCount.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -273,141 +273,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="接雨水问题-题目描述"><a href="#接雨水问题-题目描述" class="headerlink" title="接雨水问题 - 题目描述"></a>接雨水问题 - 题目描述</h2><p>给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。</p>
-<p>上面是由数组 [0,1,0,2,1,0,1,3,2,1,2,1] 表示的高度图，在这种情况下，可以接 6 个单位的雨水（蓝色部分表示雨水）。</p>
-<p>示例:<br>输入: [0,1,0,2,1,0,1,3,2,1,2,1]<br>输出: 6</p>
-<h2 id="接雨水问题-一开始的思路"><a href="#接雨水问题-一开始的思路" class="headerlink" title="接雨水问题-一开始的思路"></a>接雨水问题-一开始的思路</h2><p>经典解法包括：<br>（1）单调栈，左右遇到的最大值<br>（2）双指针</p>
-<p>首先，也是最重要的，先把题目搞清楚（好多时候解不出题是由于题目没有完全理解、没有理解完全或者完全没有理解）。<br>按照题意，一个格子能够接的水，取决于该格子向前、向后遇到的最大值，两个最大值取最小值；而我之前曾经按照往前、往后遇到的比该格子高的格子来算了。</p>
-<p>其次，让我们考虑最暴力的做法是什么？暴力扫描。</p>
-<h2 id="接雨水问题-一暴力扫描代码实现"><a href="#接雨水问题-一暴力扫描代码实现" class="headerlink" title="接雨水问题-一暴力扫描代码实现"></a>接雨水问题-一暴力扫描代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">trap</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; height)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = height.size();</span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; ++i) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//往左找到最大值</span></span><br><span class="line">        <span class="keyword">int</span> lmax = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; ++j) &#123;</span><br><span class="line">            lmax = max(lmax, height[j]);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//往右找到最大值</span></span><br><span class="line">        <span class="keyword">int</span> rmax = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; i; ++j) &#123;</span><br><span class="line">            rmax = max(rmax, height[j]);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        res += min(rmax, lmax) - height[i];</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>时间复杂度：$O(n^2)$<br>空间复杂度：$O(1)$</p>
-<h2 id="接雨水问题-进一步思考"><a href="#接雨水问题-进一步思考" class="headerlink" title="接雨水问题-进一步思考"></a>接雨水问题-进一步思考</h2><p>观察上面的代码，有很多重复计算，例如计算i左边的最大值时，扫描范围是[0, i - 1];当计算i+1左边的最大值时，扫描范围是[0, i]，显然是完全包含[0, i - 1]的，<br>对于重复计算，我们继续采用空间换时间的套路，用数组lmax[i]来存储[0, i - 1]的最大值；这样子存储之后，如果再计算lmax[i + 1]只要拿lmax[i]跟height[i + 1]比较即可。</p>
-<h2 id="接雨水问题-空间换时间版"><a href="#接雨水问题-空间换时间版" class="headerlink" title="接雨水问题-空间换时间版"></a>接雨水问题-空间换时间版</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">trap</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; height)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = height.size();</span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> lmax[N], rmax[N];</span><br><span class="line">    <span class="comment">//正序遍历</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        lmax[i] = max(lmax[i - <span class="number">1</span>], height[i - <span class="number">1</span>]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//倒序遍历 </span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = n; i &gt;= <span class="number">0</span>; --i) &#123;</span><br><span class="line">        rmax[i] = max(rmax[i + <span class="number">1</span>], height[i + <span class="number">1</span>]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        res += min(lmax[i], rmax[i]) - height[i];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>时间复杂度：$O(n)$<br>空间复杂度：$O(n)$</p>
-<h2 id="接雨水问题-能不能把空间复杂度优化掉？"><a href="#接雨水问题-能不能把空间复杂度优化掉？" class="headerlink" title="接雨水问题-能不能把空间复杂度优化掉？"></a>接雨水问题-能不能把空间复杂度优化掉？</h2><p>其实，上面的时间复杂度已经是最优了，有没有可能把空间也优化掉呢？我们注意到lmax[i]仅跟lmin[i-1]有关系，这个对于我们做空间压缩是很好的；<br>剩下的就是，我们能不能把lmax,rmax立即用上，而不需要存起来呢？答案是可以的。我们可以把上面的循环写在一起，用i、j两个指针分别指向左右两个端点，在遍历的过程中，直接把前面出的lmax, rmax立即用上。</p>
-<h2 id="接雨水问题-双指针优化版"><a href="#接雨水问题-双指针优化版" class="headerlink" title="接雨水问题-双指针优化版"></a>接雨水问题-双指针优化版</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">trap</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; height)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = height.size();</span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> lmax, rmax;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">1</span>, j = n - <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (i &lt; j) &#123;</span><br><span class="line">        lmax = max(lmax, height[i - <span class="number">1</span>]);</span><br><span class="line">        rmax = max(rmax, height[j + <span class="number">1</span>]);</span><br><span class="line">        <span class="keyword">if</span> (lmax &lt; rmax) &#123;</span><br><span class="line">            res += lmax - height[i];</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            res += rmax - height[j];</span><br><span class="line">            j--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">trap</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; height)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> lmax = <span class="number">0</span>, rmax = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> l = <span class="number">0</span>, r = height.size() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (l &lt;= r) &#123;</span><br><span class="line">            <span class="keyword">for</span> (; l &lt;= r &amp;&amp; (lmax = max(height[l], lmax)) &lt;= rmax; ++l) &#123;</span><br><span class="line">                sum += lmax - height[l];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span> (; r &gt;= l &amp;&amp; (rmax = max(height[r], rmax)) &lt;= lmax; r--) &#123;</span><br><span class="line">                sum += rmax - height[r];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; </span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>时间复杂度：$O(n)$<br>空间复杂度：$O(1)$</p>
-<p>单调栈解法</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * max water</span></span><br><span class="line"><span class="comment">     * @param arr int整型vector the array</span></span><br><span class="line"><span class="comment">     * @return long长整型</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">long</span> <span class="keyword">long</span> <span class="title">maxWater</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; arr)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; s;</span><br><span class="line">        s.push(<span class="number">-1</span>);</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.size(); ++i) &#123;</span><br><span class="line">            <span class="keyword">while</span> (s.top() != <span class="number">-1</span> &amp;&amp; arr[s.top()] &lt; arr[i]) &#123;</span><br><span class="line">                <span class="keyword">int</span> cur = s.top(); <span class="comment">//当前计算的格子</span></span><br><span class="line">                s.pop();</span><br><span class="line">                <span class="keyword">int</span> left = s.top();</span><br><span class="line">                <span class="keyword">if</span> (left &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">                    res += (min(arr[left], arr[i]) - arr[cur]) * (i - left - <span class="number">1</span>);</span><br><span class="line">                    <span class="comment">//cout &lt;&lt; &quot;i:&quot; &lt;&lt; i &lt;&lt; &quot;, cur:&quot;  &lt;&lt; cur &lt;&lt; &quot;, res: &quot; &lt;&lt; res &lt;&lt; endl;</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            s.push(i);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/skills/prefix_sum/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/prefix_sum/index.html" class="post-title-link" itemprop="url">前缀和系列-概览</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-05 15:44:03" itemprop="dateCreated datePublished" datetime="2021-01-05T15:44:03+08:00">2021-01-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:55:47" itemprop="dateModified" datetime="2022-03-01T22:55:47+08:00">2022-03-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/prefix_sum/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/prefix_sum/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>前缀和和差分，通过空间来换时间，一般用来优化时间复杂度，从$O(n^2)$到$O(n)$</p>
-<p>//一维前缀和 —— 模板题 AcWing 795. 前缀和</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">prefix_sum</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    S[i] = a[<span class="number">1</span>] + a[<span class="number">2</span>] + ... a[i];</span><br><span class="line">    a[l] + ... + a[r] = S[r] - S[l - <span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>//二维前缀和 —— 模板题 AcWing 796. 子矩阵的和</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> <span class="number">2</span>d_preifx_sum()</span><br><span class="line">&#123;</span><br><span class="line">    S[i, j] = 第i行j列格子左上部分所有元素的和</span><br><span class="line">    <span class="comment">//以(x1, y1)为左上角，(x2, y2)为右下角的子矩阵的和为：</span></span><br><span class="line">    S[x2, y2] - S[x1 - <span class="number">1</span>, y2] - S[x2, y1 - <span class="number">1</span>] + S[x1 - <span class="number">1</span>, y1 - <span class="number">1</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>//一维差分 —— 模板题 AcWing 797. 差分<br>给区间[l, r]中的每个数加上c：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">B[l] += c, B[r + <span class="number">1</span>] -= c</span><br></pre></td></tr></table></figure>
-<p>//二维差分 —— 模板题 AcWing 798. 差分矩阵<br>给以(x1, y1)为左上角，(x2, y2)为右下角的子矩阵中的所有元素加上c：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">S[x1, y1] += c, S[x2 + <span class="number">1</span>, y1] -= c, S[x1, y2 + <span class="number">1</span>] -= c, S[x2 + <span class="number">1</span>, y2 + <span class="number">1</span>] += c</span><br></pre></td></tr></table></figure>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>题目分类</th>
-<th>题目名称</th>
-<th>考察点</th>
-<th>其他说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>前缀和系列</td>
-<td><a href="../multiply_no_div.html">不使用除法的特殊累乘</a></td>
-<td>前缀和、定序技巧</td>
-</tr>
-</tbody>
-</table>
-</div>
+          <h2 id="获取不同的翻译方法次数-题目描述"><a href="#获取不同的翻译方法次数-题目描述" class="headerlink" title="获取不同的翻译方法次数-题目描述"></a>获取不同的翻译方法次数-题目描述</h2><p>给定一个数字，我们按照如下规则把它翻译为字符串：</p>
+<p>0翻译成”a”，1翻译成”b”，……，11翻译成”l”，……，25翻译成”z”。</p>
+<p>一个数字可能有多个翻译。例如12258有5种不同的翻译，它们分别是”bccfi”、”bwfi”、”bczi”、”mcfi”和”mzi”。</p>
+<p>请编程实现一个函数用来计算一个数字有多少种不同的翻译方法。</p>
+<p>样例<br>输入：”12258”</p>
+<p>输出：5</p>
+<h2 id="获取不同的翻译方法次数-总体思路"><a href="#获取不同的翻译方法次数-总体思路" class="headerlink" title="获取不同的翻译方法次数-总体思路"></a>获取不同的翻译方法次数-总体思路</h2><p>首先最容易想到的解法是递归，但是我们注意到有很多重复计算，所以更优的做法应该是DP</p>
+<p>dp[i]表示0到s[i]这个字符串能够包含的翻译方法。</p>
+<p>启发式思考：对于字符串类的DP问题，dp[i]一般是表示以i为结尾的字符串要计算的值。</p>
+<p>d[i] = dp[i - 1] + dp[i - 2] when as a ALHPA OR  dp[i - 1] when other</p>
+<h2 id="获取不同的翻译方法次数-代码实现"><a href="#获取不同的翻译方法次数-代码实现" class="headerlink" title="获取不同的翻译方法次数-代码实现"></a>获取不同的翻译方法次数-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">string</span> s;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> u)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (u == s.size()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        res += (<span class="number">1</span> * dfs(u + <span class="number">1</span>)); <span class="comment">//长度为1的结果数量</span></span><br><span class="line">        <span class="keyword">if</span> (u + <span class="number">1</span> &lt; s.size()) &#123;</span><br><span class="line">           <span class="keyword">int</span> val = <span class="number">10</span> * (s[u] - <span class="string">&#x27;0&#x27;</span>) + s[u + <span class="number">1</span>] - <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">           <span class="keyword">if</span> (<span class="number">10</span> &lt;= val &amp;&amp; val &lt;= <span class="number">25</span>) &#123; </span><br><span class="line">               res += (<span class="number">1</span> * dfs(u + <span class="number">2</span>)); <span class="comment">//长度为2的结果数</span></span><br><span class="line">           &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getTranslationCount</span><span class="params">(<span class="built_in">string</span> _s)</span> </span>&#123;</span><br><span class="line">        s = _s;</span><br><span class="line">        <span class="keyword">return</span> dfs(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -429,7 +305,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/skills/sliding_wind/index.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/linked_list/copyRandomList.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -443,7 +319,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/sliding_wind/index.html" class="post-title-link" itemprop="url">滑动窗口系列-概览</a>
+            <a href="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/copyRandomList.html" class="post-title-link" itemprop="url">链表系列-复制复杂链表</a>
         </h2>
 
         <div class="post-meta">
@@ -455,317 +331,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2021-01-05 15:44:03" itemprop="dateCreated datePublished" datetime="2021-01-05T15:44:03+08:00">2021-01-05</time>
+              <time title="Created: 2021-01-04 11:42:03" itemprop="dateCreated datePublished" datetime="2021-01-04T11:42:03+08:00">2021-01-04</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-30 09:54:15" itemprop="dateModified" datetime="2022-10-30T09:54:15+08:00">2022-10-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/sliding_wind/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/sliding_wind/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <div class="table-container">
-<table>
-<thead>
-<tr>
-<th>题目分类</th>
-<th>题目名称</th>
-<th>考察点</th>
-<th>其他说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-<td><a href="../longestSubstringWithoutDuplication.html">最长无重复字串</a></td>
-<td>滑动窗口、字符串类</td>
-</tr>
-</tbody>
-</table>
-</div>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//滑动窗口 模版</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>; i &lt; n; i ++ )</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//i是新进入窗口的元素</span></span><br><span class="line">    <span class="comment">//[j,i]是窗口边缘，j是要滑出的下标，i是新进入的下标</span></span><br><span class="line">    <span class="keyword">while</span> (j &lt; i &amp;&amp; check(i, j)) j ++ ; <span class="comment">//j是可能要滑出窗口的元素</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 具体问题的逻辑</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/skills/sliding_wind/longestSubstringWithoutDuplication.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/sliding_wind/longestSubstringWithoutDuplication.html" class="post-title-link" itemprop="url">滑动窗口系列-最长无重复字串</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-05 15:44:03" itemprop="dateCreated datePublished" datetime="2021-01-05T15:44:03+08:00">2021-01-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-19 11:46:34" itemprop="dateModified" datetime="2022-11-19T11:46:34+08:00">2022-11-19</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/sliding_wind/longestSubstringWithoutDuplication.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/sliding_wind/longestSubstringWithoutDuplication.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="最长无重复字串-题目描述"><a href="#最长无重复字串-题目描述" class="headerlink" title="最长无重复字串 - 题目描述"></a>最长无重复字串 - 题目描述</h2><p>请从字符串中找出一个最长的不包含重复字符的子字符串，计算该最长子字符串的长度。</p>
-<p>假设字符串中只包含从’a’到’z’的字符。</p>
-<p>样例<br>输入：”abcabc”</p>
-<p>输出：3</p>
-<h2 id="最长无重复字串-实现思路"><a href="#最长无重复字串-实现思路" class="headerlink" title="最长无重复字串-实现思路"></a>最长无重复字串-实现思路</h2><p>首先，默写下滑动窗口的模版：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>, n;</span><br><span class="line"><span class="keyword">while</span> (i &lt; n) &#123;</span><br><span class="line">    <span class="comment">//对新进入窗口的元素i进行处理</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (j &lt; i &amp;&amp; check(xx)) &#123;</span><br><span class="line">        <span class="comment">//对出窗口的元素j进行处理</span></span><br><span class="line">        j++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其次，搞清楚滑动窗口是用来做什么的以及用什么数据结构来维护</p>
-<p>很明显，我们需要使用滑动窗口来存储每一个字母的出现次数，并且在<strong>当前窗口内的字母不重复</strong>；数据结构的话，hashmap即可</p>
-<h2 id="最长无重复字串-代码实现"><a href="#最长无重复字串-代码实现" class="headerlink" title="最长无重复字串-代码实现"></a>最长无重复字串-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">longestSubstringWithoutDuplication</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">int</span> i, j = <span class="number">0</span>, n =s.size();</span><br><span class="line">      <span class="built_in">unordered_map</span>&lt;<span class="keyword">char</span>,<span class="keyword">int</span>&gt; counter;</span><br><span class="line">      <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">      <span class="keyword">while</span> (i &lt; n) &#123;</span><br><span class="line">          <span class="keyword">char</span> c = s[i];</span><br><span class="line">          counter[c]++;</span><br><span class="line">          <span class="keyword">if</span> (counter[c] == <span class="number">1</span>) &#123; <span class="comment">//新来了一个不重复元素，则窗口扩大了</span></span><br><span class="line">               res = max(res, i - j + <span class="number">1</span>)</span><br><span class="line">          &#125;</span><br><span class="line">          i++;</span><br><span class="line">          <span class="keyword">while</span> (j &lt; i &amp;&amp; counter[c] &gt; <span class="number">1</span>) &#123; <span class="comment">//如果现在窗口已经不在符合条件，则一直往前移动left，直到窗口重新满足</span></span><br><span class="line">              counter[s[j]]--;</span><br><span class="line">              j++;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxLength</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; arr)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">unordered_map</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; counter;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>, res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (j &lt; arr.size()) &#123;</span><br><span class="line">            counter[arr[j]]++;</span><br><span class="line">            <span class="keyword">while</span> (counter[arr[j]] &gt; <span class="number">1</span>) &#123;</span><br><span class="line">                counter[arr[i++]]--;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            res = max(j - i + <span class="number">1</span>, res);</span><br><span class="line">            j++;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/skills/sliding_wind/shortest_cover_substr.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/sliding_wind/shortest_cover_substr.html" class="post-title-link" itemprop="url">滑动窗口系列-最短覆盖子串</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-05 15:44:03" itemprop="dateCreated datePublished" datetime="2021-01-05T15:44:03+08:00">2021-01-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-15 21:46:04" itemprop="dateModified" datetime="2022-11-15T21:46:04+08:00">2022-11-15</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/sliding_wind/shortest_cover_substr.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/sliding_wind/shortest_cover_substr.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">unordered_map</span>&lt;<span class="keyword">char</span>, <span class="keyword">int</span>&gt; pattern;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">minWindow</span><span class="params">(<span class="built_in">string</span> src, <span class="built_in">string</span> tt)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//将目标串转换为方便检查处理的hashmap</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> x : tt) &#123;</span><br><span class="line">            pattern[x]++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> cnt = pattern.size();</span><br><span class="line"></span><br><span class="line">        <span class="built_in">string</span> res;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>, c = <span class="number">0</span>; i &lt; src.size(); ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (pattern[src[i]] == <span class="number">1</span> ) c++;</span><br><span class="line">            pattern[src[i]]--; <span class="comment">//将src[i]标记为缺少状态</span></span><br><span class="line">            <span class="comment">//满足了，并且某一个字符是缺的【非pattern中的字符一定缺；并且一定会被补上】，则往前移动</span></span><br><span class="line">            <span class="keyword">while</span> (c == cnt &amp;&amp; pattern[src[j]] &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                pattern[src[j++]]++; </span><br><span class="line">            &#125; </span><br><span class="line">            <span class="keyword">if</span> (c == cnt) &#123;</span><br><span class="line">                <span class="keyword">if</span> (res.empty() || res.size() &gt; i - j + <span class="number">1</span>) res = src.substr(j, i - j + <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/linked_list/list_merge.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/list_merge.html" class="post-title-link" itemprop="url">链表系列-有序链表合并</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-05 15:20:03" itemprop="dateCreated datePublished" datetime="2021-01-05T15:20:03+08:00">2021-01-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 23:28:12" itemprop="dateModified" datetime="2022-03-01T23:28:12+08:00">2022-03-01</time>
+                <time title="Modified: 2022-03-01 23:27:17" itemprop="dateModified" datetime="2022-03-01T23:27:17+08:00">2022-03-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -790,8 +363,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/list_merge.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/list_merge.html" itemprop="commentCount"></span>
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/copyRandomList.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/copyRandomList.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -806,17 +379,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="有序链表合并-题目描述"><a href="#有序链表合并-题目描述" class="headerlink" title="有序链表合并-题目描述"></a>有序链表合并-题目描述</h2><p>输入两个递增排序的链表，合并这两个链表并使新链表中的结点仍然是按照递增排序的。</p>
-<p>样例<br>输入：1-&gt;3-&gt;5 , 2-&gt;4-&gt;5</p>
-<p>输出：1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;5</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/list_merge.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <h2 id="复制复杂链表-题目描述"><a href="#复制复杂链表-题目描述" class="headerlink" title="复制复杂链表-题目描述"></a>复制复杂链表-题目描述</h2><p>请实现一个函数可以复制一个复杂链表。</p>
+<p>在复杂链表中，每个结点除了有一个指针指向下一个结点外，还有一个额外的指针指向链表中的任意结点或者null。</p>
+<p>注意：</p>
+<p>函数结束后原链表要与输入时保持一致。</p>
+<h2 id="复制复杂链表-总体思路"><a href="#复制复杂链表-总体思路" class="headerlink" title="复制复杂链表-总体思路"></a>复制复杂链表-总体思路</h2><p>有两种思路：</p>
+<p>第一种思路，比较容易想到</p>
+<p>（1）遍历一遍，复制出新的node, 并维护好node之间的next关系，同时使用HashMap存储新旧node的映射关系</p>
+<p>（2）再遍历一遍，借助hashMap找到新节点对应的random指向过去。</p>
+<p>时间复杂度：$O(2n)$, 空间复杂度：$O(n)$</p>
+<p>那么我们是否可以不使用额外的空间吗？答案是可以的（此处需要启发式思考，实在想不出我觉得也问题不大！）</p>
+<p>（1）遍历一遍，复制新的节点，作为原节点的下一个节点插入到链表中</p>
+<p>（2）遍历一遍，如果有random指针，则借助新插入的节点找到新的random指针目标节点</p>
+<p>（3）再遍历一遍，访问链表，去掉老的链表节点</p>
+<p>时间复杂度：$O(3n)$, 空间复杂度：$O(1)$</p>
+<h2 id="复制复杂链表-代码实现"><a href="#复制复杂链表-代码实现" class="headerlink" title="复制复杂链表-代码实现"></a>复制复杂链表-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list with a random pointer.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next, *random;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL), random(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode *<span class="title">copyRandomList</span><span class="params">(ListNode *head)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!head) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> p = head; p;) &#123;</span><br><span class="line">            <span class="keyword">auto</span> np = <span class="keyword">new</span> ListNode(p-&gt;val);</span><br><span class="line">            <span class="keyword">auto</span> next = p-&gt;next;</span><br><span class="line">            np-&gt;next = next;</span><br><span class="line">            p-&gt;next = np;</span><br><span class="line">            p = next;</span><br><span class="line">        &#125;</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> p = head; p; p = p-&gt;next-&gt;next) &#123;</span><br><span class="line">            <span class="keyword">if</span> (p-&gt;random) &#123;</span><br><span class="line">                p-&gt;next-&gt;random = p-&gt;random-&gt;next;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">auto</span> dummy = <span class="keyword">new</span> ListNode(<span class="number">-1</span>);</span><br><span class="line">        <span class="keyword">auto</span> tail = dummy;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> p =head; p;) &#123;</span><br><span class="line">            tail = tail-&gt;next = p-&gt;next;</span><br><span class="line">            p = p-&gt;next = p-&gt;next-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> dummy-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -837,7 +414,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/reOrderArray.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/stack/isPopOrder.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -851,7 +428,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/reOrderArray.html" class="post-title-link" itemprop="url">数组系列-奇偶重排</a>
+            <a href="/backend_knowledge_architecture/structure_algorithm/structures/stack/isPopOrder.html" class="post-title-link" itemprop="url">栈系列-检查合法Stack的弹出序列</a>
         </h2>
 
         <div class="post-meta">
@@ -863,14 +440,317 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2021-01-05 15:20:03" itemprop="dateCreated datePublished" datetime="2021-01-05T15:20:03+08:00">2021-01-05</time>
+              <time title="Created: 2021-01-04 11:42:03" itemprop="dateCreated datePublished" datetime="2021-01-04T11:42:03+08:00">2021-01-04</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:55:03" itemprop="dateModified" datetime="2022-03-01T22:55:03+08:00">2022-03-01</time>
+                <time title="Modified: 2022-03-01 23:07:48" itemprop="dateModified" datetime="2022-03-01T23:07:48+08:00">2022-03-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/stack/isPopOrder.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/stack/isPopOrder.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="检查合法Stack的弹出序列-题目描述"><a href="#检查合法Stack的弹出序列-题目描述" class="headerlink" title="检查合法Stack的弹出序列-题目描述"></a>检查合法Stack的弹出序列-题目描述</h2><p>输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否可能为该栈的弹出顺序。</p>
+<p>假设压入栈的所有数字均不相等。</p>
+<p>例如序列1,2,3,4,5是某栈的压入顺序，序列4,5,3,2,1是该压栈序列对应的一个弹出序列，但4,3,5,1,2就不可能是该压栈序列的弹出序列。</p>
+<p>注意：若两个序列长度不等则视为并不是一个栈的压入、弹出序列。若两个序列都为空，则视为是一个栈的压入、弹出序列。</p>
+<p>样例<br>输入：[1,2,3,4,5]<br>      [4,5,3,2,1]</p>
+<p>输出：true</p>
+<h2 id="检查合法Stack的弹出序列-总体思路"><a href="#检查合法Stack的弹出序列-总体思路" class="headerlink" title="检查合法Stack的弹出序列-总体思路"></a>检查合法Stack的弹出序列-总体思路</h2><p>模拟一遍；</p>
+<p>对于每一个pushed序列元素，</p>
+<p>对于栈有两个操作：<br>（1）当前元素入栈<br>（2）弹出栈。</p>
+<p>如果弹出序列的当前元素与栈顶元素相同，则弹出；否则继续入栈。</p>
+<p>首先压入第一个元素；</p>
+<p>然后紧接着此时栈有两个操作？ 弹出当前元素 或者 继续压入新的元素。</p>
+<p>如何区分呢？</p>
+<p>要看top与弹出序列的当前是否一致；如果一致，说明弹出了元素； 如果不一致，说明压入了新的元素。</p>
+<p>接着再继续比较…</p>
+<h2 id="检查合法Stack的弹出序列-代码实现"><a href="#检查合法Stack的弹出序列-代码实现" class="headerlink" title="检查合法Stack的弹出序列-代码实现"></a>检查合法Stack的弹出序列-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">[1,2,3,5]</span></span><br><span class="line"><span class="comment">1,2,3, 5, </span></span><br><span class="line"><span class="comment">q: [4,5,3,1,2]</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">isPopOrder</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; p,<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; q)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (p.size() != q.size()) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; s;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (j &lt; <span class="keyword">int</span>(q.size())) &#123;</span><br><span class="line">            <span class="keyword">if</span> (s.empty() || s.top() != q[j]) &#123;</span><br><span class="line">                <span class="keyword">if</span> (i == <span class="keyword">int</span>(p.size())) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                s.push(p[i++]);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                s.pop();</span><br><span class="line">                j++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/GetMaxDistance.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/GetMaxDistance.html" class="post-title-link" itemprop="url">二叉树遍历系列-二叉树最远距离</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-04 11:42:03" itemprop="dateCreated datePublished" datetime="2021-01-04T11:42:03+08:00">2021-01-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-02 21:11:57" itemprop="dateModified" datetime="2022-03-02T21:11:57+08:00">2022-03-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/GetMaxDistance.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/GetMaxDistance.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>如果我们把二叉树视为一个图，父子节点之间的连线视为双向的，我们姑且定义为“举例”为两节点之间边的个数。写一个程序求一颗二叉树中相距最远的两个节点之间的距离（《编程之美》3.8）</p>
+<h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><p>该题目的技巧在于 全局变量的 应用。</p>
+<p>需要克服的惯性思维：更多的题目的计算结果会作为递归函数的返回变量。</p>
+<p>这个函数的返回值其实是root节点的高度。</p>
+<p>在计算高度的过程中，<strong>顺便</strong>完成全局变量的更新。</p>
+<h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">GetMaxDistance</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> max_distance = INT_MIN;</span><br><span class="line"></span><br><span class="line">    dfs(root, INT_MIN);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> max_distance</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> dfs(TreeNode* root, <span class="keyword">int</span> &amp;max_distance) &#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> left_max_depth = dfs(root-&gt;left, &amp;max_distance);</span><br><span class="line">    <span class="keyword">int</span> right_max_depth = dfs(root-&gt;right, &amp;max_distance);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> temp_distance = left_max_depth + right_max_depth + <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (temp_distance &gt; max_distance) max_distance = temp_distance;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> left_max_depth &gt; right_max_depth ? left_max_depth + <span class="number">1</span> : right_max_depth + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/findPathInTree.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/findPathInTree.html" class="post-title-link" itemprop="url">二叉树遍历系列-二叉树中结点值的和为输入整数的所有路径</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-04 11:42:03" itemprop="dateCreated datePublished" datetime="2021-01-04T11:42:03+08:00">2021-01-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 23:08:14" itemprop="dateModified" datetime="2022-03-01T23:08:14+08:00">2022-03-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/findPathInTree.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/findPathInTree.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="二叉树中结点值的和为输入整数的所有路径-题目描述"><a href="#二叉树中结点值的和为输入整数的所有路径-题目描述" class="headerlink" title="二叉树中结点值的和为输入整数的所有路径-题目描述"></a>二叉树中结点值的和为输入整数的所有路径-题目描述</h2><p>输入一棵二叉树和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。</p>
+<p>从树的根结点开始往下一直到叶结点所经过的结点形成一条路径。</p>
+<p>样例<br>给出二叉树如下所示，并给出num=22。<br>      5<br>     / \<br>    4   6<br>   /   / \<br>  12  13  6<br> /  \    / \<br>9    1  5   1</p>
+<p>输出：[[5,4,12,1],[5,6,6,5]]</p>
+<h2 id="二叉树中结点值的和为输入整数的所有路径-总体思路"><a href="#二叉树中结点值的和为输入整数的所有路径-总体思路" class="headerlink" title="二叉树中结点值的和为输入整数的所有路径-总体思路"></a>二叉树中结点值的和为输入整数的所有路径-总体思路</h2><p>这里，我在下面的代码中写了很多种写法，我们需要好好体会以下几个点：</p>
+<p>（1）我的return条件是什么？（是遇到空节点return还是遇到叶子结点return)</p>
+<p>（2）我应该如何处理当前访问到的节点</p>
+<p>（2）我应该如何还原现场（是pop一次还是pop两次）</p>
+<p>（3）return条件与还原现场的关系是什么？</p>
+<h2 id="二叉树中结点值的和为输入整数的所有路径-代码实现"><a href="#二叉树中结点值的和为输入整数的所有路径-代码实现" class="headerlink" title="二叉树中结点值的和为输入整数的所有路径-代码实现"></a>二叉树中结点值的和为输入整数的所有路径-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; path;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//一种写法【正确】---如果到达空节点，则返回</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(TreeNode* root, <span class="keyword">int</span> sum)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!root) <span class="keyword">return</span>;</span><br><span class="line">        </span><br><span class="line">        path.push_back(root-&gt;val);</span><br><span class="line">        sum -= root-&gt;val;</span><br><span class="line">        <span class="keyword">if</span> (!root-&gt;left &amp;&amp; !root-&gt;right &amp;&amp; !sum) &#123;</span><br><span class="line">            res.push_back(path);</span><br><span class="line">            <span class="comment">//这里不会return;</span></span><br><span class="line">            <span class="comment">//假设最后一个叶子结点是一个错误答案，我们显然需要把这个节点pop出来？</span></span><br><span class="line">            <span class="comment">//那我pop的时机是什么呢？ 显然是在遍历完左右子树之后再pop出来。</span></span><br><span class="line">        &#125;</span><br><span class="line">       </span><br><span class="line">        dfs(root-&gt;left, sum);</span><br><span class="line">        dfs(root-&gt;right, sum);</span><br><span class="line">        path.pop_back();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//一种正确的写法：注意这里，非叶子节点才会被push进去，所以只需要pop一次；</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(TreeNode* root, <span class="keyword">int</span> sum)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//结束条件</span></span><br><span class="line">        <span class="keyword">if</span> (!root-&gt;left &amp;&amp; !root-&gt;right) &#123; </span><br><span class="line">            <span class="keyword">if</span> (sum == root-&gt;val) &#123;</span><br><span class="line">                path.push_back(root-&gt;val);</span><br><span class="line">                ret.push_back(path);</span><br><span class="line">                path.pop_back();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        path.push_back(root-&gt;val);</span><br><span class="line">        <span class="keyword">if</span> (root-&gt;left) dfs(root-&gt;left, sum - root-&gt;val);</span><br><span class="line">        <span class="keyword">if</span> (root-&gt;right) dfs(root-&gt;right, sum- root-&gt;val);</span><br><span class="line">        path.pop_back();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//另一种正确的写法---如果到达叶子节点，则返回</span></span><br><span class="line">     <span class="function"><span class="keyword">void</span> <span class="title">dfs2</span><span class="params">(TreeNode* root, <span class="keyword">int</span> sum)</span> </span>&#123;</span><br><span class="line">        path.push_back(root-&gt;val);</span><br><span class="line">        sum -= root-&gt;val;</span><br><span class="line">        <span class="keyword">if</span> (!root-&gt;left &amp;&amp; !root-&gt;right) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!sum) &#123;</span><br><span class="line">                res.push_back(path);</span><br><span class="line">            &#125;  </span><br><span class="line">            <span class="keyword">return</span>; <span class="comment">//注意这里有一个return</span></span><br><span class="line">            <span class="comment">//注意这里return了，现在path中有一个错误的节点，我这个节点需要什么时候pop出来呢？</span></span><br><span class="line">            <span class="comment">//显然只能在外层调用的时候。</span></span><br><span class="line">        &#125;</span><br><span class="line">       </span><br><span class="line">        <span class="keyword">if</span> (root-&gt;left) &#123;</span><br><span class="line">            dfs(root-&gt;left, sum);</span><br><span class="line">            path.pop_back();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (root-&gt;right) &#123;</span><br><span class="line">            dfs(root-&gt;right, sum);</span><br><span class="line">            path.pop_back();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">     <span class="comment">//错误的写法---如果到达叶子节点，则返回; 但是只pop了一次！！！</span></span><br><span class="line">     <span class="function"><span class="keyword">void</span> <span class="title">dfs3</span><span class="params">(TreeNode* root, <span class="keyword">int</span> sum)</span> </span>&#123;</span><br><span class="line">        path.push_back(root-&gt;val);</span><br><span class="line">        sum -= root-&gt;val;</span><br><span class="line">        <span class="keyword">if</span> (!root-&gt;left &amp;&amp; !root-&gt;right) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!sum) &#123;</span><br><span class="line">                res.push_back(path);</span><br><span class="line">            &#125; </span><br><span class="line">            <span class="keyword">return</span>;  <span class="comment">//注意这里有一个return</span></span><br><span class="line">        &#125;</span><br><span class="line">       </span><br><span class="line">        <span class="keyword">if</span> (root-&gt;left) &#123;</span><br><span class="line">            dfs(root-&gt;left, sum);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (root-&gt;right) &#123;</span><br><span class="line">            dfs(root-&gt;right, sum);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        path.pop_back();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">findPath</span><span class="params">(TreeNode* root, <span class="keyword">int</span> sum)</span> </span>&#123;</span><br><span class="line">        dfs(root, sum);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/inorderSuccessor.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/inorderSuccessor.html" class="post-title-link" itemprop="url">二叉树遍历系列-中序遍历序列的下一个节点</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-04 11:42:03" itemprop="dateCreated datePublished" datetime="2021-01-04T11:42:03+08:00">2021-01-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 23:28:33" itemprop="dateModified" datetime="2022-03-01T23:28:33+08:00">2022-03-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -895,8 +775,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/reOrderArray.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/reOrderArray.html" itemprop="commentCount"></span>
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/inorderSuccessor.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/inorderSuccessor.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -911,18 +791,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="奇偶重排-题目描述"><a href="#奇偶重排-题目描述" class="headerlink" title="奇偶重排-题目描述"></a>奇偶重排-题目描述</h2><p>输入一个整数数组，实现一个函数来调整该数组中数字的顺序。</p>
-<p>使得所有的奇数位于数组的前半部分，所有的偶数位于数组的后半部分。</p>
-<p>样例<br>输入：[1,2,3,4,5]</p>
-<p>输出: [1,3,5,2,4]</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/reOrderArray.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <h2 id="中序遍历序列的下一个节点-题目描述"><a href="#中序遍历序列的下一个节点-题目描述" class="headerlink" title="中序遍历序列的下一个节点-题目描述"></a>中序遍历序列的下一个节点-题目描述</h2><p>给定一棵二叉树的其中一个节点，请找出中序遍历序列的下一个节点。</p>
+<p>注意：</p>
+<p>如果给定的节点是中序遍历序列的最后一个，则返回空节点;<br>二叉树一定不为空，且给定的节点一定不是空节点；<br>样例<br>假定二叉树是：[2, 1, 3, null, null, null, null]， 给出的是值等于2的节点。</p>
+<p>则应返回值等于3的节点。</p>
+<p>解释：该二叉树的结构如下，2的后继节点是3。<br>  2<br> / \<br>1   3</p>
+<h2 id="中序遍历序列的下一个节点-总体思路"><a href="#中序遍历序列的下一个节点-总体思路" class="headerlink" title="中序遍历序列的下一个节点-总体思路"></a>中序遍历序列的下一个节点-总体思路</h2><p>需要我们明确中序遍历的定义</p>
+<p>模拟题</p>
+<p>其实模拟题就是分情况讨论。</p>
+<h2 id="中序遍历序列的下一个节点-代码实现"><a href="#中序遍历序列的下一个节点-代码实现" class="headerlink" title="中序遍历序列的下一个节点-代码实现"></a>中序遍历序列的下一个节点-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode *father;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL), father(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">TreeNode* <span class="title">inorderSuccessor</span><span class="params">(TreeNode* p)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//如果有右孩子，则一直遍历找到其左左左..</span></span><br><span class="line">        <span class="keyword">if</span> (p-&gt;right) &#123;</span><br><span class="line">            p = p-&gt;right;</span><br><span class="line">            <span class="keyword">while</span> (p-&gt;left) p = p-&gt;left;</span><br><span class="line">            <span class="keyword">return</span> p;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//判断他自己是左孩子，还是右孩子。</span></span><br><span class="line">        <span class="comment">//如果是左孩子，则直接访问其父亲</span></span><br><span class="line">        <span class="comment">//如果是右孩子，则一直访问，直到不是右孩子。</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span> (p-&gt;father &amp;&amp; p-&gt;father-&gt;left != p) p = p-&gt;father;</span><br><span class="line">        <span class="keyword">return</span> p-&gt;father;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
       
     </div>
 
@@ -943,7 +821,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/linked_list/reverse/reverseList.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/printFromTopToBottom.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -957,7 +835,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/reverse/reverseList.html" class="post-title-link" itemprop="url">链表系列-链表反转</a>
+            <a href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/printFromTopToBottom.html" class="post-title-link" itemprop="url">二叉树遍历系列-从上往下打印出二叉树的每个结点</a>
         </h2>
 
         <div class="post-meta">
@@ -969,14 +847,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2021-01-05 15:20:03" itemprop="dateCreated datePublished" datetime="2021-01-05T15:20:03+08:00">2021-01-05</time>
+              <time title="Created: 2021-01-04 11:42:03" itemprop="dateCreated datePublished" datetime="2021-01-04T11:42:03+08:00">2021-01-04</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 23:03:19" itemprop="dateModified" datetime="2022-03-01T23:03:19+08:00">2022-03-01</time>
+                <time title="Modified: 2022-11-01 22:17:48" itemprop="dateModified" datetime="2022-11-01T22:17:48+08:00">2022-11-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -997,8 +875,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/reverse/reverseList.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/reverse/reverseList.html" itemprop="commentCount"></span>
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/printFromTopToBottom.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/printFromTopToBottom.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -1013,18 +891,30 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="链表反转-题目描述"><a href="#链表反转-题目描述" class="headerlink" title="链表反转-题目描述"></a>链表反转-题目描述</h2><p>定义一个函数，输入一个链表的头结点，反转该链表并输出反转后链表的头结点。</p>
-<p>思考题：</p>
-<p>请同时实现迭代版本和递归版本。<br>样例<br>输入:1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;NULL</p>
-<p>输出:5-&gt;4-&gt;3-&gt;2-&gt;1-&gt;NULL</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/reverse/reverseList.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <h2 id="从上往下打印出二叉树，同层从左到右-题目描述"><a href="#从上往下打印出二叉树，同层从左到右-题目描述" class="headerlink" title="从上往下打印出二叉树，同层从左到右-题目描述"></a>从上往下打印出二叉树，同层从左到右-题目描述</h2><p>从上往下打印出二叉树的每个结点，同一层的结点按照从左到右的顺序打印。</p>
+<p>样例<br>输入如下图所示二叉树[8, 12, 2, null, null, 6, null, 4, null, null, null]<br>    8<br>   / \<br>  12  2<br>     /<br>    6<br>   /<br>  4</p>
+<p>输出：[8, 12, 2, 6, 4]</p>
+<h2 id="从上往下打印出二叉树，同层从左到右-总体思路"><a href="#从上往下打印出二叉树，同层从左到右-总体思路" class="headerlink" title="从上往下打印出二叉树，同层从左到右-总体思路"></a>从上往下打印出二叉树，同层从左到右-总体思路</h2><p>借助queue来实现层次遍历</p>
+<h2 id="从上往下打印出二叉树，同层从左到右-代码实现"><a href="#从上往下打印出二叉树，同层从左到右-代码实现" class="headerlink" title="从上往下打印出二叉树，同层从左到右-代码实现"></a>从上往下打印出二叉树，同层从左到右-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">printFromTopToBottom</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">         <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line">        <span class="built_in">queue</span>&lt;TreeNode*&gt; q;</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">if</span> (!root) <span class="keyword">return</span> res;</span><br><span class="line">        </span><br><span class="line">        q.push(root);</span><br><span class="line">        <span class="keyword">while</span> (!q.empty()) &#123;</span><br><span class="line">            <span class="keyword">auto</span> r = q.front();</span><br><span class="line">            q.pop();</span><br><span class="line">            res.push_back(r-&gt;val);</span><br><span class="line">            <span class="keyword">if</span> (r-&gt;left) q.push(r-&gt;left);</span><br><span class="line">            <span class="keyword">if</span> (r-&gt;right) q.push(r-&gt;right); </span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="从上往下打印出二叉树，同层从左到右，分行打印-题目描述"><a href="#从上往下打印出二叉树，同层从左到右，分行打印-题目描述" class="headerlink" title="从上往下打印出二叉树，同层从左到右，分行打印-题目描述"></a>从上往下打印出二叉树，同层从左到右，分行打印-题目描述</h2><p>从上到下按层打印二叉树，同一层的结点按从左到右的顺序打印，每一层打印到一行。</p>
+<p>样例<br>输入如下图所示二叉树[8, 12, 2, null, null, 6, null, 4, null, null, null]<br>    8<br>   / \<br>  12  2<br>     /<br>    6<br>   /<br>  4</p>
+<p>输出：[[8], [12, 2], [6], [4]]</p>
+<h2 id="从上往下打印出二叉树，同层从左到右，分行打印-总体思路"><a href="#从上往下打印出二叉树，同层从左到右，分行打印-总体思路" class="headerlink" title="从上往下打印出二叉树，同层从左到右，分行打印-总体思路"></a>从上往下打印出二叉树，同层从左到右，分行打印-总体思路</h2><p>相对上题，难点在于如何识别分行，一般而言我们有以下几种办法：</p>
+<p>（1）使用nullptr作为分隔符，每次遇到nullptr进行分行处理，并压入新的nullptr。nullptr是当前层的终止符。</p>
+<p>（2）借助size, 每次遍历size个元素，size为上一次压入的元素个数。通过size来代表该层有多少元素。</p>
+<h2 id="从上往下打印出二叉树，同层从左到右，分行打印-代码实现"><a href="#从上往下打印出二叉树，同层从左到右，分行打印-代码实现" class="headerlink" title="从上往下打印出二叉树，同层从左到右，分行打印-代码实现"></a>从上往下打印出二叉树，同层从左到右，分行打印-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">printFromTopToBottom</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">        <span class="built_in">queue</span>&lt;TreeNode*&gt; q;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (!root) <span class="keyword">return</span> res;</span><br><span class="line">        </span><br><span class="line">        q.push(root);</span><br><span class="line">        q.push(<span class="literal">nullptr</span>);</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; level;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span> (q.size()) &#123;</span><br><span class="line">            <span class="keyword">auto</span> t = q.front();</span><br><span class="line">            q.pop();</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> (!t) &#123;</span><br><span class="line">                <span class="keyword">if</span> (level.empty()) <span class="keyword">break</span>;</span><br><span class="line">                res.push_back(level);</span><br><span class="line">                level.clear();</span><br><span class="line">                q.push(<span class="literal">nullptr</span>);</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            level.push_back(t-&gt;val);</span><br><span class="line">            <span class="keyword">if</span> (t-&gt;left) q.push(t-&gt;left);</span><br><span class="line">            <span class="keyword">if</span> (t-&gt;right) q.push(t-&gt;right);</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">     <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">printFromTopToBottom2</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; level;</span><br><span class="line">        <span class="built_in">queue</span>&lt;TreeNode*&gt; q;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (!root) <span class="keyword">return</span> res;</span><br><span class="line">        q.push(root);</span><br><span class="line">        <span class="keyword">while</span> (q.size()) &#123;</span><br><span class="line">            <span class="keyword">int</span> qs = q.size();  <span class="comment">//必须赋值到局部变量</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; qs; ++i) &#123;</span><br><span class="line">                <span class="keyword">auto</span> t = q.front();</span><br><span class="line">                q.pop();</span><br><span class="line">                level.push_back(t-&gt;val);</span><br><span class="line">                <span class="keyword">if</span> (t-&gt;left) q.push(t-&gt;left);</span><br><span class="line">                <span class="keyword">if</span> (t-&gt;right) q.push(t-&gt;right);</span><br><span class="line">            &#125;</span><br><span class="line">            res.push_back(level);</span><br><span class="line">            level.clear();   </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="从上往下打印出二叉树，同层从左到右，之字形打印-题目描述"><a href="#从上往下打印出二叉树，同层从左到右，之字形打印-题目描述" class="headerlink" title="从上往下打印出二叉树，同层从左到右，之字形打印-题目描述"></a>从上往下打印出二叉树，同层从左到右，之字形打印-题目描述</h2><p>请实现一个函数按照之字形顺序从上向下打印二叉树。</p>
+<p>即第一行按照从左到右的顺序打印，第二层按照从右到左的顺序打印，第三行再按照从左到右的顺序打印，其他行以此类推。</p>
+<p>样例<br>输入如下图所示二叉树[8, 12, 2, null, null, 6, 4, null, null, null, null]<br>    8<br>   / \<br>  12  2<br>     / \<br>    6   4<br>输出：[[8], [2, 12], [6, 4]]</p>
+<h2 id="从上往下打印出二叉树，同层从左到右，之字形打印-总体思路"><a href="#从上往下打印出二叉树，同层从左到右，之字形打印-总体思路" class="headerlink" title="从上往下打印出二叉树，同层从左到右，之字形打印-总体思路"></a>从上往下打印出二叉树，同层从左到右，之字形打印-总体思路</h2><p>基于上题，在res加入元素之前，判定res是否奇数，如果是奇数的话，就reverse一下子level数组</p>
+<h2 id="从上往下打印出二叉树，同层从左到右，之字形打印-代码实现"><a href="#从上往下打印出二叉树，同层从左到右，之字形打印-代码实现" class="headerlink" title="从上往下打印出二叉树，同层从左到右，之字形打印-代码实现"></a>从上往下打印出二叉树，同层从左到右，之字形打印-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">printFromTopToBottom</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">        <span class="built_in">queue</span>&lt;TreeNode*&gt; q;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (!root) <span class="keyword">return</span> res;</span><br><span class="line">        </span><br><span class="line">        q.push(root);</span><br><span class="line">        q.push(<span class="literal">nullptr</span>);</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; level;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">bool</span> flag = <span class="literal">false</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span> (q.size()) &#123;</span><br><span class="line">            <span class="keyword">auto</span> t = q.front();</span><br><span class="line">            q.pop();</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> (!t) &#123;</span><br><span class="line">                <span class="keyword">if</span> (level.empty()) <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">if</span> (flag) reverse(level.begin(), level.end());</span><br><span class="line">                res.push_back(level);</span><br><span class="line">                level.clear();</span><br><span class="line">                q.push(<span class="literal">nullptr</span>);</span><br><span class="line">                flag = !flag;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            level.push_back(t-&gt;val);</span><br><span class="line">            <span class="keyword">if</span> (t-&gt;left) q.push(t-&gt;left);</span><br><span class="line">            <span class="keyword">if</span> (t-&gt;right) q.push(t-&gt;right);</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">printFromTopToBottom2</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; level;</span><br><span class="line">        <span class="built_in">queue</span>&lt;TreeNode*&gt; q;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (!root) <span class="keyword">return</span> res;</span><br><span class="line">        q.push(root);</span><br><span class="line">        <span class="keyword">while</span> (q.size()) &#123;</span><br><span class="line">            <span class="keyword">int</span> qs = q.size();</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; qs; ++i) &#123;</span><br><span class="line">                <span class="keyword">auto</span> t = q.front();</span><br><span class="line">                q.pop();</span><br><span class="line">                level.push_back(t-&gt;val);</span><br><span class="line">                <span class="keyword">if</span> (t-&gt;left) q.push(t-&gt;left);</span><br><span class="line">                <span class="keyword">if</span> (t-&gt;right) q.push(t-&gt;right);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (res.size() % <span class="number">2</span>) &#123;</span><br><span class="line">                reverse(level.begin(), level.end());</span><br><span class="line">            &#125;</span><br><span class="line">            res.push_back(level);</span><br><span class="line">            level.clear();   </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="垂直打印二叉树"><a href="#垂直打印二叉树" class="headerlink" title="垂直打印二叉树"></a>垂直打印二叉树</h2><p>解答思路：</p>
+<ol>
+<li>依旧是通过层次打印</li>
+<li>放入队列的不仅是tree node， 还需要放入当前的横向坐标</li>
+<li>root坐标为0， 左节点减1， 右节点加1</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="built_in">std</span>::<span class="built_in">pair</span>&lt;<span class="keyword">int</span>, TreeNode*&gt; PIT;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">printV</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        unsorted_map&lt;<span class="keyword">int</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp;&gt; m;</span><br><span class="line">        <span class="built_in">queue</span>&lt;PIT&gt; q;</span><br><span class="line"></span><br><span class="line">        q.push_back(<span class="built_in">make_pair</span>(<span class="number">0</span>, root));</span><br><span class="line">        <span class="keyword">while</span> (!q.empty()) &#123;</span><br><span class="line">            <span class="keyword">int</span> n = q.size();</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">                PIT p = q.top(); q.pop();</span><br><span class="line">                m[p.first].push_back(p.second.val);</span><br><span class="line">                <span class="keyword">if</span> (p.second-&gt;left)</span><br><span class="line">                    q.push_back(<span class="built_in">make_pair</span>(p.first - <span class="number">1</span>, p.second-&gt;left));</span><br><span class="line">                <span class="keyword">if</span> (p.second-&gt;right)</span><br><span class="line">                    q.push_back(<span class="built_in">make_pair</span>(p.first - <span class="number">1</span>, p.second-&gt;right));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -1045,7 +935,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/linked_list/reverse/reverse_to_array.html">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/tree2list.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1059,7 +949,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/reverse/reverse_to_array.html" class="post-title-link" itemprop="url">链表系列-链表逆序打印到数组</a>
+            <a href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/tree2list.html" class="post-title-link" itemprop="url">二叉树遍历系列-二叉搜索树转有序双向链表</a>
         </h2>
 
         <div class="post-meta">
@@ -1071,110 +961,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2021-01-05 15:20:03" itemprop="dateCreated datePublished" datetime="2021-01-05T15:20:03+08:00">2021-01-05</time>
+              <time title="Created: 2021-01-04 11:42:03" itemprop="dateCreated datePublished" datetime="2021-01-04T11:42:03+08:00">2021-01-04</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 23:03:13" itemprop="dateModified" datetime="2022-03-01T23:03:13+08:00">2022-03-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/reverse/reverse_to_array.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/reverse/reverse_to_array.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>输入一个链表的头结点，按照 从尾到头 的顺序返回节点的值。</p>
-<p>返回的结果用数组存储。</p>
-<p>样例<br>输入：[2, 3, 5]<br>返回：[5, 3, 2]</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">printListReversingly</span><span class="params">(ListNode* head)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; r;</span><br><span class="line">        <span class="keyword">while</span> (head) &#123;</span><br><span class="line">            r.push_back(head-&gt;val);</span><br><span class="line">            head = head-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(r.rbegin(), r.rend()); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">reverse</span><span class="params">(ListNode* head)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!head) <span class="keyword">return</span>;</span><br><span class="line">        reverse(head-&gt;next);</span><br><span class="line">        res.push_back(head-&gt;val);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">reversePrint</span><span class="params">(ListNode* head)</span> </span>&#123;</span><br><span class="line">        reverse(head);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/entryNodeOfLoop.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/entryNodeOfLoop.html" class="post-title-link" itemprop="url">链表系列-链表环入口</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-05 15:20:03" itemprop="dateCreated datePublished" datetime="2021-01-05T15:20:03+08:00">2021-01-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 23:27:29" itemprop="dateModified" datetime="2022-03-01T23:27:29+08:00">2022-03-01</time>
+                <time title="Modified: 2022-03-02 20:24:36" itemprop="dateModified" datetime="2022-03-02T20:24:36+08:00">2022-03-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1199,8 +993,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/entryNodeOfLoop.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/entryNodeOfLoop.html" itemprop="commentCount"></span>
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/tree2list.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/tree2list.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -1215,19 +1009,226 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="链表环入口-题目描述"><a href="#链表环入口-题目描述" class="headerlink" title="链表环入口-题目描述"></a>链表环入口-题目描述</h2><p>给定一个链表，若其中包含环，则输出环的入口节点。</p>
-<p>若其中不包含环，则输出null。</p>
-<p>样例<br>QQ截图20181202023846.png</p>
-<p>给定如上所示的链表：<br>[1, 2, 3, 4, 5, 6]<br>2<br>注意，这里的2表示编号是2的节点，节点编号从0开始。所以编号是2的节点就是val等于3的节点。</p>
-<p>则输出环的入口节点3.</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/entryNodeOfLoop.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <h2 id="二叉搜索树转有序双向链表-题目描述"><a href="#二叉搜索树转有序双向链表-题目描述" class="headerlink" title="二叉搜索树转有序双向链表-题目描述"></a>二叉搜索树转有序双向链表-题目描述</h2><p>输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。</p>
+<p>要求不能创建任何新的结点，只能调整树中结点指针的指向。</p>
+<p>注意：</p>
+<p>需要返回双向链表最左侧的节点。<br>例如，输入下图中左边的二叉搜索树，则输出右边的排序双向链表。</p>
+<h2 id="二叉搜索树转有序双向链表-总体思路"><a href="#二叉搜索树转有序双向链表-总体思路" class="headerlink" title="二叉搜索树转有序双向链表-总体思路"></a>二叉搜索树转有序双向链表-总体思路</h2><p>两种思路：</p>
+<p>第一种思路，dfs的主要任务是返回子树对应链表的头尾节点；按照这种思路的话，我们的遍历方式是后序遍历。</p>
+<p>第二种思路，dfs的主要任务就是按照顺序访问到每一个node，同时记录一个全局的pre，然后将pre与node建立双向关联即可。</p>
+<h2 id="二叉搜索树转有序双向链表-代码实现"><a href="#二叉搜索树转有序双向链表-代码实现" class="headerlink" title="二叉搜索树转有序双向链表-代码实现"></a>二叉搜索树转有序双向链表-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">pair&lt;Node*, Node*&gt; dfs(Node* root) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!(root-&gt;left) &amp;&amp; !(root-&gt;right)) &#123;</span><br><span class="line">        root-&gt;left = root;</span><br><span class="line">        root-&gt;right = root;</span><br><span class="line">        <span class="keyword">return</span> &#123;root, root&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//访问左边</span></span><br><span class="line">    <span class="built_in">pair</span>&lt;Node*, Node*&gt;  left = &#123;root, root&#125;;</span><br><span class="line">    <span class="keyword">if</span> (root-&gt;left) &#123;</span><br><span class="line">        left = dfs(root-&gt;left);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//访问右边</span></span><br><span class="line">    <span class="built_in">pair</span>&lt;Node*, Node*&gt;  right = &#123;root, root&#125;;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (root-&gt;right) &#123;</span><br><span class="line">        right = dfs(root-&gt;right);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//访问中间节点</span></span><br><span class="line">    <span class="keyword">if</span> (left.first != root) &#123;</span><br><span class="line">        left.second-&gt;right = root;</span><br><span class="line">        root-&gt;left = left.second;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (right.first != root) &#123;</span><br><span class="line">        root-&gt;right = right.first;</span><br><span class="line">        right.first-&gt;left = root;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">return</span> &#123;left.first, right.second&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span>  <span class="title">dfs</span><span class="params">(Node* root)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (!root) <span class="keyword">return</span>;</span><br><span class="line">       </span><br><span class="line">       <span class="comment">//访问左边</span></span><br><span class="line">       dfs(root-&gt;left);</span><br><span class="line"></span><br><span class="line">       <span class="comment">//中序遍历</span></span><br><span class="line">       <span class="keyword">if</span> (!pre) &#123;</span><br><span class="line">           head = root;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">else</span> &#123;</span><br><span class="line">           pre-&gt;right = root;</span><br><span class="line">           root-&gt;left = pre;</span><br><span class="line">       &#125;</span><br><span class="line">       pre = root;</span><br><span class="line"></span><br><span class="line">       <span class="comment">//访问右边</span></span><br><span class="line">       dfs(root-&gt;right);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/verifySequenceOfBST.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/verifySequenceOfBST.html" class="post-title-link" itemprop="url">二叉树遍历系列-判断该数组是不是某二叉搜索树的后序遍历的结果</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-04 11:42:03" itemprop="dateCreated datePublished" datetime="2021-01-04T11:42:03+08:00">2021-01-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-03 19:40:16" itemprop="dateModified" datetime="2022-03-03T19:40:16+08:00">2022-03-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87Offer/" itemprop="url" rel="index"><span itemprop="name">剑指Offer</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/verifySequenceOfBST.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/verifySequenceOfBST.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="判断该数组是不是某二叉搜索树的后序遍历的结果-题目描述"><a href="#判断该数组是不是某二叉搜索树的后序遍历的结果-题目描述" class="headerlink" title="判断该数组是不是某二叉搜索树的后序遍历的结果-题目描述"></a>判断该数组是不是某二叉搜索树的后序遍历的结果-题目描述</h2><p>输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。</p>
+<p>如果是则返回true，否则返回false。</p>
+<p>假设输入的数组的任意两个数字都互不相同。</p>
+<p>样例<br>输入：[4, 8, 6, 12, 16, 14, 10]</p>
+<p>输出：true</p>
+<h2 id="判断该数组是不是某二叉搜索树的后序遍历的结果-总体思路"><a href="#判断该数组是不是某二叉搜索树的后序遍历的结果-总体思路" class="headerlink" title="判断该数组是不是某二叉搜索树的后序遍历的结果-总体思路"></a>判断该数组是不是某二叉搜索树的后序遍历的结果-总体思路</h2><p>分为几步：<br>（1）根据后序遍历序列的定义，最右边的元素是中间节点X，并且左子树的元素均小于X，右子树的元素均大于X<br>（2）顺序扫描，找到左右子树的分割点Y(分割点左边都小于X)<br>（3）从分割点Y继续扫描，确认是否有bad case，有的话，直接返回不合法<br>（4）递归处理左右两部分</p>
+<h2 id="判断该数组是不是某二叉搜索树的后序遍历的结果-代码实现"><a href="#判断该数组是不是某二叉搜索树的后序遍历的结果-代码实现" class="headerlink" title="判断该数组是不是某二叉搜索树的后序遍历的结果-代码实现"></a>判断该数组是不是某二叉搜索树的后序遍历的结果-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; s;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> r)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (l &gt;= r) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//找到分界点</span></span><br><span class="line">        <span class="keyword">int</span> k = l;</span><br><span class="line">        <span class="keyword">while</span> (k &lt; r &amp;&amp; s[k] &lt; s[r]) k++;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//确认分界点之后的元素是否都足够大</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = k; i&lt; r; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (s[i] &lt; s[r]) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//递归处理</span></span><br><span class="line">        <span class="keyword">return</span> dfs(l, k - <span class="number">1</span>) &amp;&amp; dfs(k, r - <span class="number">1</span>);</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">verifySequenceOfBST</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; sequence)</span> </span>&#123;</span><br><span class="line">        s = sequence;</span><br><span class="line">        <span class="keyword">if</span> (s.empty()) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">return</span> dfs(<span class="number">0</span>, s.size() - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/skills/string_reverse.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/string_reverse.html" class="post-title-link" itemprop="url">翻手法则-字符串反转问题</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-03 23:49:03" itemprop="dateCreated datePublished" datetime="2021-01-03T23:49:03+08:00">2021-01-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:56:58" itemprop="dateModified" datetime="2022-03-01T22:56:58+08:00">2022-03-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87Offer/" itemprop="url" rel="index"><span itemprop="name">剑指Offer</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/string_reverse.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/string_reverse.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="反转单词-题目描述"><a href="#反转单词-题目描述" class="headerlink" title="反转单词-题目描述"></a>反转单词-题目描述</h2><p>输入一个英文句子，单词之前用一个空格隔开，且句首和句尾没有多余空格。翻转句子中单词的顺序，但单词内字符的顺序不变。</p>
+<p>为简单起见，标点符号和普通字母一样处理。</p>
+<p>例如输入字符串”I am a student.”，则输出”student. a am I”。</p>
+<p>样例<br>输入：”I am a student.”</p>
+<p>输出：”student. a am I”</p>
+<h2 id="反转单词-代码实现"><a href="#反转单词-代码实现" class="headerlink" title="反转单词-代码实现"></a>反转单词-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">reverse</span><span class="params">(<span class="built_in">string</span>&amp; s, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (i &lt; j) &#123;</span><br><span class="line">            swap(s[i++], s[j--]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">reverseWords</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (s[j] != <span class="string">&#x27;\0&#x27;</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (s[j] == <span class="string">&#x27; &#x27;</span>) &#123;</span><br><span class="line">                reverse(s, i, j - <span class="number">1</span>); <span class="comment">//反转每一个</span></span><br><span class="line">                i = j + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            j++;</span><br><span class="line">        &#125;</span><br><span class="line">        reverse(s, i, j - <span class="number">1</span>); <span class="comment">//处理上面的最后一次循环</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//整体反转一次</span></span><br><span class="line">        reverse(s, <span class="number">0</span>, j - <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> s;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="字符串左旋转-题目描述"><a href="#字符串左旋转-题目描述" class="headerlink" title="字符串左旋转-题目描述"></a>字符串左旋转-题目描述</h2><p>字符串的左旋转操作是把字符串前面的若干个字符转移到字符串的尾部。</p>
+<p>请定义一个函数实现字符串左旋转操作的功能。</p>
+<p>比如输入字符串”abcdefg”和数字2，该函数将返回左旋转2位得到的结果”cdefgab”。</p>
+<p>注意：</p>
+<p>数据保证n小于等于输入字符串的长度。<br>样例<br>输入：”abcdefg” , n=2</p>
+<p>输出：”cdefgab”</p>
+<h2 id="字符串左旋转-代码实现"><a href="#字符串左旋转-代码实现" class="headerlink" title="字符串左旋转-代码实现"></a>字符串左旋转-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">reverse</span><span class="params">(<span class="built_in">string</span>&amp; s, <span class="keyword">int</span> i, <span class="keyword">int</span> j )</span> </span>&#123;</span><br><span class="line">        <span class="comment">//对撞指针，往中间凑</span></span><br><span class="line">        <span class="keyword">while</span> (i &lt; j) &#123;</span><br><span class="line">            swap(s[i++], s[j--]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">leftRotateString</span><span class="params">(<span class="built_in">string</span> str, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = str.size();</span><br><span class="line">        <span class="keyword">if</span> (k == <span class="number">0</span>) <span class="keyword">return</span> str;</span><br><span class="line">        </span><br><span class="line">        reverse(str, <span class="number">0</span>, k - <span class="number">1</span>);</span><br><span class="line">        reverse(str, k, n - <span class="number">1</span>);</span><br><span class="line">        reverse(str, <span class="number">0</span>, n - <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> str;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
       
     </div>
 
@@ -1247,7 +1248,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/24/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/24/">24</a><span class="page-number current">25</span><a class="page-number" href="/page/26/">26</a><span class="space">&hellip;</span><a class="page-number" href="/page/33/">33</a><a class="extend next" rel="next" href="/page/26/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/24/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/24/">24</a><span class="page-number current">25</span><a class="page-number" href="/page/26/">26</a><span class="space">&hellip;</span><a class="page-number" href="/page/34/">34</a><a class="extend next" rel="next" href="/page/26/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1316,20 +1317,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">328</span>
+          <span class="site-state-item-count">331</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-count">60</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

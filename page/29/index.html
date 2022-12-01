@@ -203,6 +203,601 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/language/java/spring.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/language/java/spring.html" class="post-title-link" itemprop="url">java语言-spring</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-03 19:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T19:47:03+08:00">2021-01-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-12-01 12:58:39" itemprop="dateModified" datetime="2022-12-01T12:58:39+08:00">2022-12-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index"><span itemprop="name">编程语言</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/language/java/spring.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/language/java/spring.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="spring-cloud-组件"><a href="#spring-cloud-组件" class="headerlink" title="spring cloud 组件"></a>spring cloud 组件</h3><p>euraka</p>
+<p>robbin</p>
+<p>hystrix</p>
+<p>Zuul</p>
+<p>config</p>
+<p>Feign</p>
+<h3 id="AOP-切面编程"><a href="#AOP-切面编程" class="headerlink" title="AOP 切面编程"></a>AOP 切面编程</h3><p>在不侵入业务代码的情况下，实现日志打印、登录鉴权等功能。</p>
+<p>动态代理技术，标准JDK动态代理 OR CGLIB代理</p>
+<h3 id="spring-VS-spring-MVC-VS-spring-BOOT"><a href="#spring-VS-spring-MVC-VS-spring-BOOT" class="headerlink" title="spring VS  spring MVC VS  spring BOOT"></a>spring VS  spring MVC VS  spring BOOT</h3><p>Spring 框架就像一个家族，有众多衍生产品例如 boot、security、jpa等等。但他们的基础都是Spring 的 ioc和 aop ioc 提供了依赖注入的容器 aop ，解决了面向横切面的编程，然后在此两者的基础上实现了其他延伸产品的高级功能。Spring MVC是基于 Servlet 的一个 MVC 框架 主要解决 WEB 开发的问题，因为 Spring 的配置非常复杂，各种XML、 JavaConfig、hin处理起来比较繁琐。于是为了简化开发者的使用，从而创造性地推出了Spring boot，约定优于配置，简化了spring的配置流程。说得更简便一些：Spring 最初利用“工厂模式”（DI）和“代理模式”（AOP）解耦应用组件。大家觉得挺好用，于是按照这种模式搞了一个 MVC框架（一些用Spring 解耦的组件），用开发 web 应用（ SpringMVC ）。然后有发现每次开发都写很多样板代码，为了简化工作流程，于是开发出了一些“懒人整合包”（starter），这套就是 Spring Boot。</p>
+<p>Spring MVC的功能Spring MVC提供了一种轻度耦合的方式来开发web应用。Spring MVC是Spring的一个模块，式一个web框架。通过Dispatcher Servlet, ModelAndView 和 View Resolver，开发web应用变得很容易。解决的问题领域是网站应用程序或者服务开发——URL路由、Session、模板引擎、静态Web资源等等。</p>
+<h3 id="IOC"><a href="#IOC" class="headerlink" title="IOC"></a>IOC</h3><p>inversion of control</p>
+<p>DI 依赖注入</p>
+<p>第三方容器来管理，底层实现是基于反射。</p>
+<h3 id="循环依赖的解决"><a href="#循环依赖的解决" class="headerlink" title="循环依赖的解决"></a>循环依赖的解决</h3><p>通过三个map（一级，二级，三级）创建中的对象数组<br>只能解决通过set + 单例模式； 无法解决：基于构造函数的循环依赖、通过set + 多例模式</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/back_tracking/cut_sum.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/back_tracking/cut_sum.html" class="post-title-link" itemprop="url">回溯-序列切分</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-03 19:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T19:47:03+08:00">2021-01-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-12-01 13:03:02" itemprop="dateModified" datetime="2022-12-01T13:03:02+08:00">2022-12-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/back_tracking/cut_sum.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/back_tracking/cut_sum.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>给定数字N和M，你需要从数字1到N的序列中添加+或-，使得序列的和等于M。</p>
+<p>打印出所有满足此关系的序列，例如，给定N=4 M=6,则满足条件得序列是1-2+3+4=6(一定存在此序列)</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> u)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//剪枝，如果当前明确的sum已经超了，则直接return</span></span><br><span class="line">    <span class="keyword">if</span> (exceed_already()) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (u == n) &#123;</span><br><span class="line">        <span class="comment">//check 是否满足</span></span><br><span class="line">        <span class="comment">//cmd存了切割位置，我们按照cmd寸的切割位置，把字符串切割出来，转为整数，然后求和</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//分割</span></span><br><span class="line">    cmd[u] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span> (dfs(u + <span class="number">1</span>)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//不分割</span></span><br><span class="line">    cmd[u] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> dfs(u + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/stock_common.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/stock_common.html" class="post-title-link" itemprop="url">股票买卖系列-通用解法</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-03 19:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T19:47:03+08:00">2021-01-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-12-01 12:51:23" itemprop="dateModified" datetime="2022-12-01T12:51:23+08:00">2022-12-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/stock_common.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/stock_common.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>给定一个数组，它的第 i 个元素是一支给定的股票在第 i 天的价格。</p>
+<p>设计一个算法来计算你所能获取的最大利润。你最多可以完成 两笔 交易。</p>
+<p>注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/stock_common.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/greedy/stock_1time.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/greedy/stock_1time.html" class="post-title-link" itemprop="url">股票买卖系列-仅买卖一次</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-03 19:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T19:47:03+08:00">2021-01-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-15 21:46:04" itemprop="dateModified" datetime="2022-11-15T21:46:04+08:00">2022-11-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/greedy/stock_1time.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/greedy/stock_1time.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>假设把某股票的价格按照时间先后顺序存储在数组中，请问买卖 一次 该股票可能获得的利润是多少？</p>
+<p>例如一只股票在某些时间节点的价格为[9, 11, 8, 5, 7, 12, 16, 14]。</p>
+<p>如果我们能在价格为5的时候买入并在价格为16时卖出，则能收获最大的利润11。</p>
+<p>样例<br>输入：[9, 11, 8, 5, 7, 12, 16, 14]</p>
+<p>输出：11</p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
+<li>暴力做法-$O(n^2)$</li>
+<li>调整迭代顺序（找最大值改为着最小值）本质：减元素会让之前找到的的最值失效；而加元素只需要拿新加的元素与前最值比较即可</li>
+</ol>
+<h2 id="最直观的思路-暴力做法"><a href="#最直观的思路-暴力做法" class="headerlink" title="最直观的思路-暴力做法"></a>最直观的思路-暴力做法</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxDiff</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> min_price = INT_MAX;</span><br><span class="line">        <span class="keyword">int</span> max_profit = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.size(); ++i) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; nums.size(); ++j&gt;) &#123;</span><br><span class="line">                max_profit = max(max_profit, nums[j] - nums[i]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> max_profit;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="优化思路"><a href="#优化思路" class="headerlink" title="优化思路"></a>优化思路</h2><p>你需要知道的两个前置技巧：</p>
+<p><strong>双层定值拆分原则</strong>：当涉及两层循环时，可以将外层循环变量当成定值，对循环的整体结构进行整体审视，确定是否可以优化掉一层。 把外层变量当成定植之后，观察内层循环导致在干嘛。</p>
+<p><strong>最值计算的累积效应</strong>：当涉及最值计算时，减元素会让之前找到的的最值失效；而加元素只需要拿新加的元素与前最值比较即可</p>
+<p>我们的优化，需要你知晓上面的两个技巧，然后做适当的<strong>启发式思考</strong>，具体过程我已经呈现在下面的注释中了。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxDiff</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> min_price = INT_MAX;</span><br><span class="line">        <span class="keyword">int</span> max_profit = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.size(); ++i) &#123;</span><br><span class="line">            <span class="comment">//如果把i当作定值，那么下面的这层循环是在寻找num[j]的最大值</span></span><br><span class="line">            <span class="comment">//i每增加1,内层循环会减少一个元素，根据之前的启发式，减少元素会让之前计算的最大值失效，所以不得不重新计算最大值；</span></span><br><span class="line">            <span class="comment">//我们尝试着调整迭代顺序。</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; nums.size(); ++j&gt;) &#123;</span><br><span class="line">                max_profit = max(max_profit, nums[j] - nums[i]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> max_profit;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>那么，我们更换迭代顺序之后。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxDiff</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> min_price = INT_MAX;</span><br><span class="line">        <span class="keyword">int</span> max_profit = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.size(); ++i) &#123;</span><br><span class="line">            <span class="comment">//调整迭代顺序后，如果把i当作定值，那么下面的这层循环是在寻找num[j]的最小值</span></span><br><span class="line">            <span class="comment">//i每增加1,内层循环会增加一个元素，增加一个元素后，只需比较新的元素与之前的最小值；</span></span><br><span class="line">            <span class="comment">//便可以得到新的最小值，而不需要循环查找</span></span><br><span class="line">            <span class="comment">//nums[i]是每次的新元素</span></span><br><span class="line">            <span class="comment">/*</span></span><br><span class="line"><span class="comment">            写法1</span></span><br><span class="line"><span class="comment">            寻找哪一天买入【调整顺序】</span></span><br><span class="line"><span class="comment">            for (int j = 0; j &lt; i - 1; ++j&gt;) &#123;</span></span><br><span class="line"><span class="comment">                max_profit = max(max_profit, nums[i] - nums[j]);</span></span><br><span class="line"><span class="comment">            &#125;</span></span><br><span class="line"><span class="comment">            */</span></span><br><span class="line">            </span><br><span class="line">            <span class="comment">//写法2</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i - <span class="number">1</span>; ++j&gt;) &#123;</span><br><span class="line">                min_price = max(min_price, nums[j]);</span><br><span class="line">            &#125;</span><br><span class="line">            max_profit = max(max_profit, nums[i] - min_price);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//写法3</span></span><br><span class="line">            min_price = min(min_price, nums[i]); </span><br><span class="line">            max_profit = max(max_profit, nums[i] - min_price);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> max_profit;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/greedy/stock_inf_time.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/greedy/stock_inf_time.html" class="post-title-link" itemprop="url">股票买卖系列-无限买卖</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-03 19:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T19:47:03+08:00">2021-01-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-15 21:46:04" itemprop="dateModified" datetime="2022-11-15T21:46:04+08:00">2022-11-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/greedy/stock_inf_time.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/greedy/stock_inf_time.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>假设你有一个数组prices，长度为n，其中prices[i]是某只股票在第i天的价格，请根据这个价格数组，返回买卖股票能获得的最大收益</p>
+<ol>
+<li>你可以多次买卖该只股票，但是再次购买前必须卖出之前的股票</li>
+<li>如果不能获取收益，请返回0</li>
+<li>假设买入卖出均无手续费</li>
+</ol>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>我是上帝，要想利润最大，就是吃到所有的波段！低买高卖！</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; prices)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (prices.empty()) &#123;</span><br><span class="line">            <span class="keyword">return</span> res;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; prices.size(); ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (prices[i] &gt; prices[i - <span class="number">1</span>]) &#123;</span><br><span class="line">                res += prices[i] - prices[i - <span class="number">1</span>];</span><br><span class="line">            &#125; </span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/array/rotate_90.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/structures/array/rotate_90.html" class="post-title-link" itemprop="url">矩阵旋转90度</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-03 19:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T19:47:03+08:00">2021-01-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-12-01 12:52:28" itemprop="dateModified" datetime="2022-12-01T12:52:28+08:00">2022-12-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/array/rotate_90.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/array/rotate_90.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>矩阵90度旋转</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/backend_knowledge_architecture/structure_algorithm/structures/array/rotate_90.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/stack/max_kh_len.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -584,702 +1179,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/kthNode.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/kthNode.html" class="post-title-link" itemprop="url">二叉搜索树遍历-获取第k个节点</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-03 19:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T19:47:03+08:00">2021-01-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 23:09:33" itemprop="dateModified" datetime="2022-03-01T23:09:33+08:00">2022-03-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/kthNode.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/kthNode.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一棵二叉搜索树，请找出其中的第k小的结点。</p>
-<p>你可以假设树和k都存在，并且1≤k≤树的总结点数。</p>
-<p>样例<br>输入：root = [2, 1, 3, null, null, null, null] k = 3</p>
-<p>输出：3</p>
-<h2 id="实现思路"><a href="#实现思路" class="headerlink" title="实现思路"></a>实现思路</h2><p>首先，我们需要有一个认知：二叉搜索树等同于一个有序数组。</p>
-<p>然后基于上面的认知去思考：我如何在一个有序数组中找到第k小的元素。</p>
-<p>所以，我们需要中序遍历BST，在遍历过程中对访问的元素进行计数即可，当计数到k时，便是我们要找的元素。</p>
-<p>这里科普一个常识：<strong>对于BST，我们一定是中序遍历</strong>！否则就浪费了BST有序的特性了。</p>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">int</span> k;</span><br><span class="line">    <span class="function">TreeNode* <span class="title">dfs</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (root-&gt;left) &#123;</span><br><span class="line">            <span class="keyword">auto</span> r = dfs(root-&gt;left);</span><br><span class="line">            <span class="keyword">if</span> (r) <span class="keyword">return</span> r;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (--k == <span class="number">0</span>) <span class="keyword">return</span> root;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (root-&gt;right) <span class="keyword">return</span> dfs(root-&gt;right);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">TreeNode* <span class="title">kthNode</span><span class="params">(TreeNode* root, <span class="keyword">int</span> _k)</span> </span>&#123;</span><br><span class="line">        k = _k;</span><br><span class="line">        <span class="keyword">return</span> dfs(root);    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/os/fs.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/os/fs.html" class="post-title-link" itemprop="url">操作系统之文件系统介绍</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-03 19:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T19:47:03+08:00">2021-01-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-01 13:04:33" itemprop="dateModified" datetime="2022-12-01T13:04:33+08:00">2022-12-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/os/fs.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/fs.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://img-blog.csdnimg.cn/img_convert/b7691ff4fedc7a7abf5c35ba1869e550.png" alt="fd-inode"></p>
-<p>linux内核会为每一个进程创建一个task_truct结构体来维护进程信息，称之为 进程描述符，该结构体中 指针</p>
-<p>struct files_struct *files</p>
-<p>指向一个名称为file_struct的结构体，该结构体即 进程级别的文件描述表。</p>
-<p>它的每一个条目记录的是单个文件描述符的相关信息</p>
-<hr>
-<p>系统级别的文件描述符表<br>内核对系统中所有打开的文件维护了一个描述符表，也被称之为 【打开文件表】，表格中的每一项被称之为 【打开文件句柄】，一个【打开文件句柄】 描述了一个打开文件的全部信息。<br>主要包括：</p>
-<p>当前文件偏移量（调用read()和write()时更新，或使用lseek()直接修改）<br>打开文件时所使用的状态标识（即，open()的flags参数）<br>文件访问模式（如调用open()时所设置的只读模式、只写模式或读写模式）<br>与信号驱动相关的设置<br>对该文件i-node对象的引用<br>文件类型（例如：常规文件、套接字或FIFO）和访问权限<br>一个指针，指向该文件所持有的锁列表<br>文件的各种属性，包括文件大小以及与不同类型操作相关的时间戳</p>
-<hr>
-<p>Inode表<br>每个文件系统会为存储于其上的所有文件(包括目录)维护一个i-node表，单个i-node包含以下信息：</p>
-<p>文件类型(file type)，可以是常规文件、目录、套接字或FIFO<br>访问权限<br>文件锁列表(file locks)<br>文件大小<br>等等<br>i-node存储在磁盘设备上，内核在内存中维护了一个副本，这里的i-node表为后者。副本除了原有信息，还包括：引用计数(从打开文件描述体)、所在设备号以及一些临时属性，例如文件锁。</p>
-<hr>
-<p>为什么inode中没有文件名？</p>
-<p>目录，也是文件。 文件内容是一个列表，列表项为：文件名 + inode</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/language/java/gc.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/language/java/gc.html" class="post-title-link" itemprop="url">java语言-gc</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-03 19:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T19:47:03+08:00">2021-01-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-01 12:58:15" itemprop="dateModified" datetime="2022-12-01T12:58:15+08:00">2022-12-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index"><span itemprop="name">编程语言</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/language/java/gc.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/language/java/gc.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在Java语言中，可作为GC Roots的对象包含以下几种：</p>
-<p>虚拟机栈(栈帧中的本地变量表)中引用的对象。(可以理解为:引用栈帧中的本地变量表的所有对象)<br>方法区中静态属性引用的对象(可以理解为:引用方法区该静态属性的所有对象)<br>方法区中常量引用的对象(可以理解为:引用方法区中常量的所有对象)<br>本地方法栈中(Native方法)引用的对象(可以理解为:引用Native方法的所有对象)</p>
-<p>可以理解为:</p>
-<p>(1)首先第一种是虚拟机栈中的引用的对象，我们在程序中正常创建一个对象，对象会在堆上开辟一块空间，同时会将这块空间的地址作为引用保存到虚拟机栈中，如果对象生命周期结束了，那么引用就会从虚拟机栈中出栈，因此如果在虚拟机栈中有引用，就说明这个对象还是有用的，这种情况是最常见的。</p>
-<p>(2)第二种是我们在类中定义了全局的静态的对象，也就是使用了static关键字，由于虚拟机栈是线程私有的，所以这种对象的引用会保存在共有的方法区中，显然将方法区中的静态引用作为GC Roots是必须的。</p>
-<p>(3)第三种便是常量引用，就是使用了static final关键字，由于这种引用初始化之后不会修改，所以方法区常量池里的引用的对象也应该作为GC Roots。最后一种是在使用JNI技术时，有时候单纯的Java代码并不能满足我们的需求，我们可能需要在Java中调用C或C++的代码，因此会使用native方法，jvm内存中专门有一块本地方法栈，用来保存这些对象的引用，所以本地方法栈中引用的对象也会被作为GC Roots。</p>
-<p>先通过gc-root可达性分析给对象标记，然后执行finalize() 再给对象一次机会。</p>
-<hr>
-<p>1、CMS</p>
-<p>CMS(Concurrent Mark Sweep)，我们可以轻易地从命名上看出，它是一个并发的，然后是基于标记——清理的垃圾回收器，它清理垃圾的步骤大致分为四步：</p>
-<p>初始标记（标记GCRoot能够关联到的对象）<br>并发标记（<br>重新标记<br>并发清理(会产生浮动垃圾)</p>
-<p>初始标记只要是找到GC Roots，所以是一个很快的过程，并发标记和用户线程一起，通过GC Roots找到存活的对象，重新标记主要是修复在并发标记阶段的发生了改变的对象，这个阶段会Stop the World；</p>
-<p>并发清理则是保留上一步骤标记出的存活对象，清理掉其他对象，正因为采用并发清理，所以在清理的过程中用户线程又会产生垃圾，而导致浮动垃圾，只能通过下次垃圾回收进行处理；</p>
-<p>因为cms采用的是标记清理，所以会导致内存空间不连续，从而产生内存碎片</p>
-<p>此处要清楚，CMS的垃圾回收的内存模型还是以我们常用的新生代，老年代的结构，如下图所示：</p>
-<p>2.G1</p>
-<p>G1(Garbage-First)，以分而治之的思想将堆内存分为若干个等大的Region块，虽然还是保留了新生代，老年代的概念，但是G1主要是以Region为单位进行垃圾回收，G1的分块大体结果如下图所示：</p>
-<p>G1垃圾回收器的它清理垃圾的步骤大致分为四步：</p>
-<p>初始标记<br>并发标记<br>最终标记<br>复制回收</p>
-<p>初始标记和并发标记和CMS的过程是差不多的，最后的筛选回收会首先对各个Region的回收价值和成本进行排序，根据用户所期望的GC停顿时间来制定回收计划</p>
-<p>因为采用的标记——整理的算法，所以不会产生内存碎片，最终的回收是STW的，所以也不会有浮动垃圾，Region的区域大小是固定的，所以回收Region的时间也是可控的</p>
-<p>同时G1 使用了Remembered Set来避免全堆扫描，G1中每个Region都有一个与之对应的RememberedSet ，在各个 Region 上记录自家的对象被外面对象引用的情况。当进行内存回收时，在GC根节点的枚举范围中加入RememberedSet 即可保证不对全堆扫描也不会有遗漏。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/design/ddd.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/design/ddd.html" class="post-title-link" itemprop="url">领域驱动设计</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-03 19:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T19:47:03+08:00">2021-01-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-01 13:07:01" itemprop="dateModified" datetime="2022-12-01T13:07:01+08:00">2022-12-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/design/ddd.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/design/ddd.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="领域驱动设计目的"><a href="#领域驱动设计目的" class="headerlink" title="领域驱动设计目的"></a>领域驱动设计目的</h3><p>DDD帮助我们拆解需求，并建立一个<strong><em>灵活性高、可扩展</em></strong>的业务系统</p>
-<p>领域驱动设计中的领域是什么？我理解的是一个比行业更加细分的方向，比如互联网做电商业务是电商领域，电商中有专注交易的交易领域，做电子支付叫支付领域。领域范围可大可小，领域知识表示某些具有相关相关性知识的合集。</p>
-<p>领域驱动设计是通过领域知识构建的领域模型来控制业务的复杂性，通过领域模型反映领域知识，构建更易维护的系统。解决软件难以理解，难以演化的问题。</p>
-<h3 id="领域驱动设计的核心价值"><a href="#领域驱动设计的核心价值" class="headerlink" title="领域驱动设计的核心价值"></a>领域驱动设计的核心价值</h3><p>领域驱动设计的核心目标是基于特定业务范围，通过统一业务概念（统一语言），将系统参与各方整合在一起，从而减少不同角色和环节的信息熵减问题。</p>
-<p>领域模型是领域驱动设计的核心产出，它不仅能描述真实的业务逻辑和业务场景，也是系统实现的表达方式。领域模型的适应性能直接反应系统的扩展性上，能否使系统在增大时仍然保持敏捷。</p>
-<p>领域驱动设计之所以更加流行，<strong>很大因素是领域驱动设计提供的方法论上与近些年流行的微服务有很好的匹配性</strong>，通过领域驱动设计方法清晰地<strong>识别业务边界，以此来指导微服务的拆分</strong>。 领域驱动设计提供的领域划分方法可以指导我们对微服务的拆分，以及对于演进式架构有很强的助力。</p>
-<p><img src="https://noogel.xyz/resource/img/2022-01-19-00-07-56.png" alt="四层架构"></p>
-<p><img src="https://noogel.xyz/resource/img/2021-12-12-18-59-11.png" alt="概念的涵盖范围"></p>
-<p>『领域的边界划分不断演绎，只要发现复杂性凝聚的地方，就划定为有界上下文，割裂它与其他系统的关系，并派出精兵强将专门对付。』</p>
-<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9hdGEyLWltZy5jbi1oYW5nemhvdS5vc3MtcHViLmFsaXl1bi1pbmMuY29tLzNkMTYxNTlkOTUxNTYwYmQwMDA2Y2ZlNzEwODNlNjdiLnBuZw" alt=""></p>
-<p>复用性是告诉我们When（什么时候该下沉了），即有重复代码的时候。内聚性是告诉我们How（要下沉到哪里），功能有没有内聚到恰当的实体上，有没有放到合适的层次上（因为Domain层的能力也是有两个层次的，一个是Domain Service这是相对比较粗的粒度，另一个是Domain的Model这个是最细粒度的复用）。</p>
-<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9hdGEyLWltZy5jbi1oYW5nemhvdS5vc3MtcHViLmFsaXl1bi1pbmMuY29tLzZlMGM3OTEwZDgwYmE3ZDUyNWNjYzM5ZmUwMmI0MmYyLnBuZw" alt=""></p>
-<p>领域服务(DomainService)</p>
-<p>上面我们讲述了各个要素对于资源和行为的封装，业务逻辑的实现代码应该尽量放在聚合根边界内。但是总会遇到不适合放在聚合根上的业务逻辑，而此时领域服务就需要承载编排组合领域对象、资源库和防腐接口等一系列要素，提供对其它上下文的交互接口。</p>
-<p>防腐层</p>
-<p>用来消除外部上下文结构差异的作用，也叫适配层。比如在算价上下文中需要调用促销上下文数据，不同的促销数据源提供了不同的接口和数据，这时就需要引入防腐层来屏蔽差异，防止外部上下文侵入领域内部影响代码模型。首先定义需要的数据接口规范。</p>
-<p>参考：</p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.cnblogs.com/wlandwl/p/ddd_five.html">https://www.cnblogs.com/wlandwl/p/ddd_five.html</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.cnblogs.com/pyer/p/15856573.html">https://www.cnblogs.com/pyer/p/15856573.html</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/significantfrank/article/details/98087611">https://blog.csdn.net/significantfrank/article/details/98087611</a></p>
-<hr>
-<p>Domain Primitive</p>
-<p>Domain Primitive 是一个在特定领域里，拥有精准定义的、可自我验证的、拥有行为的 Value Object 。</p>
-<p>（1）将隐性的概念显性化<br>（2）将 隐性的 上下文 显性化<br>（3）封装 多对象 行为</p>
-<p>▍什么情况下应该用 Domain Primitive<br>常见的 DP 的使用场景包括：</p>
-<p>有格式限制的 String：比如Name，PhoneNumber，OrderNumber，ZipCode，Address等</p>
-<p>有限制的Integer：比如OrderId（&gt;0），Percentage（0-100%），Quantity（&gt;=0）等</p>
-<p>可枚举的 int ：比如 Status（一般不用Enum因为反序列化问题）</p>
-<p>Double 或 BigDecimal：一般用到的 Double 或 BigDecimal 都是有业务含义的，比如 Temperature、Money、Amount、ExchangeRate、Rating 等</p>
-<p>复杂的数据结构：比如 Map<String, List<Integer>&gt; 等，尽量能把 Map 的所有操作包装掉，仅暴露必要行为</p>
-<hr>
-<p>在做架构设计时，一个好的架构应该需要实现以下几个目标：</p>
-<p>独立于框架：架构不应该依赖某个外部的库或框架，不应该被框架的结构所束缚。</p>
-<p>独立于UI：前台展示的样式可能会随时发生变化（今天可能是网页、明天可能变成console、后天是独立app），但是底层架构不应该随之而变化。</p>
-<p>独立于底层数据源：无论今天你用MySQL、Oracle还是MongoDB、CouchDB，甚至使用文件系统，软件架构不应该因为不同的底层数据储存方式而产生巨大改变。</p>
-<p>独立于外部依赖：无论外部依赖如何变更、升级，业务的核心逻辑不应该随之而大幅变化。</p>
-<p>可测试：无论外部依赖了什么数据库、硬件、UI或者服务，业务的逻辑应该都能够快速被验证正确性。</p>
-<p>数据存储层</p>
-<p>Account   本质上是一个 Entity<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Account</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> AccountId id;</span><br><span class="line">    <span class="keyword">private</span> AccountNumber accountNumber;</span><br><span class="line">    <span class="keyword">private</span> UserId userId;</span><br><span class="line">    <span class="keyword">private</span> Money available;</span><br><span class="line">    <span class="keyword">private</span> Money dailyLimit;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">withdraw</span><span class="params">(Money money)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 转出</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deposit</span><span class="params">(Money money)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 转入</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>AccountRepository 是一层抽象</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">AccountRepository</span> </span>&#123;</span><br><span class="line">    <span class="function">Account <span class="title">find</span><span class="params">(AccountId id)</span></span>;</span><br><span class="line">    <span class="function">Account <span class="title">find</span><span class="params">(AccountNumber accountNumber)</span></span>;</span><br><span class="line">    <span class="function">Account <span class="title">find</span><span class="params">(UserId userId)</span></span>;</span><br><span class="line">    <span class="function">Account <span class="title">save</span><span class="params">(Account account)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AccountRepositoryImpl</span> <span class="keyword">implements</span> <span class="title">AccountRepository</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> AccountMapper accountDAO;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> AccountBuilder accountBuilder;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Account <span class="title">find</span><span class="params">(AccountId id)</span> </span>&#123;</span><br><span class="line">        AccountDO accountDO = accountDAO.selectById(id.getValue());</span><br><span class="line">        <span class="keyword">return</span> accountBuilder.toAccount(accountDO);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Account <span class="title">find</span><span class="params">(AccountNumber accountNumber)</span> </span>&#123;</span><br><span class="line">        AccountDO accountDO = accountDAO.selectByAccountNumber(accountNumber.getValue());</span><br><span class="line">        <span class="keyword">return</span> accountBuilder.toAccount(accountDO);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Account <span class="title">find</span><span class="params">(UserId userId)</span> </span>&#123;</span><br><span class="line">        AccountDO accountDO = accountDAO.selectByUserId(userId.getId());</span><br><span class="line">        <span class="keyword">return</span> accountBuilder.toAccount(accountDO);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Account <span class="title">save</span><span class="params">(Account account)</span> </span>&#123;</span><br><span class="line">        AccountDO accountDO = accountBuilder.fromAccount(account);</span><br><span class="line">        <span class="keyword">if</span> (accountDO.getId() == <span class="keyword">null</span>) &#123;</span><br><span class="line">            accountDAO.insert(accountDO);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            accountDAO.update(accountDO);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> accountBuilder.toAccount(accountDO);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>Account实体类和AccountDO数据类的对比如下：</p>
-<p>Data Object数据类：AccountDO是单纯的和数据库表的映射关系，每个字段对应数据库表的一个column，这种对象叫Data Object。DO只有数据，没有行为。AccountDO的作用是对数据库做快速映射，避免直接在代码里写SQL。无论你用的是MyBatis还是Hibernate这种ORM，从数据库来的都应该先直接映射到DO上，但是代码里应该完全避免直接操作 DO。</p>
-<p>Entity实体类：Account 是基于领域逻辑的实体类，它的字段和数据库储存不需要有必然的联系。Entity包含数据，同时也应该包含行为。在 Account 里，字段也不仅仅是String等基础类型，而应该尽可能用上一讲的 Domain Primitive 代替，可以避免大量的校验代码。</p>
-<p>DAO 和 Repository 类的对比如下：</p>
-<p>DAO对应的是一个特定的数据库类型的操作，相当于SQL的封装。所有操作的对象都是DO类，所有接口都可以根据数据库实现的不同而改变。比如，insert 和 update 属于数据库专属的操作。</p>
-<p>Repository对应的是Entity对象读取储存的抽象，在接口层面做统一，不关注底层实现。比如，通过 save 保存一个Entity对象，但至于具体是 insert 还是 update 并不关心。Repository的具体实现类通过调用DAO来实现各种操作，通过Builder/Factory对象实现AccountDO 到 Account之间的转化</p>
-<p>原有的TransferService不再包括任何计算逻辑，仅仅作为组件编排，所有逻辑均delegate到其他组件。这种仅包含Orchestration（编排）的服务叫做Application Service（应用服务）。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/33P2FdAnjuibCA7zuzhlSIpEHAClQ3dEBNfJR6ibV1m3J4Xdtvd0VFZ6nOytMkmuuGicOAme3bTc1S3ACMt2thUDw/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="overview"></p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/33P2FdAnjuibCA7zuzhlSIpEHAClQ3dEBAstMWRiciaBWsJECe4ib9XiawJ0KYa6UccNWFp70mxO2agM1DUFYIB3b7Q/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="types"></p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/33P2FdAnjuibCA7zuzhlSIpEHAClQ3dEBw6h6u8RNXzNE3cOVYF7cambLLlIb5ibfcLj9JLynsZL1fPAzsfcdTsA/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="domain"></p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/33P2FdAnjuibCA7zuzhlSIpEHAClQ3dEBu1M0GnnGyl9jia9jUhl9SbzQWRTA9X4vw2DWSm91uJBOzliaq9gkM9Rg/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="Application"></p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/33P2FdAnjuibCA7zuzhlSIpEHAClQ3dEBicft40OXaibnibT86aj2s11aok4NXVfmcrVI79sVKs5JLtrxa1Dnia06IA/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="infrastructure"></p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/33P2FdAnjuibCA7zuzhlSIpEHAClQ3dEBCcCumAibDlffTuRD1UiaPyOYaM3VueCDT09UX5ZmYSgQEZayH5Kkb13g/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="web"></p>
-<p>interface[service]<br>规范：Interface层的HTTP和RPC接口，返回值为Result，捕捉所有异常<br>规范：一个Interface层的类应该是“小而美”的，应该是面向“一个单一的业务”或“一类同样需求的业务”，需要尽量避免用同一个类承接不同类型业务的需求。<br>application[Service]</p>
-<p>规范：CQE对象的校验应该前置，避免在ApplicationService里做参数的校验。可以通过JSR303/380和Spring Validation来实现<br>规范：Application层的所有接口返回值为DTO，不负责处理异常<br>Application层的几个核心类：</p>
-<p>ApplicationService应用服务：最核心的类，负责业务流程的编排，但本身不负责任何业务逻辑</p>
-<p>DTO Assembler：负责将内部领域模型转化为可对外的DTO</p>
-<p>Command、Query、Event对象：作为ApplicationService的入参</p>
-<p>返回的DTO：作为ApplicationService的出参</p>
-<p>我们可以看出来，ApplicationService的代码通常有类似的结构：AppService通常不做任何决策（Precondition除外），仅仅是把所有决策交给DomainService或Entity，把跟外部交互的交给Infrastructure接口，如Repository或防腐层。</p>
-<p>一般的“套路”如下：</p>
-<p>准备数据：包括从外部服务或持久化源取出相对应的Entity、VO以及外部服务返回的DTO。</p>
-<p>执行操作：包括新对象的创建、赋值，以及调用领域对象的方法对其进行操作。需要注意的是这个时候通常都是纯内存操作，非持久化。</p>
-<p>持久化：将操作结果持久化，或操作外部系统产生相应的影响，包括发消息等异步操作。</p>
-<p>如果涉及到对多个外部系统（包括自身的DB）都有变更的情况，这个时候通常处在“分布式事务”的场景里，无论是用分布式TX、TCC、还是Saga模式，取决于具体场景的设计，在此处暂时略过。</p>
-<p>domain[Service]</p>
-<p>单对象（可以把service传入entity，只读，无副作用)<br>跨领域对象（同时操作多个entity)</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/back_tracking/combination_permutation.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/back_tracking/combination_permutation.html" class="post-title-link" itemprop="url">回溯系列-组合排列</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-02 16:29:03" itemprop="dateCreated datePublished" datetime="2021-01-02T16:29:03+08:00">2021-01-02</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-01 22:17:48" itemprop="dateModified" datetime="2022-11-01T22:17:48+08:00">2022-11-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/back_tracking/combination_permutation.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/back_tracking/combination_permutation.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="N选K组合（无重复版）"><a href="#N选K组合（无重复版）" class="headerlink" title="N选K组合（无重复版）"></a>N选K组合（无重复版）</h2><p>给定两个整数 n 和 k，返回 1 … n 中所有可能的 k 个数的组合。</p>
-<h3 id="N选K组合解题思路"><a href="#N选K组合解题思路" class="headerlink" title="N选K组合解题思路"></a>N选K组合解题思路</h3><p>状态：第i个</p>
-<p>选择: n-i个选择</p>
-<p>路径：path选择</p>
-<p>结果集：列表</p>
-<p>结束条件： 找到所有的组合； path路径到了k</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// u 没有实际作用，可以通过path来替代；</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; path;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> u, <span class="keyword">int</span> start_idx)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (u == k) &#123;</span><br><span class="line">        <span class="comment">//path</span></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//未剪枝版</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = start_idx; i &lt;= n; ++i) &#123;</span><br><span class="line">        path.push_back(i);</span><br><span class="line">        dfs(u + <span class="number">1</span>, i + <span class="number">1</span>) ; <span class="comment">//注意i+1</span></span><br><span class="line">        path.pop_back();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//带剪枝版(如果i过大的话，剩下的元素会不足k个)</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = start_idx; i &lt;= n - (k - path.size()); ++i) &#123;</span><br><span class="line">        path.push_back(i);</span><br><span class="line">        dfs(u + <span class="number">1</span>, i + <span class="number">1</span>);</span><br><span class="line">        path.pop_back();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dfs(<span class="number">0</span>, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
-<h2 id="和为n的K个数的组合"><a href="#和为n的K个数的组合" class="headerlink" title="和为n的K个数的组合"></a>和为n的K个数的组合</h2><p>找出所有相加之和为 n 的 k 个数的组合。组合中只允许含有 1 - 9 的正整数，并且每种组合中不存在重复的数字。</p>
-<h3 id="N选K组合的和解题思路"><a href="#N选K组合的和解题思路" class="headerlink" title="N选K组合的和解题思路"></a>N选K组合的和解题思路</h3><p>状态：第i个</p>
-<p>选择: 9-i个选择</p>
-<p>路径：path选择</p>
-<p>结果集：列表</p>
-<p>结束条件： 找到所有的组合； path路径到了k，sum ok</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; path;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> u, <span class="keyword">int</span> sum, <span class="keyword">int</span> start)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (sum &gt; n) &#123;<span class="keyword">return</span>;&#125;</span><br><span class="line">    <span class="keyword">if</span> (u == k) &#123;</span><br><span class="line">        <span class="keyword">if</span> (sum == <span class="number">0</span>) &#123;</span><br><span class="line">            res.push_back(path);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = start; i &lt;= <span class="number">9</span> - (k - path.size()) + <span class="number">1</span>; i++) &#123;</span><br><span class="line">        path.push_back(i);</span><br><span class="line">        dfs(u + <span class="number">1</span>, sum - i, i + <span class="number">1</span>);</span><br><span class="line">        path.pop_back();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dfs(<span class="number">0</span>, n, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
-<h2 id="和为N的组合（无限选取版）"><a href="#和为N的组合（无限选取版）" class="headerlink" title="和为N的组合（无限选取版）"></a>和为N的组合（无限选取版）</h2><p>给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。candidates 中的数字可以无限制重复被选取。</p>
-<p>说明：</p>
-<p>所有数字（包括 target）都是正整数。</p>
-<p>解集不能包含重复的组合。</p>
-<h3 id="candidates找和为target解题思路"><a href="#candidates找和为target解题思路" class="headerlink" title="candidates找和为target解题思路"></a>candidates找和为target解题思路</h3><p>状态：第i个</p>
-<p>选择: 每次都有N个选择</p>
-<p>路径：path选择</p>
-<p>结果集：列表</p>
-<p>结束条件： 找到所有的组合； path路径到了k，sum ok</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//如果是一个集合来求组合的话，就需要startIndex</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; d, <span class="keyword">int</span> u, <span class="keyword">int</span> sum, <span class="keyword">int</span> start)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (sum &gt; target) &#123;<span class="keyword">return</span>;&#125;</span><br><span class="line">    <span class="keyword">if</span> (sum == target) &#123;</span><br><span class="line">        res.push_back(path);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = start; i &lt; n; ++i) &#123;</span><br><span class="line">        path.push_back(d[i]);</span><br><span class="line">        dfs(d, u + <span class="number">1</span>, sum + d[i], i); <span class="comment">//可以重复使用,</span></span><br><span class="line">        path.pop_back();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//剪枝优化： 排序(从大到小排序），提前终止，判定条件</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; d, <span class="keyword">int</span> u, <span class="keyword">int</span> sum, <span class="keyword">int</span> start)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (sum &gt; target) &#123;<span class="keyword">return</span>;&#125;</span><br><span class="line">    <span class="keyword">if</span> (sum == target) &#123;</span><br><span class="line">        res.push_back(path);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//排序后，可以剪枝，提前终止本层（因为后面的更小了，只要i不可以，后面的更不可以，可以提前终止）</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = start; i &lt; n &amp;&amp; sum+d[i] &lt;= target; ++i) &#123;</span><br><span class="line">        path.push_back(d[i]);</span><br><span class="line">        dfs(d, u + <span class="number">1</span>, sum + d[i], i); <span class="comment">//可以重复使用</span></span><br><span class="line">        path.pop_back();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="和为N的组合（有重复，仅用一次）"><a href="#和为N的组合（有重复，仅用一次）" class="headerlink" title="和为N的组合（有重复，仅用一次）"></a>和为N的组合（有重复，仅用一次）</h2><p>给定一个数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。<br>candidates 中的每个数字在每个组合中只能使用一次。</p>
-<p>说明：<br>所有数字（包括目标数）都是正整数。解集不能包含重复的组合。</p>
-<p>//需要进行排序预处理，从大到小</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; d, <span class="keyword">int</span> u, <span class="keyword">int</span> sum, <span class="keyword">int</span> start_index)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (sum &gt; target) &#123;<span class="keyword">return</span>;&#125;</span><br><span class="line">        <span class="keyword">if</span> (sum == target) &#123;</span><br><span class="line">            res.push_back(path);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = start_index; i &lt; n &amp;&amp; sum + d[i] &lt;= target; ++i) &#123;</span><br><span class="line">            <span class="comment">//在同一层次上，相同的元素不重复选取（因为前面的已经处理过了）</span></span><br><span class="line">            <span class="keyword">if</span> (i &gt;= <span class="number">1</span> &amp;&amp; d[i] == d[i - <span class="number">1</span>] &amp;&amp; used[i - <span class="number">1</span>] == <span class="literal">false</span>) &#123;<span class="keyword">continue</span>;&#125;</span><br><span class="line">            path.push_back(d[i]);</span><br><span class="line">            used[i] = <span class="literal">true</span>;</span><br><span class="line">            dfs(d, u + <span class="number">1</span>, sum + d[i], i + <span class="number">1</span>);</span><br><span class="line">            used[i] = <span class="literal">false</span>;</span><br><span class="line">            path.pop_back();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<h2 id="所有数字的排列（无重复版）"><a href="#所有数字的排列（无重复版）" class="headerlink" title="所有数字的排列（无重复版）"></a>所有数字的排列（无重复版）</h2><p>给定一个 <strong>没有重复</strong> 数字的序列，返回其所有可能的全排列。</p>
-<h3 id="解法1-给坑u找元素i"><a href="#解法1-给坑u找元素i" class="headerlink" title="解法1 给坑u找元素i"></a>解法1 给坑u找元素i</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; d, <span class="keyword">int</span> u)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (u == n) &#123;</span><br><span class="line">        res.push_back(path);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i ) &#123;</span><br><span class="line">        <span class="keyword">if</span> (used[i]) <span class="keyword">continue</span>;</span><br><span class="line">        path.push_back(d[i]);</span><br><span class="line">        <span class="comment">//path[u] = nums[i]; 这样子其实也可以，这样子反而不需要还原现场；因为u的设置顺序是从大到小</span></span><br><span class="line">        used[i] = <span class="literal">true</span>;</span><br><span class="line">        dfs(d, u + <span class="number">1</span>);</span><br><span class="line">        used[i] =<span class="literal">false</span>;</span><br><span class="line">        path.pop_back();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="解法2-特定元素-u-选择坑位（i"><a href="#解法2-特定元素-u-选择坑位（i" class="headerlink" title="解法2: 特定元素(u)选择坑位（i)"></a>解法2: 特定元素(u)选择坑位（i)</h3><p>//后面可以选择的坑原来越少了； u是第一个元素；</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; path;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> u, <span class="keyword">int</span> state)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (u == <span class="keyword">int</span>(nums.size())) &#123;</span><br><span class="line">            res.push_back(path);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.size(); ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!(state &gt;&gt; i &amp; <span class="number">1</span>)) &#123;</span><br><span class="line">                <span class="comment">//这一步骤是关键，为第u号元素找可以选择的坑位</span></span><br><span class="line">                path[i]= nums[u];</span><br><span class="line">                dfs(nums, u + <span class="number">1</span>, state + (<span class="number">1</span> &lt;&lt; i));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">permutation</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        path.resize(nums.size());</span><br><span class="line">        sort(nums.begin(), nums.end());</span><br><span class="line">        dfs(nums, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">注意到前面的state与path的配合使用，有两个目的：保存当前坑位存了哪些元素了，保存坑位的使用情况。</span><br><span class="line">有没有什么手段呢？ path可以d来替代；d的前半部分作为坑使用，后半部分保持原功能； 但是坑占用之前，需要保存其原值，一举两得。所以就有了下面这种解法。</span><br><span class="line"></span><br><span class="line">    <span class="comment">//u代表元素。</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; d, <span class="keyword">int</span> u)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (u == n) &#123;</span><br><span class="line">            res.push_back(d);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//这一步骤是关键，为第u号元素找可以选择的坑位</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = u; i &lt; n; ++i ) &#123;</span><br><span class="line">            swap(d[u], d[i]);   <span class="comment">//将u元素放入i号坑。</span></span><br><span class="line">            dfs(d, u + <span class="number">1</span>);  </span><br><span class="line">            swap(d[u], d[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="所有数字的排列（数字重复）"><a href="#所有数字的排列（数字重复）" class="headerlink" title="所有数字的排列（数字重复）"></a>所有数字的排列（数字重复）</h2><p>输入一组数字（可能包含重复数字），输出其所有的排列方式。</p>
-<p>样例<br>输入：[1,2,3]</p>
-<p>输出：<br>      [<br>        [1,2,3],<br>        [1,3,2],<br>        [2,1,3],<br>        [2,3,1],<br>        [3,1,2],<br>        [3,2,1]<br>      ]</p>
-<h3 id="为坑（u）选择合适的元素（i）"><a href="#为坑（u）选择合适的元素（i）" class="headerlink" title="为坑（u）选择合适的元素（i）"></a>为坑（u）选择合适的元素（i）</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//sort first</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> u)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (u == nums.size()) &#123;</span><br><span class="line">        res.push_back(path);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.size(); i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (i &gt; <span class="number">0</span> &amp;&amp;  nums[i] == nums[i - <span class="number">1</span>] &amp;&amp; !used[i - <span class="number">1</span>]) <span class="keyword">continue</span>; <span class="comment">//两次访问，第一次访问是used[i-1]=true,会加到path中; 第二次访问used[i-1]=false，会被跳过。</span></span><br><span class="line">        <span class="keyword">if</span> (used[i]) <span class="keyword">continue</span>;</span><br><span class="line">        used[i] = <span class="literal">true</span>;</span><br><span class="line">        <span class="comment">//为新的坑，选择了一个新的元素</span></span><br><span class="line">        path.push_back(nums[i]);</span><br><span class="line">        dfs(u + <span class="number">1</span>);</span><br><span class="line">        path.pop_back();</span><br><span class="line">        used[i] = <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="特定元素-u-选择坑位（i"><a href="#特定元素-u-选择坑位（i" class="headerlink" title="特定元素(u)选择坑位（i)"></a>特定元素(u)选择坑位（i)</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; path;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> u, <span class="keyword">int</span> start, <span class="keyword">int</span> state)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (u == <span class="keyword">int</span>(nums.size())) &#123;</span><br><span class="line">            res.push_back(path);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//对于重复元素，则放在前面的元素后面；否则从0开始</span></span><br><span class="line">        <span class="keyword">if</span> (!u || nums[u] != nums[u - <span class="number">1</span>]) start = <span class="number">0</span>;</span><br><span class="line">                </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = start; i &lt; nums.size(); ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!(state &gt;&gt; i &amp; <span class="number">1</span>)) &#123;</span><br><span class="line">                <span class="comment">//这一步骤是关键，为第u号元素找可以选择的坑位[i]</span></span><br><span class="line">                path[i]= nums[u];</span><br><span class="line">                dfs(nums, u + <span class="number">1</span>, i + <span class="number">1</span>, state + (<span class="number">1</span> &lt;&lt; i));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">permutation</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        path.resize(nums.size());</span><br><span class="line">        sort(nums.begin(), nums.end());</span><br><span class="line">        dfs(nums, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h2 id="所有递增子序列"><a href="#所有递增子序列" class="headerlink" title="所有递增子序列"></a>所有递增子序列</h2><p>给定一个整型数组, 你的任务是找到所有该数组的递增子序列，递增子序列的长度至少是2。</p>
-<p>示例:</p>
-<p>输入: [4, 6, 7, 7] 输出: [[4, 6], [4, 7], [4, 6, 7], [4, 6, 7, 7], [6, 7], [6, 7, 7], [7,7], [4,7,7]]</p>
-<p>说明:</p>
-<p>给定数组的长度不会超过15。<br>数组中的整数范围是 [-100,100]。<br>给定数组中可能包含重复数字，相等的数字应该被视为递增的一种情况。</p>
-<h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><ol>
-<li>因为找到是递增子序列，所以不能排序；也就不能通过排序来去重了</li>
-<li>可以考虑用hash_map来做去重。</li>
-</ol>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> u, <span class="keyword">int</span> start)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (u &gt;= <span class="number">2</span>) &#123;</span><br><span class="line">           res.push_back(path);</span><br><span class="line">           <span class="comment">//这里是不可以return的</span></span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="built_in">unordered_set</span>&lt;<span class="keyword">int</span>&gt; iset;</span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> i = start; i &lt; d.size(); i++) &#123;</span><br><span class="line">           <span class="keyword">if</span> (iset.count(d[i])) <span class="keyword">continue</span>;</span><br><span class="line">           <span class="keyword">if</span> (path.size() &amp;&amp; path.back() &gt; d[i]) <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">           iset.insert(d[i]);</span><br><span class="line">           path.push_back(d[i]);</span><br><span class="line">           dfs(u + <span class="number">1</span>, i + <span class="number">1</span>);</span><br><span class="line">           path.pop_back();</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://zhuanlan.zhihu.com/p/339849416">https://zhuanlan.zhihu.com/p/339849416</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/problem/%20selection/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/problem/%20selection/index.html" class="post-title-link" itemprop="url">选择问题</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-02 15:47:03" itemprop="dateCreated datePublished" datetime="2021-01-02T15:47:03+08:00">2021-01-02</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 23:00:25" itemprop="dateModified" datetime="2022-03-01T23:00:25+08:00">2022-03-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/problem/%20selection/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/problem/%20selection/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="选择问题"><a href="#选择问题" class="headerlink" title="选择问题"></a>选择问题</h3><p>从n个元素的集合中选择第i个顺序统计量的问题形式化地归结为“选择问题”。</p>
-<h4 id="中位数和顺序统计量"><a href="#中位数和顺序统计量" class="headerlink" title="中位数和顺序统计量"></a>中位数和顺序统计量</h4><p>1）顺序统计量：在一个由n个元素组成的集合中，第i个顺序统计量(order statistic)是该集合中的第i小的元素。如：在一个元素集合中，最小值是第1个顺序统计量（i=1）；最大值是第n个顺序统计量（i=n）</p>
-<p>2）中位数：对一个有n个元素的集合，将数据排序后，位置在最中间的数称为该集合的中位数。</p>
-<h4 id="最大值最小值"><a href="#最大值最小值" class="headerlink" title="最大值最小值"></a>最大值最小值</h4><p>针对一个序列取得最大和最小值均需要n-1次比较。这是一个下限，确定最大值或者最小值的算法可以看作各个元素之间一场锦标赛，每次比较都是一场比赛，两个元素中较小的或者较大的获胜，除了最终的最大值和最小值，所有其他元素都需要输一次，所以n-1次是必须的。</p>
-<p>接下来是一些比较有意思的问题，比如同时找出最小值和最大值，当然可以n-1次比较找出最大值，然后n-2次比较找出最小值，不过还是有比这个更好一点的算法，把元素两两分组，然后比较产生一个较大的值和较小的值，然后较大的值中产生最大值，较小的值中产生最小值，此时需要比较操作的次数至多3|_n/2_|。</p>
-<h4 id="最大与次大问题"><a href="#最大与次大问题" class="headerlink" title="最大与次大问题"></a>最大与次大问题</h4><p>还有一个比较问题是同时找出最大、第二大或者最次小元素的比较次数，简单的当然是2n-3，不过也有一个分组的方法能够达到$n+lgn-2$的比较次数。比较方法如下：</p>
-<p>上面已经说明了，找出最值最少的比较次数n-1，所以上面寻找的方法也是n-1次，不信可以累计求和，不过这样求最值的过程中最值上来的时候有一条路径被记录，这条路径的长度为lgn，找出次大值或者次小值直接在这个路径上寻找就只需要lgn-1的比较次数。(但是这种算法不适用于存在重复元素的情况)</p>
-<p>原理：锦标赛算法，分组，两两比较；次大值一定跟最大值PK过。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1352,7 +1251,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">333</span>
+          <span class="site-state-item-count">339</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1365,7 +1264,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-count">61</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

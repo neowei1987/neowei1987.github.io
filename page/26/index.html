@@ -203,6 +203,626 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/GetMaxDistance.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/GetMaxDistance.html" class="post-title-link" itemprop="url">二叉树遍历系列-二叉树最远距离</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-04 11:42:03" itemprop="dateCreated datePublished" datetime="2021-01-04T11:42:03+08:00">2021-01-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-02 21:11:57" itemprop="dateModified" datetime="2022-03-02T21:11:57+08:00">2022-03-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/GetMaxDistance.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/GetMaxDistance.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>如果我们把二叉树视为一个图，父子节点之间的连线视为双向的，我们姑且定义为“举例”为两节点之间边的个数。写一个程序求一颗二叉树中相距最远的两个节点之间的距离（《编程之美》3.8）</p>
+<h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><p>该题目的技巧在于 全局变量的 应用。</p>
+<p>需要克服的惯性思维：更多的题目的计算结果会作为递归函数的返回变量。</p>
+<p>这个函数的返回值其实是root节点的高度。</p>
+<p>在计算高度的过程中，<strong>顺便</strong>完成全局变量的更新。</p>
+<h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">GetMaxDistance</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> max_distance = INT_MIN;</span><br><span class="line"></span><br><span class="line">    dfs(root, INT_MIN);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> max_distance</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> dfs(TreeNode* root, <span class="keyword">int</span> &amp;max_distance) &#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> left_max_depth = dfs(root-&gt;left, &amp;max_distance);</span><br><span class="line">    <span class="keyword">int</span> right_max_depth = dfs(root-&gt;right, &amp;max_distance);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> temp_distance = left_max_depth + right_max_depth + <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (temp_distance &gt; max_distance) max_distance = temp_distance;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> left_max_depth &gt; right_max_depth ? left_max_depth + <span class="number">1</span> : right_max_depth + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/findPathInTree.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/findPathInTree.html" class="post-title-link" itemprop="url">二叉树遍历系列-二叉树中结点值的和为输入整数的所有路径</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-04 11:42:03" itemprop="dateCreated datePublished" datetime="2021-01-04T11:42:03+08:00">2021-01-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 23:08:14" itemprop="dateModified" datetime="2022-03-01T23:08:14+08:00">2022-03-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/findPathInTree.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/findPathInTree.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="二叉树中结点值的和为输入整数的所有路径-题目描述"><a href="#二叉树中结点值的和为输入整数的所有路径-题目描述" class="headerlink" title="二叉树中结点值的和为输入整数的所有路径-题目描述"></a>二叉树中结点值的和为输入整数的所有路径-题目描述</h2><p>输入一棵二叉树和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。</p>
+<p>从树的根结点开始往下一直到叶结点所经过的结点形成一条路径。</p>
+<p>样例<br>给出二叉树如下所示，并给出num=22。<br>      5<br>     / \<br>    4   6<br>   /   / \<br>  12  13  6<br> /  \    / \<br>9    1  5   1</p>
+<p>输出：[[5,4,12,1],[5,6,6,5]]</p>
+<h2 id="二叉树中结点值的和为输入整数的所有路径-总体思路"><a href="#二叉树中结点值的和为输入整数的所有路径-总体思路" class="headerlink" title="二叉树中结点值的和为输入整数的所有路径-总体思路"></a>二叉树中结点值的和为输入整数的所有路径-总体思路</h2><p>这里，我在下面的代码中写了很多种写法，我们需要好好体会以下几个点：</p>
+<p>（1）我的return条件是什么？（是遇到空节点return还是遇到叶子结点return)</p>
+<p>（2）我应该如何处理当前访问到的节点</p>
+<p>（2）我应该如何还原现场（是pop一次还是pop两次）</p>
+<p>（3）return条件与还原现场的关系是什么？</p>
+<h2 id="二叉树中结点值的和为输入整数的所有路径-代码实现"><a href="#二叉树中结点值的和为输入整数的所有路径-代码实现" class="headerlink" title="二叉树中结点值的和为输入整数的所有路径-代码实现"></a>二叉树中结点值的和为输入整数的所有路径-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; path;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//一种写法【正确】---如果到达空节点，则返回</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(TreeNode* root, <span class="keyword">int</span> sum)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!root) <span class="keyword">return</span>;</span><br><span class="line">        </span><br><span class="line">        path.push_back(root-&gt;val);</span><br><span class="line">        sum -= root-&gt;val;</span><br><span class="line">        <span class="keyword">if</span> (!root-&gt;left &amp;&amp; !root-&gt;right &amp;&amp; !sum) &#123;</span><br><span class="line">            res.push_back(path);</span><br><span class="line">            <span class="comment">//这里不会return;</span></span><br><span class="line">            <span class="comment">//假设最后一个叶子结点是一个错误答案，我们显然需要把这个节点pop出来？</span></span><br><span class="line">            <span class="comment">//那我pop的时机是什么呢？ 显然是在遍历完左右子树之后再pop出来。</span></span><br><span class="line">        &#125;</span><br><span class="line">       </span><br><span class="line">        dfs(root-&gt;left, sum);</span><br><span class="line">        dfs(root-&gt;right, sum);</span><br><span class="line">        path.pop_back();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//一种正确的写法：注意这里，非叶子节点才会被push进去，所以只需要pop一次；</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(TreeNode* root, <span class="keyword">int</span> sum)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//结束条件</span></span><br><span class="line">        <span class="keyword">if</span> (!root-&gt;left &amp;&amp; !root-&gt;right) &#123; </span><br><span class="line">            <span class="keyword">if</span> (sum == root-&gt;val) &#123;</span><br><span class="line">                path.push_back(root-&gt;val);</span><br><span class="line">                ret.push_back(path);</span><br><span class="line">                path.pop_back();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        path.push_back(root-&gt;val);</span><br><span class="line">        <span class="keyword">if</span> (root-&gt;left) dfs(root-&gt;left, sum - root-&gt;val);</span><br><span class="line">        <span class="keyword">if</span> (root-&gt;right) dfs(root-&gt;right, sum- root-&gt;val);</span><br><span class="line">        path.pop_back();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//另一种正确的写法---如果到达叶子节点，则返回</span></span><br><span class="line">     <span class="function"><span class="keyword">void</span> <span class="title">dfs2</span><span class="params">(TreeNode* root, <span class="keyword">int</span> sum)</span> </span>&#123;</span><br><span class="line">        path.push_back(root-&gt;val);</span><br><span class="line">        sum -= root-&gt;val;</span><br><span class="line">        <span class="keyword">if</span> (!root-&gt;left &amp;&amp; !root-&gt;right) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!sum) &#123;</span><br><span class="line">                res.push_back(path);</span><br><span class="line">            &#125;  </span><br><span class="line">            <span class="keyword">return</span>; <span class="comment">//注意这里有一个return</span></span><br><span class="line">            <span class="comment">//注意这里return了，现在path中有一个错误的节点，我这个节点需要什么时候pop出来呢？</span></span><br><span class="line">            <span class="comment">//显然只能在外层调用的时候。</span></span><br><span class="line">        &#125;</span><br><span class="line">       </span><br><span class="line">        <span class="keyword">if</span> (root-&gt;left) &#123;</span><br><span class="line">            dfs(root-&gt;left, sum);</span><br><span class="line">            path.pop_back();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (root-&gt;right) &#123;</span><br><span class="line">            dfs(root-&gt;right, sum);</span><br><span class="line">            path.pop_back();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">     <span class="comment">//错误的写法---如果到达叶子节点，则返回; 但是只pop了一次！！！</span></span><br><span class="line">     <span class="function"><span class="keyword">void</span> <span class="title">dfs3</span><span class="params">(TreeNode* root, <span class="keyword">int</span> sum)</span> </span>&#123;</span><br><span class="line">        path.push_back(root-&gt;val);</span><br><span class="line">        sum -= root-&gt;val;</span><br><span class="line">        <span class="keyword">if</span> (!root-&gt;left &amp;&amp; !root-&gt;right) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!sum) &#123;</span><br><span class="line">                res.push_back(path);</span><br><span class="line">            &#125; </span><br><span class="line">            <span class="keyword">return</span>;  <span class="comment">//注意这里有一个return</span></span><br><span class="line">        &#125;</span><br><span class="line">       </span><br><span class="line">        <span class="keyword">if</span> (root-&gt;left) &#123;</span><br><span class="line">            dfs(root-&gt;left, sum);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (root-&gt;right) &#123;</span><br><span class="line">            dfs(root-&gt;right, sum);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        path.pop_back();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">findPath</span><span class="params">(TreeNode* root, <span class="keyword">int</span> sum)</span> </span>&#123;</span><br><span class="line">        dfs(root, sum);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/inorderSuccessor.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/inorderSuccessor.html" class="post-title-link" itemprop="url">二叉树遍历系列-中序遍历序列的下一个节点</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-04 11:42:03" itemprop="dateCreated datePublished" datetime="2021-01-04T11:42:03+08:00">2021-01-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 23:28:33" itemprop="dateModified" datetime="2022-03-01T23:28:33+08:00">2022-03-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87Offer/" itemprop="url" rel="index"><span itemprop="name">剑指Offer</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/inorderSuccessor.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/inorderSuccessor.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="中序遍历序列的下一个节点-题目描述"><a href="#中序遍历序列的下一个节点-题目描述" class="headerlink" title="中序遍历序列的下一个节点-题目描述"></a>中序遍历序列的下一个节点-题目描述</h2><p>给定一棵二叉树的其中一个节点，请找出中序遍历序列的下一个节点。</p>
+<p>注意：</p>
+<p>如果给定的节点是中序遍历序列的最后一个，则返回空节点;<br>二叉树一定不为空，且给定的节点一定不是空节点；<br>样例<br>假定二叉树是：[2, 1, 3, null, null, null, null]， 给出的是值等于2的节点。</p>
+<p>则应返回值等于3的节点。</p>
+<p>解释：该二叉树的结构如下，2的后继节点是3。<br>  2<br> / \<br>1   3</p>
+<h2 id="中序遍历序列的下一个节点-总体思路"><a href="#中序遍历序列的下一个节点-总体思路" class="headerlink" title="中序遍历序列的下一个节点-总体思路"></a>中序遍历序列的下一个节点-总体思路</h2><p>需要我们明确中序遍历的定义</p>
+<p>模拟题</p>
+<p>其实模拟题就是分情况讨论。</p>
+<h2 id="中序遍历序列的下一个节点-代码实现"><a href="#中序遍历序列的下一个节点-代码实现" class="headerlink" title="中序遍历序列的下一个节点-代码实现"></a>中序遍历序列的下一个节点-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode *father;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL), father(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">TreeNode* <span class="title">inorderSuccessor</span><span class="params">(TreeNode* p)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//如果有右孩子，则一直遍历找到其左左左..</span></span><br><span class="line">        <span class="keyword">if</span> (p-&gt;right) &#123;</span><br><span class="line">            p = p-&gt;right;</span><br><span class="line">            <span class="keyword">while</span> (p-&gt;left) p = p-&gt;left;</span><br><span class="line">            <span class="keyword">return</span> p;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//判断他自己是左孩子，还是右孩子。</span></span><br><span class="line">        <span class="comment">//如果是左孩子，则直接访问其父亲</span></span><br><span class="line">        <span class="comment">//如果是右孩子，则一直访问，直到不是右孩子。</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span> (p-&gt;father &amp;&amp; p-&gt;father-&gt;left != p) p = p-&gt;father;</span><br><span class="line">        <span class="keyword">return</span> p-&gt;father;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/printFromTopToBottom.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/printFromTopToBottom.html" class="post-title-link" itemprop="url">二叉树遍历系列-从上往下打印出二叉树的每个结点</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-04 11:42:03" itemprop="dateCreated datePublished" datetime="2021-01-04T11:42:03+08:00">2021-01-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-01 22:17:48" itemprop="dateModified" datetime="2022-11-01T22:17:48+08:00">2022-11-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/printFromTopToBottom.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/printFromTopToBottom.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="从上往下打印出二叉树，同层从左到右-题目描述"><a href="#从上往下打印出二叉树，同层从左到右-题目描述" class="headerlink" title="从上往下打印出二叉树，同层从左到右-题目描述"></a>从上往下打印出二叉树，同层从左到右-题目描述</h2><p>从上往下打印出二叉树的每个结点，同一层的结点按照从左到右的顺序打印。</p>
+<p>样例<br>输入如下图所示二叉树[8, 12, 2, null, null, 6, null, 4, null, null, null]<br>    8<br>   / \<br>  12  2<br>     /<br>    6<br>   /<br>  4</p>
+<p>输出：[8, 12, 2, 6, 4]</p>
+<h2 id="从上往下打印出二叉树，同层从左到右-总体思路"><a href="#从上往下打印出二叉树，同层从左到右-总体思路" class="headerlink" title="从上往下打印出二叉树，同层从左到右-总体思路"></a>从上往下打印出二叉树，同层从左到右-总体思路</h2><p>借助queue来实现层次遍历</p>
+<h2 id="从上往下打印出二叉树，同层从左到右-代码实现"><a href="#从上往下打印出二叉树，同层从左到右-代码实现" class="headerlink" title="从上往下打印出二叉树，同层从左到右-代码实现"></a>从上往下打印出二叉树，同层从左到右-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">printFromTopToBottom</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">         <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line">        <span class="built_in">queue</span>&lt;TreeNode*&gt; q;</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">if</span> (!root) <span class="keyword">return</span> res;</span><br><span class="line">        </span><br><span class="line">        q.push(root);</span><br><span class="line">        <span class="keyword">while</span> (!q.empty()) &#123;</span><br><span class="line">            <span class="keyword">auto</span> r = q.front();</span><br><span class="line">            q.pop();</span><br><span class="line">            res.push_back(r-&gt;val);</span><br><span class="line">            <span class="keyword">if</span> (r-&gt;left) q.push(r-&gt;left);</span><br><span class="line">            <span class="keyword">if</span> (r-&gt;right) q.push(r-&gt;right); </span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="从上往下打印出二叉树，同层从左到右，分行打印-题目描述"><a href="#从上往下打印出二叉树，同层从左到右，分行打印-题目描述" class="headerlink" title="从上往下打印出二叉树，同层从左到右，分行打印-题目描述"></a>从上往下打印出二叉树，同层从左到右，分行打印-题目描述</h2><p>从上到下按层打印二叉树，同一层的结点按从左到右的顺序打印，每一层打印到一行。</p>
+<p>样例<br>输入如下图所示二叉树[8, 12, 2, null, null, 6, null, 4, null, null, null]<br>    8<br>   / \<br>  12  2<br>     /<br>    6<br>   /<br>  4</p>
+<p>输出：[[8], [12, 2], [6], [4]]</p>
+<h2 id="从上往下打印出二叉树，同层从左到右，分行打印-总体思路"><a href="#从上往下打印出二叉树，同层从左到右，分行打印-总体思路" class="headerlink" title="从上往下打印出二叉树，同层从左到右，分行打印-总体思路"></a>从上往下打印出二叉树，同层从左到右，分行打印-总体思路</h2><p>相对上题，难点在于如何识别分行，一般而言我们有以下几种办法：</p>
+<p>（1）使用nullptr作为分隔符，每次遇到nullptr进行分行处理，并压入新的nullptr。nullptr是当前层的终止符。</p>
+<p>（2）借助size, 每次遍历size个元素，size为上一次压入的元素个数。通过size来代表该层有多少元素。</p>
+<h2 id="从上往下打印出二叉树，同层从左到右，分行打印-代码实现"><a href="#从上往下打印出二叉树，同层从左到右，分行打印-代码实现" class="headerlink" title="从上往下打印出二叉树，同层从左到右，分行打印-代码实现"></a>从上往下打印出二叉树，同层从左到右，分行打印-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">printFromTopToBottom</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">        <span class="built_in">queue</span>&lt;TreeNode*&gt; q;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (!root) <span class="keyword">return</span> res;</span><br><span class="line">        </span><br><span class="line">        q.push(root);</span><br><span class="line">        q.push(<span class="literal">nullptr</span>);</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; level;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span> (q.size()) &#123;</span><br><span class="line">            <span class="keyword">auto</span> t = q.front();</span><br><span class="line">            q.pop();</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> (!t) &#123;</span><br><span class="line">                <span class="keyword">if</span> (level.empty()) <span class="keyword">break</span>;</span><br><span class="line">                res.push_back(level);</span><br><span class="line">                level.clear();</span><br><span class="line">                q.push(<span class="literal">nullptr</span>);</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            level.push_back(t-&gt;val);</span><br><span class="line">            <span class="keyword">if</span> (t-&gt;left) q.push(t-&gt;left);</span><br><span class="line">            <span class="keyword">if</span> (t-&gt;right) q.push(t-&gt;right);</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">     <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">printFromTopToBottom2</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; level;</span><br><span class="line">        <span class="built_in">queue</span>&lt;TreeNode*&gt; q;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (!root) <span class="keyword">return</span> res;</span><br><span class="line">        q.push(root);</span><br><span class="line">        <span class="keyword">while</span> (q.size()) &#123;</span><br><span class="line">            <span class="keyword">int</span> qs = q.size();  <span class="comment">//必须赋值到局部变量</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; qs; ++i) &#123;</span><br><span class="line">                <span class="keyword">auto</span> t = q.front();</span><br><span class="line">                q.pop();</span><br><span class="line">                level.push_back(t-&gt;val);</span><br><span class="line">                <span class="keyword">if</span> (t-&gt;left) q.push(t-&gt;left);</span><br><span class="line">                <span class="keyword">if</span> (t-&gt;right) q.push(t-&gt;right);</span><br><span class="line">            &#125;</span><br><span class="line">            res.push_back(level);</span><br><span class="line">            level.clear();   </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="从上往下打印出二叉树，同层从左到右，之字形打印-题目描述"><a href="#从上往下打印出二叉树，同层从左到右，之字形打印-题目描述" class="headerlink" title="从上往下打印出二叉树，同层从左到右，之字形打印-题目描述"></a>从上往下打印出二叉树，同层从左到右，之字形打印-题目描述</h2><p>请实现一个函数按照之字形顺序从上向下打印二叉树。</p>
+<p>即第一行按照从左到右的顺序打印，第二层按照从右到左的顺序打印，第三行再按照从左到右的顺序打印，其他行以此类推。</p>
+<p>样例<br>输入如下图所示二叉树[8, 12, 2, null, null, 6, 4, null, null, null, null]<br>    8<br>   / \<br>  12  2<br>     / \<br>    6   4<br>输出：[[8], [2, 12], [6, 4]]</p>
+<h2 id="从上往下打印出二叉树，同层从左到右，之字形打印-总体思路"><a href="#从上往下打印出二叉树，同层从左到右，之字形打印-总体思路" class="headerlink" title="从上往下打印出二叉树，同层从左到右，之字形打印-总体思路"></a>从上往下打印出二叉树，同层从左到右，之字形打印-总体思路</h2><p>基于上题，在res加入元素之前，判定res是否奇数，如果是奇数的话，就reverse一下子level数组</p>
+<h2 id="从上往下打印出二叉树，同层从左到右，之字形打印-代码实现"><a href="#从上往下打印出二叉树，同层从左到右，之字形打印-代码实现" class="headerlink" title="从上往下打印出二叉树，同层从左到右，之字形打印-代码实现"></a>从上往下打印出二叉树，同层从左到右，之字形打印-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">printFromTopToBottom</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">        <span class="built_in">queue</span>&lt;TreeNode*&gt; q;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (!root) <span class="keyword">return</span> res;</span><br><span class="line">        </span><br><span class="line">        q.push(root);</span><br><span class="line">        q.push(<span class="literal">nullptr</span>);</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; level;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">bool</span> flag = <span class="literal">false</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span> (q.size()) &#123;</span><br><span class="line">            <span class="keyword">auto</span> t = q.front();</span><br><span class="line">            q.pop();</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> (!t) &#123;</span><br><span class="line">                <span class="keyword">if</span> (level.empty()) <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">if</span> (flag) reverse(level.begin(), level.end());</span><br><span class="line">                res.push_back(level);</span><br><span class="line">                level.clear();</span><br><span class="line">                q.push(<span class="literal">nullptr</span>);</span><br><span class="line">                flag = !flag;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            level.push_back(t-&gt;val);</span><br><span class="line">            <span class="keyword">if</span> (t-&gt;left) q.push(t-&gt;left);</span><br><span class="line">            <span class="keyword">if</span> (t-&gt;right) q.push(t-&gt;right);</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">printFromTopToBottom2</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; level;</span><br><span class="line">        <span class="built_in">queue</span>&lt;TreeNode*&gt; q;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (!root) <span class="keyword">return</span> res;</span><br><span class="line">        q.push(root);</span><br><span class="line">        <span class="keyword">while</span> (q.size()) &#123;</span><br><span class="line">            <span class="keyword">int</span> qs = q.size();</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; qs; ++i) &#123;</span><br><span class="line">                <span class="keyword">auto</span> t = q.front();</span><br><span class="line">                q.pop();</span><br><span class="line">                level.push_back(t-&gt;val);</span><br><span class="line">                <span class="keyword">if</span> (t-&gt;left) q.push(t-&gt;left);</span><br><span class="line">                <span class="keyword">if</span> (t-&gt;right) q.push(t-&gt;right);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (res.size() % <span class="number">2</span>) &#123;</span><br><span class="line">                reverse(level.begin(), level.end());</span><br><span class="line">            &#125;</span><br><span class="line">            res.push_back(level);</span><br><span class="line">            level.clear();   </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="垂直打印二叉树"><a href="#垂直打印二叉树" class="headerlink" title="垂直打印二叉树"></a>垂直打印二叉树</h2><p>解答思路：</p>
+<ol>
+<li>依旧是通过层次打印</li>
+<li>放入队列的不仅是tree node， 还需要放入当前的横向坐标</li>
+<li>root坐标为0， 左节点减1， 右节点加1</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="built_in">std</span>::<span class="built_in">pair</span>&lt;<span class="keyword">int</span>, TreeNode*&gt; PIT;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="title">printV</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        unsorted_map&lt;<span class="keyword">int</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp;&gt; m;</span><br><span class="line">        <span class="built_in">queue</span>&lt;PIT&gt; q;</span><br><span class="line"></span><br><span class="line">        q.push_back(<span class="built_in">make_pair</span>(<span class="number">0</span>, root));</span><br><span class="line">        <span class="keyword">while</span> (!q.empty()) &#123;</span><br><span class="line">            <span class="keyword">int</span> n = q.size();</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">                PIT p = q.top(); q.pop();</span><br><span class="line">                m[p.first].push_back(p.second.val);</span><br><span class="line">                <span class="keyword">if</span> (p.second-&gt;left)</span><br><span class="line">                    q.push_back(<span class="built_in">make_pair</span>(p.first - <span class="number">1</span>, p.second-&gt;left));</span><br><span class="line">                <span class="keyword">if</span> (p.second-&gt;right)</span><br><span class="line">                    q.push_back(<span class="built_in">make_pair</span>(p.first - <span class="number">1</span>, p.second-&gt;right));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/tree2list.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/tree2list.html" class="post-title-link" itemprop="url">二叉树遍历系列-二叉搜索树转有序双向链表</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-04 11:42:03" itemprop="dateCreated datePublished" datetime="2021-01-04T11:42:03+08:00">2021-01-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-02 20:24:36" itemprop="dateModified" datetime="2022-03-02T20:24:36+08:00">2022-03-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87Offer/" itemprop="url" rel="index"><span itemprop="name">剑指Offer</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/tree2list.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/tree2list.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="二叉搜索树转有序双向链表-题目描述"><a href="#二叉搜索树转有序双向链表-题目描述" class="headerlink" title="二叉搜索树转有序双向链表-题目描述"></a>二叉搜索树转有序双向链表-题目描述</h2><p>输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。</p>
+<p>要求不能创建任何新的结点，只能调整树中结点指针的指向。</p>
+<p>注意：</p>
+<p>需要返回双向链表最左侧的节点。<br>例如，输入下图中左边的二叉搜索树，则输出右边的排序双向链表。</p>
+<h2 id="二叉搜索树转有序双向链表-总体思路"><a href="#二叉搜索树转有序双向链表-总体思路" class="headerlink" title="二叉搜索树转有序双向链表-总体思路"></a>二叉搜索树转有序双向链表-总体思路</h2><p>两种思路：</p>
+<p>第一种思路，dfs的主要任务是返回子树对应链表的头尾节点；按照这种思路的话，我们的遍历方式是后序遍历。</p>
+<p>第二种思路，dfs的主要任务就是按照顺序访问到每一个node，同时记录一个全局的pre，然后将pre与node建立双向关联即可。</p>
+<h2 id="二叉搜索树转有序双向链表-代码实现"><a href="#二叉搜索树转有序双向链表-代码实现" class="headerlink" title="二叉搜索树转有序双向链表-代码实现"></a>二叉搜索树转有序双向链表-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">pair&lt;Node*, Node*&gt; dfs(Node* root) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!(root-&gt;left) &amp;&amp; !(root-&gt;right)) &#123;</span><br><span class="line">        root-&gt;left = root;</span><br><span class="line">        root-&gt;right = root;</span><br><span class="line">        <span class="keyword">return</span> &#123;root, root&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//访问左边</span></span><br><span class="line">    <span class="built_in">pair</span>&lt;Node*, Node*&gt;  left = &#123;root, root&#125;;</span><br><span class="line">    <span class="keyword">if</span> (root-&gt;left) &#123;</span><br><span class="line">        left = dfs(root-&gt;left);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//访问右边</span></span><br><span class="line">    <span class="built_in">pair</span>&lt;Node*, Node*&gt;  right = &#123;root, root&#125;;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (root-&gt;right) &#123;</span><br><span class="line">        right = dfs(root-&gt;right);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//访问中间节点</span></span><br><span class="line">    <span class="keyword">if</span> (left.first != root) &#123;</span><br><span class="line">        left.second-&gt;right = root;</span><br><span class="line">        root-&gt;left = left.second;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (right.first != root) &#123;</span><br><span class="line">        root-&gt;right = right.first;</span><br><span class="line">        right.first-&gt;left = root;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">return</span> &#123;left.first, right.second&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span>  <span class="title">dfs</span><span class="params">(Node* root)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (!root) <span class="keyword">return</span>;</span><br><span class="line">       </span><br><span class="line">       <span class="comment">//访问左边</span></span><br><span class="line">       dfs(root-&gt;left);</span><br><span class="line"></span><br><span class="line">       <span class="comment">//中序遍历</span></span><br><span class="line">       <span class="keyword">if</span> (!pre) &#123;</span><br><span class="line">           head = root;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">else</span> &#123;</span><br><span class="line">           pre-&gt;right = root;</span><br><span class="line">           root-&gt;left = pre;</span><br><span class="line">       &#125;</span><br><span class="line">       pre = root;</span><br><span class="line"></span><br><span class="line">       <span class="comment">//访问右边</span></span><br><span class="line">       dfs(root-&gt;right);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/verifySequenceOfBST.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/verifySequenceOfBST.html" class="post-title-link" itemprop="url">二叉树遍历系列-判断该数组是不是某二叉搜索树的后序遍历的结果</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-04 11:42:03" itemprop="dateCreated datePublished" datetime="2021-01-04T11:42:03+08:00">2021-01-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-03 19:40:16" itemprop="dateModified" datetime="2022-03-03T19:40:16+08:00">2022-03-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87Offer/" itemprop="url" rel="index"><span itemprop="name">剑指Offer</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/verifySequenceOfBST.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/verifySequenceOfBST.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="判断该数组是不是某二叉搜索树的后序遍历的结果-题目描述"><a href="#判断该数组是不是某二叉搜索树的后序遍历的结果-题目描述" class="headerlink" title="判断该数组是不是某二叉搜索树的后序遍历的结果-题目描述"></a>判断该数组是不是某二叉搜索树的后序遍历的结果-题目描述</h2><p>输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。</p>
+<p>如果是则返回true，否则返回false。</p>
+<p>假设输入的数组的任意两个数字都互不相同。</p>
+<p>样例<br>输入：[4, 8, 6, 12, 16, 14, 10]</p>
+<p>输出：true</p>
+<h2 id="判断该数组是不是某二叉搜索树的后序遍历的结果-总体思路"><a href="#判断该数组是不是某二叉搜索树的后序遍历的结果-总体思路" class="headerlink" title="判断该数组是不是某二叉搜索树的后序遍历的结果-总体思路"></a>判断该数组是不是某二叉搜索树的后序遍历的结果-总体思路</h2><p>分为几步：<br>（1）根据后序遍历序列的定义，最右边的元素是中间节点X，并且左子树的元素均小于X，右子树的元素均大于X<br>（2）顺序扫描，找到左右子树的分割点Y(分割点左边都小于X)<br>（3）从分割点Y继续扫描，确认是否有bad case，有的话，直接返回不合法<br>（4）递归处理左右两部分</p>
+<h2 id="判断该数组是不是某二叉搜索树的后序遍历的结果-代码实现"><a href="#判断该数组是不是某二叉搜索树的后序遍历的结果-代码实现" class="headerlink" title="判断该数组是不是某二叉搜索树的后序遍历的结果-代码实现"></a>判断该数组是不是某二叉搜索树的后序遍历的结果-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; s;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> r)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (l &gt;= r) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//找到分界点</span></span><br><span class="line">        <span class="keyword">int</span> k = l;</span><br><span class="line">        <span class="keyword">while</span> (k &lt; r &amp;&amp; s[k] &lt; s[r]) k++;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//确认分界点之后的元素是否都足够大</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = k; i&lt; r; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (s[i] &lt; s[r]) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//递归处理</span></span><br><span class="line">        <span class="keyword">return</span> dfs(l, k - <span class="number">1</span>) &amp;&amp; dfs(k, r - <span class="number">1</span>);</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">verifySequenceOfBST</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; sequence)</span> </span>&#123;</span><br><span class="line">        s = sequence;</span><br><span class="line">        <span class="keyword">if</span> (s.empty()) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">return</span> dfs(<span class="number">0</span>, s.size() - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/skills/string_reverse.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -627,593 +1247,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/treeDepth.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/treeDepth.html" class="post-title-link" itemprop="url">二叉树遍历系列-获取树的深度</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-03 23:00:03" itemprop="dateCreated datePublished" datetime="2021-01-03T23:00:03+08:00">2021-01-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-03 19:40:16" itemprop="dateModified" datetime="2022-03-03T19:40:16+08:00">2022-03-03</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87Offer/" itemprop="url" rel="index"><span itemprop="name">剑指Offer</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/treeDepth.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/treeDepth.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>输入一棵二叉树的根结点，求该树的深度。</p>
-<p>从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。</p>
-<p>样例<br>输入：二叉树[8, 12, 2, null, null, 6, 4, null, null, null, null]如下图所示：<br>    8<br>   / \<br>  12  2<br>     / \<br>    6   4</p>
-<p>输出：3</p>
-<h2 id="实现思路"><a href="#实现思路" class="headerlink" title="实现思路"></a>实现思路</h2><p>第一，我们要搞清楚几个概念：树的深度、一个节点的深度与高度。</p>
-<p>第二，我们需要知道：深度是从上往下的，我们需要前序遍历。</p>
-<p>第三，我们需要知道：高度是从下往上的，我们需要后序遍历。</p>
-<p>最后，根节点比较特殊，树的深度，等于根节点的高度，也就是root到所有leaf的最长路径。</p>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">dfs</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!root) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span> + max(dfs(root-&gt;right), dfs(root-&gt;left));</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">treeDepth</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> dfs(root);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/bit/bit_add.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/bit/bit_add.html" class="post-title-link" itemprop="url">位运算系列-不使用四则运算符的加法</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-03 20:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T20:47:03+08:00">2021-01-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-09 20:45:28" itemprop="dateModified" datetime="2022-11-09T20:45:28+08:00">2022-11-09</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/bit/bit_add.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/bit/bit_add.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>写一个函数，求两个整数之和，要求在函数体内不得使用＋、－、×、÷ 四则运算符号。</p>
-<p>样例<br>输入：num1 = 1 , num2 = 2</p>
-<p>输出：3</p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>经验知识1：位运算的特点之一是在<strong>二进制表示下不进位</strong>，参与位运算的各个bit之间是独立无关的。</p>
-<p>经验知识2: XOR又称作无进位加法</p>
-<p>经验知识3: 计算机便是通过XOR，与操作，移位操作来实现加法的，具体的做法可以见下面的代码。</p>
-<p>相信如果你有上面三块知识储备，想出该题目的解法是没有问题的。</p>
-<p>这里多说一句，为什么别人可以想出正确的解法，而我们不可以。原因有两个：</p>
-<p>第一，别人知道某块知识，而我们不知道。</p>
-<p>第二，（需要使用到的知识我们是知道的）别人能够通过发散思维，或者启发式思考调取需要用到的知识储备，而我们却不行。</p>
-<p>针对以上两点，我们的解法是：</p>
-<p>第一，学习更多的知识、经验、技巧，有更多的知识储备。</p>
-<p>第二，不仅仅要学习知识、经验、技巧，还要去尝试着去做深度、广度的思考。深度的话，我们多问几个为什么，去剖析本质，找到他们的第一性原理。广度的话，我们要去做类比，要去做关联，了解两块知识的区别与联系。</p>
-<p>第三，去做更多的刻意练习：多刷题，多解题，多推理证明，保证自己思维的严密性。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> num1, <span class="keyword">int</span> num2)</span></span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (num2) &#123;</span><br><span class="line">            <span class="comment">/*</span></span><br><span class="line"><span class="comment">            经过XOR操作后，1/0,0/1,0/0都已经符合预期了，只是1/1？ 本来应该成为10，却变成了0？</span></span><br><span class="line"><span class="comment">            我们怎样才能找回丢失的进位呢？ 只有&amp;操作才能将两个1变为1，也许是我们好的选择？</span></span><br><span class="line"><span class="comment">            实际上，这就是计算机执行加法的底层原理。</span></span><br><span class="line"><span class="comment">            */</span></span><br><span class="line">            <span class="keyword">int</span> sum = num1 ^ num2;</span><br><span class="line">            <span class="keyword">int</span> carry = (num1 &amp; num2) &lt;&lt; <span class="number">1</span>;</span><br><span class="line">            num1 = sum;</span><br><span class="line">            num2 = carry;</span><br><span class="line">            <span class="comment">//用计算出来的结果重新赋值，有点辗转相除法的感觉。</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> num1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">sub</span><span class="params">(<span class="keyword">int</span> num1, <span class="keyword">int</span> num2)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//a - b = a + (-b)</span></span><br><span class="line">        <span class="keyword">return</span> add(num1, add(~num2, <span class="number">1</span>)))</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> mul(<span class="keyword">int</span> a, <span class="keyword">int</span> b) &#123;</span><br><span class="line">        <span class="comment">//最笨的方法是for循环--b次； 有没有更好的办法呢？ </span></span><br><span class="line">        <span class="comment">//都转为正数先</span></span><br><span class="line">        <span class="keyword">int</span> a1 = a &gt;= <span class="number">0</span> ? a : add(~a, <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">int</span> b1 = b &gt;= <span class="number">0</span> ? b : add(~b, <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">//整个过程跟手动乘法类似</span></span><br><span class="line">        <span class="keyword">while</span> (b1) &#123;</span><br><span class="line">            <span class="keyword">if</span> (b1 &amp; <span class="number">0x01</span>) &#123;</span><br><span class="line">                sum = add(sum, a1);</span><br><span class="line">            &#125;</span><br><span class="line">            a1 &lt;&lt;= <span class="number">1</span>;</span><br><span class="line">            b1 &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//异号，相反数</span></span><br><span class="line">        <span class="keyword">if</span> (a ^ b &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            sum = add(-sum, <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">div</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span>&amp; reminder)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> r = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">//都转为正数先</span></span><br><span class="line">        <span class="keyword">int</span> a1 = a &gt;= <span class="number">0</span> ? a : add(~a, <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">int</span> b1 = b &gt;= <span class="number">0</span> ? b : add(~b, <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">31</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">            <span class="keyword">if</span> ((a1 &gt;&gt; i) &gt;= b1) &#123; <span class="comment">// a &gt;= (b &lt;&lt; i)</span></span><br><span class="line">                r = add(r, <span class="number">1</span> &lt;&lt; i);</span><br><span class="line">                a1 = sub(a1, b1 &lt;&lt; i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">         <span class="comment">//异号，相反数</span></span><br><span class="line">        <span class="keyword">if</span> (a ^ b &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            r = add(~r, <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        reminder = a1;</span><br><span class="line">        <span class="keyword">return</span> r;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/misc/special_acc.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/misc/special_acc.html" class="post-title-link" itemprop="url">奇技淫巧-特殊的累加</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-03 20:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T20:47:03+08:00">2021-01-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-02-26 21:39:49" itemprop="dateModified" datetime="2022-02-26T21:39:49+08:00">2022-02-26</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/misc/special_acc.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/misc/special_acc.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>求1+2+…+n,要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C）。</p>
-<p>样例<br>输入：10</p>
-<p>输出：55</p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p><strong>常用技巧</strong>： 通过!n来判定n是否等于0</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">int</span> <span class="params">(*handler)</span><span class="params">(<span class="keyword">int</span>)</span></span>;</span><br><span class="line">handler fn[<span class="number">2</span>]; </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    handler myfn= fn[!!n];</span><br><span class="line">    <span class="keyword">return</span> myfn(n);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dfs_base</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dfs_normal</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> n + dfs(n - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getSum</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        fn[<span class="number">0</span>] = dfs_base;</span><br><span class="line">        fn[<span class="number">1</span>] = dfs_normal;</span><br><span class="line">        <span class="keyword">return</span> dfs(n);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/find_min_in_rotated_array.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/find_min_in_rotated_array.html" class="post-title-link" itemprop="url">二分系列-旋转数组找最值</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-03 20:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T20:47:03+08:00">2021-01-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-03 19:40:16" itemprop="dateModified" datetime="2022-03-03T19:40:16+08:00">2022-03-03</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/find_min_in_rotated_array.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/find_min_in_rotated_array.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。</p>
-<p>输入一个升序的数组的一个旋转，输出旋转数组的最小元素。</p>
-<p>例如数组{3,4,5,1,2}为{1,2,3,4,5}的一个旋转，该数组的最小值为1。</p>
-<p>数组可能包含重复项。</p>
-<p>注意：数组内所含元素非负，若数组大小为0，请返回-1。</p>
-<p>样例<br>输入：nums=[2,2,2,0,1]</p>
-<p>输出：0</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">findMin</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (nums.empty()) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">int</span> n = nums.size() - <span class="number">1</span>;</span><br><span class="line">        <span class="comment">//特判</span></span><br><span class="line">        <span class="keyword">while</span> (nums[<span class="number">0</span>] == nums[n]) &#123;n--;&#125;</span><br><span class="line">        <span class="comment">//特判</span></span><br><span class="line">        <span class="keyword">if</span> (nums[<span class="number">0</span>] &lt;= nums[n]) &#123;</span><br><span class="line">            <span class="keyword">return</span> nums[<span class="number">0</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//二分模版</span></span><br><span class="line">        <span class="keyword">int</span> l = <span class="number">0</span>, r = n;</span><br><span class="line">        <span class="keyword">while</span> (l &lt; r) &#123;</span><br><span class="line">            <span class="keyword">int</span> mid = l + r &gt;&gt; <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (nums[<span class="number">0</span>] &gt; nums[mid]) r = mid;</span><br><span class="line">            <span class="keyword">else</span>  l = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> nums[r];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/getNumberOfK.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/getNumberOfK.html" class="post-title-link" itemprop="url">二分系列-数字在排序数组中出现的次数</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-03 20:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T20:47:03+08:00">2021-01-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:46:42" itemprop="dateModified" datetime="2022-03-01T22:46:42+08:00">2022-03-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/getNumberOfK.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/getNumberOfK.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>统计一个数字在排序数组中出现的次数。<br>例如输入排序数组[1, 2, 3, 3, 3, 3, 4, 5]和数字3，由于3在这个数组中出现了4次，因此输出4。</p>
-<p>样例<br>输入：[1, 2, 3, 3, 3, 3, 4, 5] ,  3</p>
-<p>输出：4</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getNumberOfK</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums , <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (nums.empty())  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> l = <span class="number">0</span>, r = nums.size() - <span class="number">1</span>;</span><br><span class="line">    <span class="comment">// 左边界</span></span><br><span class="line">    <span class="keyword">while</span> (l &lt; r) &#123;</span><br><span class="line">        <span class="keyword">int</span> mid = l + r &gt;&gt; <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (nums[mid] &lt; k) &#123;</span><br><span class="line">            l = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            r = mid;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (nums[r] != k) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> left = r;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 右边界</span></span><br><span class="line">    l = <span class="number">0</span>, r = nums.size() - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (l &lt; r) &#123;</span><br><span class="line">        <span class="keyword">int</span> mid = l + r  + <span class="number">1</span> &gt;&gt; <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (nums[mid] &gt; k) &#123;</span><br><span class="line">            r = mid - <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            l = mid;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> r - left + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/getNumberSameAsIndex.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/getNumberSameAsIndex.html" class="post-title-link" itemprop="url">二分系列-找数值等于下标的元素</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-03 20:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T20:47:03+08:00">2021-01-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:46:45" itemprop="dateModified" datetime="2022-03-01T22:46:45+08:00">2022-03-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/getNumberSameAsIndex.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/getNumberSameAsIndex.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>假设一个单调递增的数组里的每个元素都是整数并且是唯一的。</p>
-<p>请编程实现一个函数找出数组中任意一个数值等于其下标的元素。</p>
-<p>例如，在数组[-3, -1, 1, 3, 5]中，数字3和它的下标相等。</p>
-<p>样例<br>输入：[-3, -1, 1, 3, 5]</p>
-<p>输出：3<br>注意:如果不存在，则返回-1。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getNumberSameAsIndex</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> l = <span class="number">0</span>, r = nums.size();</span><br><span class="line">        <span class="keyword">while</span> (l &lt; r) &#123;</span><br><span class="line">            <span class="keyword">int</span> mid = l + r &gt;&gt; <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (nums[mid] &gt;= mid) &#123;</span><br><span class="line">                r = mid;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123; <span class="comment">//[mid + 1, r] 都不可能满足满足；因为递增</span></span><br><span class="line">                l = mid + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (nums[r] != r) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> r;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1286,7 +1319,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">333</span>
+          <span class="site-state-item-count">339</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1299,7 +1332,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-count">61</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

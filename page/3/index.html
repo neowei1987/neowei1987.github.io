@@ -203,6 +203,827 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/thread_model/thread_pool.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/thread_model/thread_pool.html" class="post-title-link" itemprop="url">高性能服务器系列-线程池</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-11-01 22:17:47" itemprop="dateCreated datePublished" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/thread_model/thread_pool.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/thread_model/thread_pool.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="核心参数"><a href="#核心参数" class="headerlink" title="核心参数"></a>核心参数</h3><p>1、corePoolSize:线程池中的常驻核心线程数</p>
+<p>2、maximumPoolSize：线程池能容纳同时执行的最大线程数，此值必须&gt;=1</p>
+<p>3、keepAliveTime：多余的空闲线程的存活时间</p>
+<p>当前线程池数量超过corePoolSize时，当空闲的时间达到keepAliveTime值时，多余的空闲线程会被直接销毁直到只剩下corePoolSize个线程为止</p>
+<p>4、timeUtile：keepAliveTime的单位</p>
+<p>5、workQueue:任务队列，被提交但未被执行的任务</p>
+<p>6、threadFactory：表示生成线程池中工作线程的线程工厂，用于创建线程一般用默认的即可。</p>
+<p>7、handler：拒绝策略，表示当队列满了并且工作线程大于等于线程池的最大线程数</p>
+<h3 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h3><p>线程池内部是通过队列+线程实现的，当我们利⽤线程池执⾏任务时：</p>
+<ol>
+<li>如果此时线程池中的线程数量⼩于corePoolSize，即使线程池中的线程都处于空闲状态，也要创建<br>新的线程来处理被添加的任务。</li>
+<li>如果此时线程池中的线程数量等于corePoolSize，但是缓冲队列workQueue未满，那么任务被放⼊<br>缓冲队列。</li>
+<li>如果此时线程池中的线程数量⼤于等于corePoolSize，缓冲队列workQueue满，并且线程池中的数<br>量⼩于maximumPoolSize，建新的线程来处理被添加的任务。</li>
+<li>如果此时线程池中的线程数量⼤于corePoolSize，缓冲队列workQueue满，并且线程池中的数量等<br>于maximumPoolSize，那么通过 handler所指定的策略来处理此任务。</li>
+<li>当线程池中的线程数量⼤于 corePoolSize时，如果某线程空闲时间超过keepAliveTime，线程将被<br>终⽌。这样，线程池可以动态的调整池中的线程数</li>
+</ol>
+<h3 id="合理线程数"><a href="#合理线程数" class="headerlink" title="合理线程数"></a>合理线程数</h3><p>CPU密集型：CPU核数+1个线程的线程池</p>
+<p>IO密集型：a)CPU核数*2；b)CPU核数/(1-阻塞系数)。（阻塞系数：0.8～0.9）</p>
+<h3 id="拒绝策略"><a href="#拒绝策略" class="headerlink" title="拒绝策略"></a>拒绝策略</h3><p>第一种拒绝策略是 AbortPolicy，这种拒绝策略在拒绝任务时，会直接抛出异常 RejectedExecutionException （属于RuntimeException），让你感知到任务被拒绝了，于是你便可以根据业务逻辑选择重试或者放弃提交等策略。</p>
+<p>第二种拒绝策略是 DiscardPolicy，这种拒绝策略正如它的名字所描述的一样，当新任务被提交后直接被丢弃掉，也不会给你任何的通知，相对而言存在一定的风险，因为我们提交的时候根本不知道这个任务会被丢弃，可能造成数据丢失。</p>
+<p>第三种拒绝策略是 DiscardOldestPolicy，如果线程池没被关闭且没有能力执行，则会丢弃任务队列中的头结点，通常是存活时间最长的任务，这种策略与第二种不同之处在于它丢弃的不是最新提交的，而是队列中存活时间最长的，这样就可以腾出空间给新提交的任务，但同理它也存在一定的数据丢失风险。</p>
+<p>第四种拒绝策略是 CallerRunsPolicy，相对而言它就比较完善了，当有新任务提交后，如果线程池没被关闭且没有能力执行，则把这个任务交于提交任务的线程执行，也就是谁提交任务，谁就负责执行任务。这样做主要有两点好处。</p>
+<p>第一点新提交的任务不会被丢弃，这样也就不会造成业务损失。<br>第二点好处是，由于谁提交任务谁就要负责执行任务，这样提交任务的线程就得负责执行任务，而执行任务又是比较耗时的，在这段期间，提交任务的线程被占用，也就不会再提交新的任务，减缓了任务提交的速度，相当于是一个负反馈。在此期间，线程池中的线程也可以充分利用这段时间来执行掉一部分任务，腾出一定的空间，相当于是给了线程池一定的缓冲期。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/core/growth/user_growth.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/core/growth/user_growth.html" class="post-title-link" itemprop="url">用户增长</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-10-29 09:49:36" itemprop="dateCreated datePublished" datetime="2022-10-29T09:49:36+08:00">2022-10-29</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/core/growth/user_growth.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/core/growth/user_growth.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>用户增长的前提是你的产品是<strong>满足需求</strong>的，且与<strong>市场是匹配</strong>的（用户来了之后才能够留得住），但到达用户存在阻碍。</p>
+<p>所以用户增长的主要工作就是：要减少阻碍，降低交易成本（比如认知成本、信任成本、分享成本等等）。</p>
+<p>开始前，先问问自己 7 个与增长相关的基础问题，带着问题思考更高效。</p>
+<p>（1）XX公司的商业模式是什么？</p>
+<p>（2）XX公司所在的社会环境是什么？</p>
+<p>（3）XX公司处在企业生命周期的什么阶段？</p>
+<p>（4）XX公司的增长战略、增长策略、增长战术是什么？</p>
+<p>（5）XX公司的用户是谁？</p>
+<p>（6）XX公司当前是怎么做用户增长？</p>
+<p>（7）XX公司的北极星指标是什么？</p>
+<p>（因为）不同商业模式、不同阶段，则有不同的增长侧重。所以谈用户增长不能不谈<strong>商业模式</strong>、<strong>社会大环境</strong>、<strong>企业生命周期</strong>。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/timer/time_wheel.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/timer/time_wheel.html" class="post-title-link" itemprop="url">定时器系列｜时间轮</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-10-29 09:49:36" itemprop="dateCreated datePublished" datetime="2022-10-29T09:49:36+08:00">2022-10-29</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/timer/time_wheel.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/timer/time_wheel.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>时间轮</p>
+<p>逻辑形式：时间轮</p>
+<p>实际结构：链表数组</p>
+<p>实现原理：</p>
+<p>最小轮子走一圈，它的上层轮子走一格。</p>
+<p>假设图中每层轮子为20个格子，第一层轮子最小时间间隔为1ms，第二层为20ms，第三层为400ms，此时添加5ms后执行的任务，此时应该添加到第一层的第5格子中。</p>
+<p>如果此时添加445ms后执行的任务，则第一层表示的时间跨度不够，第二层表示的时间跨度也不够，第三层表示的时间跨度足够，该任务应该放到第三层轮子第二格子中，该轮子指针指到第二格子中时，计算离任务启动时间还有多长时间，慢慢将该任务移动到底层轮子上，最终任务到期执行。</p>
+<p>HashedWheelTimer时间轮是一个高性能，低消耗的数据结构，它适合用非准实时，延迟的短平快任务，例如心跳检测。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TimeWheel</span> &#123;</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">push</span><span class="params">()</span> </span>&#123;</span><br><span class="line">         <span class="comment">//利用当前时间与currentTs，计算目标offset。</span></span><br><span class="line">         <span class="comment">//把事件插入到offset对应的ticks链表中</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//利用当前时间与currentTs，计算目标offset。</span></span><br><span class="line">        <span class="comment">//确认需要往前移动多少格</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//把过期事件，trigger掉；</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//然后移动currIdx与currentTs;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">background_thread</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//每秒钟一次运行，exTicks中1s中后就要运行的item移动到ticks[(currentIdx - 1) % N]。</span></span><br><span class="line">        <span class="comment">//此处考虑并发</span></span><br><span class="line">        <span class="comment">//对currentIdx的读访问要考虑并发，可以考虑用原子变量</span></span><br><span class="line">        <span class="comment">//对链表的访问可以用互斥锁（理论上：并不是有实际冲突，因为这个tick还有接近1分钟才会被访问到。）</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">map</span>&lt;ts, Item&gt; exTicks; <span class="comment">//超过1分钟的事件；</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;List&gt; ticks;  <span class="comment">//假设60个格子，只能承载最近60s的事件。</span></span><br><span class="line">    currentIdx;</span><br><span class="line">    currentTs;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/longest_palindrome.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/longest_palindrome.html" class="post-title-link" itemprop="url">动态规划系列-最长回文子序列</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-10-28 11:34:03" itemprop="dateCreated datePublished" datetime="2022-10-28T11:34:03+08:00">2022-10-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-19 11:46:25" itemprop="dateModified" datetime="2022-11-19T11:46:25+08:00">2022-11-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/longest_palindrome.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/longest_palindrome.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>设dp[i][j]为从i到j的字符串，回文子序列的最大长度</p>
+<p>IF d[i] == d[j];<br>    dp[i][j] = dp[i + 1][j - 1] + 2<br>ELSE<br>    dp[i][j] = max(dp[i + 1][j], dp[i][j - 1])</p>
+<p>如何遍历，通过图示法可以得知，首先沿着对角线，然后斜向上。</p>
+<p>!(图示)[<a target="_blank" rel="noopener external nofollow noreferrer" href="https://pic3.zhimg.com/80/v2-1988e6664d09383c479fc879dcc419fa_1440w.webp">https://pic3.zhimg.com/80/v2-1988e6664d09383c479fc879dcc419fa_1440w.webp</a>]   </p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/core/product/think_about_product.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/core/product/think_about_product.html" class="post-title-link" itemprop="url">一个非专业人士关于产品的思考</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-03-04 22:55:48 / Modified: 00:03:03" itemprop="dateCreated datePublished" datetime="2022-03-04T22:55:48+08:00">2022-03-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BA%A7%E5%93%81/" itemprop="url" rel="index"><span itemprop="name">产品</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/core/product/think_about_product.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/core/product/think_about_product.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>作为一个时不时需要跟产品同学打交道的非专业人士（一介码农），有必要掌握一些一些关于产品的入门知识。</p>
+<p>下面的这几个问题，我觉得是最基础的。本文就结合梁宁老师的《产品思维30讲》来尝试着回答一下。</p>
+<ol>
+<li>产品的本质是什么？</li>
+<li>做产品的通用方法论是什么？</li>
+<li>如何才能做出爆品？</li>
+<li>产品创新有啥通用方法论吗？</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/core/product/think_about_product.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/core/product/liangning_chanpinsiwei30.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/core/product/liangning_chanpinsiwei30.html" class="post-title-link" itemprop="url">产品思维30讲摘要</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-03-04 22:55:48" itemprop="dateCreated datePublished" datetime="2022-03-04T22:55:48+08:00">2022-03-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-23 00:11:03" itemprop="dateModified" datetime="2021-04-23T00:11:03+08:00">2021-04-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BA%A7%E5%93%81/" itemprop="url" rel="index"><span itemprop="name">产品</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/core/product/liangning_chanpinsiwei30.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/core/product/liangning_chanpinsiwei30.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>作为一个时不时需要跟产品同学打交道的非专业人士（一介码农），有必要掌握一些一些关于产品的入门知识。</p>
+<p>下面的这几个问题，我觉得是最基础的。本文就结合梁宁老师的《产品思维30讲》来尝试着回答一下。</p>
+<ol>
+<li>产品的本质是什么？</li>
+<li>做产品的通用方法论是什么？</li>
+<li>如何才能做出爆品？</li>
+<li>产品创新有啥通用方法论吗？</li>
+</ol>
+<hr>
+<p>第一个问题，产品的本质是什么？</p>
+<p>我们首先考虑下你用过有哪些产品：<br>产品，有时候是一项服务，例如理发。<br>产品，有时候是一个实体，例如手机。<br>产品，有时候是一个网站，例如 www.baidu.com<br>产品，有时候是一个app，例如大众点评app</p>
+<p>等等，某一个能产生现金流的债权也有可能被证券化，打包成一款产品，供其他人来购买。</p>
+<p>让我们看一下百度百科上产品的定义：</p>
+<blockquote>
+<p>产品是指作为商品提供给市场，被人们使用和消费，并能满足人们某种需求的任何东西，包括有形的物品、无形的服务、组织、观念或它们的组合。</p>
+</blockquote>
+<p>从上面的定义可以看出，关于产品最重要的一点就是：它需要能够满足用户的某种需求。</p>
+<p>用户需要被满足的需求有很多。例如，我老婆在购物时发现有一个商品一下买两个的话价格会便宜50%，可是呢？两个她又用不了。这时候，他就产生了一个需求：“如果有一个人跟我一起买就好了！”</p>
+<p>还有一点，好多时候用户在出现某一款产品来满足他的“需求“之前根本就没有需求。Jobs就说过，用户根本不知道自己想要什么。例如，在汽车出来之前，人们出行都是靠马车的。那个时候，用户能够说出自己的真正需求吗？</p>
+<p>说这么多，回答刚才的问题。产品的本质是什么？ 在我看来，产品就是用来满足用户需求的东西。这句话的重点不是主语，而是定语。好的产品与坏的产品的差别就在于：</p>
+<ol>
+<li>相比坏产品，好的产品更好的满足用户的需求。用户用起来更爽，更顺手。</li>
+<li>相比坏产品，好的产品满足了用户真正的需求。好的产品，直击要害。</li>
+</ol>
+<p>所以，做好一款产品，最重要的是就是<strong>围绕着用户去思考，我可以解决哪些用户的哪些需求，给这些使用我产品的用户带来什么价值</strong>。</p>
+<p>用一个公式来表示： 产品价值 = 细分用户 * 用户需求</p>
+<p>为什么要细分用户呢？ 因为不同的用户有不同的需求，而一个产品不可能满足所有用户的需求。</p>
+<hr>
+<p>如何准确洞察用户的需求？</p>
+<p>了解人有哪些</p>
+<p>产品能力，就是这样训练一个人：<br>判断信息，抓住要点，整合有限的资源，把自己的价值打包成一个产品向世界交付，并且获得收获。</p>
+<p><img src="http://cdn.b5mang.com/2021219103712.png" alt="产品思维"></p>
+<p>微观视角<br>同理心 人性 心理学</p>
+<p><img src="http://cdn.b5mang.com/2021219103743.png" alt="同理心"></p>
+<p>用户体验，对人或者产品做一个体检：</p>
+<p>任何产品的5个层次，从表到里：</p>
+<p>【表层】感知层（让人直接感知到的外在）</p>
+<p>【表层】角色框架层（集体赋予你的人格，通过教育习得，角色化）</p>
+<p>资源结构层（一个人的财富、人脉、甚至精神资源，也就是一个人的历程）</p>
+<p>【内核】能力圈（扩充能力圈，极其痛苦）</p>
+<p>【内核】存在感（正是由于存在感不能被满足，才会去扩大自己的能力圈</p>
+<p>现在，我们再把一个人从外而内的五层再拎一遍：</p>
+<p>最外层是感知层，是你看到的一个人的样子，他的相貌、举止、着装。</p>
+<p>其实当你看到这个人的时候，你要知道有一部分是天生的，有一部分其实是角色化的产物。<br>在感知层之内的第二层是角色框架层。</p>
+<p>在角色框架层的再往里的第三层是资源结构层，资源不只是大家一般都会认为的人脉和财产，还包括了一个人的精神结构和他的精神资源。</p>
+<p>在这个资源结构层再往后的一层就是能力圈，在能力圈的里面就是这个人对自己存在感的感知。<br>所以，如果你明确知道自己想成为一个什么样的存在，你就会不断地改变自己的能力圈，改变自己的资源，然后甚至改变自己外在的样子。</p>
+<hr>
+<p>学会读懂用户的情绪<br>    用户不会分层次的表达自己的体验，只会表达自己的情绪。</p>
+<p>四种最基本的<strong>生物性情绪</strong><br>    愉悦、不爽、愤怒、恐惧</p>
+<p>满足</p>
+<p>愉悦，就是自己的个层面的需求被满足</p>
+<p>一个蹦了很久侧需求，突然被满足，就叫爽</p>
+<p>上瘾：（微小的愉悦感 + 突然被满足的爽感）= 确定性的满足</p>
+<p>不爽：就是不满足</p>
+<p>做产品：就是通过产品建立你与人之间的关系，通过产品来服务人，本质就是用户是否通过你的服务得到了满足。</p>
+<p>这就是上帝给你初始化的操作系统的密码，你不厌其烦的地方，就是你的天分所在。</p>
+<p>满足是度量产品、人与人关系的度量</p>
+<p>被侵犯，因为侵入者的体量不同，而出现不同的情绪：愤怒、恐惧</p>
+<p>愤怒：就是感觉到自己的边界被侵犯<br>恐惧：就是感觉到自己的边界被侵犯，而无可奈何</p>
+<p>愤怒，就是一种恐惧，一种对自己无能的恐惧；羞耻感也是一种恐惧，一种对社会评论的恐惧；忧郁也是一种恐惧，来自无法逃避的想象的恐惧，一种持续的恐惧，内化为忧郁。</p>
+<p>恐惧</p>
+<p>恐惧是边界，看到了一个人怕什么，就看到了他的边界。</p>
+<p>恐惧是动力，害怕失去现在的好生活，害怕给不了家人更好的生活，所以采取努力。</p>
+<p>恐惧是痛点，做产品，要么满足人们让他爽，要么帮他们抵御恐惧。例如化妆产品可以抵御对青春逝去的恐惧，罗辑思维可以抵御人们对认知焦虑的恐惧。</p>
+<hr>
+<p>因为人会基于自身所处的<strong>角色</strong>、所在的<strong>场景</strong>和个人的<strong>认知</strong>判断，<strong>选择性</strong>地说一些他觉得正确的话。</p>
+<p>优秀的销售人员（打破防御）与 优秀的产品经理（根本不让用户启动防御）</p>
+<p>基于意识清醒的交流，达成交易的唯一方式：“让对方感觉占了便宜” —-打破防御</p>
+<p>而好的产品经理，在于不让用户启动防御，顺应用户的潜意识。意识即防御。</p>
+<hr>
+<p>潜意识：1）童年  2）催眠（本质就是绕过防御）-重复（手段）/集体人格</p>
+<p>集体人格 / 角色</p>
+<p>集体，一堆角色，集体人格</p>
+<p>集体人格的形成，角色化行为，就是一个人被教育的过程：</p>
+<p>确定目标：给人们树立什么的观念<br>建立恐惧的边界（明确角色不可以做什么，如果违反了，就惩罚）<br>放入清晰的标的（明确角色只能做什么）<br>给予红利，然后让他产生路径依赖<br>不断重复</p>
+<p>为什么通过教育让人形成集体人格呢？ 为了便于管理。所以，教育是违反人性的。</p>
+<p>教育是按照人类对社会的美好期望来教育你，换句话来讲教育是理想化的</p>
+<p>有经验的将军其实能够通过训练与管理，让一个集体的<strong>集体人格短时间压倒个体的脆弱</strong>。老大一声喊，大家就冲上去了，但是这是不得已才会发生的情况。</p>
+<hr>
+<p>自然（自发，符合人性） 与 应该（被教育，反人性）</p>
+<p>人们只有在压力非常大的情况下，才会去扮演角色。除非你给他的压力非常到位，否则就不要对他做角色化预期。</p>
+<p>角色化生存，角色化生存就是我们真实的生存处境。产品经理应该去角色化得认识、沟通、交互，才能得到真正的感情。</p>
+<hr>
+<p>自律 VS 自我，哪一个更贴近产品精神。</p>
+<p>做产品经理的人善于感知，在已有的结论上建立新观点。而做其他管理的人更善于逻辑推理和总结归纳。</p>
+<p>自律：靠恐惧驱动、规则边界，控制力是自律的延伸</p>
+<p>被认为算“左脑思维”的人：<br>逻辑推理能力强、时间观念强，同时感受力差<br>因为感受力差，所以没那么敏感和情绪化，整个人体现为情绪稳定，甚至刻板；<br>更容易根据规则调适自己，更自律，更容易角色化。</p>
+<p>自我：靠愉悦驱动，创造力是自我的延伸。</p>
+<p>感受力强；<br>能在别人已经有结论的地方，建立自己的新观察，并且不太喜欢听已有的逻辑；<br>难以控制自己的情绪，能激情地表达自己，具有人格魅力。</p>
+<p>看到自己的愉悦和恐惧，看清自己的天分，看到别人的愉悦和恐惧，了解他们的潜意识与集体人格，不要触发他们的防御。</p>
+<hr>
+<p>中观视角 日常产品工作视角</p>
+<p>机会判断（一套底层思维，三个具体方法）发现机会</p>
+<p><img src="http://cdn.b5mang.com/2021219103816.png" alt="机会判断"></p>
+<p>机会判断</p>
+<p>点线面体思考框架</p>
+<p>穷人-点的努力<br>中产-至少要获得一次线性周期的收益<br>富人-借助面和体的崛起（国家、经济体、经济周期、产业、行业、领域）</p>
+<p>做一个产品的时候，入手只能是一个点；但是：<br>这个点，是附着在哪个面（你在哪个公司上班）上？这个面是在和谁竞争，他能如何展开？<br>这个面，是附着在那个经济体上？这个经济体是在崛起还是在沉没？</p>
+<p>1.描述一下，你现在的职业是什么样的一个点？<br>2.你所在的公司或者业务肯定是需要串联很多点的一条线，那你的这个点是在公司这条线的什么位置上？<br>3.这个公司附着在什么样的一个面上，谁在给你或你的公司赋能？这个面又是附着在哪个经济体上？<br>就好像在地球仪上，找到自己的位置点一样，请你用点线面体的框架，尝试标一下自己的位置。</p>
+<hr>
+<p>孙子兵法：</p>
+<p>胜与不胜在于彼，败与不败在于己。（《孙子兵法》的全篇核心就是这个概念，意思就是说：我能不能赢了你，其实我做不了主，这是你的问题；但是我会不会输，会不会打光所有的牌，会不会下桌走人，那是我自己的问题。）</p>
+<p>求之于势，不责于人。（一个人要做成一件事情，其本质上不在于你有多强，而是你要顺势而为，于万仞之上推千钧之石）</p>
+<p>作为领导者，要自己去寻找有势能的<strong>面</strong>，而不能寄希望于员工的点。反过来你要想，大家把自己最好的“点“都给了你。在一个时间周期之后，你会回报给大家什么样的线性收益呢？</p>
+<p>离开你情绪的点，去看线的方向，去预测这条线的周期，并且明确自己在周期的哪个位置，是哪个面再给你赋能。</p>
+<p>你在一条正弦曲线的哪个位置？ 这个曲线是往下的还是向上的？</p>
+<p>人生的选择远比努力更重要。<br>你的个人努力，只是在点、线、面、体的既定框架内，作为一个点的挣扎而已。</p>
+<hr>
+<p>从点开始：痛点、爽点、痒点都是产品机会</p>
+<p>表象之下：</p>
+<p>为什么？因为自我实现其实是一条漫长而痛苦的路。人的本性是懒惰的。你看到一个人展现出了勤奋、规整、自律，其实这是被一系列的恐惧（痛点）、集体人格、潜意识压迫，才会呈现出那个样子。</p>
+<p>痛点：就是恐惧，打中人的恐惧</p>
+<p>爽点：就是即时满足，用户有什么需求，你能够即时满足他</p>
+<p>痒点：就是满足虚拟自我，要满足用户想象中的自己。例如，网红产品的流行。</p>
+<hr>
+<p>用户：两套经典的用户画像（其实两套用户画像系统）</p>
+<p>第一套：羊群与草地</p>
+<p>草地：你提供的产品，我们提供的草地，一定要让“第一只羊”爽，能够满足他们；</p>
+<p>第一只羊（关键角色）：你的首批用户，羊死了，或者羊在草地上玩的不爽</p>
+<p>你找到了这个用户，他可以在你这里得到即时满足玩得很开心，那么针对这只羊，针对这个用户的同类用户去做推广，你的产品就可以被快速地推开。</p>
+<p>头羊（关键角色）：核心用户，自组织，具备网络效应；头羊的数量决定了你的网络效应有多大。</p>
+<p>当你要评估一个产品或者一家公司的网络效应有多大时，一个非常简单的评估方式就是数一数它有多少头羊（比如说论坛的版主、Y公会的老大、微博的大V、重度用户、淘宝的店主，这些都是头羊。）</p>
+<p>狼：变现用户</p>
+<p>基本上所有玩互联网网络效应的、玩社区都是这一套用户画像。</p>
+<p>例子：摄影网站的版主、BBS天涯的版主、百度贴吧的版主、淘宝的买家</p>
+<p>第二套：大明、笨笨、小闲</p>
+<ul>
+<li>大明：对自己的需求非常明确、非常清晰（寻求的是价格、或者硬货；）</li>
+</ul>
+<p>大明用户需要的是搜索，因为他们对自动主动要找的东西是非常明确的。</p>
+<p>最早的互联网电商：找到自己想要的，然后比价格。京东的成功，源于强大的体量，对供应链的挤压能力越来越强，能够越来越好的服务好大明用户。</p>
+<p>用户特点：需求清晰明了（价格、帮我搞定事情）、没有忠诚度</p>
+<ul>
+<li>笨笨：我有大概的需求，但是没那么明确。</li>
+</ul>
+<p>女人买裙子，小红书，逛。</p>
+<p>笨笨变大明：逛到要买的东西后，开始追求最便宜的。但是，如果笨笨决定了要买什么产品，那么下一秒有70%-80%的概率，笨笨就会变成大明，然后开始去追求价格。</p>
+<p>一个经典场景是我在豆瓣东西上找买东西的灵感，接着到淘宝上去找最便宜的一件购买。</p>
+<ul>
+<li>小闲：我没有消费需求，我就是来打发时间的</li>
+</ul>
+<p>百度、京东服务小明，淘宝服务笨笨，那么腾讯就是服务小闲的。</p>
+<p>QQ、微信朋友圈、游戏、看视频</p>
+<p>腾讯用户往游戏、视频的转换率会很高，但是往电商转化却很低，源于场景不对。</p>
+<hr>
+<p>两套画像的关系 + 痛点、痒点、爽点</p>
+<p>不管是小明、笨笨还是小闲，他们都是羊；你想服务哪种羊，就要按照三种不同的羊的需求，来管理你的草地，来制作你的产品。<br>具体到 痛点、痒点、爽点，你得让三种羊按照他们的心理预期，来吃一口你的草，如果吃得开心就再也不离开了。具体就是：解决了他的痛点、让他开心让他爽了。</p>
+<p>狼：<br>腾讯像用户收费，剪羊毛<br>京东、淘宝向商家收费</p>
+<hr>
+<p>场景-设计产品时要包括产品的场景</p>
+<p>什么是场景</p>
+<p>场：一个场就是时间加空间，用户必须在这个空间里停留和消费（不停留，不是场景）<br>景：情景和互动。</p>
+<p>当用户停留在这个空间的时间里，要有情景和互动让用户的情绪出发，并且裹挟用户的意见，这就是场景</p>
+<p>新场景的出现，其实也是一个“体”，比如碎片时间就是一个新场景。</p>
+<p>罗辑思维：碎片时间（一个新的场景） + 认知焦虑（用户痛点）</p>
+<p>场景的核心就是在时间加空间的点上触发别人的情绪。</p>
+<p>人的理智和意识都是把人往回拉的，而所有的情绪都是推动人的行动的。所以人会做某一个动作，会往前走，是被情绪所推动的。</p>
+<p>只有能触发用户情绪的场景才是真正的流量入口。</p>
+<p>互联网商业其实就三个核心词：产品、流量、转化率，也就是产品的比拼、流量的争夺、转化率的优化。这就是互联网竞争的全部。</p>
+<hr>
+<p>当你规划一个产品时，要问自己七个问题：<br>（1）我的产品解决了什么问题？是痛点、痒点还是爽点？<br>（2）我是在为谁解决这个问题？他得到即时满足了嘛？这是用户画像的问题<br>（3）有多少人需要解决这个问题？这个是市场规模的问题<br>（4）目前人们是如何解决这个问题的？这个是竞争分析的问题<br>（5）我的竞争方案为什么能够在市场竞争中胜出？你不要简单的看单点的竞争力，而是要看点线面体，谁给你赋能<br>（6）用户会在怎样的场景触发情绪？需要马上去解决问题，这是场景问题。<br>（7）当用户遇到问题的时候，他会想到哪个名字？</p>
+<hr>
+<p>系统能力（四个步骤，打造个人、公司核心能力）</p>
+<p><img src="http://cdn.b5mang.com/2021219103838.png" alt="系统能力"></p>
+<p>用系统能力给人提供确定性</p>
+<h4 id="系统能力的定义"><a href="#系统能力的定义" class="headerlink" title="系统能力的定义"></a>系统能力的定义</h4><p>我们看到的所有结果，都是系统能力的产物。你可以回到《机会判断：点线面体的战略选择》一课里，思考为什么一个“点”没那么重要？因为任何一个“点”都附着在一条“线”上，每一个“点”其实都是一条“线”的截面。</p>
+<p>这也是为什么结婚教练建议以结婚为目的的相亲，第<br>一次见面正常平淡即可，没有必要专门地表现自己，因为<strong>每个人的自然呈现都是系统能力的结果</strong>。</p>
+<p>比如一个人好的身材，其实是长期自律的结果；一个人得体而有美感的着装，其实是长期的审美陶冶的产物；一个人的神情和谈吐，其实是学识和性情的产物。所以一个人很自然地展现的一切，是层层叠加、长期积累的系统能力的产物。</p>
+<p>当你说你要做一个产品，你需要的是建设一套系统能力。</p>
+<p>就好像你想拥有好的身材，就必须得有控制饮食和保持运动的系统能力一样。</p>
+<p>整体流程和确定性</p>
+<h5 id="产品视角-VS-服务视角"><a href="#产品视角-VS-服务视角" class="headerlink" title="产品视角 VS 服务视角"></a>产品视角 VS 服务视角</h5><p>以用户得到一个洞为目的去提供服务，而不是想着把要做一个打孔机，卖给卖出去，这就是产品与服务的区别。</p>
+<p>如果总谈产品，容易以产品经理为中心，想着通过一款产品去改变世界。但</p>
+<p>是如果出发点是服务，就会以用户获得和用户满足为中心来设计。</p>
+<p>这两种方式的目的和实现途径完全不一样。</p>
+<p>产品：ATM<br>服务：取现金<br>系统能力（确定性）：验证ID后，问你需要多少钱，然后吐钱给你。</p>
+<h5 id="确定性的重要性"><a href="#确定性的重要性" class="headerlink" title="确定性的重要性"></a>确定性的重要性</h5><p>人们生来惧怕不确定性，所以当我们提供了某种确定性，其实就是解决了用户的某一个痛点。</p>
+<p>你现在急需用钱，可是ATM能不能取到钱是不确定的，你害怕吗？</p>
+<p>不确定性的东西是没有办法让你投入时间或者持续<strong>依赖</strong>的。</p>
+<p>围绕ATM系统能力的设计和建设，所做的一切都是为了确保确定性。<br>（当你提供核心服务时，也分流了系统的核心资源）</p>
+<h5 id="基于服务的产品思考流程"><a href="#基于服务的产品思考流程" class="headerlink" title="基于服务的产品思考流程"></a>基于服务的产品思考流程</h5><p>从存在感 到 能力圈层，再到资源层。<br>当你提供核心服务的时候，也分流了企业的核心资源。</p>
+<p>基于服务的本质，我们需要的几个流程：<br>（1）战略判断：战略部门需要做一个决策，为什么要提供这个服务？提供服务对于企业、对于用户的价值是什么？可能的价值点～<br>（2）运营部门要对每一台ATM有没有实现战略诉求来做价值评估（看看取款机有没有人用）<br>（3）运营不闷对每个点的战略价值做完数据分析和价值评估后，需要哪个点存在，我就要保证它的服务可用（确保它能够吐出钱）<br>（4）维护ATM还需要更多事情，比如硬件管理<br>（5）客服管理</p>
+<p>当你准备做一个产品时，基于系统能力，你需要考虑：</p>
+<p>（1）你的产品在“点线面体”的什么位置？<br>（2）你提供的是一个什么样子的确定性<br>（3）为了确保确定性的稳定提供，你需要的系统能力需要包括哪些环节？你有<strong>足够的资本和能力来支撑</strong>所有的环节吗？</p>
+<h4 id="系统效率"><a href="#系统效率" class="headerlink" title="系统效率"></a>系统效率</h4><p>产品是系统能力的产物；而企业则是效率分工的产物。</p>
+<p>做产品就是在建设一套系统能力，提供并保障确定性，而效率则是这个系统能力的一个核心指标。</p>
+<p>互联网思维最关键的两个点：一个是用户体验，一个是效率。小米的护城河：效率。 —-雷军</p>
+<p>效率就是快</p>
+<p>当你决定要做一个产品，准备搭建自己的系统能力时，你先问自己一句“我应该从哪个点来建立我<strong>系统性的效率优势</strong>？”因为没有效率优势，这个系统是一个没有竞争力的系统。</p>
+<p>小米：集中力量打造一款手机；小米之家（逆袭）；小米小店</p>
+<h4 id="迭代"><a href="#迭代" class="headerlink" title="迭代"></a>迭代</h4><p>迭代就是小步快跑，把最内核的部分先放出来，不断优化，小范围试错。</p>
+<p>版本规划能力，产品就是要直指人心！</p>
+<p>判断产品经理是否牛B，很重要的一条就在于判断他设计的产品第一个版本有多简单、直接、切中要害，能不能直指人心。</p>
+<p>不自信，才附加更多功能，寻找心理依靠。</p>
+<p>所以产品的核心功能点有效比什么都重要，基于核心功能附加的其他功能点没有那么重要，可以一步步来。</p>
+<p><strong>圈层</strong> （B站的二次元圈层）</p>
+<p><strong>圈层壁垒</strong>（B站的破圈之路）</p>
+<p>互联网核心用户 460w (很长时间，微信红包很长一段时间内活跃用户数）)</p>
+<p>微信红包 =》 春晚</p>
+<p>从400万用户到一亿用户，靠<strong>春节</strong>这样一个核心场景<br>的触发完成。支付宝积累一亿用户用了多久呢？大概是8年，而微信支付是一天。</p>
+<p>用户体验（五个具体方法，优化你的表达界面与产品体验）</p>
+<h4 id="关键任务-关系系统生死的任务"><a href="#关键任务-关系系统生死的任务" class="headerlink" title="关键任务-关系系统生死的任务"></a>关键任务-关系系统生死的任务</h4><p>带领大家找到关键任务，穿越生死的能力，就是领导力。</p>
+<p>普通员工：明确知晓有风险<br>项目经理：具备风险规避意识。<br>总监：有风控能力，有风险规避意识，明知有长线风险。无法避过时，知道如何组织大家做好突发预案。<br>总经理，能操作有风险的执行—-非生即死，富贵险中求</p>
+<p>面对生死考验，依靠的不是管理能力，而是领导力。甄别<strong>关键任务</strong>，动员大家穿越生死。</p>
+<h4 id="系统能力"><a href="#系统能力" class="headerlink" title="系统能力"></a>系统能力</h4><p>所有的产品都是系统能力的结果；我们要做的不是一个产品，而是建设一种能力，然后为你的用户提供确定性。</p>
+<p>系统能力的效率优势、系统的迭代能力，都不是最后你呈现的产品表面能看得出来的，但是你的系统能力是你的产品能否存在的本质。</p>
+<p>只要你在创业，终有一天会面临跨越生死。那个时候，副总裁、总监通通都帮不了你。这时能够支撑你的，是你对<strong>关键任务的甄别</strong>，你<strong>内心的确认感</strong>和你<strong>真正的兄弟</strong>。</p>
+<hr>
+<h3 id="用户体验"><a href="#用户体验" class="headerlink" title="用户体验"></a>用户体验</h3><p><img src="http://cdn.b5mang.com/202121910397.png" alt="用户体验]"></p>
+<h4 id="用户体验的五个层次"><a href="#用户体验的五个层次" class="headerlink" title="用户体验的五个层次"></a>用户体验的五个层次</h4><p>情绪纠偏，认知纠偏，不再只从原生感受上来看问题。从用户的潜意识层面考虑，从用户的情绪出发，通过场景reach到用户的痛点、爽点、痒点。</p>
+<p>不仅要仅仅考虑用户，用户的需求可能随着时间带来的趋势发生变化甚至消失，所以我们要顺势而为，“于万仞之上推千钧之石”，预测趋势，顺应趋势，抓住趋势。</p>
+<p>【承上启下】厚积薄发，厚积在于建设系统能力，薄发在于提升用户体验。</p>
+<p>用户体验有哪5个层次：</p>
+<ul>
+<li>战略存在层</li>
+</ul>
+<p>明确的回答两个问题：</p>
+<ol>
+<li>我们要通过这个产品得到什么？（对于企业的价值）</li>
+<li>我们的用户要通过这个产品得到什么？他们为什么要依赖我们？ （对于用户的价值）</li>
+</ol>
+<ul>
+<li>能力圈范围层</li>
+</ul>
+<p>围绕着清晰的战略，我们需要明确回答：</p>
+<ol>
+<li>我们要做到哪些事情，具体要提供什么样子的确定性？</li>
+<li>我们不做那些事，对这些事坚决不碰。</li>
+</ol>
+<p>能力圈朝着战略的方向变化、拓展。</p>
+<ul>
+<li>资源结构层</li>
+</ul>
+<p>资源：毛泽东一句话定义了“资源”，就是“谁是我们的敌人，谁是我们的朋友”。</p>
+<p>建设资源与能力有关，更与战略有关。</p>
+<ul>
+<li>角色框架层</li>
+</ul>
+<p>用于网站是框架，用于用户是角色。</p>
+<p>例如你跟空姐或者银行职员对话，她的反馈方式即是角色框定的。</p>
+<ul>
+<li>感知层</li>
+</ul>
+<p>精美的网站、简洁、体验</p>
+<p>baidu 胜出 google，胜出在了资源层、能力圈层<br>google 胜出 yahoo，胜出在了框架层</p>
+<h4 id="用户体验地图"><a href="#用户体验地图" class="headerlink" title="用户体验地图"></a>用户体验地图</h4><p>用户体验地图就是通过画一张图，用一种讲故事的方式，从一个特定用户的角度出发，记录下他与产品或者服务进行接触、进入、互动的完整过程。</p>
+<p>如何画用户体验地图</p>
+<ol>
+<li>一个画像完整的人物角色（你对你的第一只羊，了解吗？）</li>
+<li>清晰的描述用户的目标和预期（他为什么来到你的草地上？他买打孔机，不是为了用户打孔机，而是为了在墙上打个洞；吃饭的目的在于什么？吃饱还是营造气氛？）</li>
+<li>服务触点（用户从接触你的服务，到实现他的目的，会跟你在产品上有哪些接触）</li>
+<li>用户使用路径（用户逛宜家是使用路径，而到盒子前拿免费资料是触点）</li>
+<li>用户情绪曲线（场景是要触发情绪的）</li>
+</ol>
+<p>一个好产品，是从一个好故事开始的。要讲好用户故事，而不要过分关注数据。</p>
+<h4 id="服务蓝图"><a href="#服务蓝图" class="headerlink" title="服务蓝图"></a>服务蓝图</h4><p>CEO核心工作：定义战略、建设能力圈<br>服务设计蓝图：解决资源结构和角色框架的问题</p>
+<p>用户体验地图，是以用户情绪为中心的，讲的是第一只羊如何才能玩得开心，具体在哪个点爽、哪个点不爽</p>
+<p>而服务蓝图，则是以服务流程为中心的。你提供的产品，不可能满足用户所有的预期。资源有限，控制成本</p>
+<p>服务蓝图到底要做什么：一眼，一条路、三个点</p>
+<p>一眼：产品要第一时间让用户“一眼”看到自己的目标<br>一条路：产品要有一个清晰的路径，让用户能够知道如何使用你的服务，用来达到或者接近自己的目标。服务崩溃点<br>三个点：峰值、终值、忍耐底线<br>成本控制是本分，但是不能挑战用户的忍耐底线<br>峰终定律：体验最高峰（正面、负面）以及结束时的体验，难以忘记。</p>
+<p><img src="http://cdn.b5mang.com/20213922230.png" alt="宜家的服务设计蓝图"></p>
+<p>设计服务蓝图的核心在于：让你在资源有限的情况下，配置你的资源，在关节点上安排角色，保证整体服务路径不崩溃，尽量不要压倒用户的忍耐底线。然后，尽量集中资源，打造体验的峰值，最后在做一个体验终值的美好小尾巴。</p>
+<h4 id="上瘾机制：用户激励系统"><a href="#上瘾机制：用户激励系统" class="headerlink" title="上瘾机制：用户激励系统"></a>上瘾机制：用户激励系统</h4><p>激励：完成预定动作，就能得到满足。</p>
+<p>不确定的爽点 与 确定的爽点，就是用户体验地图情绪曲线。</p>
+<p>游戏的动力，就是压力感突然被满足，压力释放的爽感、确定性的获得、激励的满足感和在一起，让一个人成瘾。</p>
+<p>确定就是依赖；不确定就是伤害；一个确定性的丧失，无论大小都是非常难受的。</p>
+<p>宏观视角<br>创新模式（五个创新模式，洞悉顶级公司的创新战略）</p>
+<p><img src="http://cdn.b5mang.com/2021219103928.png" alt="创新模式"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/layered_architecture.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -576,622 +1397,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/big_number.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/structures/big_number.html" class="post-title-link" itemprop="url">大数高精度加减乘除</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-03-01 21:10:03" itemprop="dateCreated datePublished" datetime="2022-03-01T21:10:03+08:00">2022-03-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-02 22:33:46" itemprop="dateModified" datetime="2022-03-02T22:33:46+08:00">2022-03-02</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/big_number.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/big_number.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>一般而言，通过倒序vector\<int\>来表示高精度大数；</p>
-<p>因为做运算时，通常需要从低位开始，所以一般vector需要进行逆转处理。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//高精度加法 —— 模板题 AcWing 791. 高精度加法</span></span><br><span class="line"><span class="comment">// C = A + B, A &gt;= 0, B &gt;= 0</span></span><br><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">add</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;A, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;B)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (A.size() &lt; B.size()) <span class="keyword">return</span> add(B, A);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; C;</span><br><span class="line">    <span class="keyword">int</span> t = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; A.size(); i ++ )</span><br><span class="line">    &#123;</span><br><span class="line">        t += A[i];</span><br><span class="line">        <span class="keyword">if</span> (i &lt; B.size()) t += B[i];</span><br><span class="line">        C.push_back(t % <span class="number">10</span>);</span><br><span class="line">        t /= <span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (t) C.push_back(t);</span><br><span class="line">    <span class="keyword">return</span> C;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//高精度减法 —— 模板题 AcWing 792. 高精度减法</span></span><br><span class="line"><span class="comment">// C = A - B, 满足A &gt;= B, A &gt;= 0, B &gt;= 0</span></span><br><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">sub</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;A, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;B)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; C;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, t = <span class="number">0</span>; i &lt; A.size(); i ++ )</span><br><span class="line">    &#123;</span><br><span class="line">        t = A[i] - t;</span><br><span class="line">        <span class="keyword">if</span> (i &lt; B.size()) t -= B[i];</span><br><span class="line">        C.push_back((t + <span class="number">10</span>) % <span class="number">10</span>);</span><br><span class="line">        <span class="keyword">if</span> (t &lt; <span class="number">0</span>) t = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span> t = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//清除后面的0（高位）</span></span><br><span class="line">    <span class="keyword">while</span> (C.size() &gt; <span class="number">1</span> &amp;&amp; C.back() == <span class="number">0</span>) C.pop_back();</span><br><span class="line">    <span class="keyword">return</span> C;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//高精度乘低精度 —— 模板题 AcWing 793. 高精度乘法</span></span><br><span class="line"><span class="comment">// C = A * b, A &gt;= 0, b &gt; 0</span></span><br><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">mul</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;A, <span class="keyword">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; C;</span><br><span class="line">    <span class="keyword">int</span> t = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; A.size() || t; i ++ )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (i &lt; A.size()) t += A[i] * b;</span><br><span class="line">        C.push_back(t % <span class="number">10</span>);</span><br><span class="line">        t /= <span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> C;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//高精度除以低精度 —— 模板题 AcWing 794. 高精度除法</span></span><br><span class="line"><span class="comment">// A / b = C ... r, A &gt;= 0, b &gt; 0</span></span><br><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">div</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;A, <span class="keyword">int</span> b, <span class="keyword">int</span> &amp;r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; C;</span><br><span class="line">    r = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = A.size() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i -- )</span><br><span class="line">    &#123;</span><br><span class="line">        r = r * <span class="number">10</span> + A[i];</span><br><span class="line">        C.push_back(r / b);</span><br><span class="line">        r %= b;</span><br><span class="line">    &#125;</span><br><span class="line">    reverse(C.begin(), C.end());</span><br><span class="line">    <span class="keyword">while</span> (C.size() &gt; <span class="number">1</span> &amp;&amp; C.back() == <span class="number">0</span>) C.pop_back();</span><br><span class="line">    <span class="keyword">return</span> C;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/problem/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/problem/index.html" class="post-title-link" itemprop="url">题目组织说明</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-03-01 20:36:25" itemprop="dateCreated datePublished" datetime="2022-03-01T20:36:25+08:00">2022-03-01</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/problem/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/problem/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>我们按照多个维度来组织我们的知识。</p>
-<p>第一个维度，知识的维度。</p>
-<p>通过知识维度，我们能够熟练掌握该类知识能够解决的经典问题，从而加深了对知识的理解。</p>
-<p>第二个维度，问题的维度。</p>
-<p>问题维度的话，我们尽量罗列该问题的多种解法（从一般算法到最优解法）；通过这种方式，我们体会算法&amp;数据结构的精妙的同时，不断加深对问题的理解。</p>
-<p>第三个维度，问题变种维度。</p>
-<p>有很多问题，可以衍生出很多的变种。对于这些问题，我们也会开一个专门的目录来对待。</p>
-<p>参考：</p>
-<p>按照pattern刷题 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.zhihu.com/question/36738189/answer/908664455">https://www.zhihu.com/question/36738189/answer/908664455</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.educative.io/courses/grokking-the-coding-interview?aff=K7qB">https://www.educative.io/courses/grokking-the-coding-interview?aff=K7qB</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/interview.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/interview.html" class="post-title-link" itemprop="url">面试技巧</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-03-01 16:34:03" itemprop="dateCreated datePublished" datetime="2022-03-01T16:34:03+08:00">2022-03-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-15 21:46:04" itemprop="dateModified" datetime="2022-11-15T21:46:04+08:00">2022-11-15</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/interview.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/interview.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="GM面试"><a href="#GM面试" class="headerlink" title="GM面试"></a>GM面试</h3><h4 id="此次面试的目的"><a href="#此次面试的目的" class="headerlink" title="此次面试的目的"></a>此次面试的目的</h4><p>总结一下GM比较关注的问题方向</p>
-<p>1）在这个岗位上可以发挥什么价值？<br>2）稳定性怎么样？<br>3）潜力、自驱思考力如何？</p>
-<h4 id="可能的一些问题"><a href="#可能的一些问题" class="headerlink" title="可能的一些问题"></a>可能的一些问题</h4><p>为什么选腾讯; 你的同事怎么形容你一个词;</p>
-<p>自我介绍，为何离职？当前和上一家公司介绍在当前公司过去一年最大成就;</p>
-<p>再问了一个比较详细的项目问题和你在项目里的职责以及贡献点，</p>
-<p>你是否了解面试的岗位（职位）？这个岗位做什么的？<br>你面试要做的这个产品解决了什么问题？<br>市面上已经有的产品面临什么问题？<br>为什么在职业生涯发展阶段中从C端产品转做了平台产品？<br>职业生涯规划如何？<br>你和职业生涯下一步的差距在哪里？<br>为什么最开始先去CSIG面试了？这两个岗位差距还不小，你如何理解的？</p>
-<p>为什么选择现在所在的行业（比如我在做物流）？<br>未来这个行业会怎么样？<br>你们公司现有的xxx业务如何做的？哪里做的不好？<br>如果你是公司的xxx业务负责人，你会怎么做？</p>
-<p>最后时间有限可以问gm一个问题？</p>
-<h4 id="如何回答"><a href="#如何回答" class="headerlink" title="如何回答"></a>如何回答</h4><ol>
-<li>分别拆解基于每个point会问我的问题</li>
-</ol>
-<p>1）为团队带来的价值：</p>
-<p>a. 这个岗位是做什么的？— 对照岗位介绍和之前面试官重点关注的方向做思考总结；<br>（1）项目架构设计工作 （2）借助研发流程、业务抽象，提升研发效率与质量 （3）理解业务特性，改善团队的分工协作效率</p>
-<p>b. 如果你来了你准备怎么做？（你可以为团队产出什么价值？）— 照着岗位介绍去思考哪里是团队的机会、我个人可以产出哪些边际价值；</p>
-<p>c. 对部门的理解？— 根据之前面试官问的问题，看了很多行业报告结合自己的思考，猜测了一下行业未来的机会。（这一部分说对说错也没所谓，反正想了总比没想好）</p>
-<p>d. 之前带团队做管理有什么心得？ — 首先要建立信任、坦诚沟通。为团队成员要做三件事：1. 给些导师指导 2. 帮忙争取资源 3. 主动承担责任</p>
-<p>角色认知：由工程师转向管理者<br>管理规划：职能（为什么存在，使命与职责）、目标、团队、选择<br>    你团队是干什么的？（职责是下限，使命是上限）<br>    你团队想做出什么成果？<br>    你依靠什么样的团队？<br>    你需要投入哪些资源？<br>团队建设：能力与意愿、分工与协作、梯队与文化<br>任务管理：事前轻重缓急；事中有效执行；事后流程<br>    目标清晰、责任明确、机制健全和沟通到位<br>管理沟通：目的、内容、通道、影响力</p>
-<p>2）稳定性怎么样？</p>
-<p>a. 期待在这份工作里收获什么？（职业生涯规划？）— 我个人是想成为某个行业的专家，并且有触类旁通迁移的能力。</p>
-<p>b. 为什么想离职？— 缺少指路人。</p>
-<p>c. 为什么之前突然从C端产品经理转做平台产品经理？ — 不是主动要求转岗，是当时公司缺平台产品，我加班做了这部分工作，做着做着就做成了平台产品经理。( ´▽｀)</p>
-<p>d. 之前为什么面试CSIG的岗位？跟你之前做的方向不太一致 — 想变成平台产品的行业专家，所以需要做比较复杂业务下的平台类产品，从这个角度将这两个岗位其实是一致的。</p>
-<p>e. CSIG为什么面了五面挂了？如何复盘的？</p>
-<p>— 我觉得挂掉有两个原因：1. CSIG的岗位90%的要求其实是满足的，但是有10%的不契合；2. 因为这10%的不契合而过分紧张，没发挥好，很多想过的问题都没有答到点上。</p>
-<p>— 自己复盘了一下，其实没必要对那10%不自信，只要稳定发挥基本上没问题的。</p>
-<p>3）潜力怎么样？思考的宽度和深度</p>
-<p>a. 为什么当时想来“货拉拉“？</p>
-<p>— 考虑到三个因素：1. 好赛道（来之前查了物流行业占全国总GDP的15%的样子）2. 好公司（势头很猛，从默默无闻到闷声赚钱）3. 好领导（当时是觉得leader能力非常棒才来尝试的，但是很快leader就撤了…）</p>
-<p>b. 你觉得这个行业会如何发展？</p>
-<p>— 发达国家的物流行业占全国总GDP大概在12%的样子，我国和发达高价还有3%的gap。基于这个gap猜测，后续物流行业的GDP会越来越低，信息化、智能化、供应链会做的越来越好。在这个行业背景下，越是有研发能力的公司越容易变成寡头，两极分化会更明显。</p>
-<p>作为技术管理者，我如何保持技术判断力</p>
-<p>建立技术学习机制。盘点你负责的业务，需要哪些方面的技术，成立一个或几个核心的技术小组，让团队对各个方向的技术保持敏感，要求小组定期做交流和分享，这样你就可以保持技术的敏感度。<br>专项技术调研项目化。如果某项技术对团队的业务有重要的价值，可以专门立项做技术调研，并要求项目负责人做调研汇报。<br>和技术大牛交流。越是厉害的技术人，越能深入浅出地把技术讲明白，所以针对某项技术找大牛取经，也是学习的好途径。你看，虽然实际操刀的时间少了，但是你和技术大牛的交流机会多了，一方面因为你有更大的影响力了，另一方面，你和大牛有了共同的诉求，就是把技术“变现”，让技术产生价值。<br>听取工作汇报。因为你带的是技术团队，大部分工作都和技术相关，在读员工的周报、季度汇报时，相互探讨，也是一种切磋和学习。</p>
-<p>引发新经理不自信的三个困境，我们就探讨完了，我把它们简要总结一下：</p>
-<p>第一，你可以通过梳理自己可迁移的能力，提升能力自信；</p>
-<p>第二，你可以通过把自己从团队成员的对立面抽离，提升角色自信；</p>
-<p>第三，你可以通过收集外部积极正向的反馈，提升自我认同。</p>
-<p>一面<br>第一轮是笔试，方式是邮箱发的牛客网上的链接，一共2个小时，3种题型：10个选择，2个填空，3个问答题，选择题涉及C++基础知识<br>如没有名字的类有哪些特点：有没有构造函数和析构函数，是不是编译错误；int**x的指针中(x[2]+4)[3]跟哪一个指的是同一块儿地址，<br>还有操作系统一个程序阻塞SIGUSER1和SIGCHILD消息，<br>当这个程序变为非阻塞时是否会收到这两个消息；<br>填空题第一题是给你一个main程序和foo()函数程序（分别在不同的.c中），问用gcc-o -main.c foo.c命令编译的C++程序，最终输出的a,b,c的值具体是多少（a,b,c分别在main函数和foo函数中定义并给出初始化）；<br>第二道是给出五个程序都是实现了用一个线程创建另外两个线程，问这五个里面是否有发生竞态；问答题有3道：<br>第一个是动态规划问题：如果用a=1,b=2,……z=26那么给出一个数字串如111，一共有多少种用字符替换的方式，如ak,ka和aaa三种，返回3；<br>第二道题是奇数阶魔方矩阵的填数，告诉你实现的算法文字描述，让你用代码实现，比较简单；<br>第三道是数组的封装（如数组的底层内存分配有mmap和堆空间创建等方式，因此有不同的数组实现方式，让提出方案把几种实现方式封装），让你写设计方案，感觉好像是写文字就行</p>
-<p>10道选择题，两道填空题以及三道问答题。<br>主要知识点偏 C 语言方向：<br>Q：1. fork函数相关的执行流程<br>0条回答<br>Q：2. 信号优先级以及阻塞机制（SIGHLD、SIGUSR1）<br>2条回答<br>Q：3. 给一个常见的需求场景，要求设计相关的方案，比如有多个底层实现的数组（mmap、malloc或自定义的实现）；要求提供给用户的接口是统一的，用户无需关心数组底层的实现即可直接使用。</p>
-<p>第一轮笔试：6选择题+2填空题+2编程题+1设计题。有防作弊选择题是牛客的中上水平，时间宽裕。填空题略难，需要演算。编程题不是OJ，估计需要看你代码风格，一道是easy数列题（前缀积），一道是数独题。设计题与循环队列相关。第二轮技术群面：是每个组的组长来面。询问以往经历的C++调优、海外经历等。考察了一道medium编程题、一道无锁队列题。可以和面试官沟通。第三轮HRBP：非常专业的HRBP，问题犀利，考察你做工作时的这么几个素质：抗压能力、钻研倾向、稳定倾向等等。如果遇到她感兴趣的会一直追问到你难以回答为止。谢天谢地过了。第四轮CTO终面：还没开始，后面回来写。</p>
-<p>一面 第一轮是笔试，方式是邮箱发的牛客网上的链接，一共2个小时，3种题型：10个选择，2个填空，3个问答题，选择题涉及C++基础知识如没有名字的类有哪些特点：有没有构造函数和析构函数，是不是编译错误；int**x的指针中(x[2]+4)[3]跟哪一个指的是同一块儿地址，还有操作系统一个程序阻塞SIGUSER1和SIGCHILD消息，当这个程序变为非阻塞时是否会收到这两个消息；填空题第一题是给你一个main程序和foo()函数程序（分别在不同的.c中），问用gcc-o -main.c foo.c命令编译的C++程序，最终输出的a,b,c的值具体是多少（a,b,c分别在main函数和foo函数中定义并给出初始化）；第二道是给出五个程序都是实现了用一个线程创建另外两个线程，问这五个里面是否有发生竞态；问答题有3道：第一个是动态规划问题：如果用a=1,b=2,……z=26那么给出一个数字串如111，一共有多少种用字符替换的方式，如ak,ka和aaa三种，返回3；第二道题是奇数阶魔方矩阵的填数，告诉你实现的算法文字描述，让你用代码实现，比较简单；第三道是数组的封装（如数组的底层内存分配有mmap和堆空间创建等方式，因此有不同的数组实现方式，让提出方案把几种实现方式封装），让你写设计方案，感觉好像是写文字就行</p>
-<p>1、简历问题，排名多少能拿奖学金，上过什么课等等2、c++有什么特点3、封装是什么意思，为什么要封装4、虚函数的底层实现5、成员的三种访问属性。子类能不能访问父类protected的成员6、聊项目，没展开很多，主管展开得多…7、epoll好在哪里，epoll_wait是阻塞还是非阻塞8、讲讲epoll的流程9、继承要满足什么条件？（组合和继承的关系）10、问学没学过操作系统，讲讲操作系统（有点尬不知道讲什么…）11、做题：逆波兰表达式求值 ，面试官共享屏幕看题目，然后共享自己的屏幕在本地IDE写。有个小bug没发现运行结果不太对，但面试官说bug不调了，他觉得是对的。</p>
-<p>时长大概2小时，基础原理 编程，数学为主， 概率题：买卖股票，蚂蚁怕树枝等模板题：template 判断某个类中是否包含某个变量，，编程题：难度还好</p>
-<p>10选择 2填空 3问答<br>主要是数学，c++ 和linux相关问题<br>主要考察信号、程序运行结果以及指针操作相关问题</p>
-<p>new()的内存分配过程<br>进程与线程<br>tcp和udp<br>epoll原理<br>项目介绍</p>
-<p>首先是笔试，笔试有两个小时时间会考察很多基础知识还有编程题。<br>要考察你的c++功底，比如c++的面向对象编程特点，还有一些数据库的知识，还有很多操作系统较为底层的知识，比如io多路复用等。<br>我笔试后好久没出结果了。</p>
-<p>、输入某一年，输出这一年每个月最后一个星期五是哪一天-，输出格式”2020-10-23”<br>2、多线程题目，有3个线程，每个线程都分别输出0，偶数，奇数，如何设计输出01020304….<br>3、算法题-动态规划题      假设你有M万元（M为整数，100</p>
-<p>题目整体偏难，考察C++深度比较深入。问了很多C++底层的知识，考察了宏，模板，等，io多路复用，算法题目感觉都是leetcode</p>
-<p>linux系统的相关问题，如调用的时延；<br>cache miss x86；<br>面试官问了人选一些项目上的问题及工作难点，及如何运用到量化交易的项目上</p>
-<p>涉及的面挺广的，操作系统，数据结构，概率等4个小时的答题时间，刚刚毕业的学霸做这些题目会比较有优势。</p>
-<p>五道单选， 计算机基础，unix基础<br>两道算法 数独 加 ip地址<br>量化交易公司的软件开发岗，时间一个小时 时间比较紧</p>
-<p>给你一根面条求围成圈圈的期望2老王已知有俩娃参加聚会的时候带来了一儿子求另一个为儿子的概率3leecode是求注水体积问题用单调栈解决и还有挺多数学题的不太记得了</p>
-<p>编写出求两正整数M,N之间的最大公因数的程序</p>
-<p>编写出求两正整数M,N之间的最大公因数的程序</p>
-<p>具体题目：<br>1.二叉树一层一层打印下来，然后再从左到右打印奇数，从右到左打印偶数。 2.找括号，经典栈的算法题<br>3.输入一个二维数组，输出这个二维数组的所有元素的和<br>4.写出一个判断参数是否符合要求的装饰器<br>其他的编程题目就是和交易直接相关的，处理一连串时间序列判断是不是交易日，处理交易数据计算收益率，还有编写一个模拟交易所撮合成交单子程序。都还比较简单，用pandas就能搞定，其中没有嵌入复杂的算法。</p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/weixin_42327556/article/details/101844256">https://blog.csdn.net/weixin_42327556/article/details/101844256</a></p>
-<p>新型股票交易策略，可以买卖任意手（可不买100的倍数手)，全天24小时任意交易。但规定，每一小时内只能交易一次，相邻T i T_{i}T<br>i<br>​<br> 和T i + 1 T_{i+1}T<br>i+1<br>​<br> 交易差的绝对值不超过1；第24时内的交易和1时的交易差的绝对值不超过1；考虑交易方向。成交净买入为零，即买入的手数=卖出的手数。问，每天最多可以交易多少次？（答：144次）<br>4个球分别为不同的颜色，每次随机取出两个，将第二个的颜色涂成第一个的颜色，问多少次才能将4个球涂成同一个颜色的期望？<br>蚂蚁的问题，有N只重量均为1的蚂蚁均匀分布在一根杆上，要么往左，要么往右走，速度相同，但是第1只往右走，第N只能往左走。狩猎规则：重量大吃重量小的；重量相等，往左走吃往右走的。（1）第N只存活的概率？（2）第K！=N只存活的概率？<br>二叉树怎么返回公共组节点？<br>做过最有成就感的项目，项目背景，课题理解的深度，如何克服困难？<br>期望题：回去看草稿纸。<br>————————————————<br>版权声明：本文为CSDN博主「Ya2020」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。<br>原文链接：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/weixin_46643879/article/details/114919063">https://blog.csdn.net/weixin_46643879/article/details/114919063</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://cloud.tencent.com/developer/article/1453534">https://cloud.tencent.com/developer/article/1453534</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://zhuanlan.zhihu.com/p/498681895">https://zhuanlan.zhihu.com/p/498681895</a></p>
-<p>reverse the sequence of all the words in a string.</p>
-<ol>
-<li>1M 7 digit phone numbers, 2MB spare memory, read each number only once and sort them.号码都不一样。</li>
-</ol>
-<p>1 How do you traverse a binary tree to get a sorted list?<br>2 How do you insert an item to a circular linked list? What is it complexity? How about inserting it in constant time?<br>3 given a special programming language. No for or while loop, but you are given function that can add an element in front of array, and a function for comparing two elements. Can you use this language to sort an array?<br>4 reverse the sequence of all the words in a string.<br>知乎@华尔街老兵</p>
-<p>文章首发于知乎号，华尔街老兵©2022</p>
-<p>转载请注明出处。</p>
-<p>一副4色扑克牌，共52张牌。现在排成一列，问有多少种排法使得没有两张相 同花色是 相邻的？</p>
-<p>Given two classes:</p>
-<p>class B { public:</p>
-<p>B(args_1); B(args_2); // and many constructors with different arg lists };</p>
-<p>class D : public B { public:</p>
-<p>D(args_1) : B(args_1) {} D(args_2) : B(args_2) {} // and many constructors with different signatures similarly implemented // some additional stuff speciﬁc to D };</p>
-<p>Assume that the arg list for B’s constructors are quite long and may be revised pretty often in the future, in which case D’s constructors have to be recoded correspondingly. Duplicating the update by copy-and-paste will certainly work here. Can you propose a better way so that the update can be done in one place without copy-and-paste duplication?</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/union_set/longest_consecutive.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/structures/union_set/longest_consecutive.html" class="post-title-link" itemprop="url">并查集系列之最长连续序列</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-03-01 16:13:03" itemprop="dateCreated datePublished" datetime="2022-03-01T16:13:03+08:00">2022-03-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-29 21:41:11" itemprop="dateModified" datetime="2022-10-29T21:41:11+08:00">2022-10-29</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/union_set/longest_consecutive.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/union_set/longest_consecutive.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Longest Consecutive Sequence 求最长连续序列, $O(n)$复杂度</p>
-<p>解题思路：</p>
-<ol>
-<li>hash来记录是否使用过，以某个元素为中心，向两侧扩展</li>
-<li>带size的并查集</li>
-</ol>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">unordered_map</span>&lt;<span class="keyword">int</span>,<span class="keyword">int</span>&gt; father_map;<span class="comment">//节点-父节点</span></span><br><span class="line">    <span class="built_in">unordered_map</span>&lt;<span class="keyword">int</span>,<span class="keyword">int</span>&gt; child_count;<span class="comment">// 节点-子节点个数</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">longestConsecutive</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>( nums.size() == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; nums.size();i++)</span><br><span class="line">        &#123;</span><br><span class="line">            father_map[nums[i]] = nums[i];</span><br><span class="line">            child_count[nums[i]] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; nums.size();i++)</span><br><span class="line">        &#123;</span><br><span class="line">             <span class="keyword">if</span>( father_map.find(nums[i]+<span class="number">1</span>) != father_map.end())</span><br><span class="line">             &#123;</span><br><span class="line">                 res = max (res,mergexy(nums[i],nums[i]+<span class="number">1</span>));</span><br><span class="line">             &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getfather</span><span class="params">(<span class="keyword">int</span> i)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>( father_map[i] == i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            father_map[i] = getfather(father_map[i]);</span><br><span class="line">            <span class="keyword">return</span> father_map[i] ;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">mergexy</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        x = getfather(x);</span><br><span class="line">        y = getfather(y);</span><br><span class="line">        <span class="keyword">if</span>( x == y )</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> child_count[x];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            father_map[y] = x; </span><br><span class="line">            child_count[x] +=child_count[y];</span><br><span class="line">            <span class="keyword">return</span> child_count[x];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/skip_list.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/structures/skip_list.html" class="post-title-link" itemprop="url">跳表</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-03-01 14:00:03 / Modified: 23:11:38" itemprop="dateCreated datePublished" datetime="2022-03-01T14:00:03+08:00">2022-03-01</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/skip_list.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/skip_list.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>跳表是一种随机化数据结构，</p>
-<p>其随机化体现在插入元素的时候元素所占有的层数完全是随机的，层数是通过随机算法(随机化思想)产生的。</p>
-<p>改变索引构建策略，有效平衡执行效率与内存消耗</p>
-<p>使用场景：</p>
-<ol>
-<li>Redis ZSET实现</li>
-<li>LevelDB选用SkipList来实现memory table</li>
-</ol>
-<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://segmentfault.com/a/1190000020596941">https://segmentfault.com/a/1190000020596941</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/union_set/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/structures/union_set/index.html" class="post-title-link" itemprop="url">并查集</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-03-01 13:58:03 / Modified: 23:11:14" itemprop="dateCreated datePublished" datetime="2022-03-01T13:58:03+08:00">2022-03-01</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/union_set/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/union_set/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>并查集是一个代码很简单、但技巧性极强的数据结构，我们需要知道并查集的最重要特性：</p>
-<p>能够在近乎$O(1)$的时间复杂度内完成元素归属集合以及元素合并的操作。</p>
-<p>通常我们利用数组来实现并查集，并经常会通过路径压缩技巧来进行性能优化。</p>
-<p>我们在图的连通性判定、最小生成树-kraskal等问题中可以看到常规并查集的应用。另外，我们有时候需要额外维护size、distance等额外属性去解决更多的问题。这种技巧也需要掌握。</p>
-<h4 id="将多个集合合并成没有交集的集合"><a href="#将多个集合合并成没有交集的集合" class="headerlink" title="将多个集合合并成没有交集的集合"></a>将多个集合合并成没有交集的集合</h4><p>给定一个字符串的集合，格式如：{aaa， bbb，ccc}，{bbb，aaa,ddd}，{eeefff}，{ggg}，{dddhhh}要求将其中交集不为空的集合合并，要求合并完成后的集合之间无交集，例如上例应输出{aaabbbcccdddhhh}，{eeefff}，{ggg}。<br>（1）请描述你解决这个问题的思路；<br>（2）请给出主要的处理流程，算法，以及算法的复杂度<br>（3）请描述可能的改进。</p>
-<p>回答：类似于并查集的思路</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">并查集 —— 模板题 AcWing <span class="number">836.</span> 合并集合, AcWing <span class="number">837.</span> 连通块中点的数量</span><br><span class="line">(<span class="number">1</span>)朴素并查集：</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> p[N]; <span class="comment">//存储每个点的祖宗节点</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回x的祖宗节点</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (p[x] != x) p[x] = find(p[x]);</span><br><span class="line">    <span class="keyword">return</span> p[x];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化，假定节点编号是1~n</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i ++ ) p[i] = i;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 合并a和b所在的两个集合：</span></span><br><span class="line">p[find(a)] = find(b);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">(<span class="number">2</span>)维护size的并查集：</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> p[N], size[N];</span><br><span class="line"><span class="comment">//p[]存储每个点的祖宗节点, size[]只有祖宗节点的有意义，表示祖宗节点所在集合中的点的数量</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回x的祖宗节点</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (p[x] != x) p[x] = find(p[x]);</span><br><span class="line">    <span class="keyword">return</span> p[x];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化，假定节点编号是1~n</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i ++ )</span><br><span class="line">&#123;</span><br><span class="line">    p[i] = i;</span><br><span class="line">    size[i] = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 合并a和b所在的两个集合：</span></span><br><span class="line">size[find(b)] += size[find(a)];</span><br><span class="line">p[find(a)] = find(b);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">(<span class="number">3</span>)维护到祖宗节点距离的并查集：</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> p[N], d[N];</span><br><span class="line"><span class="comment">//p[]存储每个点的祖宗节点, d[x]存储x到p[x]的距离</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回x的祖宗节点</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (p[x] != x)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> u = find(p[x]);</span><br><span class="line">        d[x] += d[p[x]];</span><br><span class="line">        p[x] = u;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> p[x];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化，假定节点编号是1~n</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i ++ )</span><br><span class="line">&#123;</span><br><span class="line">    p[i] = i;</span><br><span class="line">    d[i] = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 合并a和b所在的两个集合：</span></span><br><span class="line">p[find(a)] = find(b);</span><br><span class="line">d[find(a)] = distance; <span class="comment">// 根据具体问题，初始化find(a)的偏移量</span></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1264,7 +1469,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">333</span>
+          <span class="site-state-item-count">339</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1277,7 +1482,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-count">61</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

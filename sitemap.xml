@@ -2,6 +2,55 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://neowei1987.github.io/math/tpl.html</loc>
+    
+    <lastmod>2022-12-01</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://neowei1987.github.io/ai/index.html</loc>
+    
+    <lastmod>2022-12-01</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://neowei1987.github.io/ai/minimize.html</loc>
+    
+    <lastmod>2022-12-01</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://neowei1987.github.io/ai/validation.html</loc>
+    
+    <lastmod>2022-12-01</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://neowei1987.github.io/ai/linear_regression.html</loc>
+    
+    <lastmod>2022-12-01</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://neowei1987.github.io/ai/exp_set.html</loc>
+    
+    <lastmod>2022-12-01</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://neowei1987.github.io/ai/feature.html</loc>
+    
+    <lastmod>2022-12-01</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/index.html</loc>
     
     <lastmod>2022-12-01</lastmod>
@@ -185,13 +234,6 @@
   
   <url>
     <loc>https://neowei1987.github.io/work/tpl.html</loc>
-    
-    <lastmod>2022-12-01</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://neowei1987.github.io/ai/linear_regression.html</loc>
     
     <lastmod>2022-12-01</lastmod>
     
@@ -2777,6 +2819,13 @@
   
   <url>
     <loc>https://neowei1987.github.io/tags/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8/</loc>
+    <lastmod>2022-12-01</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://neowei1987.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/</loc>
     <lastmod>2022-12-01</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>

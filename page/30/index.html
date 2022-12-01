@@ -203,6 +203,207 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/problem/%20selection/max_min.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/problem/%20selection/max_min.html" class="post-title-link" itemprop="url">选择问题-最少次数求最大与最小值</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-02 15:47:03" itemprop="dateCreated datePublished" datetime="2021-01-02T15:47:03+08:00">2021-01-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-02 22:45:08" itemprop="dateModified" datetime="2022-03-02T22:45:08+08:00">2022-03-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/problem/%20selection/max_min.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/problem/%20selection/max_min.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Maximum and minimum of an array using minimum number of comparisons<br>Write a C function to return minimum and maximum in an array. You program should make minimum number of comparisons.</p>
+<p>解答思路：</p>
+<p>法1: Pair Compare<br>目标：尽可能的减少比较，如何确定a[i]是不是最小值或者最大值呢？</p>
+<p>基于比较，消除不确定性<br>a[i]跟a[i+1] 比较之后？<br>a[i] 如果比 a[i+1] 则a[i]才有可能跟max比较；a[i+1] 才有可能跟min比较；</p>
+<p>结论：3次比较消除了2个元素的的不确定性；</p>
+<p>a[i]跟min, max比较；<br>a[i+1]跟min, max比较；<br>结论：4次比较，完成了2个元素的确定性；</p>
+<p>法2: Divide and Conquer<br>如果有两个元素？ 怎么选择最大值最小值？<br>如果有一个元素，怎么选择最大值最小值？<br>左半部分已经有了最大值，最小值；右半部分已经有了最小值最大值： 如何确定merge之后的最小值最大值？</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/problem/%20selection/problem_kth.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/problem/%20selection/problem_kth.html" class="post-title-link" itemprop="url">第k大元素</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-02 15:47:03" itemprop="dateCreated datePublished" datetime="2021-01-02T15:47:03+08:00">2021-01-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-02 22:46:11" itemprop="dateModified" datetime="2022-03-02T22:46:11+08:00">2022-03-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/problem/%20selection/problem_kth.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/problem/%20selection/problem_kth.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>输入n个整数，找出其中最小的k个数。</p>
+<p>注意：</p>
+<p>数据保证k一定小于等于输入数组的长度;<br>输出数组内元素请按从小到大顺序排序;<br>样例<br>输入：[1,2,3,4,5,6,7,8] , k=4</p>
+<p>输出：[1,2,3,4]</p>
+<p>常见解法：</p>
+<ul>
+<li>排序</li>
+<li>借助堆: 借助大小为K的堆，从而实现快速比较。</li>
+<li>线性选择（快排思想） —普通：最坏的时间复杂度$O(lgn)$</li>
+<li>线性选择（快排思想） —基于中位数的select升级：借助基于中位数的select算法来选择枢点，可以尽可能的2分问题，从而使得最坏的时间复杂度控制在$O(n)$</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">getLeastNumbers_Solution</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; input, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">priority_queue</span>&lt;<span class="keyword">int</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;, less&lt;<span class="keyword">int</span>&gt;&gt; q; <span class="comment">//大顶堆</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; input.size(); ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (q.size() &lt; k) &#123;</span><br><span class="line">                q.push(input[i]);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (input[i] &lt; q.top()) &#123;</span><br><span class="line">                    q.pop();</span><br><span class="line">                    q.push(input[i]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span> (q.size()) &#123;</span><br><span class="line">            res.push_back(q.top());</span><br><span class="line">            q.pop();</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        reverse(res.begin(), res.end());</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/sort/bucket_sort/bucket_sort.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1062,196 +1263,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/index.html" class="post-title-link" itemprop="url">数据结构与算法-概览</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-12-28 22:56:03" itemprop="dateCreated datePublished" datetime="2020-12-28T22:56:03+08:00">2020-12-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-04 22:55:48" itemprop="dateModified" datetime="2022-03-04T22:55:48+08:00">2022-03-04</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>建立秩序，省却搜索。—德国谚语</p>
-<p>计算机解决问题，就靠搜索。 而通过建立秩序，可以让计算机更聪明的完成搜索。</p>
-<p>而这里的建立秩序，就包括：</p>
-<ol>
-<li>为具体场景设计更合适的数据结构。这一块对应数据结构。</li>
-<li>为具体场景设计更好的搜索策略。 这一块对应算法。</li>
-</ol>
-<p>两大类存储引擎：</p>
-<p>日志结构（log-structured） 的存储引擎，以及面向页面（page-oriented） 的存储引擎（例如B树）。</p>
-<p>SSTable</p>
-<p>排序字符串表（Sorted String Table）</p>
-<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://vonng.gitbooks.io/ddia-cn/content/glossary.html">https://vonng.gitbooks.io/ddia-cn/content/glossary.html</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/time_space.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/time_space.html" class="post-title-link" itemprop="url">时空复杂度分析</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-12-28 22:56:03" itemprop="dateCreated datePublished" datetime="2020-12-28T22:56:03+08:00">2020-12-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 23:11:45" itemprop="dateModified" datetime="2022-03-01T23:11:45+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/time_space.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/time_space.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>一般ACM或者笔试题的时间限制是1秒或2秒。</p>
-<p>在这种情况下，C++代码中的操作次数控制在 $10^7$ 为最佳。</p>
-<p>下面给出在不同数据范围下，代码的时间复杂度和算法该如何选择：</p>
-<p>n≤30 =&gt; 指数级别, dfs+剪枝，状态压缩dp</p>
-<p>n≤100 =&gt; $O(n^3)$，floyd，dp，高斯消元</p>
-<p>n≤1000 =&gt; $O(n^2),O(n^2logn)$，dp，二分，朴素版Dijkstra、朴素版Prim、Bellman-Ford</p>
-<p>n≤10000 =&gt; $O(n*\sqrt{n})$，块状链表、分块、莫队</p>
-<p>n≤100000  =&gt; $O(nlogn)$ =&gt; 各种sort，线段树、树状数组、set/map、heap、拓扑排序、dijkstra+heap、prim+heap、spfa、求凸包、求半平面交、二分、CDQ分治、整体二分</p>
-<p>n≤1000000  =&gt; $O(n)$, 以及常数较小的 $O(nlogn)$ 算法 =&gt; 单调队列、 hash、双指针扫描、并查集，kmp、AC自动机，常数比较小的 $O(nlogn)$ 的做法：sort、树状数组、heap、dijkstra、spfa</p>
-<p>n≤10000000 =&gt; $O(n)$，  双指针扫描、kmp、AC自动机、线性筛素数</p>
-<p>n≤$10^9$ =&gt; $O(\sqrt{n})$， 判断质数</p>
-<p>n≤$10^{18}$ =&gt; $O(logn)$，  最大公约数，快速幂</p>
-<p>n≤$10^{1000}$ =&gt; $O((logn)^2)$，    高精度加减乘除</p>
-<p>n≤$10^{100000}$  =&gt; $O(logk×loglogk)$，k表示位数，  高精度加减、FFT/NTT</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1324,7 +1335,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">331</span>
+          <span class="site-state-item-count">333</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

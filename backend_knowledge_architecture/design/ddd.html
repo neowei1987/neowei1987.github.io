@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"neowei1987.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="领域驱动设计目的DDD帮助我们拆解需求，并建立一个灵活性高、可扩展的业务系统 领域驱动设计中的领域是什么？我理解的是一个比行业更加细分的方向，比如互联网做电商业务是电商领域，电商中有专注交易的交易领域，做电子支付叫支付领域。领域范围可大可小，领域知识表示某些具有相关相关性知识的合集。 领域驱动设计是通过领域知识构建的领域模型来控制业务的复杂性，通过领域模型反映领域知识，构建更易维护的系统。解决软件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="领域驱动设计">
+<meta property="og:url" content="https://neowei1987.github.io/backend_knowledge_architecture/design/ddd.html">
+<meta property="og:site_name" content="Neo&#39;s Blog">
+<meta property="og:description" content="领域驱动设计目的DDD帮助我们拆解需求，并建立一个灵活性高、可扩展的业务系统 领域驱动设计中的领域是什么？我理解的是一个比行业更加细分的方向，比如互联网做电商业务是电商领域，电商中有专注交易的交易领域，做电子支付叫支付领域。领域范围可大可小，领域知识表示某些具有相关相关性知识的合集。 领域驱动设计是通过领域知识构建的领域模型来控制业务的复杂性，通过领域模型反映领域知识，构建更易维护的系统。解决软件">
+<meta property="og:locale">
+<meta property="og:image" content="https://noogel.xyz/resource/img/2022-01-19-00-07-56.png">
+<meta property="og:image" content="https://noogel.xyz/resource/img/2021-12-12-18-59-11.png">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9hdGEyLWltZy5jbi1oYW5nemhvdS5vc3MtcHViLmFsaXl1bi1pbmMuY29tLzNkMTYxNTlkOTUxNTYwYmQwMDA2Y2ZlNzEwODNlNjdiLnBuZw">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9hdGEyLWltZy5jbi1oYW5nemhvdS5vc3MtcHViLmFsaXl1bi1pbmMuY29tLzZlMGM3OTEwZDgwYmE3ZDUyNWNjYzM5ZmUwMmI0MmYyLnBuZw">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/33P2FdAnjuibCA7zuzhlSIpEHAClQ3dEBNfJR6ibV1m3J4Xdtvd0VFZ6nOytMkmuuGicOAme3bTc1S3ACMt2thUDw/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/33P2FdAnjuibCA7zuzhlSIpEHAClQ3dEBAstMWRiciaBWsJECe4ib9XiawJ0KYa6UccNWFp70mxO2agM1DUFYIB3b7Q/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/33P2FdAnjuibCA7zuzhlSIpEHAClQ3dEBw6h6u8RNXzNE3cOVYF7cambLLlIb5ibfcLj9JLynsZL1fPAzsfcdTsA/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/33P2FdAnjuibCA7zuzhlSIpEHAClQ3dEBu1M0GnnGyl9jia9jUhl9SbzQWRTA9X4vw2DWSm91uJBOzliaq9gkM9Rg/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/33P2FdAnjuibCA7zuzhlSIpEHAClQ3dEBicft40OXaibnibT86aj2s11aok4NXVfmcrVI79sVKs5JLtrxa1Dnia06IA/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/33P2FdAnjuibCA7zuzhlSIpEHAClQ3dEBCcCumAibDlffTuRD1UiaPyOYaM3VueCDT09UX5ZmYSgQEZayH5Kkb13g/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1">
+<meta property="article:published_time" content="2021-01-03T11:47:03.000Z">
+<meta property="article:modified_time" content="2022-12-01T05:07:01.647Z">
+<meta property="article:author" content="NeoWei">
+<meta property="article:tag" content="后端开发知识体系,知识体系构建,刷题技巧,本质思考">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://noogel.xyz/resource/img/2022-01-19-00-07-56.png">
+
+<link rel="canonical" href="https://neowei1987.github.io/backend_knowledge_architecture/design/ddd.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.css"><style>
+#needsharebutton-postbottom {
+  cursor: pointer;
+  height: 26px;
+  margin-top: 10px;
+  position: relative;
+}
+#needsharebutton-postbottom .btn {
+  border: 1px solid $btn-default-border-color;
+  border-radius: 3px;
+  display: initial;
+  padding: 1px 4px;
+}
+</style>
+  <title>领域驱动设计 | Neo's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Neo's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不抽象就无法深入思考<br>不还原就看不到本来面目!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+		<div id="container">
+		  <div class="content post posts-expand">
+		    
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/design/ddd.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          领域驱动设计
+        </h1>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-03 19:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T19:47:03+08:00">2021-01-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-12-01 13:07:01" itemprop="dateModified" datetime="2022-12-01T13:07:01+08:00">2022-12-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/design/ddd.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/design/ddd.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="领域驱动设计目的"><a href="#领域驱动设计目的" class="headerlink" title="领域驱动设计目的"></a>领域驱动设计目的</h3><p>DDD帮助我们拆解需求，并建立一个<strong><em>灵活性高、可扩展</em></strong>的业务系统</p>
+<p>领域驱动设计中的领域是什么？我理解的是一个比行业更加细分的方向，比如互联网做电商业务是电商领域，电商中有专注交易的交易领域，做电子支付叫支付领域。领域范围可大可小，领域知识表示某些具有相关相关性知识的合集。</p>
+<p>领域驱动设计是通过领域知识构建的领域模型来控制业务的复杂性，通过领域模型反映领域知识，构建更易维护的系统。解决软件难以理解，难以演化的问题。</p>
+<h3 id="领域驱动设计的核心价值"><a href="#领域驱动设计的核心价值" class="headerlink" title="领域驱动设计的核心价值"></a>领域驱动设计的核心价值</h3><p>领域驱动设计的核心目标是基于特定业务范围，通过统一业务概念（统一语言），将系统参与各方整合在一起，从而减少不同角色和环节的信息熵减问题。</p>
+<p>领域模型是领域驱动设计的核心产出，它不仅能描述真实的业务逻辑和业务场景，也是系统实现的表达方式。领域模型的适应性能直接反应系统的扩展性上，能否使系统在增大时仍然保持敏捷。</p>
+<p>领域驱动设计之所以更加流行，<strong>很大因素是领域驱动设计提供的方法论上与近些年流行的微服务有很好的匹配性</strong>，通过领域驱动设计方法清晰地<strong>识别业务边界，以此来指导微服务的拆分</strong>。 领域驱动设计提供的领域划分方法可以指导我们对微服务的拆分，以及对于演进式架构有很强的助力。</p>
+<p><img src="https://noogel.xyz/resource/img/2022-01-19-00-07-56.png" alt="四层架构"></p>
+<p><img src="https://noogel.xyz/resource/img/2021-12-12-18-59-11.png" alt="概念的涵盖范围"></p>
+<p>『领域的边界划分不断演绎，只要发现复杂性凝聚的地方，就划定为有界上下文，割裂它与其他系统的关系，并派出精兵强将专门对付。』</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9hdGEyLWltZy5jbi1oYW5nemhvdS5vc3MtcHViLmFsaXl1bi1pbmMuY29tLzNkMTYxNTlkOTUxNTYwYmQwMDA2Y2ZlNzEwODNlNjdiLnBuZw" alt=""></p>
+<p>复用性是告诉我们When（什么时候该下沉了），即有重复代码的时候。内聚性是告诉我们How（要下沉到哪里），功能有没有内聚到恰当的实体上，有没有放到合适的层次上（因为Domain层的能力也是有两个层次的，一个是Domain Service这是相对比较粗的粒度，另一个是Domain的Model这个是最细粒度的复用）。</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9hdGEyLWltZy5jbi1oYW5nemhvdS5vc3MtcHViLmFsaXl1bi1pbmMuY29tLzZlMGM3OTEwZDgwYmE3ZDUyNWNjYzM5ZmUwMmI0MmYyLnBuZw" alt=""></p>
+<p>领域服务(DomainService)</p>
+<p>上面我们讲述了各个要素对于资源和行为的封装，业务逻辑的实现代码应该尽量放在聚合根边界内。但是总会遇到不适合放在聚合根上的业务逻辑，而此时领域服务就需要承载编排组合领域对象、资源库和防腐接口等一系列要素，提供对其它上下文的交互接口。</p>
+<p>防腐层</p>
+<p>用来消除外部上下文结构差异的作用，也叫适配层。比如在算价上下文中需要调用促销上下文数据，不同的促销数据源提供了不同的接口和数据，这时就需要引入防腐层来屏蔽差异，防止外部上下文侵入领域内部影响代码模型。首先定义需要的数据接口规范。</p>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.cnblogs.com/wlandwl/p/ddd_five.html">https://www.cnblogs.com/wlandwl/p/ddd_five.html</a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.cnblogs.com/pyer/p/15856573.html">https://www.cnblogs.com/pyer/p/15856573.html</a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/significantfrank/article/details/98087611">https://blog.csdn.net/significantfrank/article/details/98087611</a></p>
+<hr>
+<p>Domain Primitive</p>
+<p>Domain Primitive 是一个在特定领域里，拥有精准定义的、可自我验证的、拥有行为的 Value Object 。</p>
+<p>（1）将隐性的概念显性化<br>（2）将 隐性的 上下文 显性化<br>（3）封装 多对象 行为</p>
+<p>▍什么情况下应该用 Domain Primitive<br>常见的 DP 的使用场景包括：</p>
+<p>有格式限制的 String：比如Name，PhoneNumber，OrderNumber，ZipCode，Address等</p>
+<p>有限制的Integer：比如OrderId（&gt;0），Percentage（0-100%），Quantity（&gt;=0）等</p>
+<p>可枚举的 int ：比如 Status（一般不用Enum因为反序列化问题）</p>
+<p>Double 或 BigDecimal：一般用到的 Double 或 BigDecimal 都是有业务含义的，比如 Temperature、Money、Amount、ExchangeRate、Rating 等</p>
+<p>复杂的数据结构：比如 Map<String, List<Integer>&gt; 等，尽量能把 Map 的所有操作包装掉，仅暴露必要行为</p>
+<hr>
+<p>在做架构设计时，一个好的架构应该需要实现以下几个目标：</p>
+<p>独立于框架：架构不应该依赖某个外部的库或框架，不应该被框架的结构所束缚。</p>
+<p>独立于UI：前台展示的样式可能会随时发生变化（今天可能是网页、明天可能变成console、后天是独立app），但是底层架构不应该随之而变化。</p>
+<p>独立于底层数据源：无论今天你用MySQL、Oracle还是MongoDB、CouchDB，甚至使用文件系统，软件架构不应该因为不同的底层数据储存方式而产生巨大改变。</p>
+<p>独立于外部依赖：无论外部依赖如何变更、升级，业务的核心逻辑不应该随之而大幅变化。</p>
+<p>可测试：无论外部依赖了什么数据库、硬件、UI或者服务，业务的逻辑应该都能够快速被验证正确性。</p>
+<p>数据存储层</p>
+<p>Account   本质上是一个 Entity<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Account</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> AccountId id;</span><br><span class="line">    <span class="keyword">private</span> AccountNumber accountNumber;</span><br><span class="line">    <span class="keyword">private</span> UserId userId;</span><br><span class="line">    <span class="keyword">private</span> Money available;</span><br><span class="line">    <span class="keyword">private</span> Money dailyLimit;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">withdraw</span><span class="params">(Money money)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 转出</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deposit</span><span class="params">(Money money)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 转入</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>AccountRepository 是一层抽象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">AccountRepository</span> </span>&#123;</span><br><span class="line">    <span class="function">Account <span class="title">find</span><span class="params">(AccountId id)</span></span>;</span><br><span class="line">    <span class="function">Account <span class="title">find</span><span class="params">(AccountNumber accountNumber)</span></span>;</span><br><span class="line">    <span class="function">Account <span class="title">find</span><span class="params">(UserId userId)</span></span>;</span><br><span class="line">    <span class="function">Account <span class="title">save</span><span class="params">(Account account)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AccountRepositoryImpl</span> <span class="keyword">implements</span> <span class="title">AccountRepository</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> AccountMapper accountDAO;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> AccountBuilder accountBuilder;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Account <span class="title">find</span><span class="params">(AccountId id)</span> </span>&#123;</span><br><span class="line">        AccountDO accountDO = accountDAO.selectById(id.getValue());</span><br><span class="line">        <span class="keyword">return</span> accountBuilder.toAccount(accountDO);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Account <span class="title">find</span><span class="params">(AccountNumber accountNumber)</span> </span>&#123;</span><br><span class="line">        AccountDO accountDO = accountDAO.selectByAccountNumber(accountNumber.getValue());</span><br><span class="line">        <span class="keyword">return</span> accountBuilder.toAccount(accountDO);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Account <span class="title">find</span><span class="params">(UserId userId)</span> </span>&#123;</span><br><span class="line">        AccountDO accountDO = accountDAO.selectByUserId(userId.getId());</span><br><span class="line">        <span class="keyword">return</span> accountBuilder.toAccount(accountDO);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Account <span class="title">save</span><span class="params">(Account account)</span> </span>&#123;</span><br><span class="line">        AccountDO accountDO = accountBuilder.fromAccount(account);</span><br><span class="line">        <span class="keyword">if</span> (accountDO.getId() == <span class="keyword">null</span>) &#123;</span><br><span class="line">            accountDAO.insert(accountDO);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            accountDAO.update(accountDO);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> accountBuilder.toAccount(accountDO);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>Account实体类和AccountDO数据类的对比如下：</p>
+<p>Data Object数据类：AccountDO是单纯的和数据库表的映射关系，每个字段对应数据库表的一个column，这种对象叫Data Object。DO只有数据，没有行为。AccountDO的作用是对数据库做快速映射，避免直接在代码里写SQL。无论你用的是MyBatis还是Hibernate这种ORM，从数据库来的都应该先直接映射到DO上，但是代码里应该完全避免直接操作 DO。</p>
+<p>Entity实体类：Account 是基于领域逻辑的实体类，它的字段和数据库储存不需要有必然的联系。Entity包含数据，同时也应该包含行为。在 Account 里，字段也不仅仅是String等基础类型，而应该尽可能用上一讲的 Domain Primitive 代替，可以避免大量的校验代码。</p>
+<p>DAO 和 Repository 类的对比如下：</p>
+<p>DAO对应的是一个特定的数据库类型的操作，相当于SQL的封装。所有操作的对象都是DO类，所有接口都可以根据数据库实现的不同而改变。比如，insert 和 update 属于数据库专属的操作。</p>
+<p>Repository对应的是Entity对象读取储存的抽象，在接口层面做统一，不关注底层实现。比如，通过 save 保存一个Entity对象，但至于具体是 insert 还是 update 并不关心。Repository的具体实现类通过调用DAO来实现各种操作，通过Builder/Factory对象实现AccountDO 到 Account之间的转化</p>
+<p>原有的TransferService不再包括任何计算逻辑，仅仅作为组件编排，所有逻辑均delegate到其他组件。这种仅包含Orchestration（编排）的服务叫做Application Service（应用服务）。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/33P2FdAnjuibCA7zuzhlSIpEHAClQ3dEBNfJR6ibV1m3J4Xdtvd0VFZ6nOytMkmuuGicOAme3bTc1S3ACMt2thUDw/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="overview"></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/33P2FdAnjuibCA7zuzhlSIpEHAClQ3dEBAstMWRiciaBWsJECe4ib9XiawJ0KYa6UccNWFp70mxO2agM1DUFYIB3b7Q/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="types"></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/33P2FdAnjuibCA7zuzhlSIpEHAClQ3dEBw6h6u8RNXzNE3cOVYF7cambLLlIb5ibfcLj9JLynsZL1fPAzsfcdTsA/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="domain"></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/33P2FdAnjuibCA7zuzhlSIpEHAClQ3dEBu1M0GnnGyl9jia9jUhl9SbzQWRTA9X4vw2DWSm91uJBOzliaq9gkM9Rg/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="Application"></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/33P2FdAnjuibCA7zuzhlSIpEHAClQ3dEBicft40OXaibnibT86aj2s11aok4NXVfmcrVI79sVKs5JLtrxa1Dnia06IA/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="infrastructure"></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/33P2FdAnjuibCA7zuzhlSIpEHAClQ3dEBCcCumAibDlffTuRD1UiaPyOYaM3VueCDT09UX5ZmYSgQEZayH5Kkb13g/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="web"></p>
+<p>interface[service]<br>规范：Interface层的HTTP和RPC接口，返回值为Result，捕捉所有异常<br>规范：一个Interface层的类应该是“小而美”的，应该是面向“一个单一的业务”或“一类同样需求的业务”，需要尽量避免用同一个类承接不同类型业务的需求。<br>application[Service]</p>
+<p>规范：CQE对象的校验应该前置，避免在ApplicationService里做参数的校验。可以通过JSR303/380和Spring Validation来实现<br>规范：Application层的所有接口返回值为DTO，不负责处理异常<br>Application层的几个核心类：</p>
+<p>ApplicationService应用服务：最核心的类，负责业务流程的编排，但本身不负责任何业务逻辑</p>
+<p>DTO Assembler：负责将内部领域模型转化为可对外的DTO</p>
+<p>Command、Query、Event对象：作为ApplicationService的入参</p>
+<p>返回的DTO：作为ApplicationService的出参</p>
+<p>我们可以看出来，ApplicationService的代码通常有类似的结构：AppService通常不做任何决策（Precondition除外），仅仅是把所有决策交给DomainService或Entity，把跟外部交互的交给Infrastructure接口，如Repository或防腐层。</p>
+<p>一般的“套路”如下：</p>
+<p>准备数据：包括从外部服务或持久化源取出相对应的Entity、VO以及外部服务返回的DTO。</p>
+<p>执行操作：包括新对象的创建、赋值，以及调用领域对象的方法对其进行操作。需要注意的是这个时候通常都是纯内存操作，非持久化。</p>
+<p>持久化：将操作结果持久化，或操作外部系统产生相应的影响，包括发消息等异步操作。</p>
+<p>如果涉及到对多个外部系统（包括自身的DB）都有变更的情况，这个时候通常处在“分布式事务”的场景里，无论是用分布式TX、TCC、还是Saga模式，取决于具体场景的设计，在此处暂时略过。</p>
+<p>domain[Service]</p>
+<p>单对象（可以把service传入entity，只读，无副作用)<br>跨领域对象（同时操作多个entity)</p>
+
+    </div>
+
+    
+    
+    
+
+    
+      <div>
+        <div class="recommended_posts">
+    
+    
+    <h1>Recommended Posts </h1>
+    <ul>
+        
+            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/os/fs.html">操作系统之文件系统介绍</a></li>
+        
+            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/language/java/gc.html">java语言-gc</a></li>
+        
+            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/back_tracking/combination_permutation.html">回溯系列-组合排列</a></li>
+        
+            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/problem/%20selection/index.html">选择问题</a></li>
+        
+    </ul>
+     
+</div> 
+
+      </div>
+    <div class="post-widgets">
+      <div id="needsharebutton-postbottom">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    </div>
+        <div class="reward-container">
+  <div>你的支持是我坚持的最大动力!</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="NeoWei WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="NeoWei Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/back_tracking/combination_permutation.html" rel="prev" title="回溯系列-组合排列">
+      <i class="fa fa-chevron-left"></i> 回溯系列-组合排列
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/backend_knowledge_architecture/language/java/gc.html" rel="next" title="java语言-gc">
+      java语言-gc <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+		  </div>
+		  
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+		  
+<script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+<script>
+    const btw = new BTWPlugin();
+
+    btw.init({
+        id: 'container',
+        blogId: '22171-1589640164808-286',
+        name: '第一性原理思考者',
+        qrcode: 'https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.29ucrvenk9lw.jpg',
+        keyword: '思考',
+    });
+</script>
+
+
+		</div>
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%E7%9B%AE%E7%9A%84"><span class="nav-number">1.</span> <span class="nav-text">领域驱动设计目的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%E7%9A%84%E6%A0%B8%E5%BF%83%E4%BB%B7%E5%80%BC"><span class="nav-number">2.</span> <span class="nav-text">领域驱动设计的核心价值</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">NeoWei</p>
+  <div class="site-description" itemprop="description">我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">333</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">NeoWei</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a>
+  </div>
+
+<br>
+<a href="https://beian.miit.gov.cn/" rel="external nofollow noreferrer"  style="color:#f72b07" target="_blank">沪ICP备2020030798号-1</a>
+<br>
+
+        
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1279618438&web_id=1279618438"></script>
+  </div>
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.js"></script>
+  <script>
+      pbOptions = {};
+        pbOptions.iconStyle = "box";
+        pbOptions.boxForm = "horizontal";
+        pbOptions.position = "bottomCenter";
+        pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+  </script>
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'uE8T6jDhH4vW6BtH143y72nw-gzGzoHsz',
+      appKey     : '3xulfIcqN5mLqRSxptxvnamK',
+      placeholder: "Just go go",
+      avatar     : 'identicon',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

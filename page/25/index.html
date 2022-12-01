@@ -203,6 +203,106 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/deserialize.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/deserialize.html" class="post-title-link" itemprop="url">二叉树遍历系列-二叉树的序列化与反序列化</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-04 17:42:03" itemprop="dateCreated datePublished" datetime="2021-01-04T17:42:03+08:00">2021-01-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-13 18:25:30" itemprop="dateModified" datetime="2022-11-13T18:25:30+08:00">2022-11-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/deserialize.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/deserialize.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="二叉树的序列化与反序列化-题目描述"><a href="#二叉树的序列化与反序列化-题目描述" class="headerlink" title="二叉树的序列化与反序列化-题目描述"></a>二叉树的序列化与反序列化-题目描述</h2><p>请实现两个函数，分别用来序列化和反序列化二叉树。</p>
+<p>您需要确保二叉树可以序列化为字符串，并且可以将此字符串反序列化为原始树结构。</p>
+<p>样例<br>你可以序列化如下的二叉树<br>    8<br>   / \<br>  12  2<br>     / \<br>    6   4</p>
+<p>为：”[8, 12, 2, null, null, 6, 4, null, null, null, null]”<br>注意:</p>
+<p>以上的格式是AcWing序列化二叉树的方式，你不必一定按照此格式，所以可以设计出一些新的构造方式</p>
+<h2 id="中二叉树的序列化与反序列化-总体思路"><a href="#中二叉树的序列化与反序列化-总体思路" class="headerlink" title="中二叉树的序列化与反序列化-总体思路"></a>中二叉树的序列化与反序列化-总体思路</h2><p>重点考虑反序列化，我们需要考虑一种很容易找到root节点的遍历方式。</p>
+<p>如果我无法找到root节点，是无法通过递归来完成反序列化的。</p>
+<p>在前中后三种遍历中，我们可以选择先序遍历。 先序遍历，最容易找到root节点</p>
+<h2 id="中二叉树的序列化与反序列化-代码实现"><a href="#中二叉树的序列化与反序列化-代码实现" class="headerlink" title="中二叉树的序列化与反序列化-代码实现"></a>中二叉树的序列化与反序列化-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">string</span> s;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">dfs_s</span><span class="params">(TreeNode* root, <span class="built_in">string</span>&amp; res)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!root) &#123;</span><br><span class="line">            res += <span class="string">&quot;null &quot;</span>;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        res += (to_string(root-&gt;val) + <span class="string">&quot; &quot;</span>);</span><br><span class="line">        dfs_s(root-&gt;left, res);</span><br><span class="line">        dfs_s(root-&gt;right, res);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="comment">//1, 2, 4, 5, 6, null, null, null</span></span><br><span class="line">    <span class="comment">// 注意此处是引用类型</span></span><br><span class="line">    <span class="comment">// 如果不用下标，直接用字符串char*呢？ 他应该是char*&amp; ,而不可以是char* </span></span><br><span class="line">    <span class="comment">// char* 是指针，但是确是值传递！！对于值传递，当递归到内部时，外层无法感知到内部变化；</span></span><br><span class="line">    <span class="function">TreeNode* <span class="title">dfs_us</span><span class="params">(<span class="keyword">int</span>&amp; u)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (u &gt;= s.size()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//如果是nullptr</span></span><br><span class="line">        <span class="keyword">if</span> (s[u] == <span class="string">&#x27;n&#x27;</span>) &#123;</span><br><span class="line">            u += <span class="number">5</span>;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//如果是有意义的内容</span></span><br><span class="line">        <span class="keyword">int</span> val = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> flag = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (s[u] == <span class="string">&#x27;-&#x27;</span>) &#123;flag = <span class="number">-1</span>; u++;&#125;</span><br><span class="line">        <span class="keyword">while</span> (s[u] != <span class="string">&#x27; &#x27;</span>) &#123;</span><br><span class="line">            val = val * <span class="number">10</span> + s[u++] - <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        val *= flag;</span><br><span class="line">        u++;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//上面都是处理当前节点</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">auto</span> r = <span class="keyword">new</span> TreeNode(val);</span><br><span class="line">        <span class="keyword">auto</span> left = dfs_us(u); <span class="comment">//处理左边</span></span><br><span class="line">        <span class="keyword">auto</span> right = dfs_us(u);</span><br><span class="line">        r-&gt;left =left, r-&gt;right = right;</span><br><span class="line">        <span class="keyword">return</span> r;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Encodes a tree to a single string.</span></span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">serialize</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">string</span> res;</span><br><span class="line">        dfs_s(root, res);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Decodes your encoded data to tree.</span></span><br><span class="line">    <span class="function">TreeNode* <span class="title">deserialize</span><span class="params">(<span class="built_in">string</span> data)</span> </span>&#123;</span><br><span class="line">        s = data;</span><br><span class="line">        <span class="keyword">int</span> c = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> dfs_us(c);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/getTranslationCount.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1137,114 +1237,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/skills/string_reverse.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/string_reverse.html" class="post-title-link" itemprop="url">翻手法则-字符串反转问题</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-03 23:49:03" itemprop="dateCreated datePublished" datetime="2021-01-03T23:49:03+08:00">2021-01-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:56:58" itemprop="dateModified" datetime="2022-03-01T22:56:58+08:00">2022-03-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87Offer/" itemprop="url" rel="index"><span itemprop="name">剑指Offer</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/string_reverse.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/string_reverse.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="反转单词-题目描述"><a href="#反转单词-题目描述" class="headerlink" title="反转单词-题目描述"></a>反转单词-题目描述</h2><p>输入一个英文句子，单词之前用一个空格隔开，且句首和句尾没有多余空格。翻转句子中单词的顺序，但单词内字符的顺序不变。</p>
-<p>为简单起见，标点符号和普通字母一样处理。</p>
-<p>例如输入字符串”I am a student.”，则输出”student. a am I”。</p>
-<p>样例<br>输入：”I am a student.”</p>
-<p>输出：”student. a am I”</p>
-<h2 id="反转单词-代码实现"><a href="#反转单词-代码实现" class="headerlink" title="反转单词-代码实现"></a>反转单词-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">reverse</span><span class="params">(<span class="built_in">string</span>&amp; s, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (i &lt; j) &#123;</span><br><span class="line">            swap(s[i++], s[j--]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">reverseWords</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (s[j] != <span class="string">&#x27;\0&#x27;</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (s[j] == <span class="string">&#x27; &#x27;</span>) &#123;</span><br><span class="line">                reverse(s, i, j - <span class="number">1</span>); <span class="comment">//反转每一个</span></span><br><span class="line">                i = j + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            j++;</span><br><span class="line">        &#125;</span><br><span class="line">        reverse(s, i, j - <span class="number">1</span>); <span class="comment">//处理上面的最后一次循环</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//整体反转一次</span></span><br><span class="line">        reverse(s, <span class="number">0</span>, j - <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> s;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h2 id="字符串左旋转-题目描述"><a href="#字符串左旋转-题目描述" class="headerlink" title="字符串左旋转-题目描述"></a>字符串左旋转-题目描述</h2><p>字符串的左旋转操作是把字符串前面的若干个字符转移到字符串的尾部。</p>
-<p>请定义一个函数实现字符串左旋转操作的功能。</p>
-<p>比如输入字符串”abcdefg”和数字2，该函数将返回左旋转2位得到的结果”cdefgab”。</p>
-<p>注意：</p>
-<p>数据保证n小于等于输入字符串的长度。<br>样例<br>输入：”abcdefg” , n=2</p>
-<p>输出：”cdefgab”</p>
-<h2 id="字符串左旋转-代码实现"><a href="#字符串左旋转-代码实现" class="headerlink" title="字符串左旋转-代码实现"></a>字符串左旋转-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">reverse</span><span class="params">(<span class="built_in">string</span>&amp; s, <span class="keyword">int</span> i, <span class="keyword">int</span> j )</span> </span>&#123;</span><br><span class="line">        <span class="comment">//对撞指针，往中间凑</span></span><br><span class="line">        <span class="keyword">while</span> (i &lt; j) &#123;</span><br><span class="line">            swap(s[i++], s[j--]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">leftRotateString</span><span class="params">(<span class="built_in">string</span> str, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = str.size();</span><br><span class="line">        <span class="keyword">if</span> (k == <span class="number">0</span>) <span class="keyword">return</span> str;</span><br><span class="line">        </span><br><span class="line">        reverse(str, <span class="number">0</span>, k - <span class="number">1</span>);</span><br><span class="line">        reverse(str, k, n - <span class="number">1</span>);</span><br><span class="line">        reverse(str, <span class="number">0</span>, n - <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> str;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1317,7 +1309,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">331</span>
+          <span class="site-state-item-count">333</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

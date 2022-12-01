@@ -203,6 +203,114 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/skills/string_reverse.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/string_reverse.html" class="post-title-link" itemprop="url">翻手法则-字符串反转问题</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-03 23:49:03" itemprop="dateCreated datePublished" datetime="2021-01-03T23:49:03+08:00">2021-01-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:56:58" itemprop="dateModified" datetime="2022-03-01T22:56:58+08:00">2022-03-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87Offer/" itemprop="url" rel="index"><span itemprop="name">剑指Offer</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/string_reverse.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/string_reverse.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="反转单词-题目描述"><a href="#反转单词-题目描述" class="headerlink" title="反转单词-题目描述"></a>反转单词-题目描述</h2><p>输入一个英文句子，单词之前用一个空格隔开，且句首和句尾没有多余空格。翻转句子中单词的顺序，但单词内字符的顺序不变。</p>
+<p>为简单起见，标点符号和普通字母一样处理。</p>
+<p>例如输入字符串”I am a student.”，则输出”student. a am I”。</p>
+<p>样例<br>输入：”I am a student.”</p>
+<p>输出：”student. a am I”</p>
+<h2 id="反转单词-代码实现"><a href="#反转单词-代码实现" class="headerlink" title="反转单词-代码实现"></a>反转单词-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">reverse</span><span class="params">(<span class="built_in">string</span>&amp; s, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (i &lt; j) &#123;</span><br><span class="line">            swap(s[i++], s[j--]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">reverseWords</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (s[j] != <span class="string">&#x27;\0&#x27;</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (s[j] == <span class="string">&#x27; &#x27;</span>) &#123;</span><br><span class="line">                reverse(s, i, j - <span class="number">1</span>); <span class="comment">//反转每一个</span></span><br><span class="line">                i = j + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            j++;</span><br><span class="line">        &#125;</span><br><span class="line">        reverse(s, i, j - <span class="number">1</span>); <span class="comment">//处理上面的最后一次循环</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//整体反转一次</span></span><br><span class="line">        reverse(s, <span class="number">0</span>, j - <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> s;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="字符串左旋转-题目描述"><a href="#字符串左旋转-题目描述" class="headerlink" title="字符串左旋转-题目描述"></a>字符串左旋转-题目描述</h2><p>字符串的左旋转操作是把字符串前面的若干个字符转移到字符串的尾部。</p>
+<p>请定义一个函数实现字符串左旋转操作的功能。</p>
+<p>比如输入字符串”abcdefg”和数字2，该函数将返回左旋转2位得到的结果”cdefgab”。</p>
+<p>注意：</p>
+<p>数据保证n小于等于输入字符串的长度。<br>样例<br>输入：”abcdefg” , n=2</p>
+<p>输出：”cdefgab”</p>
+<h2 id="字符串左旋转-代码实现"><a href="#字符串左旋转-代码实现" class="headerlink" title="字符串左旋转-代码实现"></a>字符串左旋转-代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">reverse</span><span class="params">(<span class="built_in">string</span>&amp; s, <span class="keyword">int</span> i, <span class="keyword">int</span> j )</span> </span>&#123;</span><br><span class="line">        <span class="comment">//对撞指针，往中间凑</span></span><br><span class="line">        <span class="keyword">while</span> (i &lt; j) &#123;</span><br><span class="line">            swap(s[i++], s[j--]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">leftRotateString</span><span class="params">(<span class="built_in">string</span> str, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = str.size();</span><br><span class="line">        <span class="keyword">if</span> (k == <span class="number">0</span>) <span class="keyword">return</span> str;</span><br><span class="line">        </span><br><span class="line">        reverse(str, <span class="number">0</span>, k - <span class="number">1</span>);</span><br><span class="line">        reverse(str, k, n - <span class="number">1</span>);</span><br><span class="line">        reverse(str, <span class="number">0</span>, n - <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> str;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/sum_234.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1106,124 +1214,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/lowest_ancestor.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/lowest_ancestor.html" class="post-title-link" itemprop="url">二叉树遍历系列-最低公共祖先</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-03 20:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T20:47:03+08:00">2021-01-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-02 21:18:09" itemprop="dateModified" datetime="2022-03-02T21:18:09+08:00">2022-03-02</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/lowest_ancestor.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/lowest_ancestor.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给出一个二叉树，输入两个树节点，求它们的最低公共祖先。</p>
-<p>一个树节点的祖先节点包括它本身。</p>
-<p>注意：</p>
-<p>输入的二叉树不为空；<br>输入的两个节点一定不为空，且是二叉树中的节点；<br>样例<br>二叉树[8, 12, 2, null, null, 6, 4, null, null, null, null]如下图所示：<br>    8<br>   / \<br>  12  2<br>     / \<br>    6   4</p>
-<ol>
-<li><p>如果输入的树节点为2和12，则输出的最低公共祖先为树节点8。</p>
-</li>
-<li><p>如果输入的树节点为2和6，则输出的最低公共祖先为树节点2。</p>
-</li>
-</ol>
-<h2 id="最普通的实现思路"><a href="#最普通的实现思路" class="headerlink" title="最普通的实现思路"></a>最普通的实现思路</h2><p>实现考虑容易想到的实现思路：</p>
-<p>第一步，找到从root到节点A的路径，计作pa；时间复杂度$O(n)$，空间复杂度$O(n)$</p>
-<p>第二步，找到从root到节点B的路径，计作pb；时间复杂度$O(n)$，空间复杂度$O(n)$</p>
-<p>第三步，同时遍历pa、pb，找到最后一个相同的元素，便是A、B的最低公共祖先。时间复杂度$O(n)$</p>
-<p>综上，总的时间复杂度为$O(3n)$，空间复杂度$O(2n)$</p>
-<h2 id="常规的二叉树遍历讨论"><a href="#常规的二叉树遍历讨论" class="headerlink" title="常规的二叉树遍历讨论"></a>常规的二叉树遍历讨论</h2><p>拿到一个二叉树遍历的题目，</p>
-<p>（1）我们首先要思考的是：要解决这个问题，哪种遍历方式最合适？</p>
-<p>前序遍历、后序遍历、中序遍历还是层次遍历？</p>
-<p>（2）其次，我们做出一个假设：假设我已经调用了dfs(child),并解决了这个子问题</p>
-<p>（3）最后，基于上面的假设去思考如何解决整个问题。</p>
-<p>针对上面的第一个问题，我们想要<strong>从下往上遍历整棵树，所以我们需要后序遍历</strong>。</p>
-<p>同时我们做出假设，dfs(child,p,q)会返回p,q在child子树中的最低公共祖先。那么我们的代码大概会长这样：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">TreeNod* <span class="title">dfs</span><span class="params">(TreeNode* root, TreeNode* p, TreeNode* q)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//基本情况</span></span><br><span class="line">    TreeNode* left = dfs(root-&gt;left, p, q);</span><br><span class="line">    TreeNode* right = dfs(root-&gt;right, p, q);</span><br><span class="line">    <span class="comment">//更多处理：要充分理解题目的要求，明确每一个概念的定义，将其转换为代码。</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果在left中找到了p/q， 并且在right中也找到了p/q, 那么显然root就是最低公共祖先。</p>
-<p>如果left中p/q, 而right没有找到，显然遍历left得到的返回值就是最低公公祖先。</p>
-<p>另外需要注意，此处你有一个假设：p\q一定在tree中能够找到；如果该假设被打破的话，这段代码会出问题。</p>
-<h2 id="最终代码"><a href="#最终代码" class="headerlink" title="最终代码"></a>最终代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">TreeNod* <span class="title">dfs</span><span class="params">(TreeNode* root, TreeNode* p, TreeNode* q)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == p || root == q || root == null) <span class="keyword">return</span> root;</span><br><span class="line">    TreeNode* left = dfs(root-&gt;left, p, q);</span><br><span class="line">    TreeNode* right = dfs(root-&gt;right, p, q);</span><br><span class="line">    <span class="keyword">if</span> (left &amp;&amp; right) <span class="keyword">return</span> root;</span><br><span class="line">    <span class="keyword">if</span> (left) <span class="keyword">return</span> left; <span class="keyword">else</span> <span class="keyword">return</span> right;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1296,7 +1286,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">331</span>
+          <span class="site-state-item-count">333</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

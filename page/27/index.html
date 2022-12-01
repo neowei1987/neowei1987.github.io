@@ -203,6 +203,124 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/lowest_ancestor.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/lowest_ancestor.html" class="post-title-link" itemprop="url">二叉树遍历系列-最低公共祖先</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-03 20:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T20:47:03+08:00">2021-01-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-02 21:18:09" itemprop="dateModified" datetime="2022-03-02T21:18:09+08:00">2022-03-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/lowest_ancestor.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/lowest_ancestor.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给出一个二叉树，输入两个树节点，求它们的最低公共祖先。</p>
+<p>一个树节点的祖先节点包括它本身。</p>
+<p>注意：</p>
+<p>输入的二叉树不为空；<br>输入的两个节点一定不为空，且是二叉树中的节点；<br>样例<br>二叉树[8, 12, 2, null, null, 6, 4, null, null, null, null]如下图所示：<br>    8<br>   / \<br>  12  2<br>     / \<br>    6   4</p>
+<ol>
+<li><p>如果输入的树节点为2和12，则输出的最低公共祖先为树节点8。</p>
+</li>
+<li><p>如果输入的树节点为2和6，则输出的最低公共祖先为树节点2。</p>
+</li>
+</ol>
+<h2 id="最普通的实现思路"><a href="#最普通的实现思路" class="headerlink" title="最普通的实现思路"></a>最普通的实现思路</h2><p>实现考虑容易想到的实现思路：</p>
+<p>第一步，找到从root到节点A的路径，计作pa；时间复杂度$O(n)$，空间复杂度$O(n)$</p>
+<p>第二步，找到从root到节点B的路径，计作pb；时间复杂度$O(n)$，空间复杂度$O(n)$</p>
+<p>第三步，同时遍历pa、pb，找到最后一个相同的元素，便是A、B的最低公共祖先。时间复杂度$O(n)$</p>
+<p>综上，总的时间复杂度为$O(3n)$，空间复杂度$O(2n)$</p>
+<h2 id="常规的二叉树遍历讨论"><a href="#常规的二叉树遍历讨论" class="headerlink" title="常规的二叉树遍历讨论"></a>常规的二叉树遍历讨论</h2><p>拿到一个二叉树遍历的题目，</p>
+<p>（1）我们首先要思考的是：要解决这个问题，哪种遍历方式最合适？</p>
+<p>前序遍历、后序遍历、中序遍历还是层次遍历？</p>
+<p>（2）其次，我们做出一个假设：假设我已经调用了dfs(child),并解决了这个子问题</p>
+<p>（3）最后，基于上面的假设去思考如何解决整个问题。</p>
+<p>针对上面的第一个问题，我们想要<strong>从下往上遍历整棵树，所以我们需要后序遍历</strong>。</p>
+<p>同时我们做出假设，dfs(child,p,q)会返回p,q在child子树中的最低公共祖先。那么我们的代码大概会长这样：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">TreeNod* <span class="title">dfs</span><span class="params">(TreeNode* root, TreeNode* p, TreeNode* q)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//基本情况</span></span><br><span class="line">    TreeNode* left = dfs(root-&gt;left, p, q);</span><br><span class="line">    TreeNode* right = dfs(root-&gt;right, p, q);</span><br><span class="line">    <span class="comment">//更多处理：要充分理解题目的要求，明确每一个概念的定义，将其转换为代码。</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果在left中找到了p/q， 并且在right中也找到了p/q, 那么显然root就是最低公共祖先。</p>
+<p>如果left中p/q, 而right没有找到，显然遍历left得到的返回值就是最低公公祖先。</p>
+<p>另外需要注意，此处你有一个假设：p\q一定在tree中能够找到；如果该假设被打破的话，这段代码会出问题。</p>
+<h2 id="最终代码"><a href="#最终代码" class="headerlink" title="最终代码"></a>最终代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">TreeNod* <span class="title">dfs</span><span class="params">(TreeNode* root, TreeNode* p, TreeNode* q)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == p || root == q || root == null) <span class="keyword">return</span> root;</span><br><span class="line">    TreeNode* left = dfs(root-&gt;left, p, q);</span><br><span class="line">    TreeNode* right = dfs(root-&gt;right, p, q);</span><br><span class="line">    <span class="keyword">if</span> (left &amp;&amp; right) <span class="keyword">return</span> root;</span><br><span class="line">    <span class="keyword">if</span> (left) <span class="keyword">return</span> left; <span class="keyword">else</span> <span class="keyword">return</span> right;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/network/trace_rt.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1014,116 +1132,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/language/java/cpu_mem.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/language/java/cpu_mem.html" class="post-title-link" itemprop="url">问题排查系统命令</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-03 19:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T19:47:03+08:00">2021-01-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-01 12:59:55" itemprop="dateModified" datetime="2022-12-01T12:59:55+08:00">2022-12-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/language/java/cpu_mem.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/language/java/cpu_mem.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>top 查看cpu使用率，重点关注：内核还是用户态、load值</p>
-<p>cpu使用率2500%左右(40核系统，但平时才300%左右)，并确认当前系统load值是否很高，如果很高(超过cpu核数)，说明当前系统出现大量线程排队现象，如果load比较低但cpu很高，说明系统运行很顺畅，而是业务比较繁忙导致。</p>
-<p>top -H pid 查看哪些线程cpu占比高</p>
-<p>jstat -gc pid 查看java内部状态</p>
-<p>jstack 查看调用stack </p>
-<p>strace 查看系统调用</p>
-<p>查看函数/接口耗时</p>
-<p>调整jvm 内存参数，调整gc方式（cms-&gt;g1)</p>
-<p>arthas</p>
-<p>dashboard：当前系统的实时数据面板</p>
-<p>thread：查看当前 JVM 的线程堆栈信息</p>
-<p>jvm：查看当前 JVM 的信息</p>
-<p>sc：查看JVM已加载的类信息</p>
-<p>sm：查看已加载类的方法信息</p>
-<p>jad：反编译指定已加载类的源码</p>
-<p>classloader：查看classloader的继承树，urls，类加载信息，使用classloader去getResource</p>
-<p>monitor：方法执行监控</p>
-<p>watch：方法执行数据观测</p>
-<p>trace：方法内部调用路径，并输出方法路径上的每个节点上耗时</p>
-<p>stack：输出当前方法被调用的调用路径</p>
-<p>tt：方法执行数据的时空隧道，记录下指定方法每次调用的入参和返回信息，并能对这些不同的时间下调用进行观测</p>
-<p>reset：重置增强类，将被 Arthas 增强过的类全部还原，Arthas 服务端关闭时会重置所有增强过的类</p>
-<p>quit：退出当前 Arthas 客户端，其他 Arthas 客户端不受影响</p>
-<p>shutdown：关闭 Arthas 服务端，所有 Arthas 客户端全部退出</p>
-<hr>
-<p>memory 各种查看</p>
-<hr>
-<p>netstat 查看timewait closewait, 查看数据包长什么样，是否符合预期等</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1196,7 +1204,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">331</span>
+          <span class="site-state-item-count">333</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

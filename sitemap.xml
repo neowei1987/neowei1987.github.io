@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/index.html</loc>
+    
+    <lastmod>2022-12-01</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://neowei1987.github.io/backend_knowledge_architecture/design/ddd.html</loc>
+    
+    <lastmod>2022-12-01</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://neowei1987.github.io/backend_knowledge_architecture/os/signal.html</loc>
     
     <lastmod>2022-12-01</lastmod>

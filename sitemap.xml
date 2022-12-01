@@ -2,6 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://neowei1987.github.io/ai/linear_regression.html</loc>
+    
+    <lastmod>2022-12-01</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://neowei1987.github.io/ai/sk_learn.html</loc>
+    
+    <lastmod>2022-12-01</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://neowei1987.github.io/ai/math.html</loc>
+    
+    <lastmod>2022-12-01</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://neowei1987.github.io/backend_knowledge_architecture/store/index.html</loc>
+    
+    <lastmod>2022-12-01</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://neowei1987.github.io/backend_knowledge_architecture/code/better_code.html</loc>
     
     <lastmod>2022-12-01</lastmod>
@@ -17,13 +45,6 @@
   
   <url>
     <loc>https://neowei1987.github.io/backend_knowledge_architecture/store/tair.html</loc>
-    
-    <lastmod>2022-11-26</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://neowei1987.github.io/backend_knowledge_architecture/store/index.html</loc>
     
     <lastmod>2022-11-26</lastmod>
     

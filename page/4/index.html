@@ -203,6 +203,307 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/language/java/cpu_mem.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/language/java/cpu_mem.html" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-11-01 22:17:47" itemprop="dateCreated datePublished" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-06 22:40:40" itemprop="dateModified" datetime="2022-11-06T22:40:40+08:00">2022-11-06</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/language/java/cpu_mem.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/language/java/cpu_mem.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>top 查看cpu使用率，重点关注：内核还是用户态、load值</p>
+<p>cpu使用率2500%左右(40核系统，但平时才300%左右)，并确认当前系统load值是否很高，如果很高(超过cpu核数)，说明当前系统出现大量线程排队现象，如果load比较低但cpu很高，说明系统运行很顺畅，而是业务比较繁忙导致。</p>
+<p>top -H pid 查看哪些线程cpu占比高</p>
+<p>jstat -gc pid 查看java内部状态</p>
+<p>jstack 查看调用stack </p>
+<p>strace 查看系统调用</p>
+<p>查看函数/接口耗时</p>
+<p>调整jvm 内存参数，调整gc方式（cms-&gt;g1)</p>
+<p>arthas</p>
+<p>dashboard：当前系统的实时数据面板</p>
+<p>thread：查看当前 JVM 的线程堆栈信息</p>
+<p>jvm：查看当前 JVM 的信息</p>
+<p>sc：查看JVM已加载的类信息</p>
+<p>sm：查看已加载类的方法信息</p>
+<p>jad：反编译指定已加载类的源码</p>
+<p>classloader：查看classloader的继承树，urls，类加载信息，使用classloader去getResource</p>
+<p>monitor：方法执行监控</p>
+<p>watch：方法执行数据观测</p>
+<p>trace：方法内部调用路径，并输出方法路径上的每个节点上耗时</p>
+<p>stack：输出当前方法被调用的调用路径</p>
+<p>tt：方法执行数据的时空隧道，记录下指定方法每次调用的入参和返回信息，并能对这些不同的时间下调用进行观测</p>
+<p>reset：重置增强类，将被 Arthas 增强过的类全部还原，Arthas 服务端关闭时会重置所有增强过的类</p>
+<p>quit：退出当前 Arthas 客户端，其他 Arthas 客户端不受影响</p>
+<p>shutdown：关闭 Arthas 服务端，所有 Arthas 客户端全部退出</p>
+<hr>
+<p>memory 各种查看</p>
+<hr>
+<p>netstat 查看timewait closewait, 查看数据包长什么样，是否符合预期等</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/language/java/class_load.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/language/java/class_load.html" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-11-01 22:17:47" itemprop="dateCreated datePublished" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/language/java/class_load.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/language/java/class_load.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>bootstrap classloader<br>extension classloader<br>application classloader<br>custom classloader</p>
+<p>双亲委派模型</p>
+<p>当一个类收到了类加载请求，他首先不会尝试自己去加载这个类，而是把这个请求委派给父类去完成，每一个层次类加载器都是如此，因此所有的加载请求都应该传送到启动类加载其中，只有当父类加载器反馈自己无法完成这个请求的时候（在它的加载路径下没有找到所需加载的Class），子类加载器才会尝试自己去加载</p>
+<p>参考：<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/w1lgy/article/details/126434976">https://blog.csdn.net/w1lgy/article/details/126434976</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/tx/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/distributed_system/tx/index.html" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-11-01 22:17:47" itemprop="dateCreated datePublished" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/distributed_system/tx/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/tx/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>消息事务是指一系列的生产、消费操作可以要么都完成，要么都失败，类似数据库的事务。这个特性在0.10.2的版本是不支持的，从0.11版本开始才支持。华为云DMS率先提供Kafka 1.1.0的专享版服务，支持消息事务特性。      </p>
+<p>支持事务消息有什么作用？消息事务是实现分布式事务的一种方案，可以确保分布式场景下的数据最终一致性。例如最常用的转账场景，小王 转账到小明，实际操作是小王账户减去相应金额，小明的账户增加相应金额，在分库分表的前提下，2个账户存储在不同的数据库中，这时需要分布式事务才能保证数据库一致性，单个数据库的事务无法保证跨库之间的原子性。如果小王账户先扣钱，再去发送消息到小明所在的数据库去通知增加钱，在没有事务消息的情况下，无论是先扣钱或者先发送通知增加钱，都会有数据不一致的问题，因为无法保证两者的原子性。而有了事务消息，可以保证发送通知与本地事务（扣钱）是一个原子操作，本地事务与发送通知可以同时成功或者同时失败，确保数据一致。</p>
+<p>除了数据最终一致性外，还实现了消息Exactly once语义。所谓Exactly once语义是消息传递语义中最难实现的一种，包括At most once：最多一次（不会重复，但是可能丢失数据）； At least once：至少投递一次（不会丢失，但是会导致重复）和Exactly  once: 刚好一次（不丢不重），也即幂等性。Kafka的幂等性可以保证生产只对一个分区实现Exactl once语义，需要多个分区也实现这个语义，还需要引入消息事务确保原子性。</p>
+<p>分布式事务介绍</p>
+<p>当前系统架构主流是分布式架构与微服务架构，在这种架构下数据源不是单一的数据库，业务逻辑往往需要在多个数据库中实现原子操作，单个数据库中的强大的本地事务无法保证多节点原子操作。 此时需要分布式事务来确保数据的一致性。目前使用较多的分布式事务解决方案有几种：</p>
+<p>1、XA事务：两阶段/三阶段提交</p>
+<p>XA是由X/Open组织提出的分布式事务的规范。XA规范主要定义了(全局)事务管理器(Transaction Manager)和(局部)资源管理器(Resource Manager)之间的接口。XA接口是双向的系统接口，在事务管理器（Transaction Manager）以及一个或多个资源管理器（Resource Manager）之间形成通信桥梁。实现XA事务的关键是两阶段和三阶段提交协议。</p>
+<p>两阶段提交协议（Two-phase Commit，2PC）经常被用来实现分布式事务。一般分为协调器C和若干事务参与者Si两种角色，这里的事务参与者就是具体的数据库，协调器可以和事务参与者在一台机器上，如下图</p>
+<p>二阶段提交协议主要包括由2个阶段：第一个阶段为准备阶段（prepare），第二阶段为提交阶段。准备阶段由事务协调者向事务参与者发送prepare消息，各个参与者处理本地事务但不提交，然后向事务协调者返回事务状态。 提交阶段根据准备阶段各参与者的执行请求，协调者确定事务是提交或者回滚，向各个参与者发送命令。</p>
+<p>二阶段提交协议主要的问题是在提交执行过程中，所有的参与者都需要听从协调者的统一调度，期间处于阻塞状态而不能从事其他操作，这样<strong>效率及其低下</strong>。特别是当协调者发出提交通知到部分参与者后宕机，其他参与者就会阻塞。</p>
+<p>2PC的缺点：</p>
+<p>性能问题：所有事务参与者在等待其它参与者响应的时候都处于同步阻塞状态，无法进行其它操作<br>单点问题：协调者（TM）在 2PC 中起到非常大的作用，发生故障将会造成很大影响。特别是在阶段二发生故障，所有参与者（RM）会一直等待状态，无法完成其它操作。<br>数据一致性问题：协调者如果因为网络问题或者宕机了，向一部分参与者发送了commit，另一部分还没来得及发就宕机了，就会造成数据不一致。<br>局限性：只适用于数据库层面的分布式事务</p>
+<p>针对二阶段提交存在的问题，三阶段提交协议在prepare与commit阶段之间增加一个pre-commit阶段。Prepare阶段只询问参与者而不做事务，而在pre-commit阶段各个参与者才会执行本地事务但不提交。Commit阶段就是直接提交。这样做可以避免二阶段当协调者迟迟没有发出commit或者rollback通知，参与者在超时后可以自行提交或者回滚，避免阻塞事务（这是因为经过了prepare阶段已经确认了各个参与者是可以执行的，最后第三阶段直接执行即可）。 三阶段提交也存在很多问题，也<strong>不能完全保证数据一致</strong>，完全一致需要用到Paxos算法。</p>
+<p>优点：引进了超时机制，变相的优化了参与者同步阻塞的范围，也避免了协调者单点问题，阶段3协调者出现问题参与者也会提交事务</p>
+<p>缺点：依旧存在数据不一致问题，阶段三假设协调者发出回滚命令，而某个参与者因网络问题没有收到命令，受机制影响也会提交事务，此时数据就不一致了；同时因为多引进了一个阶段，性能方面也会有所下降</p>
+<p>2、TCC补偿性事务解决方案</p>
+<p>TCC分别对应Try、Confirm和Cancel三种操作，含义如下：</p>
+<ul>
+<li><p>Try：预留业务资源</p>
+</li>
+<li><p>Confirm：确认执行业务操作，执行事务</p>
+</li>
+<li><p>Cancel：取消执行业务操作</p>
+</li>
+</ul>
+<p>TCC解决了跨应用业务操作的原子性问题，在诸如组合支付、账务拆分场景非常实用。</p>
+<p>TCC实际上把数据库层的二阶段提交上提到了应用层来实现，对于数据库来说是一阶段提交，<strong>规避了数据库层的2PC性能低下问题</strong>。</p>
+<p>TCC需要业务提供使用，代码侵入性强，开发复杂和成本高。<br>非强一致性，属于补偿事务，实现最终一致</p>
+<p>3、事务消息</p>
+<p>基于消息中间件的事务消息来完成分布式事务。事务消息可以确保本地执行事务与消息发送是原子的：先发送一条消息到消息中间件（例如RabbitMQ)，然后执行本地事务(本地DB操作），当本地事务成功后再发送提交确认（Confirm)到消息中间件，然后这条消息才能被其他业务消费者所能感知，从而确保原子性；如果本地事务失败，则Rollback消息中间件。</p>
+<p> 所以，我们这里最核心的就是A银行通过本地事务保证日志记录+后台线程轮询保证消息不丢失。B银行通过本地事务保证日志记录从而保证消息不重复消费！B银行在回调A银行的接口时会通知处理结果，如果转账失败，A银行会根据处理结果进行回滚。</p>
+<p> rabbit MQ通过query本地事务状态来实现消息事务。</p>
+<hr>
+<p>当然，分布式事务最好的解决方案是尽量避免出现分布式事务！</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/weixin_39785970/article/details/110844239">https://blog.csdn.net/weixin_39785970/article/details/110844239</a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://xie.infoq.cn/article/7b55d37b619256f9fa4ca4777">https://xie.infoq.cn/article/7b55d37b619256f9fa4ca4777</a></p>
+<p>kafka实现的多条消息的事务性，要么一起被消费到，要么一起丢失。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/core/growth/user_growth.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1100,299 +1401,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/thread_model/co_for_go.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/server/thread_model/co_for_go.html" class="post-title-link" itemprop="url">高性能服务器系列-go的协程管理</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-03-02 09:04:36 / Modified: 09:18:10" itemprop="dateCreated datePublished" datetime="2022-03-02T09:04:36+08:00">2022-03-02</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/server/thread_model/co_for_go.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/thread_model/co_for_go.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>M(Machine)，可以理解成一个线程，真正执行P的线程。系统线程，想要在CPU上执行代码必须有线程，通过系统调用clone创建</p>
-<p>P(Processor)，一个P表示一个逻辑处理器，用于调度G。每一个Processor有一个称为G的队列，队列里放了等待被调度运行的协程。M必须获得P才能执行P队列中的G代码，否则会陷入休眠</p>
-<p>G，一段goroutine代码，放到P对应的队列上，等待被调度运行。代表一个计算任务，由代码和上下文（如当前代码执行的位置、栈信息、状态等）组成。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/cache/consistency.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/cache/consistency.html" class="post-title-link" itemprop="url">关于缓存与数据库的一致性与过载保护机制</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-03-02 07:20:03" itemprop="dateCreated datePublished" datetime="2022-03-02T07:20:03+08:00">2022-03-02</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-29 09:49:36" itemprop="dateModified" datetime="2022-10-29T09:49:36+08:00">2022-10-29</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/cache/consistency.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/cache/consistency.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="数据库、缓存一致性问题"><a href="#数据库、缓存一致性问题" class="headerlink" title="数据库、缓存一致性问题"></a>数据库、缓存一致性问题</h2><p>先说最重要的数据库、缓存一致性问题，关于该问题，有以下几点需要考虑：</p>
-<ol>
-<li><p>当DB数据发生变更时，是删除缓存还是修改缓存？</p>
-<p>答案是删除缓存。相比修改缓存，删除缓存是幂等性操作。删除缓存可以避免出现双写并发问题。</p>
-</li>
-<li><p>先写DB还是先写缓存？</p>
-<p>答案是先操作DB。结合case1, 在读多写少的高并发场景下，如果先删缓存再操作DB，有一个很明显的逻辑错误，使得有极高的概率出现读写并发问题。虽然先db后缓存的方式也无法完全避免这类问题，但是出现的概率极低。</p>
-</li>
-<li><p>高并发下，关于缓存的一致性会出现什么问题？</p>
-<p>case1, case2中提到了在高并发的情况下，会出现某种并发逻辑错误，导致数据不一致。</p>
-</li>
-<li><p>是否听说过订阅数据库binlog变更去清理缓存的方法？这个方法的使用场景是啥？</p>
-<p>通过binlog变更的方式去清理缓存，有两个好处：第一，无业务侵入型；第二，支持无限重试。</p>
-</li>
-</ol>
-<h3 id="CacheAside模式"><a href="#CacheAside模式" class="headerlink" title="CacheAside模式"></a>CacheAside模式</h3><p>CacheAside模式，一定是最佳的吗？不一定，具体场景具体分析：</p>
-<p>（1）新用户注册场景，同时数据库主从延迟1s</p>
-<p>解决方案：新建数据库 + 新建缓存（避免读取到延迟的数据结果）</p>
-<p>（2）写入特别频繁的场景，而我们对命中率有一定的要求</p>
-<p>  解决方案：</p>
-<ol>
-<li>updateDB + updateCache(With Lock)</li>
-<li>updateDB + updateCache(with TTL)</li>
-</ol>
-<h3 id="Write-Read-Through模式"><a href="#Write-Read-Through模式" class="headerlink" title="Write/Read Through模式"></a>Write/Read Through模式</h3><p>两种应对write miss的办法：</p>
-<p>  （1）write-allocate 写cache，再由cache更新db<br>  （2）no write allocate 直接更新db</p>
-<h3 id="write-back模式"><a href="#write-back模式" class="headerlink" title="write back模式"></a>write back模式</h3><p><img src="http://cdn.b5mang.com/2021320144254.png" alt="write-back模式的读"></p>
-<p><img src="http://cdn.b5mang.com/2021320144312.png" alt="write-back模式的写"></p>
-<p>变种：在允许数据丢失的情况下，写入时只写缓存，而异步写入存储</p>
-<h2 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h2><p>再说缓存穿透问题。</p>
-<p>首先明确什么是缓存穿透问题？考虑在很高的读并发下，如果某一个redis key突然过期，会发生什么？如果真的发生这种情况，并且我们没有任何预防措施，按照cache aside模式，程序会read from db，然后set cache。但是由于并发很高，所有的线程同时去请求db，造成db过载不可用。我们称这种现象就缓存穿透。通过分布式锁来控制仅一个线程去read db，而其他线程等待，可以一定程度上避免缓存穿透问题。</p>
-<p>缓存并发穿透（狗桩效应）：极热点缓存失效，大量请求穿透到DB，造成DB瞬时压力过大</p>
-<p>如何解决缓存并发穿透呢？<br>（1）热点发现，定时续期<br>（2）对于极热点，启用本地缓存</p>
-<p>还有一种情况，如果请求的<strong>某一个key在db中也不存在</strong>，我们需要设置一个拥有较短TTL的空缓存来避免每次请求都穿透到db。</p>
-<p>回种空值—-缺点在于：会占用很大的内存来存储好多无用请求，需要评估内存是否OK</p>
-<p>布隆过滤器—-在写入DB时，额外写一份数据到布隆过滤器，查询时优先访问过滤器</p>
-<h2 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h2><p>最后谈一下缓存雪崩。</p>
-<p>同样先搞清楚什么是缓存雪崩。由于某些系统设计不合理，缓存会设置为相同的过期时间或者很接近。这样子在某个时间点，缓存便会近乎同时失效，造成业务请求全部回源db,造成db过载，我们称这种情况为缓存雪崩。一般情况下，我们需要有意的设置key的过期时间，让他们随机过期，从而解决缓存同时过期导致的缓存雪崩问题。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/big_number.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/structures/big_number.html" class="post-title-link" itemprop="url">大数高精度加减乘除</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-03-01 21:10:03" itemprop="dateCreated datePublished" datetime="2022-03-01T21:10:03+08:00">2022-03-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-02 22:33:46" itemprop="dateModified" datetime="2022-03-02T22:33:46+08:00">2022-03-02</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/big_number.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/big_number.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>一般而言，通过倒序vector\<int\>来表示高精度大数；</p>
-<p>因为做运算时，通常需要从低位开始，所以一般vector需要进行逆转处理。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//高精度加法 —— 模板题 AcWing 791. 高精度加法</span></span><br><span class="line"><span class="comment">// C = A + B, A &gt;= 0, B &gt;= 0</span></span><br><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">add</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;A, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;B)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (A.size() &lt; B.size()) <span class="keyword">return</span> add(B, A);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; C;</span><br><span class="line">    <span class="keyword">int</span> t = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; A.size(); i ++ )</span><br><span class="line">    &#123;</span><br><span class="line">        t += A[i];</span><br><span class="line">        <span class="keyword">if</span> (i &lt; B.size()) t += B[i];</span><br><span class="line">        C.push_back(t % <span class="number">10</span>);</span><br><span class="line">        t /= <span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (t) C.push_back(t);</span><br><span class="line">    <span class="keyword">return</span> C;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//高精度减法 —— 模板题 AcWing 792. 高精度减法</span></span><br><span class="line"><span class="comment">// C = A - B, 满足A &gt;= B, A &gt;= 0, B &gt;= 0</span></span><br><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">sub</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;A, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;B)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; C;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, t = <span class="number">0</span>; i &lt; A.size(); i ++ )</span><br><span class="line">    &#123;</span><br><span class="line">        t = A[i] - t;</span><br><span class="line">        <span class="keyword">if</span> (i &lt; B.size()) t -= B[i];</span><br><span class="line">        C.push_back((t + <span class="number">10</span>) % <span class="number">10</span>);</span><br><span class="line">        <span class="keyword">if</span> (t &lt; <span class="number">0</span>) t = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span> t = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//清除后面的0（高位）</span></span><br><span class="line">    <span class="keyword">while</span> (C.size() &gt; <span class="number">1</span> &amp;&amp; C.back() == <span class="number">0</span>) C.pop_back();</span><br><span class="line">    <span class="keyword">return</span> C;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//高精度乘低精度 —— 模板题 AcWing 793. 高精度乘法</span></span><br><span class="line"><span class="comment">// C = A * b, A &gt;= 0, b &gt; 0</span></span><br><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">mul</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;A, <span class="keyword">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; C;</span><br><span class="line">    <span class="keyword">int</span> t = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; A.size() || t; i ++ )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (i &lt; A.size()) t += A[i] * b;</span><br><span class="line">        C.push_back(t % <span class="number">10</span>);</span><br><span class="line">        t /= <span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> C;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//高精度除以低精度 —— 模板题 AcWing 794. 高精度除法</span></span><br><span class="line"><span class="comment">// A / b = C ... r, A &gt;= 0, b &gt; 0</span></span><br><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">div</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;A, <span class="keyword">int</span> b, <span class="keyword">int</span> &amp;r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; C;</span><br><span class="line">    r = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = A.size() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i -- )</span><br><span class="line">    &#123;</span><br><span class="line">        r = r * <span class="number">10</span> + A[i];</span><br><span class="line">        C.push_back(r / b);</span><br><span class="line">        r %= b;</span><br><span class="line">    &#125;</span><br><span class="line">    reverse(C.begin(), C.end());</span><br><span class="line">    <span class="keyword">while</span> (C.size() &gt; <span class="number">1</span> &amp;&amp; C.back() == <span class="number">0</span>) C.pop_back();</span><br><span class="line">    <span class="keyword">return</span> C;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1465,7 +1473,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">325</span>
+          <span class="site-state-item-count">328</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

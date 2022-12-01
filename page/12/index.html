@@ -203,6 +203,293 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/design_pattern/reactor.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/design_pattern/reactor.html" class="post-title-link" itemprop="url">设计模式-reactor模式</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 23:23:36" itemprop="dateModified" datetime="2022-03-01T23:23:36+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/design_pattern/reactor.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/design_pattern/reactor.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Reactor 模式首先是事件驱动的，有一个或多个并发输入源，有一个Service Handler，有多个Request Handlers；这个Service Handler会同步的将输入的请求（Event）多路复用的分发给相应的Request Handler。如果用图表示的如下：</p>
+<p><img src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/4/5/169ed823caf32d30~tplv-t2oaga2asx-watermark.awebp" alt="Reactor模式"></p>
+<p>其实在设计模式层面，IO多路复用也是采用 Reactor 模式的。</p>
+<p>IO 多路复用模型可以看成是 Reactor 模式在 IO 模型上的应用。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/high_perfermance.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/distributed_system/high_perfermance.html" class="post-title-link" itemprop="url">分布式系统-低延迟，高性能</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-02 08:54:55" itemprop="dateModified" datetime="2022-03-02T08:54:55+08:00">2022-03-02</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/distributed_system/high_perfermance.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/high_perfermance.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在我看来，高性能指的是，我们的系统能够在尽可能短的时间内完成用户的请求，也就是说latency尽可能的低。</p>
+<p>如果说系统能够支撑更大的吞吐量，能够承载更多的同时在线。我们除了降低latency，还可以考虑加机器（如果还没有reach到某个系统平瓶颈的前提下）</p>
+<h3 id="提高吞吐量"><a href="#提高吞吐量" class="headerlink" title="提高吞吐量"></a>提高吞吐量</h3><h4 id="增加并发进程数"><a href="#增加并发进程数" class="headerlink" title="增加并发进程数"></a>增加并发进程数</h4><p>注意：无限增加，不会无限提升性能(对系统的扩展性有要求)</p>
+<p><img src="http://cdn.b5mang.com/202132011337.png" alt="性能拐点模型"></p>
+<h4 id="减少响应时间"><a href="#减少响应时间" class="headerlink" title="减少响应时间"></a>减少响应时间</h4><p>IO密集型：优化数据库索引、加缓存</p>
+<p>CPU密集型：优化算法时间复杂度、减少不必要运算等</p>
+<p>并发读的核心优化理念是尽量减少用户到服务端来“读”数据，或者让他们读更少的数据；</p>
+<p>并发写的处理原则也一样，它要求我们在数据库层面独立出来一个库，做特殊的处理。</p>
+<p>从一个架构师的角度来看，要想打造并维护一个超大流量并发读写、高性能、高可用的系统，在整个用户请求路径上从浏览器到服务端我们要遵循几个原则，就是要保证</p>
+<ol>
+<li>用户请求的数据尽量少</li>
+<li>完成这个请求的路径尽量短、依赖尽量少 =》 上游到下游的请求数尽量少</li>
+</ol>
+<p>也就两个大的方向：提升单次效率、减少不必要的请求</p>
+<ol>
+<li>动静分离方案（移除无关依赖、减少请求）</li>
+<li>热点的发现与隔离（缩短热点的服务路径）</li>
+<li>请求的削峰与分层过滤（异步化，减少无必要的依赖）</li>
+<li>服务端的极致优化（缩短热点的服务路径）</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/high_scalability.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/distributed_system/high_scalability.html" class="post-title-link" itemprop="url">分布式系统-可扩展</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-04 22:55:48" itemprop="dateModified" datetime="2022-03-04T22:55:48+08:00">2022-03-04</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/distributed_system/high_scalability.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/high_scalability.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h2><p>有合理的办法应对系统的增长（数据量、流量、复杂性）</p>
+<p>一个良好适配应用的可扩展架构，是围绕着<strong>假设</strong>（assumption）建立的：哪些操作是常见的？哪些操作是罕见的？这就是所谓负载参数。如果假设最终是错误的，那么为扩展所做的工程投入就白费了，最糟糕的是适得其反。</p>
+<p>数据库、缓存、依赖的第三方、复杂均衡、交换机带宽都是系统扩展时需要考虑的点</p>
+<h3 id="分层"><a href="#分层" class="headerlink" title="分层"></a>分层</h3><p>首先要分层，分层是实现扩展的必要条件；分了层才能让系统有更好的可扩展能力；</p>
+<p><img src="http://cdn.b5mang.com/2021320104242.png" alt="架构分层"></p>
+<p>我们将系统分为如下几层：</p>
+<h4 id="接入层"><a href="#接入层" class="headerlink" title="接入层"></a>接入层</h4><p>主要负责负载均衡，要求负载均衡策略的时间复杂度要尽量简单，追求$O(lgn)$的时间复杂度，最坏不能超过$O(n)$。对于更坏时间复杂度的均衡策略，性能上会扛不住。</p>
+<h4 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h4><p>业务层：按照业务拆分、按照重要性拆分（轻重分离，核心、非核心）、按照请求来源（客户端、web、内网等）—这个跑偏了，这些点主要服务于可用性。</p>
+<p>这里侧重点在于无状态，我们一定要确保我们的服务无状态。</p>
+<h4 id="存储层"><a href="#存储层" class="headerlink" title="存储层"></a>存储层</h4><p>存储层做扩展会更麻烦一些。</p>
+<p>一般情况下，要求我们根据业务量提前估计好存储容量。根据计算出来的总的存储量，提前做足够的数据分片。</p>
+<p>换言之，对于存储层，我们的一种思路是：早做扩展，以确保将来不做扩展；</p>
+<p>另外一种思路是，添加必要的路由层（数据访问路由层）或者路由算法（数据表倍增法），来确保将来的扩展对上层不可见。</p>
+<h4 id="manager层"><a href="#manager层" class="headerlink" title="manager层"></a>manager层</h4><ol>
+<li>抽象service层可能提供的一些原子能力</li>
+<li>封装对第三方接口的调用</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/server.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -322,7 +609,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-26 22:26:13" itemprop="dateModified" datetime="2022-11-26T22:26:13+08:00">2022-11-26</time>
+                <time title="Modified: 2022-12-01 11:36:40" itemprop="dateModified" datetime="2022-12-01T11:36:40+08:00">2022-12-01</time>
               </span>
 
           
@@ -879,363 +1166,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/thread_model/thread.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/server/thread_model/thread.html" class="post-title-link" itemprop="url">高性能服务器设计-常见线程模型</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:44:37" itemprop="dateModified" datetime="2022-03-01T22:44:37+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/server/thread_model/thread.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/thread_model/thread.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="单线程模型"><a href="#单线程模型" class="headerlink" title="单线程模型"></a>单线程模型</h3><p>代表：Redis</p>
-<p>基本原理：</p>
-<p>单一线程，依次socket-&gt;bind-&gt;listen，然后epoll_wait分别进行accept以及读写事件</p>
-<p>优点&amp;使用场景：</p>
-<p>简单、没有并发锁问题；适用于短耗时的计算密集型服务</p>
-<p>缺点：</p>
-<p>不能支持耗时较长的事件，尤其是IO密集型</p>
-<h3 id="单线程-listen-accept-epoll-wait-1队列通知-n线程-读写处理-模型"><a href="#单线程-listen-accept-epoll-wait-1队列通知-n线程-读写处理-模型" class="headerlink" title="单线程(listen+accept+epoll_wait) + 1队列通知 + n线程(读写处理) 模型"></a>单线程(listen+accept+epoll_wait) + 1队列通知 + n线程(读写处理) 模型</h3><p>代表：thrift-nonblocking-server</p>
-<p>基本原理：</p>
-<ol>
-<li>在这种模型中，有1+n个线程</li>
-<li><p>有1个线程执行端口的listen并把listen_fd加入该线程的epoll_set，然后循环去做如下事情：</p>
-<p> 2.1 epoll_wait监听新连接的到</p>
-<p> 2.2 调用accept获得新到的fd</p>
-<p> 2.3 把fd放入队列</p>
-<p> 回到2.1，继续epoll_wait</p>
-</li>
-<li><p>另外有n个工作线程，从队列里面获取文件描述符，然后执行：1）读取数据，2）执行任务</p>
-</li>
-</ol>
-<p>优点：</p>
-<ul>
-<li>模型不算复杂</li>
-<li>并发能力强，能够充分利用多核</li>
-<li>天然支持负载均衡（每个工作工作线程完成任务之后就会去队列里主动获取文件描述符）</li>
-</ul>
-<p>缺点：</p>
-<p>队列可能是性能瓶颈，尤其是当业务逻辑耗时本身极其短的情况下</p>
-<h3 id="单线程-listen-accept-epoll-wait-n队列通知-n线程-读写处理-模型"><a href="#单线程-listen-accept-epoll-wait-n队列通知-n线程-读写处理-模型" class="headerlink" title="单线程(listen+accept+epoll_wait) + n队列通知 + n线程(读写处理) 模型"></a>单线程(listen+accept+epoll_wait) + n队列通知 + n线程(读写处理) 模型</h3><p>代表：memcache</p>
-<p>基本原理：</p>
-<ul>
-<li><p>这种模型基本类似于上一种模型，区别在于把1个队列换成n个队列，每个工作线程绑定一个队列，每个工作线程从自己的队列消费数据，其他的保持一致</p>
-</li>
-<li><p>LISTEN线程往PIPE里写入一个哨兵，通知WORKER线程队列可读</p>
-</li>
-</ul>
-<p>优点：</p>
-<p>并发能力更强。相比于单队列的模型，多队列的好处是减少了队列的锁竞争。对于短耗时任务能得到比较多的提升，很适合缓存类应用</p>
-<p>缺点：</p>
-<p>有可能导致负载不均。因为监听线程是不会去根据不同线程的处理速度决定把任务分配给哪个线程的，如果每个任务的耗时不均衡，那么就可能导致有些线程累死，有些线程饿死。</p>
-<p>单线程listen, 在处理高速率海量连接时，单线程可能会成为瓶颈</p>
-<h3 id="单进程-listen-n进程-accept-epoll-读写处理-模型"><a href="#单进程-listen-n进程-accept-epoll-读写处理-模型" class="headerlink" title="单进程(listen) + n进程(accept + epoll + 读写处理) 模型"></a>单进程(listen) + n进程(accept + epoll + 读写处理) 模型</h3><p>代表：nginx</p>
-<p>基本原理：</p>
-<ol>
-<li>master进程监听新连接的到来，并让其中一个worker进程accept。这里需要处理惊群效应问题(加锁、SO_REUSEPORT)</li>
-<li>worker进程accept到fd之后，把fd注册到到本进程的epoll句柄里面，由本进程处理这个fd的后续读写事件</li>
-<li>worker进程根据自身负载情况，选择性地不去accept新fd，从而实现负载均衡</li>
-</ol>
-<h3 id="单线程-listen-n线程-accept-epoll-读写处理-协程-模型"><a href="#单线程-listen-n线程-accept-epoll-读写处理-协程-模型" class="headerlink" title="单线程(listen) + n线程(accept + epoll + 读写处理 + 协程) 模型"></a>单线程(listen) + n线程(accept + epoll + 读写处理 + 协程) 模型</h3>
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/thread_model/libsvrkit.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/server/thread_model/libsvrkit.html" class="post-title-link" itemprop="url">高性能服务器系列-libsvrkit RPC框架</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-17 21:45:12" itemprop="dateCreated datePublished" datetime="2022-02-17T21:45:12+08:00">2022-02-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-02 09:04:39" itemprop="dateModified" datetime="2022-03-02T09:04:39+08:00">2022-03-02</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/server/thread_model/libsvrkit.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/thread_model/libsvrkit.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <ol>
-<li><p>同时只有一个worker来accept接受新的连接请求。一个连接上的所有请求都是由同一个worker来处理。</p>
-</li>
-<li><p>通过iovec来接收输入, iovec可以直接交给pb来解析。</p>
-</li>
-<li><p>如果是一个新的请求包，则开启一个co由它来进行处理。</p>
-</li>
-<li><p>如果是一个回复包，则根据回复包的seqno, 查询map， 找到对应的co， co_resume， 执行原来的业务逻辑。</p>
-</li>
-<li><p>通过时间轮来管理所有的超时时间。</p>
-</li>
-<li><p>epoll_wait的timeout 是 min(1ms, 下次超时时间)</p>
-</li>
-<li><p>通过pipe来进行线程同步。</p>
-</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/cache/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/cache/index.html" class="post-title-link" itemprop="url">缓存简要说明</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-16 23:20:03" itemprop="dateCreated datePublished" datetime="2022-02-16T23:20:03+08:00">2022-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-29 09:49:36" itemprop="dateModified" datetime="2022-10-29T09:49:36+08:00">2022-10-29</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/cache/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/cache/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>高速缓存服务器(Cache Server)是软硬件高度集成的专业功能服务器，主要做高速缓存加速服务，一般部署在网络边缘。</p>
-<p>根据加速对象不同，分为客户端加速和服务器加速</p>
-<p>客户端加速Cache部署在网络出口处，把常访问的内容缓存在本地，提高响应速度和节约带宽;</p>
-<p>服务器加速Cache部署在服务器前端，作为Web服务器的前置机，提高Web服务器的性能，加速访问速度。</p>
-<hr>
-<p>缓存有哪些类型？</p>
-<ul>
-<li>服务器LocalCache （有状态）</li>
-</ul>
-<p>将缓存内容放到服务器的本地内存或者磁盘；</p>
-<p>无法及时更新，一般都是设置一个合理的过期时间，让其自动过期；适用于实时性要求不高的场景；</p>
-<p>优缺点：本地缓存是内存访问，没有远程交互开销，性能最好，但是受限于单机容量，一般缓存较小且无法扩展。</p>
-<p>特例：数据库缓存</p>
-<ul>
-<li>分布式缓存（无状态）</li>
-</ul>
-<p>redis\memcache\tair</p>
-<ul>
-<li>客户端缓存（有状态）</li>
-</ul>
-<p>具体有哪些：<br>浏览器cookie；浏览器本地缓存；flash本地存储；html5的本地存储；native app 本地缓存</p>
-<p>缓存系统对比与选型</p>
-<hr>
-<p>在Web应用领域，Web缓存大致可以分为以下几种类型：</p>
-<h4 id="浏览器端缓存"><a href="#浏览器端缓存" class="headerlink" title="浏览器端缓存"></a>浏览器端缓存</h4><p>浏览器缓存根据一套与服务器约定的规则进行工作，在同一个会话过程中会检查一次并确定缓存的副本足够新。如果你浏览过程中，比如前进或后退，访问到同一个图片，这些图片可以从浏览器缓存中调出而即时显现。</p>
-<p>客户端浏览器缓存主要是通过在http头部增加<br>Last-Modified,If-Modified-Since,Expires,Cache-Control等标识，和服务器进行协商，是否是采用客户的本机缓存来实现。</p>
-<p>其中这里面也会分为三种方式</p>
-<p>1 通过Last-Modified，If-Modified-Since方式和服务器通信，客户发出http请求中包含If-Modified-Since，如果服务器端代码没有修改，服务器端返回302响应代码的请求响应头（内容不返回）客户端则直接用本机缓存的内容缓存显示结果。相<br>当于节省了服务器执行代码时间以及数据传输时间。</p>
-<p>2 通过Expires,Cache-Control控制，客户端发现如果上次请求的页面还未过期，通过Expires或者Cache-Control进行辨别，则直接显示本机缓存的内容，不与服务器进行通信。</p>
-<h4 id="服务器端缓存"><a href="#服务器端缓存" class="headerlink" title="服务器端缓存"></a>服务器端缓存</h4><h5 id="CDN缓存"><a href="#CDN缓存" class="headerlink" title="CDN缓存"></a>CDN缓存</h5><p>CDN（Content delivery networks）缓存，也叫网关缓存、反向代理缓存。CDN缓存一般是由网站管理员自己部署，为了让他们的网站更容易扩展并获得更好的性能。浏览器先向CDN网关发起Web请求，网关服务器后面对应着一台或多台负载均衡源服务器，会根据它们的负载请求，动态将请求转发到合适的源服务器上。虽然这种架构负载均衡源服务器之间的缓存没法共享，但却拥有更好的处扩展性。从浏览器角度来看，整个CDN就是一个源服务器，从这个层面来说，本文讨论浏览器和服务器之间的缓存机制，在这种架构下同样适用。</p>
-<h5 id="代理服务器缓存"><a href="#代理服务器缓存" class="headerlink" title="代理服务器缓存"></a>代理服务器缓存</h5><p>代理服务器是浏览器和源服务器之间的中间服务器，浏览器先向这个中间服务器发起Web请求，经过处理后（比如权限验证，缓存匹配等），再将请求转发到源服务器。代理服务器缓存的运作原理跟浏览器的运作原理差不多，只是规模更大。可以把它理解为一个共享缓存，不只为一个用户服务，一般为大量用户提供服务，因此在减少相应时间和带宽使用方面很有效，同一个副本会被重用多次。常见代理服务器缓存解决方案有Squid等</p>
-<h5 id="Web应用层缓存"><a href="#Web应用层缓存" class="headerlink" title="Web应用层缓存"></a>Web应用层缓存</h5><p>应用层缓存指的是从代码层面上，通过代码逻辑和缓存策略，实现对数据，页面，图片等资源的缓存，可以根据实际情况选择将数据存在文件系统或者内存中，减少数据库查询或者读写瓶颈，提高响应效率。</p>
-<h5 id="数据库数据缓存"><a href="#数据库数据缓存" class="headerlink" title="数据库数据缓存"></a>数据库数据缓存</h5><p>Web应用，特别是SNS类型的应用，往往关系比较复杂，数据库表繁多，如果频繁进行数据库查询，很容易导致数据库不堪重荷。为了提供查询的性能，会将查询后的数据放到内存中进行缓存，下次查询时，直接从内存缓存直接返回，提供响应效率。比如常用的缓存方案有memcached等。</p>
-<p>总结一下：<br>一般的高并发的应用程序，都在web层采用了以上几种缓存，一般静态资源（图片，js，css）都会采用nginx反向代理+客户端缓存来实现<br>对于门户网站，尤其是首页的新闻，一般都会缓存起来，可以通过反向代理也可以通过应用程序缓存实现方式<br>对于下载或者视频网站，由于数据传输比较大，直接采用浏览器本地缓存实现。</p>
-<hr>
-<p>业务需求可能涉及的缓存组件要求：</p>
-<h5 id="容量"><a href="#容量" class="headerlink" title="容量"></a>容量</h5><p>需要存储什么类型的内容？ 存储量多大？</p>
-<h5 id="并发（qps"><a href="#并发（qps" class="headerlink" title="并发（qps)"></a>并发（qps)</h5><p>缓存的读写比例以及qps如何？</p>
-<h5 id="响应时间"><a href="#响应时间" class="headerlink" title="响应时间"></a>响应时间</h5><p>更高的qps可以通过扩容来解决，但是一次响应的时间是有限制的，例如跨机房访问延迟0.5ms，就决定了响应时间不可能低于0.5ms;</p>
-<p>反过来，如果业务上要求的resp time必须小于0.5ms， 那么该缓存就一定满足不了我们的要求。</p>
-<h5 id="使用成本"><a href="#使用成本" class="headerlink" title="使用成本"></a>使用成本</h5><p>分为两部分：</p>
-<ol>
-<li>首先服务端，主要包括：运维成本、机器成本</li>
-<li>第二，客户端，主要包括程序员研发成本：单一的库依赖、简洁的配置和人性化的API丰富的文档和技术支持</li>
-</ol>
-<h5 id="扩展性要求"><a href="#扩展性要求" class="headerlink" title="扩展性要求"></a>扩展性要求</h5><p>在某方面出现瓶颈（qps或者容量）时，能否通过增加机器来快速在线扩容；这个主要涉及到系统的负载均衡能力；</p>
-<h5 id="容灾能力"><a href="#容灾能力" class="headerlink" title="容灾能力"></a>容灾能力</h5><p>缓存数据丢失；不同的系统有不同的容灾能力；一定要结合业务需求</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1308,7 +1238,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">325</span>
+          <span class="site-state-item-count">328</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

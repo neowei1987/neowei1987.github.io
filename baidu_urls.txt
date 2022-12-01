@@ -1,3 +1,6 @@
+https://neowei1987.github.io/ai/linear_regression.html
+https://neowei1987.github.io/ai/sk_learn.html
+https://neowei1987.github.io/ai/math.html
 https://neowei1987.github.io/backend_knowledge_architecture/code/better_code.html
 https://neowei1987.github.io/backend_knowledge_architecture/store/tair.html
 https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/sort/quick_sort/qsort.html
@@ -195,6 +198,3 @@ https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/
 https://neowei1987.github.io/backend_knowledge_architecture/system_design/distributed_log.html
 https://neowei1987.github.io/backend_knowledge_architecture/system_design/dns.html
 https://neowei1987.github.io/backend_knowledge_architecture/system_design/online_stat.html
-https://neowei1987.github.io/backend_knowledge_architecture/system_design/url_uniq.html
-https://neowei1987.github.io/backend_knowledge_architecture/system_design/val_rank.html
-https://neowei1987.github.io/backend_knowledge_architecture/system_design/topk_1h.html

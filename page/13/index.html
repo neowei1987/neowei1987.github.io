@@ -203,6 +203,363 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/thread_model/thread.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/thread_model/thread.html" class="post-title-link" itemprop="url">高性能服务器设计-常见线程模型</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:44:37" itemprop="dateModified" datetime="2022-03-01T22:44:37+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/thread_model/thread.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/thread_model/thread.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="单线程模型"><a href="#单线程模型" class="headerlink" title="单线程模型"></a>单线程模型</h3><p>代表：Redis</p>
+<p>基本原理：</p>
+<p>单一线程，依次socket-&gt;bind-&gt;listen，然后epoll_wait分别进行accept以及读写事件</p>
+<p>优点&amp;使用场景：</p>
+<p>简单、没有并发锁问题；适用于短耗时的计算密集型服务</p>
+<p>缺点：</p>
+<p>不能支持耗时较长的事件，尤其是IO密集型</p>
+<h3 id="单线程-listen-accept-epoll-wait-1队列通知-n线程-读写处理-模型"><a href="#单线程-listen-accept-epoll-wait-1队列通知-n线程-读写处理-模型" class="headerlink" title="单线程(listen+accept+epoll_wait) + 1队列通知 + n线程(读写处理) 模型"></a>单线程(listen+accept+epoll_wait) + 1队列通知 + n线程(读写处理) 模型</h3><p>代表：thrift-nonblocking-server</p>
+<p>基本原理：</p>
+<ol>
+<li>在这种模型中，有1+n个线程</li>
+<li><p>有1个线程执行端口的listen并把listen_fd加入该线程的epoll_set，然后循环去做如下事情：</p>
+<p> 2.1 epoll_wait监听新连接的到</p>
+<p> 2.2 调用accept获得新到的fd</p>
+<p> 2.3 把fd放入队列</p>
+<p> 回到2.1，继续epoll_wait</p>
+</li>
+<li><p>另外有n个工作线程，从队列里面获取文件描述符，然后执行：1）读取数据，2）执行任务</p>
+</li>
+</ol>
+<p>优点：</p>
+<ul>
+<li>模型不算复杂</li>
+<li>并发能力强，能够充分利用多核</li>
+<li>天然支持负载均衡（每个工作工作线程完成任务之后就会去队列里主动获取文件描述符）</li>
+</ul>
+<p>缺点：</p>
+<p>队列可能是性能瓶颈，尤其是当业务逻辑耗时本身极其短的情况下</p>
+<h3 id="单线程-listen-accept-epoll-wait-n队列通知-n线程-读写处理-模型"><a href="#单线程-listen-accept-epoll-wait-n队列通知-n线程-读写处理-模型" class="headerlink" title="单线程(listen+accept+epoll_wait) + n队列通知 + n线程(读写处理) 模型"></a>单线程(listen+accept+epoll_wait) + n队列通知 + n线程(读写处理) 模型</h3><p>代表：memcache</p>
+<p>基本原理：</p>
+<ul>
+<li><p>这种模型基本类似于上一种模型，区别在于把1个队列换成n个队列，每个工作线程绑定一个队列，每个工作线程从自己的队列消费数据，其他的保持一致</p>
+</li>
+<li><p>LISTEN线程往PIPE里写入一个哨兵，通知WORKER线程队列可读</p>
+</li>
+</ul>
+<p>优点：</p>
+<p>并发能力更强。相比于单队列的模型，多队列的好处是减少了队列的锁竞争。对于短耗时任务能得到比较多的提升，很适合缓存类应用</p>
+<p>缺点：</p>
+<p>有可能导致负载不均。因为监听线程是不会去根据不同线程的处理速度决定把任务分配给哪个线程的，如果每个任务的耗时不均衡，那么就可能导致有些线程累死，有些线程饿死。</p>
+<p>单线程listen, 在处理高速率海量连接时，单线程可能会成为瓶颈</p>
+<h3 id="单进程-listen-n进程-accept-epoll-读写处理-模型"><a href="#单进程-listen-n进程-accept-epoll-读写处理-模型" class="headerlink" title="单进程(listen) + n进程(accept + epoll + 读写处理) 模型"></a>单进程(listen) + n进程(accept + epoll + 读写处理) 模型</h3><p>代表：nginx</p>
+<p>基本原理：</p>
+<ol>
+<li>master进程监听新连接的到来，并让其中一个worker进程accept。这里需要处理惊群效应问题(加锁、SO_REUSEPORT)</li>
+<li>worker进程accept到fd之后，把fd注册到到本进程的epoll句柄里面，由本进程处理这个fd的后续读写事件</li>
+<li>worker进程根据自身负载情况，选择性地不去accept新fd，从而实现负载均衡</li>
+</ol>
+<h3 id="单线程-listen-n线程-accept-epoll-读写处理-协程-模型"><a href="#单线程-listen-n线程-accept-epoll-读写处理-协程-模型" class="headerlink" title="单线程(listen) + n线程(accept + epoll + 读写处理 + 协程) 模型"></a>单线程(listen) + n线程(accept + epoll + 读写处理 + 协程) 模型</h3>
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/thread_model/libsvrkit.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/thread_model/libsvrkit.html" class="post-title-link" itemprop="url">高性能服务器系列-libsvrkit RPC框架</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-17 21:45:12" itemprop="dateCreated datePublished" datetime="2022-02-17T21:45:12+08:00">2022-02-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-02 09:04:39" itemprop="dateModified" datetime="2022-03-02T09:04:39+08:00">2022-03-02</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/thread_model/libsvrkit.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/thread_model/libsvrkit.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ol>
+<li><p>同时只有一个worker来accept接受新的连接请求。一个连接上的所有请求都是由同一个worker来处理。</p>
+</li>
+<li><p>通过iovec来接收输入, iovec可以直接交给pb来解析。</p>
+</li>
+<li><p>如果是一个新的请求包，则开启一个co由它来进行处理。</p>
+</li>
+<li><p>如果是一个回复包，则根据回复包的seqno, 查询map， 找到对应的co， co_resume， 执行原来的业务逻辑。</p>
+</li>
+<li><p>通过时间轮来管理所有的超时时间。</p>
+</li>
+<li><p>epoll_wait的timeout 是 min(1ms, 下次超时时间)</p>
+</li>
+<li><p>通过pipe来进行线程同步。</p>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/cache/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/cache/index.html" class="post-title-link" itemprop="url">缓存简要说明</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-16 23:20:03" itemprop="dateCreated datePublished" datetime="2022-02-16T23:20:03+08:00">2022-02-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-10-29 09:49:36" itemprop="dateModified" datetime="2022-10-29T09:49:36+08:00">2022-10-29</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/cache/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/cache/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>高速缓存服务器(Cache Server)是软硬件高度集成的专业功能服务器，主要做高速缓存加速服务，一般部署在网络边缘。</p>
+<p>根据加速对象不同，分为客户端加速和服务器加速</p>
+<p>客户端加速Cache部署在网络出口处，把常访问的内容缓存在本地，提高响应速度和节约带宽;</p>
+<p>服务器加速Cache部署在服务器前端，作为Web服务器的前置机，提高Web服务器的性能，加速访问速度。</p>
+<hr>
+<p>缓存有哪些类型？</p>
+<ul>
+<li>服务器LocalCache （有状态）</li>
+</ul>
+<p>将缓存内容放到服务器的本地内存或者磁盘；</p>
+<p>无法及时更新，一般都是设置一个合理的过期时间，让其自动过期；适用于实时性要求不高的场景；</p>
+<p>优缺点：本地缓存是内存访问，没有远程交互开销，性能最好，但是受限于单机容量，一般缓存较小且无法扩展。</p>
+<p>特例：数据库缓存</p>
+<ul>
+<li>分布式缓存（无状态）</li>
+</ul>
+<p>redis\memcache\tair</p>
+<ul>
+<li>客户端缓存（有状态）</li>
+</ul>
+<p>具体有哪些：<br>浏览器cookie；浏览器本地缓存；flash本地存储；html5的本地存储；native app 本地缓存</p>
+<p>缓存系统对比与选型</p>
+<hr>
+<p>在Web应用领域，Web缓存大致可以分为以下几种类型：</p>
+<h4 id="浏览器端缓存"><a href="#浏览器端缓存" class="headerlink" title="浏览器端缓存"></a>浏览器端缓存</h4><p>浏览器缓存根据一套与服务器约定的规则进行工作，在同一个会话过程中会检查一次并确定缓存的副本足够新。如果你浏览过程中，比如前进或后退，访问到同一个图片，这些图片可以从浏览器缓存中调出而即时显现。</p>
+<p>客户端浏览器缓存主要是通过在http头部增加<br>Last-Modified,If-Modified-Since,Expires,Cache-Control等标识，和服务器进行协商，是否是采用客户的本机缓存来实现。</p>
+<p>其中这里面也会分为三种方式</p>
+<p>1 通过Last-Modified，If-Modified-Since方式和服务器通信，客户发出http请求中包含If-Modified-Since，如果服务器端代码没有修改，服务器端返回302响应代码的请求响应头（内容不返回）客户端则直接用本机缓存的内容缓存显示结果。相<br>当于节省了服务器执行代码时间以及数据传输时间。</p>
+<p>2 通过Expires,Cache-Control控制，客户端发现如果上次请求的页面还未过期，通过Expires或者Cache-Control进行辨别，则直接显示本机缓存的内容，不与服务器进行通信。</p>
+<h4 id="服务器端缓存"><a href="#服务器端缓存" class="headerlink" title="服务器端缓存"></a>服务器端缓存</h4><h5 id="CDN缓存"><a href="#CDN缓存" class="headerlink" title="CDN缓存"></a>CDN缓存</h5><p>CDN（Content delivery networks）缓存，也叫网关缓存、反向代理缓存。CDN缓存一般是由网站管理员自己部署，为了让他们的网站更容易扩展并获得更好的性能。浏览器先向CDN网关发起Web请求，网关服务器后面对应着一台或多台负载均衡源服务器，会根据它们的负载请求，动态将请求转发到合适的源服务器上。虽然这种架构负载均衡源服务器之间的缓存没法共享，但却拥有更好的处扩展性。从浏览器角度来看，整个CDN就是一个源服务器，从这个层面来说，本文讨论浏览器和服务器之间的缓存机制，在这种架构下同样适用。</p>
+<h5 id="代理服务器缓存"><a href="#代理服务器缓存" class="headerlink" title="代理服务器缓存"></a>代理服务器缓存</h5><p>代理服务器是浏览器和源服务器之间的中间服务器，浏览器先向这个中间服务器发起Web请求，经过处理后（比如权限验证，缓存匹配等），再将请求转发到源服务器。代理服务器缓存的运作原理跟浏览器的运作原理差不多，只是规模更大。可以把它理解为一个共享缓存，不只为一个用户服务，一般为大量用户提供服务，因此在减少相应时间和带宽使用方面很有效，同一个副本会被重用多次。常见代理服务器缓存解决方案有Squid等</p>
+<h5 id="Web应用层缓存"><a href="#Web应用层缓存" class="headerlink" title="Web应用层缓存"></a>Web应用层缓存</h5><p>应用层缓存指的是从代码层面上，通过代码逻辑和缓存策略，实现对数据，页面，图片等资源的缓存，可以根据实际情况选择将数据存在文件系统或者内存中，减少数据库查询或者读写瓶颈，提高响应效率。</p>
+<h5 id="数据库数据缓存"><a href="#数据库数据缓存" class="headerlink" title="数据库数据缓存"></a>数据库数据缓存</h5><p>Web应用，特别是SNS类型的应用，往往关系比较复杂，数据库表繁多，如果频繁进行数据库查询，很容易导致数据库不堪重荷。为了提供查询的性能，会将查询后的数据放到内存中进行缓存，下次查询时，直接从内存缓存直接返回，提供响应效率。比如常用的缓存方案有memcached等。</p>
+<p>总结一下：<br>一般的高并发的应用程序，都在web层采用了以上几种缓存，一般静态资源（图片，js，css）都会采用nginx反向代理+客户端缓存来实现<br>对于门户网站，尤其是首页的新闻，一般都会缓存起来，可以通过反向代理也可以通过应用程序缓存实现方式<br>对于下载或者视频网站，由于数据传输比较大，直接采用浏览器本地缓存实现。</p>
+<hr>
+<p>业务需求可能涉及的缓存组件要求：</p>
+<h5 id="容量"><a href="#容量" class="headerlink" title="容量"></a>容量</h5><p>需要存储什么类型的内容？ 存储量多大？</p>
+<h5 id="并发（qps"><a href="#并发（qps" class="headerlink" title="并发（qps)"></a>并发（qps)</h5><p>缓存的读写比例以及qps如何？</p>
+<h5 id="响应时间"><a href="#响应时间" class="headerlink" title="响应时间"></a>响应时间</h5><p>更高的qps可以通过扩容来解决，但是一次响应的时间是有限制的，例如跨机房访问延迟0.5ms，就决定了响应时间不可能低于0.5ms;</p>
+<p>反过来，如果业务上要求的resp time必须小于0.5ms， 那么该缓存就一定满足不了我们的要求。</p>
+<h5 id="使用成本"><a href="#使用成本" class="headerlink" title="使用成本"></a>使用成本</h5><p>分为两部分：</p>
+<ol>
+<li>首先服务端，主要包括：运维成本、机器成本</li>
+<li>第二，客户端，主要包括程序员研发成本：单一的库依赖、简洁的配置和人性化的API丰富的文档和技术支持</li>
+</ol>
+<h5 id="扩展性要求"><a href="#扩展性要求" class="headerlink" title="扩展性要求"></a>扩展性要求</h5><p>在某方面出现瓶颈（qps或者容量）时，能否通过增加机器来快速在线扩容；这个主要涉及到系统的负载均衡能力；</p>
+<h5 id="容灾能力"><a href="#容灾能力" class="headerlink" title="容灾能力"></a>容灾能力</h5><p>缓存数据丢失；不同的系统有不同的容灾能力；一定要结合业务需求</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/cache/memcache.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1230,285 +1587,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/network/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/network/index.html" class="post-title-link" itemprop="url">计算机网络必知必会</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-16 23:20:03" itemprop="dateCreated datePublished" datetime="2022-02-16T23:20:03+08:00">2022-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 23:22:10" itemprop="dateModified" datetime="2022-03-01T23:22:10+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/network/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/network/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="长链接-VS-短链接"><a href="#长链接-VS-短链接" class="headerlink" title="长链接 VS 短链接"></a>长链接 VS 短链接</h2><p>长连接：</p>
-<p>长连接多用于操作频繁，点对点的通讯（尤其是需要下行消息的场景，例如<strong>即时通信</strong>），而且连接数不能太多的情况。</p>
-<p>短连接：</p>
-<p>web网站的http服务一般都用短连接。因为长连接对于服务器来说要耗费一定的资源。</p>
-<p>像web网站这么频繁的成千上万甚至上亿客户端的连接用短连接更省一些资源。试想如果都用长连接，而且同时用成千上万的用户，每个用户都占有一个连接的话，可想而知服务器的压力有多大。所以并发量大，但是每个用户又不需频繁操作的情况下需要短连接。</p>
-<h2 id="TCP与UDP的区别"><a href="#TCP与UDP的区别" class="headerlink" title="TCP与UDP的区别"></a>TCP与UDP的区别</h2><p>流模式 VS 数据报模式、连接 VS 无连接、可靠性</p>
-<h3 id="TCP与UDP应用"><a href="#TCP与UDP应用" class="headerlink" title="TCP与UDP应用"></a>TCP与UDP应用</h3><p>TCP:对效率要求低，对准确性要求较高 (如文件传输、重要状态的更新等)</p>
-<p>eg.  STMP, TELNET, HTTP, FTP</p>
-<p>UDP:对效率要求高，对准确性要求较低 (如视频传输、实时通信等)。</p>
-<p>eg.  DNS,TFTP,RIP,DHCP,SNMP</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/network/tcp.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/network/tcp.html" class="post-title-link" itemprop="url">计算机网络 - TCP协议</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-16 23:20:03" itemprop="dateCreated datePublished" datetime="2022-02-16T23:20:03+08:00">2022-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 23:22:15" itemprop="dateModified" datetime="2022-03-01T23:22:15+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/network/tcp.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/network/tcp.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="TCP状态迁移图"><a href="#TCP状态迁移图" class="headerlink" title="TCP状态迁移图"></a>TCP状态迁移图</h2><p><img src="https://img-blog.csdn.net/20171214152607931?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGliYWluZXUyMDA0/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="TCP状态迁移图"></p>
-<p>TCP三次握手的缺陷：Sync Flood攻击</p>
-<h3 id="关于TIME-WAIT存在的必要性"><a href="#关于TIME-WAIT存在的必要性" class="headerlink" title="关于TIME_WAIT存在的必要性"></a>关于TIME_WAIT存在的必要性</h3><p>1）为实现TCP全双工连接的可靠释放</p>
-<p>由TCP状态变迁图可知，假设发起主动关闭的一方（client）最后发送的ACK在网络中丢失，由于TCP协议的重传机制，执行被动关闭的一方（server）将会重发其FIN，在该FIN到达client之前，client必须维护这条连接状态，也就说这条TCP连接所对应的资源（client方的local_ip,local_port）不能被立即释放或重新分配，直到另一方重发的FIN达到之后，client重发ACK后，经过2MSL时间周期没有再收到另一方的FIN之后，该TCP连接才能恢复初始的CLOSED状态。如果主动关闭一方不维护这样一个TIME_WAIT状态，那么当被动关闭一方重发的FIN到达时，主动关闭一方的TCP传输层会用RST包响应对方，这会被对方认为是有错误发生，然而这事实上只是正常的关闭连接过程，并非异常。</p>
-<p>2）为使旧的数据包在网络因过期而消失；防止lost duplicate对后续新建正常链接的传输造成破坏。</p>
-<p>lost duplicate在实际的网络中非常常见，经常是由于路由器产生故障，路径无法收敛，导致一个packet在路由器A，B，C之间做类似死循环的跳转。IP头部有个TTL，限制了一个包在网络中的最大跳数，因此这个包有两种命运，要么最后TTL变为0，在网络中消失；要么TTL在变为0之前路由器路径收敛，它凭借剩余的TTL跳数终于到达目的地。但非常可惜的是TCP通过超时重传机制在早些时候发送了一个跟它一模一样的包，并先于它达到了目的地，因此它的命运也就注定被TCP协议栈抛弃。</p>
-<p>另外一个概念叫做incarnation connection，指跟上次的socket pair一摸一样的新连接，叫做incarnation of previous connection。</p>
-<p>lost duplicate加上incarnation connection，则会对我们的传输造成致命的错误。</p>
-<p>大家都知道TCP是流式的，所有包到达的顺序是不一致的，依靠序列号由TCP协议栈做顺序的拼接；假设一个incarnation connection这时收到的seq=1000, 来了一个lost duplicate为seq=1000, len=1000, 则tcp认为这个lost duplicate合法，并存放入了receive buffer，导致传输出现错误。</p>
-<p>通过一个2MSL TIME_WAIT状态，确保所有的lost duplicate都会消失掉，避免对新连接造成错误。</p>
-<h2 id="TCP拥塞控制"><a href="#TCP拥塞控制" class="headerlink" title="TCP拥塞控制"></a>TCP拥塞控制</h2><p>核心：拥塞窗口 cwnd</p>
-<p>第一阶段：慢开始、拥塞避免</p>
-<p><strong>快重传</strong>要求接收方在收到一个失序的报文段后就立即发出重复确认（为的是使发送方及早知道有报文段没有到达对方）而不要等到自己发送数据时捎带确认。快重传算法规定，发送方只要一连收到三个重复确认就应当立即重传对方尚未收到的报文段，而不必继续等待设置的重传计时器时间到期。</p>
-<p>第二阶段；快重传、快恢复</p>
-<p>快重传配合使用的还有<strong>快恢复</strong>算法，有以下两个要点:</p>
-<p>①当发送方连续收到三个重复确认时，就执行“乘法减小”算法，把ssthresh门限减半。但是接下去并不执行慢开始算法。</p>
-<p>②考虑到如果网络出现拥塞的话就不会收到好几个重复的确认，所以发送方现在认为网络可能没有出现拥塞。所以此时不执行慢开始算法，而是将cwnd设置为ssthresh的大小，然后执行拥塞避免算法。</p>
-<p><img src="https://img-blog.csdn.net/20130801220615250?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2ljb2ZpZWxk/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="快恢复"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/cache/cdn/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/cache/cdn/index.html" class="post-title-link" itemprop="url">内容分发网络</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-16 23:20:03" itemprop="dateCreated datePublished" datetime="2022-02-16T23:20:03+08:00">2022-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 23:17:15" itemprop="dateModified" datetime="2022-03-01T23:17:15+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/cache/cdn/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/cache/cdn/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>CDN系统能够实时地根据网络流量和各节点的连接、负载状况以及到用户的距离和响应时间等综合信息将用户的请求重新导向离用户最近的服务节点上。其目的是使用户可就近取得所需内容，解决Internet网络拥挤的状况，提高用户访问网站的响应速度。<br>关键技术</p>
-<p>（1）内容发布：它借助于建立索引、缓存、流分裂、组播（Multicast）等技术，将内容发布或投递到距离用户最近的远程服务点（POP）处；</p>
-<p>（2）内容路由：它是整体性的网络负载均衡技术，通过内容路由器中的重定向（DNS）机制，在多个远程POP上均衡用户的请求，以使用户请求得到最近内容源的响应；</p>
-<p>（3）内容交换：它根据内容的可用性、服务器的可用性以及用户的背景，在POP的缓存服务器上，利用应用层交换、流分裂、重定向（ICP、WCCP）等技术，智能地平衡负载流量；</p>
-<p>（4）性能管理：它通过内部和外部监控系统，获取网络部件的状况信息，测量内容发布的端到端性能（如包丢失、延时、平均带宽、启动时间、帧速率等），保证网络处于最佳的运行状态。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1581,7 +1659,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">325</span>
+          <span class="site-state-item-count">328</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

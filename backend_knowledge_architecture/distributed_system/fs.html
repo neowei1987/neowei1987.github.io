@@ -19,13 +19,13 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"neowei1987.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"www.fpthinker.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="存储的分布式化 高效存储的一些考虑：  很长时间没有人访问的老数据，怎么办？ 是不是减少副本的同时，还能还原出数据？（例如，RAID） 数据压缩，平成好压缩效果与压缩&#x2F;解压速度 数据的分层存储：根据数据的冷热来选择不同的存储介质（局部性原理），内存、硬盘（SSD、SATA) 存储与计算分离（底层基础：网络IO不再是瓶颈，而CPU性能、磁盘IO性能跟不上）  分布式存储引擎主要解决数据如何拆分、数据">
 <meta property="og:type" content="article">
 <meta property="og:title" content="分布式文件系统">
-<meta property="og:url" content="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/fs.html">
+<meta property="og:url" content="https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/fs.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
 <meta property="og:description" content="存储的分布式化 高效存储的一些考虑：  很长时间没有人访问的老数据，怎么办？ 是不是减少副本的同时，还能还原出数据？（例如，RAID） 数据压缩，平成好压缩效果与压缩&#x2F;解压速度 数据的分层存储：根据数据的冷热来选择不同的存储介质（局部性原理），内存、硬盘（SSD、SATA) 存储与计算分离（底层基础：网络IO不再是瓶颈，而CPU性能、磁盘IO性能跟不上）  分布式存储引擎主要解决数据如何拆分、数据">
 <meta property="og:locale">
@@ -35,7 +35,7 @@
 <meta property="article:tag" content="分布式系统">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/fs.html">
+<link rel="canonical" href="https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/fs.html">
 
 
 <script id="page-configurations">
@@ -206,7 +206,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/fs.html">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/fs.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -301,13 +301,13 @@
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/hardware/number.html">计算机硬件-数字的表示</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/hardware/number.html">计算机硬件-数字的表示</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/hardware/tlb.html">计算机硬件-TLB</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/hardware/tlb.html">计算机硬件-TLB</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/high_consistency.html">分布式系统-一致性</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/high_consistency.html">分布式系统-一致性</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/index.html">分布式系统介绍</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/index.html">分布式系统介绍</a></li>
         
     </ul>
      
@@ -449,7 +449,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">340</span>
+          <span class="site-state-item-count">341</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

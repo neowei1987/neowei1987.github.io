@@ -19,13 +19,13 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"neowei1987.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"www.fpthinker.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="端口复用，通过互斥锁来避免惊群效应 为什么不采用多线程模型管理连接  无状态服务，无需共享进程内存 采用独立的进程，可以让互相之间不会影响。一个进程异常崩溃，其他进程的服务不会中断，提升了架构的可靠性。 进程之间不共享资源，不需要加锁，所以省掉了锁带来的开销。  为什么不采用多线程处理逻辑业务？  进程数已经等于核心数，再新建线程处理任务，只会抢占现有进程，增加切换代价。 作为接入层，基本上都是数">
 <meta property="og:type" content="article">
 <meta property="og:title" content="高性能服务器设计-Nginx IO模型">
-<meta property="og:url" content="https://neowei1987.github.io/backend_knowledge_architecture/server/io_model/io_model_for_nginx.html">
+<meta property="og:url" content="https://www.fpthinker.com/backend_knowledge_architecture/server/io_model/io_model_for_nginx.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
 <meta property="og:description" content="端口复用，通过互斥锁来避免惊群效应 为什么不采用多线程模型管理连接  无状态服务，无需共享进程内存 采用独立的进程，可以让互相之间不会影响。一个进程异常崩溃，其他进程的服务不会中断，提升了架构的可靠性。 进程之间不共享资源，不需要加锁，所以省掉了锁带来的开销。  为什么不采用多线程处理逻辑业务？  进程数已经等于核心数，再新建线程处理任务，只会抢占现有进程，增加切换代价。 作为接入层，基本上都是数">
 <meta property="og:locale">
@@ -35,7 +35,7 @@
 <meta property="article:tag" content="高性能服务器">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://neowei1987.github.io/backend_knowledge_architecture/server/io_model/io_model_for_nginx.html">
+<link rel="canonical" href="https://www.fpthinker.com/backend_knowledge_architecture/server/io_model/io_model_for_nginx.html">
 
 
 <script id="page-configurations">
@@ -206,7 +206,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/io_model/io_model_for_nginx.html">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/io_model/io_model_for_nginx.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -294,13 +294,13 @@
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/store/index.html">存储系列-概览</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/store/index.html">存储系列-概览</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/server/io_model/io_model.html">高性能服务器设计-IO模型</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/server/io_model/io_model.html">高性能服务器设计-IO模型</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/server/io_model/multiplex_io.html">高性能服务器设计-常见IO多路复用技术介绍</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/server/io_model/multiplex_io.html">高性能服务器设计-常见IO多路复用技术介绍</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/server/io_model/sync_or_aysnc.html">高性能服务器设计-同步OR异步</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/server/io_model/sync_or_aysnc.html">高性能服务器设计-同步OR异步</a></li>
         
     </ul>
      
@@ -441,7 +441,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">340</span>
+          <span class="site-state-item-count">341</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

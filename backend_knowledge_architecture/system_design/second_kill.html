@@ -19,13 +19,13 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"neowei1987.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"www.fpthinker.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="如何才能更好地理解秒杀系统呢？ 一个秒杀系统的架构，包括CDN，反向代理，session共享，由于分布式数据库我不熟，所以数据一致性那部分没有解决。  主要技术点： （1）缓存 （2）独立秒杀系统、独立集群 （3）验证系统，防秒杀器  主要技术点： （1）动静分离 （2）本地缓存 （3）热点隔离 权衡点：要想获得极致性能，必然会牺牲通用型、易用性等 动静分离“动态数据”和“静态数据”的主要区别就是">
 <meta property="og:type" content="article">
 <meta property="og:title" content="常见系统设计题系列-秒杀系统">
-<meta property="og:url" content="https://neowei1987.github.io/backend_knowledge_architecture/system_design/second_kill.html">
+<meta property="og:url" content="https://www.fpthinker.com/backend_knowledge_architecture/system_design/second_kill.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
 <meta property="og:description" content="如何才能更好地理解秒杀系统呢？ 一个秒杀系统的架构，包括CDN，反向代理，session共享，由于分布式数据库我不熟，所以数据一致性那部分没有解决。  主要技术点： （1）缓存 （2）独立秒杀系统、独立集群 （3）验证系统，防秒杀器  主要技术点： （1）动静分离 （2）本地缓存 （3）热点隔离 权衡点：要想获得极致性能，必然会牺牲通用型、易用性等 动静分离“动态数据”和“静态数据”的主要区别就是">
 <meta property="og:locale">
@@ -44,7 +44,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://cdn.b5mang.com/2021319231635.png">
 
-<link rel="canonical" href="https://neowei1987.github.io/backend_knowledge_architecture/system_design/second_kill.html">
+<link rel="canonical" href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/second_kill.html">
 
 
 <script id="page-configurations">
@@ -215,7 +215,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/system_design/second_kill.html">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/second_kill.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -375,13 +375,13 @@
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/system_design/kv_ttl.html">常见系统设计题系列- 带TTL的KV存储</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/kv_ttl.html">常见系统设计题系列- 带TTL的KV存储</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/system_design/push.html">常见系统设计题系列-推送系统</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/push.html">常见系统设计题系列-推送系统</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/system_design/tiny_url.html">常见系统设计题系列-短网址系统</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/tiny_url.html">常见系统设计题系列-短网址系统</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/system_design/lottery.html">常见系统设计题系列-抽奖系统</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/lottery.html">常见系统设计题系列-抽奖系统</a></li>
         
     </ul>
      
@@ -520,7 +520,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">340</span>
+          <span class="site-state-item-count">341</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

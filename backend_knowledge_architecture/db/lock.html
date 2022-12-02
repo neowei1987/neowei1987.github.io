@@ -19,13 +19,13 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"neowei1987.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"www.fpthinker.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="数据库中涉及到锁的一些经常考察的知识点  悲观锁 VS 乐观锁首先悲观锁（Pessimistic Lock）、乐观锁并不是两种锁，而是两种思想，两种用于实现并发控制的思想。 其中，悲观锁指的是对数据被外界修改持悲观态度，认为数据大概率会被他人修改，所以在我准备修改数据时，我会对该数据加锁以避免其他人对该数据进行并发访问。 而乐观锁指的是对外部修改数据持乐观态度，认为数据不会修改，所以我会直接对数据">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据库必知必会-锁篇">
-<meta property="og:url" content="https://neowei1987.github.io/backend_knowledge_architecture/db/lock.html">
+<meta property="og:url" content="https://www.fpthinker.com/backend_knowledge_architecture/db/lock.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
 <meta property="og:description" content="数据库中涉及到锁的一些经常考察的知识点  悲观锁 VS 乐观锁首先悲观锁（Pessimistic Lock）、乐观锁并不是两种锁，而是两种思想，两种用于实现并发控制的思想。 其中，悲观锁指的是对数据被外界修改持悲观态度，认为数据大概率会被他人修改，所以在我准备修改数据时，我会对该数据加锁以避免其他人对该数据进行并发访问。 而乐观锁指的是对外部修改数据持乐观态度，认为数据不会修改，所以我会直接对数据">
 <meta property="og:locale">
@@ -37,7 +37,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://images.gitbook.cn/c347e4d0-a1b6-11ea-97df-0d0e3bd6b465">
 
-<link rel="canonical" href="https://neowei1987.github.io/backend_knowledge_architecture/db/lock.html">
+<link rel="canonical" href="https://www.fpthinker.com/backend_knowledge_architecture/db/lock.html">
 
 
 <script id="page-configurations">
@@ -208,7 +208,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/db/lock.html">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/db/lock.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -384,13 +384,13 @@
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/db/index.html">数据库必知必会</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/db/index.html">数据库必知必会</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/db/innodb.html">数据库必知必会-InnoDB存储引擎</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/db/innodb.html">数据库必知必会-InnoDB存储引擎</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/network/index.html">计算机网络必知必会</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/network/index.html">计算机网络必知必会</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/network/tcp.html">计算机网络 - TCP协议</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/network/tcp.html">计算机网络 - TCP协议</a></li>
         
     </ul>
      
@@ -532,7 +532,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">340</span>
+          <span class="site-state-item-count">341</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

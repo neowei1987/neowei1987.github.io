@@ -19,13 +19,13 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"neowei1987.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"www.fpthinker.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="系统在困境（adversity）（硬件故障、软件故障、人为错误）中仍可正常工作（正确完成功能，并能达到期望的性能水准）。 plan挂了之后，系统能不能活下来？ 有没有负责兜底的PlanB。 造成错误的原因叫做故障（fault），能预料并应对故障的系统特性可称为容错（fault-tolerant）或韧性（resilient）。 注意故障（fault）不同于失效（failure）【2】。故障通常定义为">
 <meta property="og:type" content="article">
 <meta property="og:title" content="分布式系统-可用性">
-<meta property="og:url" content="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/high_availability.html">
+<meta property="og:url" content="https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/high_availability.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
 <meta property="og:description" content="系统在困境（adversity）（硬件故障、软件故障、人为错误）中仍可正常工作（正确完成功能，并能达到期望的性能水准）。 plan挂了之后，系统能不能活下来？ 有没有负责兜底的PlanB。 造成错误的原因叫做故障（fault），能预料并应对故障的系统特性可称为容错（fault-tolerant）或韧性（resilient）。 注意故障（fault）不同于失效（failure）【2】。故障通常定义为">
 <meta property="og:locale">
@@ -41,7 +41,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://images.elecfans.top/uploads/20221109/491f36c6-6037-11ed-8abf-dac502259ad0.png">
 
-<link rel="canonical" href="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/high_availability.html">
+<link rel="canonical" href="https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/high_availability.html">
 
 
 <script id="page-configurations">
@@ -212,7 +212,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/high_availability.html">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/high_availability.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -441,13 +441,13 @@
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/index.html">分布式系统介绍</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/index.html">分布式系统介绍</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/design_pattern/index.html">设计模式-概览</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/design_pattern/index.html">设计模式-概览</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/server/memory_pool/index.html">内存池系列｜概览</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/server/memory_pool/index.html">内存池系列｜概览</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/server/memory_pool/memcahce_for_tcmalloc.html">内存池系列｜TCMalloc分析</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/server/memory_pool/memcahce_for_tcmalloc.html">内存池系列｜TCMalloc分析</a></li>
         
     </ul>
      
@@ -589,7 +589,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">340</span>
+          <span class="site-state-item-count">341</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

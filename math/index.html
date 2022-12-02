@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.fpthinker.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="0. 背景介绍，把人吸引过来 积分中值定理、微分中值定理  泰勒公式 出发点： 用简单的熟悉的多项式来近似代替复杂的函数  易计算函数值，导数与积分仍是多项式  多项式由它的系数完全确定，其系数又由它在一点的函数值及其导数所确定。  阶数 阶乘：削弱高阶项的作用，让他晚一些起作用！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习机器学习可能用到的数学">
+<meta property="og:url" content="https://www.fpthinker.com/math/index.html">
+<meta property="og:site_name" content="Neo&#39;s Blog">
+<meta property="og:description" content="0. 背景介绍，把人吸引过来 积分中值定理、微分中值定理  泰勒公式 出发点： 用简单的熟悉的多项式来近似代替复杂的函数  易计算函数值，导数与积分仍是多项式  多项式由它的系数完全确定，其系数又由它在一点的函数值及其导数所确定。  阶数 阶乘：削弱高阶项的作用，让他晚一些起作用！">
+<meta property="og:locale">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.3k2ld3hyx4q0.jpg">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.6xln7bk35440.jpg">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.4d7j3hvxg760.jpg">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.7kf4o4g1ei80.jpg">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.7j26y9yr7r40.jpg">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.7e70x8sfgq00.jpg">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.35a3lqh63wu0.jpg">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.3s3afpjzgmo0.jpg">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.6mtlivhz1ys0.jpg">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.zhvrg2wn4w0.jpg">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.6hf4qer5oxk0.jpg">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.39zcy7gk03m0.jpg">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.qsgyvy3jf3k.jpg">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.7d2k1suwjgw0.jpg">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.fds0ah0bp6g.jpg">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.3dnlhkacz3u0.jpg">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.5o17vqnyt6g.jpg">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.3khgm3xf8l00.jpg">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.24ayqxutj8zk.jpg">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.3d1u3wbplqu0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.55un8ls0oc00.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.3wcw6an7gi20.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.1zn6kly1z8kg.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.3iaoumor3r60.webp">
+<meta property="article:published_time" content="2022-12-01T13:03:03.000Z">
+<meta property="article:modified_time" content="2022-12-02T15:34:07.083Z">
+<meta property="article:author" content="NeoWei">
+<meta property="article:tag" content="机器学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.3k2ld3hyx4q0.jpg">
+
+<link rel="canonical" href="https://www.fpthinker.com/math/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.css"><style>
+#needsharebutton-postbottom {
+  cursor: pointer;
+  height: 26px;
+  margin-top: 10px;
+  position: relative;
+}
+#needsharebutton-postbottom .btn {
+  border: 1px solid $btn-default-border-color;
+  border-radius: 3px;
+  display: initial;
+  padding: 1px 4px;
+}
+</style>
+  <title>学习机器学习可能用到的数学 | Neo's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Neo's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">不抽象就无法深入思考<br>不还原就看不到本来面目!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+		<div id="container">
+		  <div class="content post posts-expand">
+		    
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/math/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          学习机器学习可能用到的数学
+        </h1>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-12-01 21:03:03" itemprop="dateCreated datePublished" datetime="2022-12-01T21:03:03+08:00">2022-12-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-12-02 23:34:07" itemprop="dateModified" datetime="2022-12-02T23:34:07+08:00">2022-12-02</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/math/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/math/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="0-背景介绍，把人吸引过来"><a href="#0-背景介绍，把人吸引过来" class="headerlink" title="0. 背景介绍，把人吸引过来"></a>0. 背景介绍，把人吸引过来</h2><p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.3k2ld3hyx4q0.jpg" alt="image"></p>
+<p>积分中值定理、微分中值定理</p>
+<hr>
+<p>泰勒公式</p>
+<p>出发点：</p>
+<pre><code>用简单的熟悉的多项式来近似代替复杂的函数
+
+易计算函数值，导数与积分仍是多项式
+
+多项式由它的系数完全确定，其系数又由它在一点的函数值及其导数所确定。
+</code></pre><p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.6xln7bk35440.jpg" alt="image"></p>
+<p>阶数</p>
+<p>阶乘：削弱高阶项的作用，让他晚一些起作用！</p>
+<a id="more"></a>
+<hr>
+<p>拉格朗日乘子法</p>
+<p>求极值，并且带条件</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.4d7j3hvxg760.jpg" alt="image"></p>
+<hr>
+<p>矩阵</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.7kf4o4g1ei80.jpg" alt="image"></p>
+<p> 矩阵不满足交换律 <script type="math/tex">A*B \ne B*A</script></p>
+<p> <img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.7j26y9yr7r40.jpg" alt="image"></p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.7e70x8sfgq00.jpg" alt="image"></p>
+<p>矩阵的秩： 矩阵中最大不相关向量的个数</p>
+<p>行秩 = 列秩</p>
+<p>二维 在秩为1的矩阵的作用下，会转换为一条线。<br>二维，在秩为1的矩阵的作用下，还是保持为二维。</p>
+<p>矩阵 做 旋转、拉伸</p>
+<p>特征值 特征向量 特征空间<br><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.35a3lqh63wu0.jpg" alt="image"></p>
+<p>一个矩阵有很多的特征向量，特征提取就是取$\lambda$更大的特征向量</p>
+<p>SVD矩阵分解</p>
+<p>100W X 10W 稀疏矩阵 = 100W X 10 的矩阵 * 10 X 10W的矩阵</p>
+<p>基变换：旋转、伸缩坐标轴</p>
+<p>特征值分解</p>
+<p>$A = U<em>A</em>U^{-1}$</p>
+<p>U 特征向量<br>A 是对角阵，取最大的几个，他们就是代表。</p>
+<p>限制： N*N方阵</p>
+<p>$MN = MK<em>KK</em>KN$，其中K &lt;&lt; N, 取10%的特征，占据的样本可能会超过99%（因为比较稀疏）</p>
+<hr>
+<p>概率函数（概率质量函数）</p>
+<p>$p(x) = Prob(X = x)$</p>
+<p>概率分布，就是一个表格，表中罗列了随机变量X的所有取值以及其对应的概率。</p>
+<p>概率密度函数</p>
+<p>频率分布直方图，当分组越来越多，轮廓会变为一条曲线。</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.3s3afpjzgmo0.jpg" alt="image"></p>
+<p>简单随机抽样，<br>抽取的样本满足两点：<br>（1）样本X1，2…Xn是相互独立的随机变量。<br>（2）样本X1，X2.Xn与总体X同分布。</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.6mtlivhz1ys0.jpg" alt="image"></p>
+<p>概率表达了在给定参数日时X=的可能性；而似然表示的是在给定样本X=时，参数的可能性！</p>
+<p>二维随机变量</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.zhvrg2wn4w0.jpg" alt="image"></p>
+<p>联合概率分布，2 * 2表格</p>
+<p>二维随机变量(X,Y)的分布函数</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.6hf4qer5oxk0.jpg" alt="image"></p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.39zcy7gk03m0.jpg" alt="image"></p>
+<p>边缘概率分布<br>$F_X(x) = P(X \le x) $</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.qsgyvy3jf3k.jpg" alt="image"></p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.7d2k1suwjgw0.jpg" alt="image"></p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.fds0ah0bp6g.jpg" alt="image"></p>
+<p>中心极限定理</p>
+<p>样本的平均值约等于总体的平均值。不管总体是什么分布，任意一个总体<br>的样本平均值都会围绕在总体的整体平均值周围，并且呈正态分布。</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.3dnlhkacz3u0.jpg" alt="image"></p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.5o17vqnyt6g.jpg" alt="image"></p>
+<p>正态分布</p>
+<p>二项式分布</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.3khgm3xf8l00.jpg" alt="image"></p>
+<p>做N次实验，成功概率是p， 则成功k次的概率服从以上分布。</p>
+<p>泊松分布</p>
+<p>泊松分布中使用了这些符号：<br>·$\lambda$是事件发生的速率；<br>·t是时间间隔的长度；<br>·X是该时间间隔内的事件数，其中，X称为泊松随机变量，X的概率分布称为泊松分布。<br>·令$\mu$表示长度为的间隔中的平均事件数。那么，$\mu=\lambda*t$。</p>
+<p>例如说一个医院中，每个病人来看病都是随机并独立的概率，则该医院一天（或者其他特定时间段，一小时，一周等等）接纳的病人总数可以看做是一个服从poisson分布的随机变量。但是为什么可以这样处理呢？通俗定义：假定一个事件在一段时间内随机发生，且符合以下条件：<br>·（1）将该时间段无限分隔成若干个小的时间段，在这个接近于零的小时间段里，该事件发生一次的概率与这个极小时间段的长度成正比。<br>·（2）在每一个极小时间段内，该事件发生两次及以上的概率恒等于零。<br>·（3）该事件在不同的小时间段里，发生与否相互独立。<br>则该事件称为poisson process。这个第二定义就更加利于大家理解了，回到医院的例子之中，如果我们把一天分成24个小时，或者24x60分钟，或者24x3600<br>秒。时间分的越短，这个时间段里来病人的概率就越小（比如说医院在正午12点到正午12点又一毫秒之间来病人的概率是不是很接近于零？）。条件一符合。另<br>外如果我们把时间分的很细很细，是不是同时来两个病人（或者两个以上的病人）就是不可能的事件？即使两个病人同时来，也总有一个人先迈步子跨进医院大<br>门吧。条件二也符合。倒是条件三的要求比较苛刻。应用到实际例子中就是说病人们来医院的概率必须是相互独立的，如果不是，则不能看作是poisso分布。</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.24ayqxutj8zk.jpg" alt="image"></p>
+<p>均匀分布 uniform distribution</p>
+<p>卡方分布<br>正态分布随机变量Xi的平方和服从卡方分布，有一个自由度参数$\lambda$</p>
+<p>beta分布</p>
+<p>可以看作一个概率的概率分布， 当你不知道一个东西的具体概率是多少时， 它可以给出了所有概率出现的可能性大小</p>
+<p>$\alpha$ 跟 $\beta$ 分别为先验的成功次数与失败次数；概率密度函数的输入是X(是一个概率值)， 输出也是一个概率，表示的是该事件成功率 = X的概率。</p>
+<hr>
+<p>核函数</p>
+<p>为什么：</p>
+<p>如果我的数据有足够多的可利用的信息，那么我可以直接做我喜欢的事了，但是现在如果没有那么多的信息，我可不可以在数学上进行一些投机呢？</p>
+<p>低维（比如我只知道一个人的年龄，性别，那我能对她多了解吗？）<br>高维（比如我知道他从出生开始，做过哪些事，赚过哪些钱等）</p>
+<p>如果我们对数据更好的了解（是机器去了解他们，我们不需要认识啦）得到的结果不也会更好嘛。</p>
+<p>低维度 =》 高维度</p>
+<p>低维不可分</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.3d1u3wbplqu0.webp" alt="image"></p>
+<p>linear 核函数</p>
+<p>特征已经比较丰富了，样本数据量巨大， 需要进行实时得出结果的问题。</p>
+<p>一种计算向量内积的数学技巧</p>
+<p>多项式核函数<br><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.55un8ls0oc00.webp" alt="image"></p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.3wcw6an7gi20.webp" alt="image"></p>
+<p>高斯核函数</p>
+<p>一维高斯核函数（正态分布）、二维高斯核函数</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.1zn6kly1z8kg.webp" alt="image"></p>
+<hr>
+<p>信息熵</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.3iaoumor3r60.webp" alt="image"></p>
+<p>log的作用是把一个很小的概率p变为一个绝对值很大的数！</p>
+<p>对于分类任务，结果的熵越下，说明效果越好。</p>
+<h2 id="1-是什么，XXX的本质"><a href="#1-是什么，XXX的本质" class="headerlink" title="1. 是什么，XXX的本质"></a>1. 是什么，XXX的本质</h2><h2 id="2-为什么：XXX的价值"><a href="#2-为什么：XXX的价值" class="headerlink" title="2. 为什么：XXX的价值"></a>2. 为什么：XXX的价值</h2><h2 id="3-怎么办：XXX带给我们的方法论"><a href="#3-怎么办：XXX带给我们的方法论" class="headerlink" title="3. 怎么办：XXX带给我们的方法论"></a>3. 怎么办：XXX带给我们的方法论</h2>
+    </div>
+
+    
+    
+    
+
+    
+      <div>
+        <div class="recommended_posts">
+    
+    
+    <h1>Recommended Posts </h1>
+    <ul>
+        
+            <li><a href="https://www.fpthinker.com/math/tpl.html">学习机器学习可能用到的数学</a></li>
+        
+            <li><a href="https://www.fpthinker.com/ai/logistic_regression.html">逻辑回归</a></li>
+        
+            <li><a href="https://www.fpthinker.com/ai/exp_set.html">指数分布族</a></li>
+        
+            <li><a href="https://www.fpthinker.com/ai/feature.html">特征工程</a></li>
+        
+    </ul>
+     
+</div> 
+
+      </div>
+    <div class="post-widgets">
+      <div id="needsharebutton-postbottom">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    </div>
+        <div class="reward-container">
+  <div>你的支持是我坚持的最大动力!</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="NeoWei WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="NeoWei Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/ai/logistic_regression.html" rel="prev" title="逻辑回归">
+      <i class="fa fa-chevron-left"></i> 逻辑回归
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/math/tpl.html" rel="next" title="学习机器学习可能用到的数学">
+      学习机器学习可能用到的数学 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+		  </div>
+		  
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+		  
+<script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+<script>
+    const btw = new BTWPlugin();
+
+    btw.init({
+        id: 'container',
+        blogId: '22171-1589640164808-286',
+        name: '第一性原理思考者',
+        qrcode: 'https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.29ucrvenk9lw.jpg',
+        keyword: '思考',
+    });
+</script>
+
+
+		</div>
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0-%E8%83%8C%E6%99%AF%E4%BB%8B%E7%BB%8D%EF%BC%8C%E6%8A%8A%E4%BA%BA%E5%90%B8%E5%BC%95%E8%BF%87%E6%9D%A5"><span class="nav-number">1.</span> <span class="nav-text">0. 背景介绍，把人吸引过来</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%8CXXX%E7%9A%84%E6%9C%AC%E8%B4%A8"><span class="nav-number">2.</span> <span class="nav-text">1. 是什么，XXX的本质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B8%BA%E4%BB%80%E4%B9%88%EF%BC%9AXXX%E7%9A%84%E4%BB%B7%E5%80%BC"><span class="nav-number">3.</span> <span class="nav-text">2. 为什么：XXX的价值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9AXXX%E5%B8%A6%E7%BB%99%E6%88%91%E4%BB%AC%E7%9A%84%E6%96%B9%E6%B3%95%E8%AE%BA"><span class="nav-number">4.</span> <span class="nav-text">3. 怎么办：XXX带给我们的方法论</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">NeoWei</p>
+  <div class="site-description" itemprop="description">我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">341</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">61</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">NeoWei</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a>
+  </div>
+
+<br>
+<a href="https://beian.miit.gov.cn/" rel="external nofollow noreferrer"  style="color:#f72b07" target="_blank">沪ICP备2020030798号-1</a>
+<br>
+
+        
+
+
+  <div style="display: none;">
+    <script src="//s95.cnzz.com/z_stat.php?id=1279618438&web_id=1279618438"></script>
+  </div>
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.js"></script>
+  <script>
+      pbOptions = {};
+        pbOptions.iconStyle = "box";
+        pbOptions.boxForm = "horizontal";
+        pbOptions.position = "bottomCenter";
+        pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+  </script>
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'uE8T6jDhH4vW6BtH143y72nw-gzGzoHsz',
+      appKey     : '3xulfIcqN5mLqRSxptxvnamK',
+      placeholder: "Just go go",
+      avatar     : 'identicon',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

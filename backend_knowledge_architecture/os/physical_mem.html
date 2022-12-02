@@ -19,13 +19,13 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"neowei1987.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"www.fpthinker.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="TLB：MMU工作的过程就是查询页表的过程。如果把页表放在内存中查询的时候开销太大，因此为了提高查找效率，专门用一小片访问更快的区域存放地址转换条目。（当页表内容有变化的时候，需要清除TLB，以防止地址映射出错。） Caches：cpu和内存之间的缓存机制，用于提高访问速率，armv8架构的话上图的caches其实是L2 Cache 内存命中率假设在 n 次内存访问中，出现命中的次数是 m，那么">
 <meta property="og:type" content="article">
 <meta property="og:title" content="操作系统 - 物理内存管理">
-<meta property="og:url" content="https://neowei1987.github.io/backend_knowledge_architecture/os/physical_mem.html">
+<meta property="og:url" content="https://www.fpthinker.com/backend_knowledge_architecture/os/physical_mem.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
 <meta property="og:description" content="TLB：MMU工作的过程就是查询页表的过程。如果把页表放在内存中查询的时候开销太大，因此为了提高查找效率，专门用一小片访问更快的区域存放地址转换条目。（当页表内容有变化的时候，需要清除TLB，以防止地址映射出错。） Caches：cpu和内存之间的缓存机制，用于提高访问速率，armv8架构的话上图的caches其实是L2 Cache 内存命中率假设在 n 次内存访问中，出现命中的次数是 m，那么">
 <meta property="og:locale">
@@ -39,7 +39,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://pics3.baidu.com/feed/838ba61ea8d3fd1f0c5a12495ab0521794ca5f7c.jpeg?token=dd0db40934355dcfa5bc35bec53f8b4d">
 
-<link rel="canonical" href="https://neowei1987.github.io/backend_knowledge_architecture/os/physical_mem.html">
+<link rel="canonical" href="https://www.fpthinker.com/backend_knowledge_architecture/os/physical_mem.html">
 
 
 <script id="page-configurations">
@@ -210,7 +210,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/os/physical_mem.html">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/os/physical_mem.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -296,13 +296,13 @@
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/os/vm_mem.html">操作系统系列｜虚拟内存</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/os/vm_mem.html">操作系统系列｜虚拟内存</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/os/page_cache.html">操作系统 - PageCache</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/os/page_cache.html">操作系统 - PageCache</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/os/process_thread.html">操作系统 - 进程与线程</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/os/process_thread.html">操作系统 - 进程与线程</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/os/os_structure.html">操作系统中碰到的数据结构汇总</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/os/os_structure.html">操作系统中碰到的数据结构汇总</a></li>
         
     </ul>
      
@@ -444,7 +444,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">340</span>
+          <span class="site-state-item-count">341</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

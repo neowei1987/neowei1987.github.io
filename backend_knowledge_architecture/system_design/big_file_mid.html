@@ -19,13 +19,13 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"neowei1987.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"www.fpthinker.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="在一个文件中有10G个整数，乱序排列，要求找出中位数。内存限制为2G。 回答： 不妨假设10G个整数是64bit的。2G内存可以存放256M个64bit整数。 我们可以将64bit的整数空间平均分成256M个取值范围，用2G的内存对每个取值范围内出现整数个数进行统计。这样遍历一边10G整数后，我们便知道中数在那个范围内出现，以及这个范围内总共出现了多少个整数。 如果中数所在范围出现的整数比较少，我">
 <meta property="og:type" content="article">
 <meta property="og:title" content="常见系统设计题系列-大文件整数找中位数">
-<meta property="og:url" content="https://neowei1987.github.io/backend_knowledge_architecture/system_design/big_file_mid.html">
+<meta property="og:url" content="https://www.fpthinker.com/backend_knowledge_architecture/system_design/big_file_mid.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
 <meta property="og:description" content="在一个文件中有10G个整数，乱序排列，要求找出中位数。内存限制为2G。 回答： 不妨假设10G个整数是64bit的。2G内存可以存放256M个64bit整数。 我们可以将64bit的整数空间平均分成256M个取值范围，用2G的内存对每个取值范围内出现整数个数进行统计。这样遍历一边10G整数后，我们便知道中数在那个范围内出现，以及这个范围内总共出现了多少个整数。 如果中数所在范围出现的整数比较少，我">
 <meta property="og:locale">
@@ -36,7 +36,7 @@
 <meta property="article:tag" content="分治">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://neowei1987.github.io/backend_knowledge_architecture/system_design/big_file_mid.html">
+<link rel="canonical" href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/big_file_mid.html">
 
 
 <script id="page-configurations">
@@ -207,7 +207,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/system_design/big_file_mid.html">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/big_file_mid.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -298,13 +298,13 @@
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/pre_in_rebuild.html">二叉树系列-前序中序序列重建二叉树</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/pre_in_rebuild.html">二叉树系列-前序中序序列重建二叉树</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/system_design/compile_seq.html">常见系统设计题系列-源码编译顺序</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/compile_seq.html">常见系统设计题系列-源码编译顺序</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/bit/NumberOf1.html">二进制表示中1的个数</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/bit/NumberOf1.html">二进制表示中1的个数</a></li>
         
-            <li><a href="https://neowei1987.github.io/core/%E5%95%86%E4%B8%9A%E5%8A%9B/%E5%90%B4%E4%BC%AF%E5%87%A1%E6%AF%8F%E5%91%A8%E5%95%86%E4%B8%9A%E8%AF%84%E8%AE%BA.html">吴伯凡每周商业评论</a></li>
+            <li><a href="https://www.fpthinker.com/core/%E5%95%86%E4%B8%9A%E5%8A%9B/%E5%90%B4%E4%BC%AF%E5%87%A1%E6%AF%8F%E5%91%A8%E5%95%86%E4%B8%9A%E8%AF%84%E8%AE%BA.html">吴伯凡每周商业评论</a></li>
         
     </ul>
      
@@ -446,7 +446,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">340</span>
+          <span class="site-state-item-count">341</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

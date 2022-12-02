@@ -19,13 +19,13 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"neowei1987.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"www.fpthinker.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="并发 &#x3D; rt * qps N &#x3D; X * RN表示系统中同时活动的用户，包括正在处理中和队列中的；X表示用户相继到达系统的速率，在平衡状态时即为系统吞吐量（到达&#x3D;离开）；R表示每个用户在系统中平均的驻留时间 eg. 一个请求在系统中的停留时间，1s; 一秒钟平均过来100个请求（当然一秒钟也会离开100个请求）那么系统同时处理的请求数是多少？ 应该是1s * 100 (个&#x2F;s) &#x3D; 100个。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="高性能服务器设计-littile&#39;s raw定律">
-<meta property="og:url" content="https://neowei1987.github.io/backend_knowledge_architecture/server/concurrency_limiter/little_raw.html">
+<meta property="og:url" content="https://www.fpthinker.com/backend_knowledge_architecture/server/concurrency_limiter/little_raw.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
 <meta property="og:description" content="并发 &#x3D; rt * qps N &#x3D; X * RN表示系统中同时活动的用户，包括正在处理中和队列中的；X表示用户相继到达系统的速率，在平衡状态时即为系统吞吐量（到达&#x3D;离开）；R表示每个用户在系统中平均的驻留时间 eg. 一个请求在系统中的停留时间，1s; 一秒钟平均过来100个请求（当然一秒钟也会离开100个请求）那么系统同时处理的请求数是多少？ 应该是1s * 100 (个&#x2F;s) &#x3D; 100个。">
 <meta property="og:locale">
@@ -35,7 +35,7 @@
 <meta property="article:tag" content="高性能服务器">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://neowei1987.github.io/backend_knowledge_architecture/server/concurrency_limiter/little_raw.html">
+<link rel="canonical" href="https://www.fpthinker.com/backend_knowledge_architecture/server/concurrency_limiter/little_raw.html">
 
 
 <script id="page-configurations">
@@ -206,7 +206,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/concurrency_limiter/little_raw.html">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/concurrency_limiter/little_raw.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -297,13 +297,13 @@
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/system_design/distributed_lock.html">常见系统设计题系列-分布式锁</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/distributed_lock.html">常见系统设计题系列-分布式锁</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/server/timer/index.html">高性能服务器设计-定时器</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/server/timer/index.html">高性能服务器设计-定时器</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/server/concurrency_limiter/index.html">高性能服务器设计-限流模型</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/server/concurrency_limiter/index.html">高性能服务器设计-限流模型</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/mq/kafka.html">消息队列-Kafka</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/mq/kafka.html">消息队列-Kafka</a></li>
         
     </ul>
      
@@ -445,7 +445,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">340</span>
+          <span class="site-state-item-count">341</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

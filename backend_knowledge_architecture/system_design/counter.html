@@ -19,13 +19,13 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"neowei1987.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"www.fpthinker.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="数据库数据库 + 分库分表 方案的问题：  如果不分库，性能扛不住 如果按照时间分库分表，存在热表问题（越新的微博，越容易被访问） 如果按照id取模的方式，扩展性不够。  数据库 + 缓存最大的问题：  cache需要访问好多空数据（好多微博的count为0） cache 太贵了，尤其是redis，redis的有效内存利用率比较低。（如果key特别特别多，用redis特别昂贵，这个时候需要考虑自研">
 <meta property="og:type" content="article">
 <meta property="og:title" content="常见系统设计题系列-微博计数系统">
-<meta property="og:url" content="https://neowei1987.github.io/backend_knowledge_architecture/system_design/counter.html">
+<meta property="og:url" content="https://www.fpthinker.com/backend_knowledge_architecture/system_design/counter.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
 <meta property="og:description" content="数据库数据库 + 分库分表 方案的问题：  如果不分库，性能扛不住 如果按照时间分库分表，存在热表问题（越新的微博，越容易被访问） 如果按照id取模的方式，扩展性不够。  数据库 + 缓存最大的问题：  cache需要访问好多空数据（好多微博的count为0） cache 太贵了，尤其是redis，redis的有效内存利用率比较低。（如果key特别特别多，用redis特别昂贵，这个时候需要考虑自研">
 <meta property="og:locale">
@@ -35,7 +35,7 @@
 <meta property="article:tag" content="后端开发知识体系,知识体系构建,刷题技巧,本质思考">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://neowei1987.github.io/backend_knowledge_architecture/system_design/counter.html">
+<link rel="canonical" href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/counter.html">
 
 
 <script id="page-configurations">
@@ -206,7 +206,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/system_design/counter.html">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/counter.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -314,13 +314,13 @@
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="https://neowei1987.github.io/%E9%80%9A%E7%94%A8%E8%BD%AF%E6%8A%80%E8%83%BD/%E5%A6%82%E4%BD%95%E9%AB%98%E6%95%88%E6%B2%9F%E9%80%9A/%E5%8F%A3%E6%89%8D%E5%A5%97%E8%B7%AF%E5%AD%A6.html">个人能力提升系列-沟通｜口才套路学</a></li>
+            <li><a href="https://www.fpthinker.com/%E9%80%9A%E7%94%A8%E8%BD%AF%E6%8A%80%E8%83%BD/%E5%A6%82%E4%BD%95%E9%AB%98%E6%95%88%E6%B2%9F%E9%80%9A/%E5%8F%A3%E6%89%8D%E5%A5%97%E8%B7%AF%E5%AD%A6.html">个人能力提升系列-沟通｜口才套路学</a></li>
         
-            <li><a href="https://neowei1987.github.io/%E6%A8%A1%E5%9E%8B/index.html">模型系列-如果我需要干什么，我有一个模型</a></li>
+            <li><a href="https://www.fpthinker.com/%E6%A8%A1%E5%9E%8B/index.html">模型系列-如果我需要干什么，我有一个模型</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/stack/index.html">stack相关的题目</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/structures/stack/index.html">stack相关的题目</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/greedy/index.html">贪心算法</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/greedy/index.html">贪心算法</a></li>
         
     </ul>
      
@@ -459,7 +459,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">340</span>
+          <span class="site-state-item-count">341</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

@@ -19,13 +19,13 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"neowei1987.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"www.fpthinker.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="服务的处理能力是有客观上限的。当请求速度超过服务的处理速度时，服务就会过载。 如果服务持续过载，会导致越来越多的请求积压，最终所有的请求都必须等待较长时间才能被处理，从而使整个服务处于瘫痪状态。 与之相对的，如果直接拒绝掉一部分请求，反而能够让服务能够”及时”处理更多的请求。 我们称这种做法为限流。限流是过载保护的手段之一，目的在于保护系统不被超过服务吞吐能力的流量（或突发）打死。 常见的限流手段">
 <meta property="og:type" content="article">
 <meta property="og:title" content="高性能服务器设计-限流模型">
-<meta property="og:url" content="https://neowei1987.github.io/backend_knowledge_architecture/server/concurrency_limiter/index.html">
+<meta property="og:url" content="https://www.fpthinker.com/backend_knowledge_architecture/server/concurrency_limiter/index.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
 <meta property="og:description" content="服务的处理能力是有客观上限的。当请求速度超过服务的处理速度时，服务就会过载。 如果服务持续过载，会导致越来越多的请求积压，最终所有的请求都必须等待较长时间才能被处理，从而使整个服务处于瘫痪状态。 与之相对的，如果直接拒绝掉一部分请求，反而能够让服务能够”及时”处理更多的请求。 我们称这种做法为限流。限流是过载保护的手段之一，目的在于保护系统不被超过服务吞吐能力的流量（或突发）打死。 常见的限流手段">
 <meta property="og:locale">
@@ -38,7 +38,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://cdn.b5mang.com/20201222223148.png">
 
-<link rel="canonical" href="https://neowei1987.github.io/backend_knowledge_architecture/server/concurrency_limiter/">
+<link rel="canonical" href="https://www.fpthinker.com/backend_knowledge_architecture/server/concurrency_limiter/">
 
 
 <script id="page-configurations">
@@ -209,7 +209,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/concurrency_limiter/index.html">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/concurrency_limiter/index.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -322,13 +322,13 @@
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/server/timer/index.html">高性能服务器设计-定时器</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/server/timer/index.html">高性能服务器设计-定时器</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/server/concurrency_limiter/little_raw.html">高性能服务器设计-littile's raw定律</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/server/concurrency_limiter/little_raw.html">高性能服务器设计-littile's raw定律</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/mq/kafka.html">消息队列-Kafka</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/mq/kafka.html">消息队列-Kafka</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/mq/index.html">消息队列-概览</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/mq/index.html">消息队列-概览</a></li>
         
     </ul>
      
@@ -470,7 +470,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">340</span>
+          <span class="site-state-item-count">341</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

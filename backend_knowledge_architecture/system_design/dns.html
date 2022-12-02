@@ -19,13 +19,13 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"neowei1987.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"www.fpthinker.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="设计DNS服务器中cache的数据结构。 要求设计一个DNS的Cache结构，要求能够满足每秒5000以上的查询，满足IP数据的快速插入，查询的速度要快。（题目还给出了一系列的数据，比如：站点数总共为5000万，IP地址有1000万，等等） 回答： DNS服务器实现域名到IP地址的转换。 每个域名的平均长度为25个字节（估计值），每个IP为4个字节，所以Cache的每个条目需要大概30个字节。 总">
 <meta property="og:type" content="article">
 <meta property="og:title" content="常见系统设计题系列- DNS系统">
-<meta property="og:url" content="https://neowei1987.github.io/backend_knowledge_architecture/system_design/dns.html">
+<meta property="og:url" content="https://www.fpthinker.com/backend_knowledge_architecture/system_design/dns.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
 <meta property="og:description" content="设计DNS服务器中cache的数据结构。 要求设计一个DNS的Cache结构，要求能够满足每秒5000以上的查询，满足IP数据的快速插入，查询的速度要快。（题目还给出了一系列的数据，比如：站点数总共为5000万，IP地址有1000万，等等） 回答： DNS服务器实现域名到IP地址的转换。 每个域名的平均长度为25个字节（估计值），每个IP为4个字节，所以Cache的每个条目需要大概30个字节。 总">
 <meta property="og:locale">
@@ -35,7 +35,7 @@
 <meta property="article:tag" content="后端开发知识体系,知识体系构建,刷题技巧,本质思考">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://neowei1987.github.io/backend_knowledge_architecture/system_design/dns.html">
+<link rel="canonical" href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/dns.html">
 
 
 <script id="page-configurations">
@@ -206,7 +206,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/system_design/dns.html">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/dns.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -298,13 +298,13 @@
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/deleteDuplication.html">链表系列-排序链表删除重复节点</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/deleteDuplication.html">链表系列-排序链表删除重复节点</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/system_design/distributed_log.html">常见系统设计题系列-分布式日志系统</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/distributed_log.html">常见系统设计题系列-分布式日志系统</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/system_design/online_stat.html">常见系统设计题系列-在线人数统计</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/online_stat.html">常见系统设计题系列-在线人数统计</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/system_design/url_uniq.html">常见系统设计题系列-URL去重</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/url_uniq.html">常见系统设计题系列-URL去重</a></li>
         
     </ul>
      
@@ -442,7 +442,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">340</span>
+          <span class="site-state-item-count">341</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

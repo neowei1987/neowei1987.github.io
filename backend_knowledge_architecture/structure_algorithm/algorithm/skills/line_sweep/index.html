@@ -19,13 +19,13 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"neowei1987.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"www.fpthinker.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="扫描线是一条想象中的向右扫过平面的竖直线。也因此，以此思想为基础的算法也被称为平面扫描算法(Plane Sweep Algorithm)，我们以某些事件为基础扫描我们思考的问题以使扫描离散化。 这些事件都是以我们思考的问题为基础，我们将在下面讨论的算法中看见。除去这些事件以外，我们需要维护一些数据结构来储存以y坐标为顺序排列的点（这一顺序有时可能会改变）以助益于在扫描到某些事件时进行操作。在一些情">
 <meta property="og:type" content="article">
 <meta property="og:title" content="扫描线">
-<meta property="og:url" content="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/skills/line_sweep/index.html">
+<meta property="og:url" content="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/skills/line_sweep/index.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
 <meta property="og:description" content="扫描线是一条想象中的向右扫过平面的竖直线。也因此，以此思想为基础的算法也被称为平面扫描算法(Plane Sweep Algorithm)，我们以某些事件为基础扫描我们思考的问题以使扫描离散化。 这些事件都是以我们思考的问题为基础，我们将在下面讨论的算法中看见。除去这些事件以外，我们需要维护一些数据结构来储存以y坐标为顺序排列的点（这一顺序有时可能会改变）以助益于在扫描到某些事件时进行操作。在一些情">
 <meta property="og:locale">
@@ -35,7 +35,7 @@
 <meta property="article:tag" content="后端开发知识体系,知识体系构建,刷题技巧,本质思考">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/skills/line_sweep/">
+<link rel="canonical" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/skills/line_sweep/">
 
 
 <script id="page-configurations">
@@ -206,7 +206,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/skills/line_sweep/index.html">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/skills/line_sweep/index.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -293,13 +293,13 @@
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/sub_array_sum_max.html">动态规划系列-子数组最大和</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/dp/sub_array_sum_max.html">动态规划系列-子数组最大和</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/heap/mid_data_stream.html">数据流中位数</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/structures/heap/mid_data_stream.html">数据流中位数</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/double_pointer.html">双指针技巧</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/double_pointer.html">双指针技巧</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/sort/merge_sort/reverse_cnt.html">逆序数计算系列</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/sort/merge_sort/reverse_cnt.html">逆序数计算系列</a></li>
         
     </ul>
      
@@ -437,7 +437,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">340</span>
+          <span class="site-state-item-count">341</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

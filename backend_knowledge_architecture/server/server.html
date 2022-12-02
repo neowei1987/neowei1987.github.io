@@ -19,13 +19,13 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"neowei1987.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"www.fpthinker.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="池化技术核心思想：用空间换时间，期望使用预先创建好的对象来减少频繁创建对象的性能开销，同时还统一管理了对象，降低了对象的使用成本。例子：（1）数据库连接池-最小数量、最大数量、如果超过最大则等待（2）线程池-最小数量、最大数量、有界队列（监控队列中元素的个数）线程池大小：区分IO密集、CPU密集（3）内存池 超时事件管理 IO模型 线程模型，一般会综合考虑IO模型、超时事件如何管理、线程池、消息队">
 <meta property="og:type" content="article">
 <meta property="og:title" content="高性能服务器设计-总览">
-<meta property="og:url" content="https://neowei1987.github.io/backend_knowledge_architecture/server/server.html">
+<meta property="og:url" content="https://www.fpthinker.com/backend_knowledge_architecture/server/server.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
 <meta property="og:description" content="池化技术核心思想：用空间换时间，期望使用预先创建好的对象来减少频繁创建对象的性能开销，同时还统一管理了对象，降低了对象的使用成本。例子：（1）数据库连接池-最小数量、最大数量、如果超过最大则等待（2）线程池-最小数量、最大数量、有界队列（监控队列中元素的个数）线程池大小：区分IO密集、CPU密集（3）内存池 超时事件管理 IO模型 线程模型，一般会综合考虑IO模型、超时事件如何管理、线程池、消息队">
 <meta property="og:locale">
@@ -35,7 +35,7 @@
 <meta property="article:tag" content="高性能服务器">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://neowei1987.github.io/backend_knowledge_architecture/server/server.html">
+<link rel="canonical" href="https://www.fpthinker.com/backend_knowledge_architecture/server/server.html">
 
 
 <script id="page-configurations">
@@ -206,7 +206,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/server/server.html">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/server.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -285,13 +285,13 @@
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/high_perfermance.html">分布式系统-低延迟，高性能</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/high_perfermance.html">分布式系统-低延迟，高性能</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/high_scalability.html">分布式系统-可扩展</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/high_scalability.html">分布式系统-可扩展</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/store/index.html">存储系列-概览</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/store/index.html">存储系列-概览</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/server/io_model/io_model.html">高性能服务器设计-IO模型</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/server/io_model/io_model.html">高性能服务器设计-IO模型</a></li>
         
     </ul>
      
@@ -432,7 +432,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">340</span>
+          <span class="site-state-item-count">341</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

@@ -19,13 +19,13 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"neowei1987.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"www.fpthinker.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="TCP状态迁移图 TCP三次握手的缺陷：Sync Flood攻击 关于TIME_WAIT存在的必要性1）为实现TCP全双工连接的可靠释放 由TCP状态变迁图可知，假设发起主动关闭的一方（client）最后发送的ACK在网络中丢失，由于TCP协议的重传机制，执行被动关闭的一方（server）将会重发其FIN，在该FIN到达client之前，client必须维护这条连接状态，也就说这条TCP连接所对应">
 <meta property="og:type" content="article">
 <meta property="og:title" content="计算机网络 - TCP协议">
-<meta property="og:url" content="https://neowei1987.github.io/backend_knowledge_architecture/network/tcp.html">
+<meta property="og:url" content="https://www.fpthinker.com/backend_knowledge_architecture/network/tcp.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
 <meta property="og:description" content="TCP状态迁移图 TCP三次握手的缺陷：Sync Flood攻击 关于TIME_WAIT存在的必要性1）为实现TCP全双工连接的可靠释放 由TCP状态变迁图可知，假设发起主动关闭的一方（client）最后发送的ACK在网络中丢失，由于TCP协议的重传机制，执行被动关闭的一方（server）将会重发其FIN，在该FIN到达client之前，client必须维护这条连接状态，也就说这条TCP连接所对应">
 <meta property="og:locale">
@@ -38,7 +38,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://img-blog.csdn.net/20171214152607931?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGliYWluZXUyMDA0/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
 
-<link rel="canonical" href="https://neowei1987.github.io/backend_knowledge_architecture/network/tcp.html">
+<link rel="canonical" href="https://www.fpthinker.com/backend_knowledge_architecture/network/tcp.html">
 
 
 <script id="page-configurations">
@@ -209,7 +209,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/network/tcp.html">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/network/tcp.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -302,13 +302,13 @@
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/db/lock.html">数据库必知必会-锁篇</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/db/lock.html">数据库必知必会-锁篇</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/network/index.html">计算机网络必知必会</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/network/index.html">计算机网络必知必会</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/cache/cdn/index.html">内容分发网络</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/cache/cdn/index.html">内容分发网络</a></li>
         
-            <li><a href="https://neowei1987.github.io/%E6%A8%A1%E5%9E%8B/%E7%9B%AE%E6%A0%87%E5%8E%9F%E5%88%99%E6%96%B9%E6%B3%95.html">模型系列-目标、原则、方法</a></li>
+            <li><a href="https://www.fpthinker.com/%E6%A8%A1%E5%9E%8B/%E7%9B%AE%E6%A0%87%E5%8E%9F%E5%88%99%E6%96%B9%E6%B3%95.html">模型系列-目标、原则、方法</a></li>
         
     </ul>
      
@@ -450,7 +450,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">340</span>
+          <span class="site-state-item-count">341</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

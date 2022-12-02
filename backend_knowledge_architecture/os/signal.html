@@ -19,13 +19,13 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"neowei1987.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"www.fpthinker.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="信号是一种异步通信机制，它是在软件层面上对中断机制的一种模拟， 阻塞信号信号有几种状态，首先是信号的产生 (Genertion)，而实际执行信号处理动作时，状态为递达 (Delivery)，信号在产生到递达中的状态被称为未决 (Pending) 进程可以选择阻塞 (Blocking)某些信号，被阻塞的信号在产生后将保持在未决状态，直到进程解除对该信号的阻塞，才执行递达的动作  1.4 信号的处理时">
 <meta property="og:type" content="article">
 <meta property="og:title" content="操作系统之信号机制">
-<meta property="og:url" content="https://neowei1987.github.io/backend_knowledge_architecture/os/signal.html">
+<meta property="og:url" content="https://www.fpthinker.com/backend_knowledge_architecture/os/signal.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
 <meta property="og:description" content="信号是一种异步通信机制，它是在软件层面上对中断机制的一种模拟， 阻塞信号信号有几种状态，首先是信号的产生 (Genertion)，而实际执行信号处理动作时，状态为递达 (Delivery)，信号在产生到递达中的状态被称为未决 (Pending) 进程可以选择阻塞 (Blocking)某些信号，被阻塞的信号在产生后将保持在未决状态，直到进程解除对该信号的阻塞，才执行递达的动作  1.4 信号的处理时">
 <meta property="og:locale">
@@ -37,7 +37,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://img-blog.csdnimg.cn/img_convert/a110097ed46dba672cfdd5613699d363.png">
 
-<link rel="canonical" href="https://neowei1987.github.io/backend_knowledge_architecture/os/signal.html">
+<link rel="canonical" href="https://www.fpthinker.com/backend_knowledge_architecture/os/signal.html">
 
 
 <script id="page-configurations">
@@ -208,7 +208,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/os/signal.html">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/os/signal.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -294,13 +294,13 @@
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/os/epoll.html">操作系统之epoll</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/os/epoll.html">操作系统之epoll</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/os/fork.html">操作系统之fork</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/os/fork.html">操作系统之fork</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/tx/index.html">事务一致性总体说明</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/tx/index.html">事务一致性总体说明</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/distributed_system/tx/paxos.html">Paxos协议介绍</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/tx/paxos.html">Paxos协议介绍</a></li>
         
     </ul>
      
@@ -438,7 +438,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">340</span>
+          <span class="site-state-item-count">341</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

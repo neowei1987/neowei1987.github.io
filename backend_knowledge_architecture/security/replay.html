@@ -19,13 +19,13 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"neowei1987.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"www.fpthinker.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="第一个点：如何防止给服务端的内容被黑客抓取，并查看里面的内容？ 客户端每次加密前，都随机生成一个AES key，我们计为：AES_Key同时请求服务端，获取服务端RSA的公钥，我们计作：RSA_Public(服务端持有用于加密的私钥RSA_Private) 客户端使用RSA非对称加密算法对AES_Key进行加密，得到Encrypt_AES_Key&#x3D;RSA_Encrypt(AES_Key, RSA_">
 <meta property="og:type" content="article">
 <meta property="og:title" content="网站安全系列-防重放攻击&amp;防篡改">
-<meta property="og:url" content="https://neowei1987.github.io/backend_knowledge_architecture/security/replay.html">
+<meta property="og:url" content="https://www.fpthinker.com/backend_knowledge_architecture/security/replay.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
 <meta property="og:description" content="第一个点：如何防止给服务端的内容被黑客抓取，并查看里面的内容？ 客户端每次加密前，都随机生成一个AES key，我们计为：AES_Key同时请求服务端，获取服务端RSA的公钥，我们计作：RSA_Public(服务端持有用于加密的私钥RSA_Private) 客户端使用RSA非对称加密算法对AES_Key进行加密，得到Encrypt_AES_Key&#x3D;RSA_Encrypt(AES_Key, RSA_">
 <meta property="og:locale">
@@ -35,7 +35,7 @@
 <meta property="article:tag" content="系统安全">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://neowei1987.github.io/backend_knowledge_architecture/security/replay.html">
+<link rel="canonical" href="https://www.fpthinker.com/backend_knowledge_architecture/security/replay.html">
 
 
 <script id="page-configurations">
@@ -206,7 +206,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/security/replay.html">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/security/replay.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -283,13 +283,13 @@
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="https://neowei1987.github.io/core/index.html">得到课程索引</a></li>
+            <li><a href="https://www.fpthinker.com/core/index.html">得到课程索引</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/security/csrf.html">网站安全系列-CSRF攻击</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/security/csrf.html">网站安全系列-CSRF攻击</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/security/sql_injection.html">网站安全系列-SQL注入</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/security/sql_injection.html">网站安全系列-SQL注入</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/security/sync_flood.html">网站安全系列-SYN-Flood攻击</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/security/sync_flood.html">网站安全系列-SYN-Flood攻击</a></li>
         
     </ul>
      
@@ -430,7 +430,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">340</span>
+          <span class="site-state-item-count">341</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

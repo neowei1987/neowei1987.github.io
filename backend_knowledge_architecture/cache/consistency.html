@@ -19,13 +19,13 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"neowei1987.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"www.fpthinker.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="数据库、缓存一致性问题先说最重要的数据库、缓存一致性问题，关于该问题，有以下几点需要考虑：  当DB数据发生变更时，是删除缓存还是修改缓存？ 答案是删除缓存。相比修改缓存，删除缓存是幂等性操作。删除缓存可以避免出现双写并发问题。  先写DB还是先写缓存？ 答案是先操作DB。结合case1, 在读多写少的高并发场景下，如果先删缓存再操作DB，有一个很明显的逻辑错误，使得有极高的概率出现读写并发问题。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于缓存与数据库的一致性与过载保护机制">
-<meta property="og:url" content="https://neowei1987.github.io/backend_knowledge_architecture/cache/consistency.html">
+<meta property="og:url" content="https://www.fpthinker.com/backend_knowledge_architecture/cache/consistency.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
 <meta property="og:description" content="数据库、缓存一致性问题先说最重要的数据库、缓存一致性问题，关于该问题，有以下几点需要考虑：  当DB数据发生变更时，是删除缓存还是修改缓存？ 答案是删除缓存。相比修改缓存，删除缓存是幂等性操作。删除缓存可以避免出现双写并发问题。  先写DB还是先写缓存？ 答案是先操作DB。结合case1, 在读多写少的高并发场景下，如果先删缓存再操作DB，有一个很明显的逻辑错误，使得有极高的概率出现读写并发问题。">
 <meta property="og:locale">
@@ -38,7 +38,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://cdn.b5mang.com/2021320144254.png">
 
-<link rel="canonical" href="https://neowei1987.github.io/backend_knowledge_architecture/cache/consistency.html">
+<link rel="canonical" href="https://www.fpthinker.com/backend_knowledge_architecture/cache/consistency.html">
 
 
 <script id="page-configurations">
@@ -209,7 +209,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/backend_knowledge_architecture/cache/consistency.html">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/cache/consistency.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -322,13 +322,13 @@
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/algorithm/dp/rob.html">变种题系列-打家劫舍</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/dp/rob.html">变种题系列-打家劫舍</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/server/thread_model/co_for_go.html">高性能服务器系列-go的协程管理</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/server/thread_model/co_for_go.html">高性能服务器系列-go的协程管理</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/structures/big_number.html">大数高精度加减乘除</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/structures/big_number.html">大数高精度加减乘除</a></li>
         
-            <li><a href="https://neowei1987.github.io/backend_knowledge_architecture/structure_algorithm/problem/index.html">题目组织说明</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/problem/index.html">题目组织说明</a></li>
         
     </ul>
      
@@ -470,7 +470,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">340</span>
+          <span class="site-state-item-count">341</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

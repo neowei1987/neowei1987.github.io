@@ -19,13 +19,13 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"neowei1987.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"www.fpthinker.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="逻辑回归，是一种分类算法，而并非回归算法。 逻辑回归要解决的问题是，给你一组样本以及标签，你基于这些数据去训练你的模型。然后我再给你一个新的样本，你告诉我有多大概率的属于某一个分类【二分类问题，黑还是白】 $Y &#x3D; \theta * X + \epsilon $ 我们现在的目标是找到一组$\theta$可以让它乘以X之后尽可能的匹配Y $\epsilon$为误差，服从均值为0，方差为$\mu^2$">
 <meta property="og:type" content="article">
 <meta property="og:title" content="逻辑回归">
-<meta property="og:url" content="https://neowei1987.github.io/ai/logistic_regression.html">
+<meta property="og:url" content="https://www.fpthinker.com/ai/logistic_regression.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
 <meta property="og:description" content="逻辑回归，是一种分类算法，而并非回归算法。 逻辑回归要解决的问题是，给你一组样本以及标签，你基于这些数据去训练你的模型。然后我再给你一个新的样本，你告诉我有多大概率的属于某一个分类【二分类问题，黑还是白】 $Y &#x3D; \theta * X + \epsilon $ 我们现在的目标是找到一组$\theta$可以让它乘以X之后尽可能的匹配Y $\epsilon$为误差，服从均值为0，方差为$\mu^2$">
 <meta property="og:locale">
@@ -41,7 +41,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.6a7a9c3m0ak0.jpg">
 
-<link rel="canonical" href="https://neowei1987.github.io/ai/logistic_regression.html">
+<link rel="canonical" href="https://www.fpthinker.com/ai/logistic_regression.html">
 
 
 <script id="page-configurations">
@@ -212,7 +212,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://neowei1987.github.io/ai/logistic_regression.html">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/ai/logistic_regression.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -326,13 +326,13 @@
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="https://neowei1987.github.io/math/tpl.html">学习机器学习可能用到的数学</a></li>
+            <li><a href="https://www.fpthinker.com/math/tpl.html">学习机器学习可能用到的数学</a></li>
         
-            <li><a href="https://neowei1987.github.io/ai/exp_set.html">指数分布族</a></li>
+            <li><a href="https://www.fpthinker.com/math/index.html">学习机器学习可能用到的数学</a></li>
         
-            <li><a href="https://neowei1987.github.io/ai/feature.html">特征工程</a></li>
+            <li><a href="https://www.fpthinker.com/ai/exp_set.html">指数分布族</a></li>
         
-            <li><a href="https://neowei1987.github.io/ai/minimize.html">损失函数最优化</a></li>
+            <li><a href="https://www.fpthinker.com/ai/feature.html">特征工程</a></li>
         
     </ul>
      
@@ -379,7 +379,7 @@
       <i class="fa fa-chevron-left"></i> 指数分布族
     </a></div>
       <div class="post-nav-item">
-    <a href="/math/tpl.html" rel="next" title="学习机器学习可能用到的数学">
+    <a href="/math/index.html" rel="next" title="学习机器学习可能用到的数学">
       学习机器学习可能用到的数学 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
@@ -471,7 +471,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">340</span>
+          <span class="site-state-item-count">341</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

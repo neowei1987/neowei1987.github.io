@@ -203,6 +203,183 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/memory_pool/memcache_for_nginx.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/memory_pool/memcache_for_nginx.html" class="post-title-link" itemprop="url">内存池系列｜nginx内存分配</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-23 22:41:04" itemprop="dateCreated datePublished" datetime="2022-02-23T22:41:04+08:00">2022-02-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:44:13" itemprop="dateModified" datetime="2022-03-01T22:44:13+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/memory_pool/memcache_for_nginx.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/memory_pool/memcache_for_nginx.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.it610.com%2Fimage%2Finfo5%2F7488f6235cda4dabaa7beed536bac0ba.jpg&amp;refer=http%3A%2F%2Fimg.it610.com&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=jpeg" alt="nginx内存池"></p>
+<p>有几个：</p>
+<ol>
+<li>nginx_pool_s 虽然包含了 ngx_pool_data，但是nginx_pool_s本身的内存管理还是通过ngx_pool_data来进行分配的</li>
+<li>可以理解为：nginx_pool_s是一种特殊类型的ngx_pool_data。</li>
+<li>nginx_pool_s 维护了current指针，来指向下一个用来分配内存的小内存块链表节点</li>
+<li>nginx_pool_s 维护了large指针，来指向下一个用来分配内存的d大内存块链表节点</li>
+<li>ngx_pool_data 维护了next指针 来指向下一个nginx_pool_s</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/memory_pool/memcache_for_stl.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/memory_pool/memcache_for_stl.html" class="post-title-link" itemprop="url">内存池系列｜STL内存分配</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-23 22:41:04" itemprop="dateCreated datePublished" datetime="2022-02-23T22:41:04+08:00">2022-02-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:44:16" itemprop="dateModified" datetime="2022-03-01T22:44:16+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/memory_pool/memcache_for_stl.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/memory_pool/memcache_for_stl.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ol>
+<li>基于hash的freelist</li>
+<li>由于STL知道分配出去的内存对象大小，所以他技巧性地用了union来减少内碎片。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/design_pattern/reactor.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -940,232 +1117,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/io_model/sync_or_aysnc.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/server/io_model/sync_or_aysnc.html" class="post-title-link" itemprop="url">高性能服务器设计-同步OR异步</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-30 18:37:48" itemprop="dateModified" datetime="2022-10-30T18:37:48+08:00">2022-10-30</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/server/io_model/sync_or_aysnc.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/io_model/sync_or_aysnc.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="判断使用同步或异步"><a href="#判断使用同步或异步" class="headerlink" title="判断使用同步或异步"></a>判断使用同步或异步</h4><p>计算qps * latency(in seconds)【最大并发】，如果和cpu核数是同一数量级，就用同步，否则用异步。</p>
-<p>eg. qps = 2000，latency = 10ms，计算结果 = 2000 * 0.01s = 20<br>和常见的32核在同一个数量级，用同步。</p>
-<p>eg. qps = 100, latency = 5s, 计算结果 = 100 * 5s = 500。和核数不在同一个数量级，用异步。</p>
-<p>eg. qps = 500, latency = 100ms，计算结果 = 500 * 0.1s = 50。基本在同一个数量级，可用同步。如果未来延时继续增长，考虑异步。</p>
-<p>这个公式计算的是同时进行的平均请求数（你可以尝试证明一下），和线程数，cpu核数是可比的。当这个值远大于cpu核数时，说明大部分操作并不耗费cpu，而是让大量线程阻塞着，使用异步可以明显节省线程资源（栈占用的内存）。当这个值小于或和cpu核数差不多时，异步能节省的线程资源就很有限了，这时候简单易懂的同步代码更重要。</p>
-<h4 id="异步或bthread"><a href="#异步或bthread" class="headerlink" title="异步或bthread"></a>异步或bthread</h4><p>有了bthread这个工具，用户甚至可以自己实现异步。以“半同步”为例，在brpc中用户有多种选择：</p>
-<p>发起多个异步RPC后挨个Join，这个函数会阻塞直到RPC结束。（这儿是为了和bthread对比，实现中我们建议你使用ParallelChannel，而不是自己Join）<br>启动多个bthread各自执行同步RPC后挨个join bthreads。<br>哪种效率更高呢？显然是前者。后者不仅要付出创建bthread的代价，在RPC过程中bthread还被阻塞着，不能用于其他用途。</p>
-<p>如果仅仅是为了并发RPC，别用bthread。</p>
-<p>不过当你需要并行计算时，问题就不同了。使用bthread可以简单地构建树形的并行计算，充分利用多核资源。比如检索过程中有三个环节可以并行处理，你可以建立两个bthread运行两个环节，在原地运行剩下的环节，最后join那两个bthread。过程大致如下：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">search</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  ...</span><br><span class="line">  bthread th1, th2;</span><br><span class="line">  <span class="keyword">if</span> (bthread_start_background(&amp;th1, <span class="literal">NULL</span>, part1, part1_args) != <span class="number">0</span>) &#123;</span><br><span class="line">    LOG(ERROR) &lt;&lt; <span class="string">&quot;Fail to create bthread for part1&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (bthread_start_background(&amp;th2, <span class="literal">NULL</span>, part2, part2_args) != <span class="number">0</span>) &#123;</span><br><span class="line">    LOG(ERROR) &lt;&lt; <span class="string">&quot;Fail to create bthread for part2&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  part3(part3_args);</span><br><span class="line">  bthread_join(th1);</span><br><span class="line">  bthread_join(th2);</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这么实现的point：</p>
-<ul>
-<li>你当然可以建立三个bthread分别执行三个部分，最后join它们，但相比这个方法要多耗费一个线程资源。</li>
-<li>bthread从建立到执行是有延时的（调度延时），在不是很忙的机器上，这个延时的中位数在3微秒左右，90%在10微秒内，99.99%在30微秒内。这说明两点：计算时间超过1ms时收益比较明显。如果计算非常简单，几微秒就结束了，用bthread是没有意义的。尽量让原地运行的部分最慢，那样bthread中的部分即使被延迟了几微秒，最后可能还是会先结束，而消除掉延迟的影响。并且join一个已结束的bthread时会立刻返回，不会有上下文切换开销。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/load_balance/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/server/load_balance/index.html" class="post-title-link" itemprop="url">高性能服务器设计-负载均衡模型</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-03 20:08:45" itemprop="dateModified" datetime="2022-11-03T20:08:45+08:00">2022-11-03</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/server/load_balance/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/load_balance/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="round-robin"><a href="#round-robin" class="headerlink" title="round-robin"></a>round-robin</h3><p>总是选择列表中的下一台服务器，结尾的下一台是开头，无需其他设置。比如有3台机器a,b,c，那么brpc会依次向a, b, c, a, b, c, …发送请求。注意这个算法的前提是服务器的配置，网络条件，负载都是<strong>类似</strong>的</p>
-<h3 id="Weighted-Round-Robin"><a href="#Weighted-Round-Robin" class="headerlink" title="Weighted Round Robin"></a>Weighted Round Robin</h3><p>根据服务器列表配置的权重值来选择服务器。服务器被选到的机会正比于其权重值，并且该算法能保证同一服务器被选到的结果较均衡的散开</p>
-<p>不足：</p>
-<ol>
-<li>无法快速摘除有问题的节点</li>
-<li>无法均衡后端负载</li>
-<li>无法降低总体延迟</li>
-</ol>
-<p>nginx的WRR算法原理如下：</p>
-<p>每个服务器都有两个权重变量：</p>
-<p>a：weight，配置文件中指定的该服务器的权重，这个值是固定不变的；</p>
-<p>b：current_weight，服务器目前的权重。一开始为0，之后会动态调整。</p>
-<p>每次当请求到来，选取服务器时，会遍历数组中所有服务器。对于每个服务器，让它的current_weight增加它的weight；同时累加所有服务器的weight，并保存为total。</p>
-<p>遍历完所有服务器之后，如果该服务器的current_weight是最大的，就选择这个服务器处理本次请求。最后把该服务器的current_weight减去total。</p>
-<p><img src="https://img-blog.csdn.net/20160731092902416?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="nginx_WRR"></p>
-<h3 id="动态感知版的Weighted-Round-Robin"><a href="#动态感知版的Weighted-Round-Robin" class="headerlink" title="动态感知版的Weighted Round Robin"></a>动态感知版的Weighted Round Robin</h3><p>动态感知的WRR<br>peer.score = success_rate /(lantency * cpuUsage)</p>
-<p>具体做法：</p>
-<ol>
-<li>利用每次RPC请求返回的Response夹带CPU使用率</li>
-<li>每隔一段时间整体调整一次节点的权重分数</li>
-</ol>
-<p>不足：</p>
-<p>自动刷新权重值，但是在刷新时无法做到完全的实时，再快也不可能超过一个 RTT，都会存在一些信息延迟差。当后台资源比较稀缺时，遇到网络抖动时，就可能会把该节点炸掉，但是在监控上面是感觉不到的，因为 CPU 已经被平均掉了。</p>
-<h4 id="best-of-two-random-choice"><a href="#best-of-two-random-choice" class="headerlink" title="best of two random choice"></a>best of two random choice</h4><p>repsonse中附带cpu使用率，信息滞后造成了严重的羊群效应</p>
-<p>计算权重分数，每次请求来时我们都会更新延迟，并且把之前获得的时间延迟进行权重的衰减，新获得的时间提高权重，这样就实现了滚动更新</p>
-<p><img src="http://cdn.b5mang.com/2020123022446.png" alt="带系数的滑动平均值"><br>时间衰减系数的滑动平均值：伴随时间，老的均值，权重越来越小，新的response time，越来越高</p>
-<h3 id="randomized"><a href="#randomized" class="headerlink" title="randomized"></a>randomized</h3><p>随机法，是随机选择一台服务器来分配任务。它保证了请求的分散性达到了均衡的目的。同时它是没有状态的不需要维持上次的选择状态和均衡因子。但是随着任务量的增大，它的效果趋向轮询后也会具有轮询算法的部分缺点。</p>
-<p>根据随机算法，将请求随机分配到后端服务器中，请求的均匀请求依赖于随机算法，该实现方式较为简单，常常可以配合处理一些极端的请求，例如热点请求情况。不适合对命中率有要求的场景。</p>
-<h3 id="consistent-hashing"><a href="#consistent-hashing" class="headerlink" title="consistent-hashing"></a>consistent-hashing</h3><p>Hash哈希是根据Source IP、 Destination IP、URL、或者其它，算hash值或者md5，再采用取模，相同的请求会请求到同一个后端服务器中。该算法无法解决热点请求，会把某个时间段的热点请求路由到某个单机上，造成雪崩效应，同时在扩充和节点宕机时发生命中率急剧降低的问题（hash算法导致），该策略适合维护长连接和提高命中率。Consistanct Hash是对Hash 算法的优化，可以有效的解决宕机和扩充造成的命中率急剧降低的问题。</p>
-<p>一致性Hash算法也是使用取模的方法，只是，刚才描述的取模法是对服务器的数量进行取模，而一致性Hash算法是对2^32取模，什么意思呢？简单来说，一致性Hash算法将整个哈希值空间组织成一个虚拟的圆环，如假设某哈希函数H的值空间为0~2^32-1（即哈希值是一个32位无符号整形）。</p>
-<p>整个空间按顺时针方向组织，圆环的正上方的点代表0，0点右侧的第一个点代表1，以此类推，2、3、4、5、6……直到2^32-1，也就是说0点左侧的第一个点代表2^32-1， 0和2^32-1在零点中方向重合，我们把这个由2^32个点组成的圆环称为Hash环。</p>
-<p>下一步将各个服务器使用Hash进行一个哈希，具体可以选择服务器的IP或主机名作为关键字进行哈希，这样每台机器就能确定其在哈希环上的位置。</p>
-<h3 id="brpc-locality-aware"><a href="#brpc-locality-aware" class="headerlink" title="brpc locality-aware"></a>brpc locality-aware</h3><p>优先选择延时低的下游，直到其延时高于其他机器，无需其他设置</p>
-<p>在DP 2.0中我们使用了一种新的算法: Locality-aware load balancing，能根据下游节点的负载分配流量，还能快速规避失效的节点，在很大程度上，这种算法的延时也是全局最优的。基本原理非常简单：</p>
-<p>以下游节点的吞吐除以延时作为分流权值。</p>
-<p>比如只有两台下游节点，W代表权值，QPS代表吞吐，L代表延时，那么W1 = QPS1 / L1和W2 = QPS2 / L2分别是这两个节点的分流权值，分流时随机数落入的权值区间就是流量的目的地了。</p>
-<p>一种分析方法如下：</p>
-<p>稳定状态时的QPS显然和其分流权值W成正比，即W1 / W2 ≈ QPS1 / QPS2。<br>根据分流公式又有：W1 / W2 = QPS1 / QPS2 * (L2 / L1)。<br>故稳定状态时L1和L2应当是趋同的。当L1小于L2时，节点1会更获得相比其QPS1更大的W1，从而在未来获得更多的流量，直到其延时高于平均值或没有更多的流量。</p>
-<p>具体见：</p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/apache/incubator-brpc/blob/master/docs/cn/lalb.md">Locality-aware</a></p>
-<p>任务：子任务<br>自然任务NatureTask，用户任务, TaskKey 用户邀请别人点赞达到10，自己去下单金额超过100（考虑逆向）</p>
-<p>状态机（根据规则引擎的判定结果，决定状态机往哪边走）</p>
-<p>变与不变，不变的部份，通过代码落地下来；变的部份，通过规则引擎来处理。</p>
-<p>不变的部份：事件是可以枚举的，奖励是可以枚举的；<br>变的部份：任务参数会变，活动周期会变，累加规则会变，事件奖励的各种组合</p>
-<p>写别样的代码…</p>
-<p>PM运营沟通，让他们尽量少提没有通用性的需求；<br>熟悉业务的同时，给出自己的技术方案<br>给大家打鸡血，协同大家一起完成1.0版</p>
-<p>救火案例2<br>B站微博系统，</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1238,14 +1189,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">341</span>
+          <span class="site-state-item-count">343</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">

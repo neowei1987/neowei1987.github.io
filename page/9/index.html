@@ -203,6 +203,221 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/hardware/cpu_cache.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/hardware/cpu_cache.html" class="post-title-link" itemprop="url">计算机硬件-CPU高速缓存</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 11:01:03" itemprop="dateCreated datePublished" datetime="2022-02-25T11:01:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/hardware/cpu_cache.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/hardware/cpu_cache.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="高速缓存"><a href="#高速缓存" class="headerlink" title="高速缓存"></a>高速缓存</h4><p>思想：索引思想、折中思想</p>
+<ul>
+<li>直接映射ByHash</li>
+</ul>
+<p>主存中的一个块只能映射到Cache的某一特定块中去。例如，主存的第0块、第16块、……、第2032块，只能映射到Cache的第0块；而主存的第1块、第17块、……、第2033块，只能映射到Cache的第1块……</p>
+<p><img src="https://static.oschina.net/uploads/img/201803/07163540_dO4M.gif" alt="直接映射"></p>
+<p>直接映射是最简单的地址映射方式，它的硬件简单，成本低，地址变换速度快，而且不涉及替换算法问题。</p>
+<p>但是这种方式不够灵活，Cache的存储空间得不到充分利用，每个主存块只有一个固定位置可存放，容易产生冲突，使Cache效率下降，</p>
+<p>因此只适合大容量Cache采用。</p>
+<p>例如，如果一个程序需要重复引用主存中第0块与第16块，最好将主存第0块与第16块同时复制到Cache中，但由于它们都只能复制到Cache的第0块中去，即使Cache中别的存储空间空着也不能占用，因此这两个块会不断地交替装入Cache中，导致命中率降低</p>
+<ul>
+<li>全相连映射ByAll</li>
+</ul>
+<p>图3-15 是全相联映射的Cache组织，主存中任何一块都可以映射到Cache中的任何一块位置上</p>
+<p><img src="https://static.oschina.net/uploads/img/201803/07163541_oEp6.gif" alt="全相连映射"></p>
+<p>全相联映射方式比较灵活，主存的各块可以映射到Cache的任一块中，Cache的利用率高，块冲突概率低，只要淘汰Cache中的某一块，即可调入主存的任一块。</p>
+<p>但是，由于Cache比较电路的设计和实现比较困难，这种方式只适合于小容量Cache采用。</p>
+<ul>
+<li>组相连映射ByGroup</li>
+</ul>
+<p>组间直接相连，组内全相连</p>
+<p> 组相联映射实际上是直接映射和全相联映射的折中方案，其组织结构如图3-16所示。主存和Cache都分组，主存中一个组内的块数与Cache中的分组数相同，组间采用直接映射，组内采用全相联映射。也就是说，将Cache分成u组，每组v块，主存块存放到哪个组是固定的，至于存到该组哪一块则是灵活的。例如，主存分为256组，每组8块，Cache分为8组，每组2块。</p>
+<p> <img src="https://static.oschina.net/uploads/img/201803/07163541_YspG.gif" alt="组相连映射"></p>
+<p>主存中的各块与Cache的组号之间有固定的映射关系，但可自由映射到对应Cache组中的任何一块。例如，主存中的第0块、第8块……均映射于Cache的第0组，但可映射到Cache第0组中的第0块或第1块；主存的第1块、第9块……均映射于Cache的第1组，但可映射到Cache第1组中的第2块或第3块。</p>
+<p>常采用的组相联结构Cache，每组内有2、4、8、16块，称为2路、4路、8路、16路组相联Cache。</p>
+<p>组相联结构Cache是前两种方法的折中方案，适度兼顾二者的优点，尽量避免二者的缺点，因而得到普遍采用。</p>
+<p>具体参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/weixin_34319111/article/details/92562285">https://blog.csdn.net/weixin_34319111/article/details/92562285</a></p>
+<h4 id="一致性协议"><a href="#一致性协议" class="headerlink" title="一致性协议"></a>一致性协议</h4><p>MESI 缓存一致性协议</p>
+<p>Modified、Exclusive、Shared、Invalid</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/os/vm_mem.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/os/vm_mem.html" class="post-title-link" itemprop="url">操作系统系列｜虚拟内存</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 10:55:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:55:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-10-30 21:15:33" itemprop="dateModified" datetime="2022-10-30T21:15:33+08:00">2022-10-30</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/os/vm_mem.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/vm_mem.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://pics7.baidu.com/feed/95eef01f3a292df5ed263835cecf2b6835a8732b.png?token=d3599f2975744c1d572bd6e62b2daf04" alt="虚拟地址转换为物理地址的本质"></p>
+<p>我们知道linux采用了分页机制，通常采用四级页表，页全局目录(PGD)，页上级目录(PUD)，页中间目录(PMD)，页表(PTE)。如下：</p>
+<p><img src="https://pics2.baidu.com/feed/728da9773912b31b18d3813af7e64172dbb4e169.png?token=c455dcb1766f6df26c45bc14d987b355" alt="虚拟地址转换为物理地址硬件过程"></p>
+<ol>
+<li>从CR3寄存器中读取页目录所在物理页面的基址(即所谓的页目录基址)，从线性地址的第一部分获取页目录项的索引，两者相加得到页目录项的物理地址。</li>
+<li>第一次读取内存得到pgd_t结构的目录项，从中取出物理页基址取出，即页上级页目录的物理基地址。</li>
+<li>从线性地址的第二部分中取出页上级目录项的索引，与页上级目录基地址相加得到页上级目录项的物理地址。</li>
+<li>第二次读取内存得到pud_t结构的目录项，从中取出页中间目录的物理基地址。</li>
+<li>从线性地址的第三部分中取出页中间目录项的索引，与页中间目录基址相加得到页中间目录项的物理地址。</li>
+<li>第三次读取内存得到pmd_t结构的目录项，从中取出页表的物理基地址。</li>
+<li>从线性地址的第四部分中取出页表项的索引，与页表基址相加得到页表项的物理地址。</li>
+<li>第四次读取内存得到pte_t结构的目录项，从中取出物理页的基地址。</li>
+<li>从线性地址的第五部分中取出物理页内偏移量，与物理页基址相加得到最终的物理地址。</li>
+<li>第五次读取内存得到最终要访问的数据。</li>
+</ol>
+<p>整个过程是比较机械的，每次转换先获取物理页基地址，再从线性地址中获取索引，合成物理地址后再访问内存。不管是页表还是要访问的数据都是以页为单位存放在主存中的，因此每次访问内存时都要先获得基址，再通过索引(或偏移)在页内访问数据，因此可以将线性地址看作是若干个索引的集合。</p>
+<h3 id="虚拟内存管理"><a href="#虚拟内存管理" class="headerlink" title="虚拟内存管理"></a>虚拟内存管理</h3><h4 id="Linux通过红黑树管理"><a href="#Linux通过红黑树管理" class="headerlink" title="Linux通过红黑树管理"></a>Linux通过红黑树管理</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">task_struct</span> &#123;</span></span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span> *<span class="title">mm</span>;</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">vm_area_struct</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span> * <span class="title">vm_mm</span>;</span>    <span class="comment">/* 所属的内存描述符 */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> vm_start;    <span class="comment">/* vma的起始地址 */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> vm_end;        <span class="comment">/* vma的结束地址 */</span></span><br><span class="line"> </span><br><span class="line">    <span class="comment">/* 该vma的在一个进程的vma链表中的前驱vma和后驱vma指针，链表中的vma都是按地址来排序的*/</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">vm_area_struct</span> *<span class="title">vm_next</span>, *<span class="title">vm_prev</span>;</span></span><br><span class="line"> </span><br><span class="line">    <span class="keyword">pgprot_t</span> vm_page_prot;        <span class="comment">/* vma的访问权限 */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> vm_flags;    <span class="comment">/* 标识集 */</span></span><br><span class="line"> </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">rb_node</span> <span class="title">vm_rb</span>;</span>      <span class="comment">/* 红黑树中对应的节点 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该结构体是一段虚拟内存，从vm_start到vm_end，他们拥有相同的权限；<br>vm_prev 、vm_next 是双向链表的next与pre；<br>vm_rb 是红黑树节点</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span> &#123;</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">vm_area_struct</span> * <span class="title">mmap</span>;</span>       <span class="comment">/* list of VMAs */</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">rb_root</span> <span class="title">mm_rb</span>;</span><span class="comment">/*又是红黑树的根节点*/</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">vm_area_struct</span> * <span class="title">mmap_cache</span>;</span>      <span class="comment">/* last find_vma result */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>mmap是双向链表；按照地址大小来顺序管理所有的area</p>
+<p>mm_rb是红黑树的根节点</p>
+<p>红黑树的Key-Value: 虚拟地址 =&gt; 对应的area.</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/os/page_cache.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1003,194 +1218,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/hardware/tlb.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/hardware/tlb.html" class="post-title-link" itemprop="url">计算机硬件-TLB</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:01:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:40:21" itemprop="dateModified" datetime="2022-03-01T22:40:21+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/hardware/tlb.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/hardware/tlb.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>TLB（Translation Lookaside Buffer）是一块高速缓存。</p>
-<p>TLB缓存虚拟地址和其映射的物理地址。</p>
-<p>数据cache缓存地址(虚拟地址或者物理地址)和数据。</p>
-<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://zhuanlan.zhihu.com/p/108425561">https://zhuanlan.zhihu.com/p/108425561</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/fs.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/distributed_system/fs.html" class="post-title-link" itemprop="url">分布式文件系统</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-24 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-24T10:01:03+08:00">2022-02-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/distributed_system/fs.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/fs.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>存储的分布式化</p>
-<p>高效存储的一些考虑：</p>
-<ol>
-<li>很长时间没有人访问的老数据，怎么办？</li>
-<li>是不是减少副本的同时，还能还原出数据？（例如，RAID）</li>
-<li>数据压缩，平成好压缩效果与压缩/解压速度</li>
-<li>数据的分层存储：根据数据的冷热来选择不同的存储介质（局部性原理），内存、硬盘（SSD、SATA)</li>
-<li>存储与计算分离（底层基础：网络IO不再是瓶颈，而CPU性能、磁盘IO性能跟不上）</li>
-</ol>
-<h4 id="分布式存储引擎"><a href="#分布式存储引擎" class="headerlink" title="分布式存储引擎"></a>分布式存储引擎</h4><p>主要解决数据如何拆分、数据如何冗余、数据如何定位的问题。</p>
-<p>（1）parititioning 方式，即数据在逻辑上怎么切分</p>
-<p>（2）localization 方式，即数据在物理上怎么分布</p>
-<p>一个系统要想拥有高可用性，有且只有一个办法 — 副本（replication），因为物理故障是无法避免的，只能花钱做备份。</p>
-<p>主从和时效性是 replication 要考虑的两个重要问题。</p>
-<p>主从主要有单主、多主和无主三种方式。</p>
-<p>时效性主要有同步、异步、半同步三种方式。</p>
-<p>（3）rebalance 方式，即在节点数变化后，数据在物理上怎么重新分布.</p>
-<h4 id="分布式文件系统"><a href="#分布式文件系统" class="headerlink" title="分布式文件系统"></a>分布式文件系统</h4><p>按照Block拆分文件，然后通过一个管理员来管理Block到对应及其的映射关系。</p>
-<p>新的问题：<br>如果存储block的机器挂了怎么办？ 如果管理员挂了怎么办？</p>
-<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://zhuanlan.zhihu.com/p/141775358">https://zhuanlan.zhihu.com/p/141775358</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1263,14 +1290,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">341</span>
+          <span class="site-state-item-count">343</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">

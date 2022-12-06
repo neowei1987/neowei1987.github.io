@@ -30,7 +30,7 @@
 <meta property="og:description" content="CPU寄存器在用途方面，他们有各自默认的用途：  Eax用来保存所有API函数的返回值。寄存器AX和AL通常称为累加器(Accumulator)，用累加器进行的操作可能需要更少时间。累加器可用于乘、除、输入&#x2F;输出等操作，它们的使用频率很高； 寄存器BX称为基地址寄存器(Base Register)。它可作为存储器指针来使用； 寄存器CX称为计数寄存器(Count Register)。在循环和字符串">
 <meta property="og:locale">
 <meta property="article:published_time" content="2022-02-25T02:01:03.000Z">
-<meta property="article:modified_time" content="2022-03-02T01:04:18.741Z">
+<meta property="article:modified_time" content="2022-12-06T13:37:50.123Z">
 <meta property="article:author" content="NeoWei">
 <meta property="article:tag" content="计算机硬件">
 <meta name="twitter:card" content="summary">
@@ -238,7 +238,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-02 09:04:18" itemprop="dateModified" datetime="2022-03-02T09:04:18+08:00">2022-03-02</time>
+                <time title="Modified: 2022-12-06 21:37:50" itemprop="dateModified" datetime="2022-12-06T21:37:50+08:00">2022-12-06</time>
               </span>
 
           
@@ -280,6 +280,7 @@
 <li>ESP：栈指针寄存器(extended stack pointer)，其内存放着一个指针，该指针永远指向系统栈最上面一个栈帧的栈顶。</li>
 <li>EBP：基址指针寄存器(extended base pointer)，其内存放着一个指针，该指针永远指向系统栈最上面一个栈帧的底部。</li>
 </ul>
+<p>对于64位CPU，EAX —-&gt; RAX</p>
 <h3 id="CPU指令的执行"><a href="#CPU指令的执行" class="headerlink" title="CPU指令的执行"></a>CPU指令的执行</h3><p>一个基本的CPU执行计算的过程如下：</p>
 <ol>
 <li>程序以及数据被加载到主内存</li>
@@ -299,6 +300,41 @@
 <li>函数返回<br> add esp 100<br> mov ebp =&gt; esp<br> 注意：上面这一句应该是重复的，理论上只要对esp进行了完成逆操作，esp应该等于ebp了。是不需要额外通过ebp来还原的；当然如果要通过ebp来还原，也就不需要去显示操作esp了。<br> pop ebp 还原ebp<br> ret（pop eip）</li>
 <li>将压入的参数POP出来<br> pop p2<br> pop p1</li>
 </ol>
+<h2 id="指令集"><a href="#指令集" class="headerlink" title="指令集"></a>指令集</h2><p> 所谓指令集，是CPU中用来计算和控制计算机系统的一套指令的集合。指令的强弱是CPU的重要指标，指令集是提高微处理器效率的最有效工具之一。</p>
+<p>CPU依靠指令来计算和控制系统，每款CPU在设计时就规定了一系列与其硬件电路相配合的指令系统。与其他硬件电路相配合，决定的是这一款CPU的生态系统。因此，指令集搭建的是一个桥梁，是软硬件之间沟通的桥梁，简单来说，软件通过指令集和硬件讲话。因此，指令集对形成生态至关重要，从这个意义上讲，不同的CPU指令集，决定了这款CPU设计的复杂程度。</p>
+<p>从现阶段的主流体系结构讲，指令集可分为复杂指令集(CISC, complex instruction set computer)和精简指令集(RISC, reduced instruction set computer)两部分。简单来讲，RISC功能简洁，代表着简洁的CPU设计，CISC功能完备，代表着复杂的CPU设计。<br>这里引用步日欣老师文章中的一段话：</p>
+<pre><code>CPU的指令，就如同盖房子的砖，如果都是小块的标准砖头，也能盖起各种不同的房子，这就是RISC；
+如果除了标准砖头，还设计了很多的砖瓦结构件，适用于拐角、吊梁等，这就是CISC。
+不同的模式，都能盖起房子，但是效率却大不一样，RISC的标准砖头，小平房可以盖，
+摩天大楼也可以盖，底层的原材料很简单，都是标准化的砖头；
+CISC的各种复杂的结构件，对于盖一种房子的时候效率确实高，吊起结构件随便一拼装就ok，
+但是如果要盖的房子种类多了，就需要定义更多更复杂的结构件，结构件的管理就会越来越复杂，
+而且在建设某种常见建筑的时候，大部分特殊的结构架是闲置不用的，大大影响了施工效率。
+基于CISC模式下的CPU设计，在各种新需求下，堆叠的功能越来越复杂，芯片设计难度也越来越高，效率低下，
+因此就出现了RISC精简指令集的概念。
+</code></pre><h3 id="对比CISC和RISC"><a href="#对比CISC和RISC" class="headerlink" title="对比CISC和RISC"></a>对比CISC和RISC</h3><p>CISC的指令能力强，单多数指令使用率低却增加了CPU的复杂度，指令是可变长格式；RISC的指令大部分为单周期指令，指令长度固定，操作寄存器，只有Load/Store操作内存</p>
+<p>CISC支持多种寻址方式；RISC支持方式少</p>
+<p>CISC通过微程序控制技术实现；RISC增加了通用寄存器，硬布线逻辑控制为主，是和采用流水线</p>
+<p>CISC的研制周期长</p>
+<p>RISC优化编译，有效支持高级语言</p>
+<p>大白话就是：</p>
+<p>CISC架构，性能好，但是耗电多，电压高。主要用于桌面服务。</p>
+<p>RISC架构：耗电少，电压低，但是单核性能比不上CISC架构，主要用于嵌入式开发，或者移动设备开发。</p>
+<h3 id="CPU架构"><a href="#CPU架构" class="headerlink" title="CPU架构"></a>CPU架构</h3><ol>
+<li><p>ARM架构，过去称作进阶精简指令集机器（Advanced RISC Machine，更早称作：Acorn RISC Machine），是一个32位精简指令集（RISC）处理器架构</p>
+</li>
+<li><p>x86或80x86是英代尔Intel首先开发制造的一种微处理器体系结构的泛称。x86架构是重要地可变指令长度的CISC（复杂指令集电脑，Complex Instruction Set Computer）。</p>
+</li>
+<li><p>MIPS是世界上很流行的一种RISC处理器。MIPS的意思是“无内部互锁流水级的微处理器”(Microprocessor without interlockedpipedstages)</p>
+</li>
+<li><p>PowerPC 是一种精简指令集（RISC）架构的中央处理器（CPU），其基本的设计源自IBM（国际商用机器公司）的IBMPowerPC 601 微处理器POWER（PerformanceOptimized With Enhanced RISC</p>
+</li>
+</ol>
+<h3 id="intel-amd和arm的关系"><a href="#intel-amd和arm的关系" class="headerlink" title="intel,amd和arm的关系"></a>intel,amd和arm的关系</h3><p>Intel 与 AMD是两个公司，amd 与 arm 又是同一个公司（AMD）的两款产品</p>
+<p>Intel与AMD共同采用x86架构，都采用CICS指令集，一般用于桌面应用；</p>
+<p>而arm 采用 ARM架构，采用RICS指令集，例如家用游戏机、平板、手机等会采用arm CPU</p>
+<p>可以说，AMD CPU是 AMD公司为对抗Intel公司的Intel CPU推出的第一代产品；</p>
+<p>而 ARM CPU 是AMD公司为了对抗Intel公司的Intel CPU推出的第二代产品，</p>
 <h2 id="co-实现"><a href="#co-实现" class="headerlink" title="co 实现"></a>co 实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">co_ctx&#123;</span><br><span class="line"><span class="keyword">void</span>* regs[<span class="number">14</span>]; <span class="comment">//用于保存或者设定特定寄存器</span></span><br><span class="line"><span class="keyword">size_t</span> ss_size; <span class="comment">//栈帧区域大小</span></span><br><span class="line"><span class="keyword">char</span>* ss_sp; <span class="comment">// 协程栈帧内存区域，这个区域一般在堆上分配</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">co_make (co_ctx* co, func* p, p1, p2)</span><br><span class="line">    使用p, p1, p2把co填充起来</span><br><span class="line">    co.ss_sp都是分配在堆上</span><br><span class="line">    co的EIP与ESP需要被单独赋值</span><br><span class="line">&#125;</span><br><span class="line">co_swap（）&#123;</span><br><span class="line">    主要要保存当前寄存器到要swap_out的co_ctx中</span><br><span class="line">    将要swap_in的co_ctx设置到寄存器中</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>具体参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://vinsflyfish.github.io/posts/thinking-in-libco/">https://vinsflyfish.github.io/posts/thinking-in-libco/</a></p>
 
@@ -450,7 +486,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CPU%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">CPU寄存器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU%E6%8C%87%E4%BB%A4%E7%9A%84%E6%89%A7%E8%A1%8C"><span class="nav-number">1.1.</span> <span class="nav-text">CPU指令的执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E6%AC%A1%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8"><span class="nav-number">1.2.</span> <span class="nav-text">一次函数调用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#co-%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">co 实现</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CPU%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">CPU寄存器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU%E6%8C%87%E4%BB%A4%E7%9A%84%E6%89%A7%E8%A1%8C"><span class="nav-number">1.1.</span> <span class="nav-text">CPU指令的执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E6%AC%A1%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8"><span class="nav-number">1.2.</span> <span class="nav-text">一次函数调用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="nav-number">2.</span> <span class="nav-text">指令集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94CISC%E5%92%8CRISC"><span class="nav-number">2.1.</span> <span class="nav-text">对比CISC和RISC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU%E6%9E%B6%E6%9E%84"><span class="nav-number">2.2.</span> <span class="nav-text">CPU架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#intel-amd%E5%92%8Carm%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">2.3.</span> <span class="nav-text">intel,amd和arm的关系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#co-%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">co 实现</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -464,7 +500,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">343</span>
+          <span class="site-state-item-count">344</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -477,7 +513,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">61</span>
+        <span class="site-state-item-count">62</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

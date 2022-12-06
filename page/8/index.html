@@ -203,6 +203,105 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/distributed_lock.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/system_design/distributed_lock.html" class="post-title-link" itemprop="url">常见系统设计题系列-分布式锁</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-02-25 17:29:03 / Modified: 17:29:41" itemprop="dateCreated datePublished" datetime="2022-02-25T17:29:03+08:00">2022-02-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">系统设计</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/system_design/distributed_lock.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/system_design/distributed_lock.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="分布式锁应该具备哪些条件"><a href="#分布式锁应该具备哪些条件" class="headerlink" title="分布式锁应该具备哪些条件"></a>分布式锁应该具备哪些条件</h3><ol>
+<li>在分布式系统环境下，一个方法在同一时间只能被一个机器的一个线程执行</li>
+<li>高可用的获取锁与释放锁</li>
+<li>高性能的获取锁与释放锁</li>
+<li>具备可重入特性（可理解为重新进入，由多于一个任务并发使用，而不必担心数据错误）</li>
+<li>具备锁失效机制，防止死锁</li>
+<li>具备非阻塞锁特性，即没有获取到锁将直接返回获取锁失败</li>
+</ol>
+<p>ps. 考虑幂等性</p>
+<h3 id="分布式锁实现"><a href="#分布式锁实现" class="headerlink" title="分布式锁实现"></a>分布式锁实现</h3><p>基于数据库</p>
+<p>基于Redis SET命令</p>
+<p>基于Memcache CAS命令</p>
+<p>基于Zookeeper</p>
+<h3 id="具体参考"><a href="#具体参考" class="headerlink" title="具体参考"></a>具体参考</h3><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.jianshu.com/p/a1ebab8ce78a">https://www.jianshu.com/p/a1ebab8ce78a</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/timer/index.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1286,130 +1385,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/os/sync.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/os/sync.html" class="post-title-link" itemprop="url">操作系统 - 线程同步</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 11:12:03" itemprop="dateCreated datePublished" datetime="2022-02-25T11:12:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-30 21:10:19" itemprop="dateModified" datetime="2022-10-30T21:10:19+08:00">2022-10-30</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/os/sync.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/sync.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>多线程问题的本质：有序性，可见性，原子性</p>
-<p>我们处理线程安全可以有几个层次：</p>
-<ol>
-<li>能否做成无状态的不变对象。无状态是最安全的。</li>
-<li>能否线程封闭<br>（1）栈封闭，多采用局部变量<br>（2）线程局部存储（用空间换性能）<br>（3）程序控制线程封闭（Hash，将同一hash val的的请求丢给同一个线程去处理）</li>
-<li>采用何种同步技术</li>
-</ol>
-<h4 id="多线程同步的方式"><a href="#多线程同步的方式" class="headerlink" title="多线程同步的方式"></a>多线程同步的方式</h4><p>线程同步</p>
-<p>多个线程间的一种协作机制。谈到线程我们经常想到的是线程间的竞争，比如去争夺锁，但这并不是故事的全部，线程间也会有协作机制。就是在一个线程进行了规定操作后，就进入等待状态， 等待其他线程执行完他们的指定代码过后 再将其唤醒;<br>（在有多个线程进行等待时， 如果需要，可以使用 notifyAll()来唤醒所有的等待线程。）</p>
-<p>(1) 信号量 semphore</p>
-<p>(2) 共享内存 shared_memory</p>
-<p>(3) 读写锁 rw_lock</p>
-<p>(4) 条件变量 condition</p>
-<p>线程间存在依赖</p>
-<p><img src="https://img-blog.csdnimg.cn/img_convert/edb8f67325ff3f693d58f635eeff9650.jpeg" alt="条件变量的使用"></p>
-<p>(5) 互斥量 mutex</p>
-<h4 id="互斥锁"><a href="#互斥锁" class="headerlink" title="互斥锁"></a>互斥锁</h4><p>对于互斥锁，如果资源已经被占用，资源申请者只能进入睡眠状态。</p>
-<ol>
-<li>临界区：通过对多线程的串行化来访问公共资源或一段代码，速度快，适合控制数据访问。</li>
-<li>互斥量：为协调共同对一个共享资源的单独访问而设计的。</li>
-<li>信号量：为控制一个具有有限数量用户资源而设计。</li>
-<li>读写锁</li>
-</ol>
-<h5 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a>自旋锁</h5><p>但是自旋锁不会引起调用者睡眠，如果自旋锁已经被别的执行单元保持，调用者就一直循环在那里看是否该自旋锁的保持者已经释放了锁。如果等待的时间比较短，适合使用自旋锁，占用大量的CPU资源</p>
-<h4 id="锁的实现机制"><a href="#锁的实现机制" class="headerlink" title="锁的实现机制"></a>锁的实现机制</h4><p>在硬件层面，CPU提供了原子操作、关中断、锁内存总线的机制。</p>
-<h4 id="禁中断"><a href="#禁中断" class="headerlink" title="禁中断"></a>禁中断</h4><p>既然只有中断才能把上锁过程打断，造成多线程操作失败。我先关中断不就得了，在加锁操作完成后再开中断。</p>
-<h4 id="普通的原子指令"><a href="#普通的原子指令" class="headerlink" title="普通的原子指令"></a>普通的原子指令</h4><p>上面这个手段太笨重了，能不能硬件做一种加锁的原子操作呢？能，大名鼎鼎的“test and set”指令就是做这个事情的。</p>
-<h5 id="锁内存总线-原子指令"><a href="#锁内存总线-原子指令" class="headerlink" title="锁内存总线 + 原子指令"></a>锁内存总线 + 原子指令</h5><p>通过上面的手段，单核环境下，锁的实现问题得到了圆满的解决。</p>
-<p>那么多核环境呢？简单嘛，还是“test and set”不就得了，这是一条指令，原子的，不会有问题的。</p>
-<p>真的吗，单独一条指令能够保证该指令在单个核上执行过程中不会被中断打断，但是两个核同时执行这个指令呢？。。。</p>
-<p>我再想想，硬件执行时还是得从内存中读取lock，判断并设置状态到内存，貌似这个过程也不是那么原子嘛。对，多个核执行确实会存在这个问题。怎么办呢？首先我们得明白这个地方的关键点，关键点是两个核会并行操作内存而且从操作内存这个调度来看“test and set”不是原子的，需要先读内存然后再写内存，如果我们保证这个内存操作是原子的，就能保证锁的正确性了。</p>
-<p>确实，硬件提供了锁内存总线的机制，我们在锁内存总线的状态下执行test and set操作，就能保证同时只有一个核来test and set，从而避免了多核下发生的问题。</p>
-<h4 id="无锁"><a href="#无锁" class="headerlink" title="无锁"></a>无锁</h4><ol>
-<li>无锁算法的底层实现 — CAS</li>
-<li>借助内存访问WORD的原子性</li>
-</ol>
-<p>参考：</p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="http://jm.taobao.org/2011/12/07/1347/">http://jm.taobao.org/2011/12/07/1347/</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/heiyeshuwu/article/details/9722443">https://blog.csdn.net/heiyeshuwu/article/details/9722443</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.cnblogs.com/jing99/p/11984966.html">https://www.cnblogs.com/jing99/p/11984966.html</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.qbitai.com/2019/12/9895.html">https://www.qbitai.com/2019/12/9895.html</a><br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.jianshu.com/p/d585b3938dea">https://www.jianshu.com/p/d585b3938dea</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/ITer_ZC/article/details/40392787">https://blog.csdn.net/ITer_ZC/article/details/40392787</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1482,7 +1457,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">343</span>
+          <span class="site-state-item-count">344</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1495,7 +1470,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">61</span>
+        <span class="site-state-item-count">62</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

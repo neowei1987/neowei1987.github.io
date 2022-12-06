@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://www.fpthinker.com/backend_knowledge_architecture/hardware/cpu.html</loc>
+    <lastmod>2022-12-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.fpthinker.com/backend_knowledge_architecture/language/cpp/call_convention.html</loc>
+    <lastmod>2022-12-06</lastmod>
+  </url>
+  <url>
     <loc>https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/dp/egg_drop.html</loc>
     <lastmod>2022-12-05</lastmod>
   </url>
@@ -682,10 +690,6 @@
   </url>
   <url>
     <loc>https://www.fpthinker.com/backend_knowledge_architecture/server/thread_model/libsvrkit.html</loc>
-    <lastmod>2022-03-02</lastmod>
-  </url>
-  <url>
-    <loc>https://www.fpthinker.com/backend_knowledge_architecture/hardware/cpu.html</loc>
     <lastmod>2022-03-02</lastmod>
   </url>
   <url>

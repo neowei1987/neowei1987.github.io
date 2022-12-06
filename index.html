@@ -303,6 +303,127 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/language/cpp/call_convention.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/language/cpp/call_convention.html" class="post-title-link" itemprop="url">函数调用约定</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-12-06 20:40:03 / Modified: 21:02:20" itemprop="dateCreated datePublished" datetime="2022-12-06T20:40:03+08:00">2022-12-06</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/language/cpp/call_convention.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/language/cpp/call_convention.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="0-函数调用约定"><a href="#0-函数调用约定" class="headerlink" title="0. 函数调用约定"></a>0. 函数调用约定</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>谁来清理入栈参数</th>
+<th>参数压栈顺序</th>
+<th>函数名转换规则</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>__stdcall</td>
+<td>被调用函数在返回前清理入栈参数</td>
+<td>参数自右向左压栈</td>
+<td>C语言时，_function@number，number为参数的字节数；C++编译时函数名的转换：?function@@YG<em>**</em>@Z或者?function@@YG*XZ；若函数有参数，以@Z结束；若函数无参数，则以Z结束</td>
+</tr>
+<tr>
+<td>__cdecl</td>
+<td>调用函数在返回后清理入栈参数</td>
+<td>参数自右向左压栈</td>
+<td>_function，其中function为函数名；C++编译时函数名的转换：同__stdcall，把YG改为YA</td>
+</tr>
+<tr>
+<td>__fastcall</td>
+<td>被调用函数在返回前清理入栈参数</td>
+<td>使用ECX传递第一个参数，EDX传递第二个参数，其余参数自右向左压栈</td>
+<td>C编译时函数名的转换：@function@number；C++编译时函数名的转换：同__stdcall，把YG改为YI</td>
+</tr>
+<tr>
+<td>__pascal</td>
+<td>被调用函数在返回前清理入栈参数</td>
+<td>参数自左向右压栈</td>
+<td>较为复杂，参加pascal文档</td>
+</tr>
+</tbody>
+</table>
+</div>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/backend_knowledge_architecture/language/cpp/call_convention.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/dp/egg_drop.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1059,97 +1180,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/ai/validation.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/ai/validation.html" class="post-title-link" itemprop="url">模型验证</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-12-01 16:03:03 / Modified: 20:28:10" itemprop="dateCreated datePublished" datetime="2022-12-01T16:03:03+08:00">2022-12-01</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/ai/validation.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/ai/validation.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="0-背景介绍，把人吸引过来"><a href="#0-背景介绍，把人吸引过来" class="headerlink" title="0. 背景介绍，把人吸引过来"></a>0. 背景介绍，把人吸引过来</h2><p>针对样本的不足，我们通常采用：交叉验证</p>
-<p>模型评估：</p>
-<ul>
-<li>混淆矩阵</li>
-<li>准确率、召回率</li>
-<li>F1 score</li>
-<li>RAC曲线</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/ai/validation.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1222,7 +1252,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">343</span>
+          <span class="site-state-item-count">344</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1235,7 +1265,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">61</span>
+        <span class="site-state-item-count">62</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

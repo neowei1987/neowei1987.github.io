@@ -203,6 +203,263 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/search_2d_array.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/search_2d_array.html" class="post-title-link" itemprop="url">有序矩阵查找</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 23:34:03" itemprop="dateCreated datePublished" datetime="2022-02-25T23:34:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:48:10" itemprop="dateModified" datetime="2022-03-01T22:48:10+08:00">2022-03-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87Offer/" itemprop="url" rel="index"><span itemprop="name">剑指Offer</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/search_2d_array.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/search_2d_array.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在一个二维数组中，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。</p>
+<p>请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。</p>
+<p>样例<br>输入数组：</p>
+<p>[<br>[1,2,8,9]，<br>[2,4,9,12]，<br>[4,7,10,13]，<br>[6,8,11,15]<br>]</p>
+<p>如果输入查找数值为7，则返回true，</p>
+<p>如果输入查找数值为5，则返回false。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">searchArray</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="built_in">array</span>, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">array</span>.empty() || <span class="built_in">array</span>[<span class="number">0</span>].empty()) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="built_in">array</span>[<span class="number">0</span>].size() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (i &lt; <span class="built_in">array</span>.size() &amp;&amp; j &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">array</span>[i][j] == target) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">array</span>[i][j] &gt; target) j--;</span><br><span class="line">            <span class="keyword">else</span> i++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/index.html" class="post-title-link" itemprop="url">二分系列-概览</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 22:47:03" itemprop="dateCreated datePublished" datetime="2022-02-25T22:47:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-03 19:40:16" itemprop="dateModified" datetime="2022-03-03T19:40:16+08:00">2022-03-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="关于二分"><a href="#关于二分" class="headerlink" title="关于二分"></a>关于二分</h3><p>二分是分治的一种；问题收敛速度最快的一种。</p>
+<p>通过每次把问题搜索空间排除一半，进而得到lgN的时间复杂度。</p>
+<p>将区间分为两部分，第一部分满足某一个特征；第二部分满足另一个特征</p>
+<p>通过二分来解决的问题包括：</p>
+<ol>
+<li>二分查找一个数组</li>
+<li>通过二分的方式，遍历所有可能的结果。然后判定结果是否ok。也就是把查找问题转换为判定问题。</li>
+</ol>
+<p>二分答案：答案具有“单调性”，外层花费$logN$的时间转化为判定性问题.</p>
+<p>答案具有“单调性”：注意是先0后1函数，还是先1后0函数，和二分的实现形式，是一直保持小于，还是能累加就累加？</p>
+<p>一般定义判定是“是否存在一个小于等于、是否存在一个大于等于”，这么定义是显然有单调性的</p>
+<p>二分出的答案一般对check的进行有所帮助</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//整数二分算法模板 https://www.cnblogs.com/smallocean/p/11913963.html</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">check</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;<span class="keyword">return</span> <span class="literal">true</span>;<span class="comment">/* ... */</span>&#125; <span class="comment">// 检查x是否满足某种性质</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 区间[l, r]被划分成[l, mid]和[mid + 1, r]时使用：</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bsearch_1</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (l &lt; r)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> mid = l + r &gt;&gt; <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (check(mid)) r = mid;    <span class="comment">// check()判断mid是否满足性质</span></span><br><span class="line">        <span class="keyword">else</span> l = mid + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> l;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 区间[l, r]被划分成[l, mid - 1]和[mid, r]时使用：</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bsearch_2</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (l &lt; r)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> mid = l + r + <span class="number">1</span> &gt;&gt; <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (check(mid)) l = mid;</span><br><span class="line">        <span class="keyword">else</span> r = mid - <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> l;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//浮点数二分算法模板 —— 模板题 AcWing 790. 数的三次方根</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">check</span><span class="params">(<span class="keyword">double</span> x)</span> </span>&#123;<span class="comment">/* ... */</span>&#125; <span class="comment">// 检查x是否满足某种性质</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">bsearch_3</span><span class="params">(<span class="keyword">double</span> l, <span class="keyword">double</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">double</span> eps = <span class="number">1e-6</span>;   <span class="comment">// eps 表示精度，取决于题目对精度的要求</span></span><br><span class="line">    <span class="keyword">while</span> (r - l &gt; eps)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">double</span> mid = (l + r) / <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">if</span> (check(mid)) r = mid;</span><br><span class="line">        <span class="keyword">else</span> l = mid;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> l;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="二分相关题目索引"><a href="#二分相关题目索引" class="headerlink" title="二分相关题目索引"></a>二分相关题目索引</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>题目分类</th>
+<th>题目名称</th>
+<th>考察点</th>
+<th>其他说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td><a href="getNumberOfK.html">查第一个出现的位置</a></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td><a href="getNumberSameAsIndex.html">递增找number与index相等</a></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td><a href="moving_cnt.html">重复数字出现次数</a></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td><a href="find_min_in_rotated_array.html">旋转数组找最值</a></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>求两个有序数组前K大的数</td>
+<td>考虑A的中间元素m/2和B的中间元素n/2</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>多路归并</td>
+<td>求m个有序数组前K大的数</td>
+<td>维护一个大小为m的堆</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://zhuanlan.zhihu.com/p/157779732">https://zhuanlan.zhihu.com/p/157779732</a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.dazhuanlan.com/2019/12/16/5df6e82127d88/">https://www.dazhuanlan.com/2019/12/16/5df6e82127d88/</a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/weixin_34355715/article/details/94465888">https://blog.csdn.net/weixin_34355715/article/details/94465888</a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/weixin_43626741/article/details/104364387">https://blog.csdn.net/weixin_43626741/article/details/104364387</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/distributed_lock.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1186,205 +1443,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/breaker/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/server/breaker/index.html" class="post-title-link" itemprop="url">高性能服务器设计-熔断模型</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 11:56:03" itemprop="dateCreated datePublished" datetime="2022-02-25T11:56:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:43:15" itemprop="dateModified" datetime="2022-03-01T22:43:15+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/server/breaker/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/breaker/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="熔断简单说明"><a href="#熔断简单说明" class="headerlink" title="熔断简单说明"></a>熔断简单说明</h2><p>在分布式系统中，一次完整的请求可能需要经过多个服务模块的调用，请求在多个服务中传递，服务对服务的调用会产生新的请求，这些请求共同组成了这次请求的调用链。当调用链中的某个环节，特别是下游服务不可用时，将会导致上游服务调用方不可用，最终将这种不可用的影响扩大到整个系统，导致整个分布式的不可用，引起服务雪崩现象。</p>
-<p>为了避免这种情况，在下游服务不可用时，保护上游服务的可用性显得极其重要。对此我们可以通过熔断的方式，通过及时熔断服务调用方和服务提供方的调用链，保护服务调用方资源，防止服务雪崩现象的出现。</p>
-<p>使用服务熔断，能够有效地保护服务调用方的稳定性，它能够避免服务调用者频繁调用可能失败的服务提供者，防止服务调用者浪费cpu、线程和IO资源等，提高服务整体的可用性。</p>
-<p>所以，熔断设计的目的是在服务提供方不可用时保护服务调用方的资源，减少服务调用中无用的远程调用。</p>
-<h2 id="常见熔断策略"><a href="#常见熔断策略" class="headerlink" title="常见熔断策略"></a>常见熔断策略</h2><h3 id="google-SRE-自适应熔断"><a href="#google-SRE-自适应熔断" class="headerlink" title="google SRE 自适应熔断"></a>google SRE 自适应熔断</h3><p>基于失败率</p>
-<p>drop_ratio = $max(0, （requests - K * accepts） / (requests + 1))$</p>
-<p>算法参数：</p>
-<ul>
-<li>requests：窗口时间内的请求总数</li>
-<li>accepts：正常请求数量</li>
-<li>K：敏感度，K 越小越容易丢请求，一般推荐 1.5-2 之间</li>
-</ul>
-<p>算法解释：</p>
-<ul>
-<li>正常情况下 requests=accepts，所以概率是 0。</li>
-<li>随着正常请求数量减少，当达到 requests == K* accepts 继续请求时，概率 P 会逐渐比 0 大开始按照概率逐渐丢弃一些请求，如果故障严重则丢包会越来越多，假如窗口时间内 accepts==0 则完全熔断。</li>
-<li>当应用逐渐恢复正常时，accepts、requests 同时都在增加，但是 K*accepts 会比 requests 增加的更快，所以概率很快就会归 0，关闭熔断。</li>
-</ul>
-<h3 id="brpc熔断策略"><a href="#brpc熔断策略" class="headerlink" title="brpc熔断策略"></a>brpc熔断策略</h3><p>在开启了熔断之后，CircuitBreaker会记录每一个请求的处理结果，并维护一个累计出错时长，记为acc_error_cost，当acc_error_cost &gt; max_error_cost时，熔断该节点。</p>
-<p>两个小技巧：</p>
-<ol>
-<li>利用EMA（移动平均值）策略计算接口的平均响应时间</li>
-<li>利用双时间窗口统计来平衡短期抖动与长期错误率过高；</li>
-</ol>
-<p>具体见：<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/apache/incubator-brpc/blob/master/docs/cn/circuit_breaker.md">CircuitBreaker</a></p>
-<h3 id="netflix-断路器"><a href="#netflix-断路器" class="headerlink" title="netflix 断路器"></a>netflix 断路器</h3><p><img src="https://img-blog.csdnimg.cn/20201201181047280.png" alt="熔断器策略"></p>
-<p>三种断路器状态：关闭、打开、半开</p>
-<p>最近一段时间内的错误率 = 错误数 / 总数</p>
-<p>最近一段时间内的错误数与总数，通过<strong>滑动窗口</strong>来实现，而滑动窗口又通过<strong>环形队列</strong>来实现。</p>
-<p>错误率超过多少，则进入打开状态，持续一段时间。</p>
-<p>持续一段时间后，进入半开状态，允许定量的请求通过，如果成功的比例足够大，则进入关闭状态，否则重新加入打开状态。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/parallel/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/parallel/index.html" class="post-title-link" itemprop="url">并行算法 - 概览</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 11:31:03" itemprop="dateCreated datePublished" datetime="2022-02-25T11:31:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:42:17" itemprop="dateModified" datetime="2022-03-01T22:42:17+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/parallel/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/parallel/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>并行排序（并行归并排序、并行快速排序）</p>
-<p>并行查找（并行的散列表，随机分为K份）</p>
-<p>并行字符串匹配（任何算法都可以，只是分割后，需要补上2m个char）</p>
-<p>并行搜索（对于BFS，使用两个队列，循环使用）</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1457,7 +1515,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">344</span>
+          <span class="site-state-item-count">345</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

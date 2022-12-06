@@ -203,6 +203,101 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/io_model/io_model_for_nginx.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/io_model/io_model_for_nginx.html" class="post-title-link" itemprop="url">高性能服务器设计-Nginx IO模型</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-10-30 18:33:31" itemprop="dateModified" datetime="2022-10-30T18:33:31+08:00">2022-10-30</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/io_model/io_model_for_nginx.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/io_model/io_model_for_nginx.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>端口复用，通过互斥锁来避免<strong>惊群</strong>效应</p>
+<p>为什么不采用多线程模型管理连接</p>
+<ol>
+<li>无状态服务，无需共享进程内存</li>
+<li>采用独立的进程，可以让互相之间不会影响。一个进程异常崩溃，其他进程的服务不会中断，提升了架构的可靠性。</li>
+<li>进程之间不共享资源，不需要加锁，所以省掉了锁带来的开销。</li>
+</ol>
+<p>为什么不采用多线程处理逻辑业务？</p>
+<ol>
+<li>进程数已经等于核心数，再新建线程处理任务，只会抢占现有进程，增加切换代价。</li>
+<li>作为接入层，基本上都是数据转发业务，网络 IO 任务的等待耗时部分，已经被处理为非阻塞/全异步/事件驱动模式，在没有更多 CPU 的情况下，再利用多线程处理，意义不大。</li>
+<li>并且如果进程中有阻塞的处理逻辑，应该由各个业务进行解决，比如 openResty 中利用了 Lua 协程，对阻塞业务进行了优化。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/io_model/multiplex_io.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1289,215 +1384,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/db/engine_index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/db/engine_index.html" class="post-title-link" itemprop="url">数据库必知必会-存储引擎与数据库索引篇</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-16 23:20:03" itemprop="dateCreated datePublished" datetime="2022-02-16T23:20:03+08:00">2022-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/db/engine_index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/db/engine_index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>数据库索引一些经常考察的知识点</p>
-<h4 id="mysql数据库索引"><a href="#mysql数据库索引" class="headerlink" title="mysql数据库索引"></a>mysql数据库索引</h4><ol>
-<li>Mysql 数据库有哪些索引以及他们各自的特点？InnoDB为什么选择用B+树作为索引，而不用B树？  </li>
-</ol>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>索引</th>
-<th>特点</th>
-<th>使用场景</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>hash索引</td>
-<td>散列表实现，等值查询效率高，不能排序,不能进行范围查询</td>
-<td>不需要范围查询，仅需等值查询时，可以考虑使用</td>
-</tr>
-<tr>
-<td>BTree索引</td>
-<td>B+树实现，支持范围查询</td>
-<td>默认</td>
-</tr>
-<tr>
-<td>RTree索引</td>
-<td>仅支持地理位置类型，RTree空间树实现，相比Btree有更好的范围查询性能</td>
-<td>有按照地理位置检索需要的场景</td>
-</tr>
-<tr>
-<td>FullText索引</td>
-<td>分词加倒排索引实现</td>
-<td>有类似like的全文检索类型的查询</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>相比B树，B+树索引支持范围查找。</p>
-<p>索引匹配原则：左前缀匹配原则</p>
-<h4 id="聚簇索引、非聚簇索引"><a href="#聚簇索引、非聚簇索引" class="headerlink" title="聚簇索引、非聚簇索引"></a>聚簇索引、非聚簇索引</h4><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>索引</th>
-<th>特点</th>
-<th>使用场景</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>聚簇索引（clustered index）</td>
-<td>数据按照索引顺序存储，叶子节点存储真实的数据</td>
-<td>InnoDB索引</td>
-</tr>
-<tr>
-<td>非聚簇索引（secondary index，non-clustered index）</td>
-<td>叶子节点存储指向真正数据行的指针</td>
-<td>MyISAM</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><img src="https://img2018.cnblogs.com/i-beta/1464190/201911/1464190-20191106145143172-1760681728.png" alt="聚簇索引与非聚簇索引"></p>
-<h4 id="数据库回表"><a href="#数据库回表" class="headerlink" title="数据库回表"></a>数据库回表</h4><p>数据库回表是怎么回事？如何避免？</p>
-<p>在查询辅助索引时，如果要查询的字段已经全部在索引中了，那么就不需要额外再查询主索引了；反之，如果要查询的字段当前索引无法覆盖，那么Mysql需要额外查询主索引去获取要查询的字段，访问索引的次数多了一次，我们称刚才的过程为回表。我们通过增加全覆盖索引可以避免回表。</p>
-<h5 id="InnoDB索引与MyISAM索引的区别"><a href="#InnoDB索引与MyISAM索引的区别" class="headerlink" title="InnoDB索引与MyISAM索引的区别"></a>InnoDB索引与MyISAM索引的区别</h5><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>索引</th>
-<th>特点</th>
-<th>使用场景</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>InnoDB索引</td>
-<td>InnoDB的主索引的叶子节点就是数据本身，而辅助索引的叶子节点是主键ID</td>
-<td>InnoDB索引</td>
-</tr>
-<tr>
-<td>MyISAM索引</td>
-<td>InnoDB的主索引与辅助索引没有区别，叶子节点存储都是指向真实数据行的指针</td>
-<td>MyISAM</td>
-</tr>
-</tbody>
-</table>
-</div>
-<ol>
-<li><p>索引为什么要用B+树来实现？<br> 首先，相比红黑树、AVL等二叉平衡树，B+树更加矮胖，这样子索引查找便能够更好的访问磁盘IO，从而有更好的查询性能；另外相比B树，B+树在叶子节点之间维护了一根链表，借助该链表，范围查找性能更加稳定。</p>
-<p> <img src="https://images.gitbook.cn/b480a130-a1b6-11ea-97df-0d0e3bd6b465" alt="MysqlB+树索引展示"></p>
-</li>
-<li><p>两种存储引擎区别与各自使用场景</p>
-</li>
-</ol>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>存储引擎</th>
-<th>特点</th>
-<th>使用场景</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>MyISAM</td>
-<td>不支持外键，表锁，插入数据时锁定整个表，查表的总行数不需要扫表，索引与数据分开</td>
-<td>不需要支持事务，绝大多数请求为读操作，系统崩溃后数据丢失可接受</td>
-</tr>
-<tr>
-<td>InnoDB</td>
-<td>支持外键，行级锁，事务，查表的总行数时需要扫表，必须有唯一索引，索引与数据在一个文件中</td>
-<td>需要支持事务，读写相当，不可接受数据丢失</td>
-</tr>
-</tbody>
-</table>
-</div>
-<ol>
-<li>为什么说数据表超过2000W就会变慢？有理论依旧吗？</li>
-</ol>
-<p>磁盘扇区、文件系统、InnoDB存储引擎都有各自的最小存储单元。</p>
-<p><img src="https://pic1.zhimg.com/80/v2-ac5c2c389a4d39dac6cd324d6ba71f34_1440w.jpg" alt="最小存储单元"></p>
-<p>非叶子节点由索引值和指针构成：主键假设8字节；指针8字节；所以一个页最多有多少个指针呢？ 16k / 16 = 1000左右。</p>
-<p>叶子节点直接存数据，假设数据大小为1k，那么一个叶子节点存了16条记录。</p>
-<p>所以，B+树树高为1的话，存的记录最多为16 <em> 000； 高为2的话，1000 </em> 1000 * 16 = 1600w左右。</p>
-<p>在内存有限的情况下，多加一层，就意味着要多一次磁盘IO，性能便会急剧下降。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1570,7 +1456,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">344</span>
+          <span class="site-state-item-count">345</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

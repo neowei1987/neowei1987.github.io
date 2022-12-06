@@ -22,15 +22,15 @@
     var CONFIG = {"hostname":"www.fpthinker.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="epoll 的 edge-trigger 和 level-trigger 模式处理逻辑差异极小，性能测试结果表明常规应用场景 中二者性能差异可以忽略。? 使用 edge-trigger 的 user app 比使用 level-trigger 的逻辑复杂，出错概率更高。? edge-trigger 和 level-trigger 的性能差异主要在于 epoll_wait 系统调用的处理速度，是否">
+  <meta name="description" content="epoll 的 edge-trigger 和 level-trigger 模式处理逻辑差异极小，性能测试结果表明常规应用场景 中二者性能差异可以忽略。? 使用 edge-trigger 的 user app 比使用 level-trigger 的逻辑复杂，出错概率更高。? edge-trigger 和 level-trigger 的性能差异主要在于 epoll_wait 系统调用的处理速度，是否是">
 <meta property="og:type" content="article">
 <meta property="og:title" content="操作系统之epoll">
 <meta property="og:url" content="https://www.fpthinker.com/backend_knowledge_architecture/os/epoll.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
-<meta property="og:description" content="epoll 的 edge-trigger 和 level-trigger 模式处理逻辑差异极小，性能测试结果表明常规应用场景 中二者性能差异可以忽略。? 使用 edge-trigger 的 user app 比使用 level-trigger 的逻辑复杂，出错概率更高。? edge-trigger 和 level-trigger 的性能差异主要在于 epoll_wait 系统调用的处理速度，是否">
+<meta property="og:description" content="epoll 的 edge-trigger 和 level-trigger 模式处理逻辑差异极小，性能测试结果表明常规应用场景 中二者性能差异可以忽略。? 使用 edge-trigger 的 user app 比使用 level-trigger 的逻辑复杂，出错概率更高。? edge-trigger 和 level-trigger 的性能差异主要在于 epoll_wait 系统调用的处理速度，是否是">
 <meta property="og:locale">
 <meta property="article:published_time" content="2021-01-03T11:47:03.000Z">
-<meta property="article:modified_time" content="2022-12-01T05:04:55.913Z">
+<meta property="article:modified_time" content="2022-12-06T13:59:50.468Z">
 <meta property="article:author" content="NeoWei">
 <meta property="article:tag" content="后端开发知识体系,知识体系构建,刷题技巧,本质思考">
 <meta name="twitter:card" content="summary">
@@ -238,7 +238,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-01 13:04:55" itemprop="dateModified" datetime="2022-12-01T13:04:55+08:00">2022-12-01</time>
+                <time title="Modified: 2022-12-06 21:59:50" itemprop="dateModified" datetime="2022-12-06T21:59:50+08:00">2022-12-06</time>
               </span>
 
           
@@ -266,7 +266,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p> epoll 的 edge-trigger 和 level-trigger 模式处理逻辑差异极小，性能测试结果表明常规应用场景 中二者性能差异可以忽略。<br>? 使用 edge-trigger 的 user app 比使用 level-trigger 的逻辑复杂，出错概率更高。<br>? edge-trigger 和 level-trigger 的性能差异主要在于 epoll_wait 系统调用的处理速度，是否是 user app 的性能瓶颈需要视应用场景而定，不可一概而论。</p>
+        <p>epoll 的 edge-trigger 和 level-trigger 模式处理逻辑差异极小，性能测试结果表明常规应用场景 中二者性能差异可以忽略。<br>? 使用 edge-trigger 的 user app 比使用 level-trigger 的逻辑复杂，出错概率更高。<br>? edge-trigger 和 level-trigger 的性能差异主要在于 epoll_wait 系统调用的处理速度，是否是 user app 的性能瓶颈需要视应用场景而定，不可一概而论。</p>
 <p>但从 kernel 代码来看，edge-trigger/level-trigger 模式的处理逻辑几乎完全相同，差别仅在于 level-trigger 模式在 event 发生时不会将其从 ready list 中移除，略为增大了 event 处理过程中 kernel space 中记录数据的大小。</p>
 <p>然而，edge-trigger 模式一定要配合 user app 中的 ready list 结构，以便收集已出现 event 的 fd，再通过 round-robin 方式挨个处理，以此避免通信数据量很大时出现忙于处理热点 fd 而导致非热点 fd 饿死的现象。统观 kernel 和 user space，由于 user app 中 ready list 的实现千奇百怪，不一定都经过仔细的推敲优化，因此 edge-trigger 的总内存开销往往还大于 level-trigger 的开销。</p>
 <p>一般号称 edge-trigger 模式的优势在于能够减少 epoll 相关系统调用，这话不假，但 user app 里可不是只有 epoll 相关系统调用吧？为了绕过饿死问题，edge-trigger 模式的 user app 要自行进行 read/write 循环处理，这其中增加的系统调用和减少的 epoll 系统调用加起来，有谁能说一定就能明显地快起来呢？</p>
@@ -429,7 +429,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">344</span>
+          <span class="site-state-item-count">345</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

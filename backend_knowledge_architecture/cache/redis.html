@@ -30,9 +30,10 @@
 <meta property="og:description" content="如何评价redis的高性能？为何要把Redis设计成单线程？ (1)redis全内存，单线程，无锁。 (2)redis Rehash 渐进式hash,双缓冲 + 分而治之思想   关于写入，仅写ht[1]，不再写入ht[0]；关于读取，优先读ht[1], 没有的话，再读取ht[0]  渐进式迁移的过程中，一次迁移一个bucket。包括用于解决冲突的hash链。  以下是哈希表渐进式 rehash">
 <meta property="og:locale">
 <meta property="og:image" content="https://images.gitbook.cn/0bc2bef0-a343-11ea-a506-f32f5295a5a9">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.6804bfkyyxo0.webp">
 <meta property="og:image" content="https://pic2.zhimg.com/80/v2-1530e8c407dd674e77ee7dc36295b161_1440w.jpg">
-<meta property="article:published_time" content="2022-02-16T15:20:03.000Z">
-<meta property="article:modified_time" content="2022-11-01T14:17:47.944Z">
+<meta property="article:published_time" content="2022-12-13T15:20:03.000Z">
+<meta property="article:modified_time" content="2022-12-13T15:57:19.770Z">
 <meta property="article:author" content="NeoWei">
 <meta property="article:tag" content="缓存">
 <meta name="twitter:card" content="summary">
@@ -233,16 +234,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2022-02-16 23:20:03" itemprop="dateCreated datePublished" datetime="2022-02-16T23:20:03+08:00">2022-02-16</time>
+              <time title="Created: 2022-12-13 23:20:03 / Modified: 23:57:19" itemprop="dateCreated datePublished" datetime="2022-12-13T23:20:03+08:00">2022-12-13</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
-              </span>
 
           
   
@@ -287,8 +282,12 @@
 <p><strong>EMBSTR</strong>(EmbeddedString， 当存储的字符串长度较短时(len&lt;=44 字节),Redis将会采用 embstr 编码，避免再次分配内存， 复用redis object)。这个长度是咋计算出来的呢？ 跟redis的底层内存池（jcmalloc）有关系。 64字节减去一些元数据。</p>
 <p><strong>RAW</strong> 原始字符串</p>
 <p><strong>ZIPLIST</strong> (压缩列表，连续内存，内存利用率高，增删改查效率低下；当hash、zset、list元素少且内容不大时使用该编码),</p>
+<p>压缩列表是一块连续的内存空间，元素之间紧挨着存储，没有任何冗余空隙。每次有写操作的时候，会<strong>重新分配内存</strong>，例如insert, remove等操作。</p>
 <p><strong>QUICK_LIST</strong>（list元素较多时使用）</p>
+<p>double list of ziplist</p>
 <p><strong>INTSET</strong>(整数集合，当set元素较少且都为整数时，使用该编码,从小到大的顺序存储，方便做交、并、差集运算。</p>
+<p>intset是一个由整数组成的有序集合，从而便于在上面进行二分查找，用于快速地判断一个元素是否属于这个集合</p>
+<p>ziplist可以存储任意二进制串，而intset只能存储整数。<br>ziplist是无序的，而intset是从小到大有序的。因此，在ziplist上查找只能遍历，而在intset上可以进行二分查找，性能更高。<br>ziplist可以对每个数据项进行不同的变长编码（每个数据项前面都有数据长度字段len），而intset只能整体使用一个统一的编码（encoding）。</p>
 <p><strong>HASH</strong>（hash元素较多时使用） 渐进式扩容缩容策略</p>
 <p><strong>SKIPLIST</strong>（跳表，zset元素多时使用）</p>
 <h5 id="数据结构与编码关系"><a href="#数据结构与编码关系" class="headerlink" title="数据结构与编码关系"></a>数据结构与编码关系</h5><div class="table-container">
@@ -314,7 +313,7 @@
 <tr>
 <td>zset</td>
 <td>ZIPLIST（元素较少，成员较小）</td>
-<td>SKIPLIST</td>
+<td>SKIPLIST + Dict</td>
 </tr>
 <tr>
 <td>set</td>
@@ -330,12 +329,31 @@
 </table>
 </div>
 <p><img src="https://images.gitbook.cn/0bc2bef0-a343-11ea-a506-f32f5295a5a9" alt="在这里插入图片描述"></p>
+<p>实际上，Redis中sorted set的实现是这样的：</p>
+<p>当数据较少时，sorted set是由一个ziplist来实现的。<br>当数据多的时候，sorted set是由一个dict + 一个skiplist来实现的。简单来讲，dict用来查询数据到分数的对应关系，而skiplist用来根据分数查询数据（可能是范围查找）。</p>
+<h3 id="Redis中的skiplist是什么样子的"><a href="#Redis中的skiplist是什么样子的" class="headerlink" title="Redis中的skiplist是什么样子的"></a>Redis中的skiplist是什么样子的</h3><p>score字段是数据对应的分数。</p>
+<p>backward字段是指向链表前一个节点的指针（前向指针）。节点只有1个前向指针，所以只有第1层链表是一个双向链表。</p>
+<p>level[]存放指向各层链表后一个节点的指针（后向指针）。每层对应1个后向指针，用forward字段表示。另外，每个后向指针还对应了一个<strong>span</strong>值，它表示当前的指针跨越了多少个节点。span用于计算元素排名(rank)，这正是前面我们提到的Redis对于skiplist所做的一个扩展。需要注意的是，level[]是一个柔性数组（flexible array member），因此它占用的内存不在zskiplistNode结构里面，而需要插入节点的时候单独为它分配。也正因为如此，skiplist的每个节点所包含的指针数目才是不固定的，我们前面分析过的结论——skiplist每个节点包含的指针数目平均为1/(1-p)——才能有意义。</p>
+<p>假设我们在这个skiplist中查找score=89.0的元素（即Bob的成绩数据），在查找路径中，我们会跨域图中标红的指针，这些指针上面的span值累加起来，就得到了Bob的排名(2+2+1)-1=4（减1是因为rank值以0起始）。需要注意这里算的是从小到大的排名，而如果要算从大到小的排名，只需要用skiplist长度减去查找路径上的span累加值，即6-(2+2+1)=1。</p>
+<p>可见，在查找skiplist的过程中，通过累加span值的方式，我们就能很容易算出排名。相反，如果指定排名来查找数据（类似zrange和zrevrange那样），也可以不断累加span并时刻保持累加值不超过指定的排名，通过这种方式就能得到一条O(log n)的查找路径。</p>
+<h4 id="skiplist与平衡树、哈希表的比较"><a href="#skiplist与平衡树、哈希表的比较" class="headerlink" title="skiplist与平衡树、哈希表的比较"></a>skiplist与平衡树、哈希表的比较</h4><p>skiplist和各种平衡树（如AVL、红黑树等）的元素是有序排列的，而哈希表不是有序的。因此，在哈希表上只能做单个key的查找，不适宜做范围查找。所谓范围查找，指的是查找那些大小在指定的两个值之间的所有节点。</p>
+<p>在做范围查找的时候，平衡树比skiplist操作要复杂。在平衡树上，我们找到指定范围的小值之后，还需要以中序遍历的顺序继续寻找其它不超过大值的节点。如果不对平衡树进行一定的改造，这里的中序遍历并不容易实现。而在skiplist上进行范围查找就非常简单，只需要在找到小值之后，对第1层链表进行若干步的遍历就可以实现。</p>
+<p>平衡树的插入和删除操作可能引发子树的调整，逻辑复杂，而skiplist的插入和删除只需要修改相邻节点的指针，操作简单又快速。</p>
+<p>从内存占用上来说，skiplist比平衡树更灵活一些。一般来说，平衡树每个节点包含2个指针（分别指向左右子树），而skiplist每个节点包含的指针数目平均为1/(1-p)，具体取决于参数p的大小。如果像Redis里的实现一样，取p=1/4，那么平均每个节点包含1.33个指针，比平衡树更有优势。</p>
+<p>查找单个key，skiplist和平衡树的时间复杂度都为O(log n)，大体相当；而哈希表在保持较低的哈希值冲突概率的前提下，查找时间复杂度接近O(1)，性能更高一些。所以我们平常使用的各种Map或dictionary结构，大都是基于哈希表实现的。</p>
+<p>从算法实现难度上来比较，skiplist比平衡树要简单得多。</p>
 <h4 id="Redis的可靠存储"><a href="#Redis的可靠存储" class="headerlink" title="Redis的可靠存储"></a>Redis的可靠存储</h4><p>redis是如何实现可靠存储的：真的可靠吗？ AOF、RDB有啥区别？ 分别适用于什么场景？</p>
 <p>借助AOF、RDB可以一定程度上减少数据的损失，但是都无法做到数据的100%。</p>
 <p>RDB，定期fork一个子进程，通过copy on write技术，来进行内存的dump，成本相对AOF较高，所以不可能很短时间内就dump一次，所以如果内存中的数据还没有来得及dump到RDB，那么会丢失比较多的数据，好处是借助RDB恢复数据比较快。 RDB最大的时间成本是clone页表。</p>
 <p>AOF，定期（通常是s级别）append 写操作命令到文件中，只是简单的写一次磁盘，所以性能较好，如果新的命令append到aof之间发生宕机，丢失的数据也比较少。缺点是每次基于AOF恢复数据会比较慢。</p>
 <p>AOF缓冲数据的写入策略：NO（依赖操作系统的flush盘机制）、always（性能最差，安全性最好）、everySecond（最多丢失1～2秒数据）</p>
-<p>AOF重写，AOF 重写缓冲区</p>
+<p>AOF重写【BGREWRITEAOF】，AOF 重写缓冲区</p>
+<p>把主线程的内存拷贝一份给fork出来的 bgrewriteaof 子进程，这里面包含了Redis中最新的数据。</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.6804bfkyyxo0.webp" alt="image"></p>
+<p>下表是完整的AOF后台重写过程：</p>
+<p>时间    服务器进程（父进程）    子进程</p>
+<p>T1    执行命令 SET K1 V1<br>T2    执行命令 SET K1 V1<br>T3    执行命令 SET K1 V1<br>T4    创建子进程，执行AOF文件重写    开始AOF重写<br>T5    执行命令 SET K2 V2    执行重写<br>T6    执行命令 SET K3 V3    执行重写<br>T7    执行命令 SET K4 V4    完成AOF重写，向父进程发送信号<br>T8    接收到信号，将T5 T6 T7 服务器的写命令追加到新的AOF文件末尾<br>T9    用新的AOF替换旧的AOF</p>
+<p>T8 T9执行的任务会阻塞服务器处理命令。</p>
 <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.51cto.com/article/694868.html">https://www.51cto.com/article/694868.html</a></p>
 <p>Redis 3.0 基于checkpoint思想的新持久化方式</p>
 <h4 id="Redis的高可用性"><a href="#Redis的高可用性" class="headerlink" title="Redis的高可用性"></a>Redis的高可用性</h4><p>redis tw代理模式与cluster集群模式分别是如何工作的？ 哪一种模式使用了一致性Hash?</p>
@@ -378,6 +396,12 @@
 <li>allkeys-lfu:  Least Frequently Used 最近最不常用的</li>
 <li>allkeys-random: 回收随机的键使得新添加的数据有空间存放。</li>
 </ul>
+<h3 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h3><p>事务，但 Redis 提供的不是严格的事务，Redis 只保证串行执行命令，并且能保证全部执行，但是执行命令失败时并不会回滚，而是会继续执行下去。</p>
+<ol>
+<li>命令入队报错，全部回滚，没有任何影响</li>
+<li>命令执行时报错，不会回滚，而是会继续执行余下的命令</li>
+</ol>
+<h4 id="watch机制"><a href="#watch机制" class="headerlink" title="watch机制"></a>watch机制</h4><p>watch 一个变量， multi exec 根据中间有没有其他线程更改watched的变量来决定，是commit事务还是rollback事务，有点像CAS操作，只是Redis的watch机制并没有ABA问题</p>
 <h3 id="高级用法"><a href="#高级用法" class="headerlink" title="高级用法"></a>高级用法</h3><p>Bitmap :<br>位图是支持按 bit 位来存储信息，可以用来实现 布隆过滤器（BloomFilter）；</p>
 <p>HyperLogLog:<br>供不精确的去重计数功能，比较适合用来做大规模数据的去重统计，例如统计 UV；</p>
 <p>Geospatial:<br>可以用来保存地理位置，并作位置距离计算或者根据半径计算位置等。有没有想过用Redis来实现附近的人？或者计算最优地图路径？</p>
@@ -386,7 +410,7 @@
 <p>Pipeline：<br>可以批量执行一组指令，一次性返回全部结果，可以减少频繁的请求应答。</p>
 <p>Lua：<br>Redis 支持提交 Lua 脚本来执行一系列的功能。</p>
 <p>我在前电商老东家的时候，秒杀场景经常使用这个东西，讲道理有点香，利用他的原子性。</p>
-<p>事务：<br>最后一个功能是事务，但 Redis 提供的不是严格的事务，Redis 只保证串行执行命令，并且能保证全部执行，但是执行命令失败时并不会回滚，而是会继续执行下去。</p>
+<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="http://zhangtielei.com/posts/blog-redis-ziplist.html">http://zhangtielei.com/posts/blog-redis-ziplist.html</a></p>
 
     </div>
 
@@ -402,13 +426,13 @@
     <h1>Recommended Posts </h1>
     <ul>
         
-            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/cache/index.html">缓存简要说明</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/language/go/index.html">go语言陷阱</a></li>
         
-            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/cache/memcache.html">MC缓存必知必会</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/cache/consistency.html">关于缓存与数据库的一致性与过载保护机制</a></li>
         
-            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/db/acid.html">数据库必知必会-事务篇</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/hardware/cpu.html">计算机硬件-CPU寄存器简介</a></li>
         
-            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/db/engine_index.html">数据库必知必会-存储引擎与数据库索引篇</a></li>
+            <li><a href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/max_product.html">分裂二叉树的最大乘积</a></li>
         
     </ul>
      
@@ -454,13 +478,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/backend_knowledge_architecture/db/acid.html" rel="prev" title="数据库必知必会-事务篇">
-      <i class="fa fa-chevron-left"></i> 数据库必知必会-事务篇
+    <a href="/backend_knowledge_architecture/language/go/index.html" rel="prev" title="go语言陷阱">
+      <i class="fa fa-chevron-left"></i> go语言陷阱
     </a></div>
-      <div class="post-nav-item">
-    <a href="/backend_knowledge_architecture/cache/memcache.html" rel="next" title="MC缓存必知必会">
-      MC缓存必知必会 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -536,7 +557,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%AB%E7%A7%8D%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">八种编码方式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%BC%96%E7%A0%81%E5%85%B3%E7%B3%BB"><span class="nav-number">2.</span> <span class="nav-text">数据结构与编码关系</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis%E7%9A%84%E5%8F%AF%E9%9D%A0%E5%AD%98%E5%82%A8"><span class="nav-number"></span> <span class="nav-text">Redis的可靠存储</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis%E7%9A%84%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7"><span class="nav-number"></span> <span class="nav-text">Redis的高可用性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis-%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-number"></span> <span class="nav-text">Redis 实现分布式锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#redis-key%E8%BF%87%E6%9C%9F%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="nav-number"></span> <span class="nav-text">redis key过期的方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#redis-%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5"><span class="nav-number"></span> <span class="nav-text">redis 淘汰策略</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95"><span class="nav-number"></span> <span class="nav-text">高级用法</span></a></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%AB%E7%A7%8D%E7%BC%96%E7%A0%81%E6%96%B9%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">八种编码方式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%BC%96%E7%A0%81%E5%85%B3%E7%B3%BB"><span class="nav-number">2.</span> <span class="nav-text">数据结构与编码关系</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E4%B8%AD%E7%9A%84skiplist%E6%98%AF%E4%BB%80%E4%B9%88%E6%A0%B7%E5%AD%90%E7%9A%84"><span class="nav-number"></span> <span class="nav-text">Redis中的skiplist是什么样子的</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#skiplist%E4%B8%8E%E5%B9%B3%E8%A1%A1%E6%A0%91%E3%80%81%E5%93%88%E5%B8%8C%E8%A1%A8%E7%9A%84%E6%AF%94%E8%BE%83"><span class="nav-number"></span> <span class="nav-text">skiplist与平衡树、哈希表的比较</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis%E7%9A%84%E5%8F%AF%E9%9D%A0%E5%AD%98%E5%82%A8"><span class="nav-number"></span> <span class="nav-text">Redis的可靠存储</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis%E7%9A%84%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7"><span class="nav-number"></span> <span class="nav-text">Redis的高可用性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis-%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-number"></span> <span class="nav-text">Redis 实现分布式锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#redis-key%E8%BF%87%E6%9C%9F%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="nav-number"></span> <span class="nav-text">redis key过期的方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#redis-%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5"><span class="nav-number"></span> <span class="nav-text">redis 淘汰策略</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1"><span class="nav-number"></span> <span class="nav-text">事务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#watch%E6%9C%BA%E5%88%B6"><span class="nav-number"></span> <span class="nav-text">watch机制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95"><span class="nav-number"></span> <span class="nav-text">高级用法</span></a></div>
       </div>
       <!--/noindex-->
 
@@ -550,7 +571,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">345</span>
+          <span class="site-state-item-count">346</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -563,7 +584,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">62</span>
+        <span class="site-state-item-count">63</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

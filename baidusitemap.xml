@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://www.fpthinker.com/backend_knowledge_architecture/db/innodb.html</loc>
+    <lastmod>2022-12-13</lastmod>
+  </url>
+  <url>
+    <loc>https://www.fpthinker.com/backend_knowledge_architecture/db/index.html</loc>
+    <lastmod>2022-12-13</lastmod>
+  </url>
+  <url>
+    <loc>https://www.fpthinker.com/backend_knowledge_architecture/cache/redis.html</loc>
+    <lastmod>2022-12-13</lastmod>
+  </url>
+  <url>
+    <loc>https://www.fpthinker.com/backend_knowledge_architecture/cache/consistency.html</loc>
+    <lastmod>2022-12-13</lastmod>
+  </url>
+  <url>
+    <loc>https://www.fpthinker.com/backend_knowledge_architecture/language/go/index.html</loc>
+    <lastmod>2022-12-13</lastmod>
+  </url>
+  <url>
+    <loc>https://www.fpthinker.com/backend_knowledge_architecture/language/cpp/base.html</loc>
+    <lastmod>2022-12-12</lastmod>
+  </url>
+  <url>
     <loc>https://www.fpthinker.com/backend_knowledge_architecture/hardware/cpu.html</loc>
     <lastmod>2022-12-06</lastmod>
   </url>
@@ -98,10 +122,6 @@
   </url>
   <url>
     <loc>https://www.fpthinker.com/backend_knowledge_architecture/language/java/cpu_mem.html</loc>
-    <lastmod>2022-12-01</lastmod>
-  </url>
-  <url>
-    <loc>https://www.fpthinker.com/backend_knowledge_architecture/language/cpp/base.html</loc>
     <lastmod>2022-12-01</lastmod>
   </url>
   <url>
@@ -357,14 +377,6 @@
     <lastmod>2022-11-01</lastmod>
   </url>
   <url>
-    <loc>https://www.fpthinker.com/backend_knowledge_architecture/db/innodb.html</loc>
-    <lastmod>2022-11-01</lastmod>
-  </url>
-  <url>
-    <loc>https://www.fpthinker.com/backend_knowledge_architecture/cache/redis.html</loc>
-    <lastmod>2022-11-01</lastmod>
-  </url>
-  <url>
     <loc>https://www.fpthinker.com/backend_knowledge_architecture/db/engine_index.html</loc>
     <lastmod>2022-11-01</lastmod>
   </url>
@@ -474,10 +486,6 @@
   </url>
   <url>
     <loc>https://www.fpthinker.com/backend_knowledge_architecture/db/acid.html</loc>
-    <lastmod>2022-10-29</lastmod>
-  </url>
-  <url>
-    <loc>https://www.fpthinker.com/backend_knowledge_architecture/cache/consistency.html</loc>
     <lastmod>2022-10-29</lastmod>
   </url>
   <url>
@@ -734,10 +742,6 @@
   </url>
   <url>
     <loc>https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/structures/linked_list/delete_node.html</loc>
-    <lastmod>2022-03-01</lastmod>
-  </url>
-  <url>
-    <loc>https://www.fpthinker.com/backend_knowledge_architecture/db/index.html</loc>
     <lastmod>2022-03-01</lastmod>
   </url>
   <url>

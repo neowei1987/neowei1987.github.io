@@ -203,6 +203,354 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/micro_service/discovery.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/micro_service/discovery.html" class="post-title-link" itemprop="url">微服务系列-服务注册与发现</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 12:03:03" itemprop="dateCreated datePublished" datetime="2022-02-25T12:03:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:40:41" itemprop="dateModified" datetime="2022-03-01T22:40:41+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/micro_service/discovery.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/micro_service/discovery.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>集成：在服务提供端或者调用端，如何集成注册中心？应用内 OR 应用外</p>
+<p>测活：服务注册之后，如何对服务进行测活以保证服务的可用性</p>
+<p>负载均衡：当存在多个服务提供者时，如何均衡各个提供者的负载？</p>
+<p>运行时依赖：引入注册中心之后，对应用的运行时环境有何影响？</p>
+<p>可用性：如何保证注册中心本身的可用性，特别是消除单点故障？</p>
+<p>状态获取：（1）主动探测（2）心跳上报</p>
+<p>一些可能问题：</p>
+<ul>
+<li>保护机制：如果短时间内摘除的节点数量超过集群的40%，则停止摘除节点</li>
+<li>通知风暴问题（准备更多的注册中心节点；精简通知内容）</li>
+</ul>
+<p>目前比较流行的解决方案包括：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>对比维度</th>
+<th>euraka</th>
+<th>consul</th>
+<th>ZK</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>实现思路</td>
+<td>去中心化，通过复制来同步数据，但不保证一致性。只要有一个节点可用，系统整体就可用。</td>
+<td>内置了服务注册与发现框架、分布一致性协议实现、健康检查、Key/Value 存储、多数据中心方案</td>
+<td>使用ZK节点临时节点来维护服务器列表,ZK支持watch节点变更通知机制</td>
+</tr>
+<tr>
+<td>测活</td>
+<td>客户端心跳</td>
+<td>TCP/HTTP/gRPC/Cmd</td>
+<td>自研-客户端心跳</td>
+</tr>
+<tr>
+<td>负载均衡</td>
+<td>Ribbon</td>
+<td>Fabio</td>
+<td>自研-负载均衡</td>
+</tr>
+<tr>
+<td>雪崩保护</td>
+<td>有，灾难态进入自我保护模式</td>
+<td>无</td>
+<td>自研</td>
+</tr>
+<tr>
+<td>自动注销实例</td>
+<td>支持</td>
+<td>支持</td>
+<td>进程不可用，临时节点自动销毁</td>
+</tr>
+<tr>
+<td>访问协议</td>
+<td>HTTP</td>
+<td>HTTP/DNS</td>
+<td>自研</td>
+</tr>
+<tr>
+<td>监听支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>WATCH NODE变更</td>
+</tr>
+<tr>
+<td>多数据中心</td>
+<td>支持</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>跨注册中心同步</td>
+<td>支持</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>框架集成</td>
+<td>SpingCloud继承</td>
+<td>Spring、k8s集成</td>
+<td>无</td>
+</tr>
+<tr>
+<td>优点</td>
+<td>去中心化，高可用</td>
+<td>功能相对完善</td>
+<td>简单容易实现，适用于初创期</td>
+</tr>
+<tr>
+<td>不足</td>
+<td>一致性差</td>
+<td>可用性无保证</td>
+<td>服务可用性无保障<br>ZK跨机房集群支持不佳</td>
+</tr>
+<tr>
+<td>CAP</td>
+<td>AP</td>
+<td>CP</td>
+<td>CP</td>
+</tr>
+<tr>
+<td>一致性协议</td>
+<td>仅复制，非强一致</td>
+<td>raft</td>
+<td>zab，一种类paxos协议</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><img src="http://cdn.b5mang.com/20201222213947.png" alt="20201222213947"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/micro_service/micro_service.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/micro_service/micro_service.html" class="post-title-link" itemprop="url">微服务系列-概览</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 12:01:03" itemprop="dateCreated datePublished" datetime="2022-02-25T12:01:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/micro_service/micro_service.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/micro_service/micro_service.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="单体到微服务"><a href="#单体到微服务" class="headerlink" title="单体到微服务"></a>单体到微服务</h4><p>为什么要转向微服务架构（收益）</p>
+<ol>
+<li>系统扩展性不足（例如，因为DB连接问题导致无法持续扩容）</li>
+<li>迭代效率低。如果是预估到业务在飞速增长，那就别犹豫，一定要提前考虑微服务的拆分。</li>
+<li>系统编译、部署成本高</li>
+<li>如果在设计架构的时候，发现需要很多异构的技术栈，那也要考虑下微服务。</li>
+</ol>
+<p>转向微服务架构需要克服什么困难（成本）</p>
+<ol>
+<li>技术基础设施要求比较高（如果公司技术基础设施非常完备，对应的业务起初就设计的非常复杂，那么也别犹豫，起手就上微服务。）</li>
+<li>工程拆分挑战比较大，实现时容易为了拆分而拆分。</li>
+</ol>
+<h4 id="拆分原则"><a href="#拆分原则" class="headerlink" title="拆分原则"></a>拆分原则</h4><p>从单体到微服务，也许可以有一个过度：工程的拆分</p>
+<p>微服务拆分的大原则</p>
+<ol>
+<li>单一服务内的高内聚、低耦合，单一职责</li>
+<li>拆分粒度：先粗拆，后细拆（伴随业务复杂度的变多，或者对业务的理解程度加深）</li>
+<li>拆分过程中，要避免影响业务的日常功能迭代—按照依赖顺序，挨个拆分</li>
+<li>确保服务接口定义有可扩展性</li>
+<li>避免环形依赖问题（通过分层，例如业务层、数据访问层）</li>
+</ol>
+<p>业务优先，组织结构，质量维度</p>
+<p>SRP Single Responsibilty 单一指责原则<br>CCP Common Closure Principle 共同闭包原则，包中包含的所有类应该是同类的变化的一个集合，也就是说，如果对包作出修改，需要调整的类应该都在这个包之内。</p>
+<p>你的团队成员结构是什么样的，你的架构就会长成啥样。</p>
+<p>团队按照业务边界来拆分；确保团队不要太大</p>
+<p>因为微服务就是为了减少研发成本，而包括沟通成本。</p>
+<p>服务拆分带来的问题</p>
+<ol>
+<li>接口调用耗时增加</li>
+<li>如何知道调用哪个服务？服务注册中心</li>
+<li>服务治理体系：熔断、限流、降级、超时控制等</li>
+<li>问题排查困难（分布式链路追踪）</li>
+</ol>
+<h4 id="微服务组件"><a href="#微服务组件" class="headerlink" title="微服务组件"></a>微服务组件</h4><h5 id="API网关"><a href="#API网关" class="headerlink" title="API网关"></a>API网关</h5><p>入口网关：隔离客户端与微服务，协议转换、安全策略、认证、限流、熔断等</p>
+<p>出口网关：调用外部API，统一认证，授权、授权、访问控制等</p>
+<p>性能：IO多路复用、异步非阻塞、线程池</p>
+<p>设计要点：性能、扩展性（责任链模式）</p>
+<p>隔离性：针对接口对线程池进行分类</p>
+<h5 id="服务注册与发现"><a href="#服务注册与发现" class="headerlink" title="服务注册与发现"></a>服务注册与发现</h5><p>zookeeper, consul, euraker</p>
+<h5 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h5><p>RoundRobin, Hash, Weight</p>
+<h5 id="熔断、限流"><a href="#熔断、限流" class="headerlink" title="熔断、限流"></a>熔断、限流</h5><h5 id="配置实时下发"><a href="#配置实时下发" class="headerlink" title="配置实时下发"></a>配置实时下发</h5><h6 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h6><p>配置项的读取-变更推送如何实现：</p>
+<ol>
+<li>轮询 + 摘要 （简单，实时性略差）</li>
+<li>长轮询 + 版本号（复杂，实时性好一些）</li>
+</ol>
+<p>client的高性能实现逻辑：</p>
+<ol>
+<li>DoubleBufferedData， 数据分前台和后台</li>
+<li>读拿到自己所在线程的thread-local读写锁，执行查询逻辑后释放锁。</li>
+<li>同时只有一个写：修改后台数据，切换前后台，挨个获得所有thread-local锁并立刻释放，结束后再改一遍新后台（老前台）。</li>
+</ol>
+<p>一个小原则：配置系统的旁路化，不要因为配置系统挂了，你的程序启动不了；<br>可以做两层缓存：内存缓存、文件保存</p>
+<h6 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h6><p>不同的配置类型：节点类型 》机房类型 》 全局配置</p>
+<p>配置项的存储-配置系统的高可用</p>
+<p>核心指标在于可用性！！！5个9？</p>
+<h5 id="对接调用链追踪-（Jager"><a href="#对接调用链追踪-（Jager" class="headerlink" title="对接调用链追踪 （Jager)"></a>对接调用链追踪 （Jager)</h5><p>trace_id + span_id来标识链路的调用关系。</p>
+<p>对trace_id采样，而不要随机采样。</p>
+<p>span 基本工作单元，一次链路调用（可以是RPC，DB等没有特定的限制）创建一个span，通过一个64位ID标识它，uuid较为方便，span中还有其他的数据，例如描述信息，时间戳，key-value对的（Annotation）tag信息，<strong>parent_id</strong>(基于parent_span_id来维护树形结构）等,其中parent-id可以表示span调用链路来源。</p>
+<p>trace_id 类似于 树结构的Span集合，表示一次完整的跟踪，从请求到服务器开始，服务器返回response结束，跟踪每次rpc调用的耗时，存在唯一标识trace_id。比如：你运行的分布式大数据存储一次Trace就由你的一次请求组成。</p>
+<p>Annotation 注解，用来记录请求特定事件相关信息（例如时间），一个span中会有多个annotation注解描述。通常包含四个注解信息：</p>
+<h5 id="监控系统"><a href="#监控系统" class="headerlink" title="监控系统"></a>监控系统</h5><p><img src="http://cdn.b5mang.com/2021320212041.png" alt="监控哪些内容"></p>
+<p><img src="http://cdn.b5mang.com/2021320212155.png" alt="监控系统架构"></p>
+<p>方案：普罗米修斯、Graphna</p>
+<p>APM：端到端的监控体系</p>
+<p>如何防止消息被篡改：对消息体 + 消息头 进行加密，生成一个签名<br>如何对数据进行加密：</p>
+<p>使用非对称加密的公钥对 “对称加密的私钥-OriginPrivate“ 进行加密，得到SecretPrivate<br>然后服务端利用非对称加密的私钥，对 SecretPrivate进行解密，得到OriginPrivate</p>
+<p>然后再使用OriginPrivate对加密之后的消息体（SecretContext)进行解密，得到Contenxt</p>
+<p>监控哪些东西：网络卡顿率、做某件事情的失败率等</p>
+<p>考虑暂存 + retry来应对网络状况不佳的情况</p>
+<h5 id="自动化全链路压测系统"><a href="#自动化全链路压测系统" class="headerlink" title="自动化全链路压测系统"></a>自动化全链路压测系统</h5><p>压测的原则-尽量模拟真实情况；压测的注意点：<br>（1）使用线上数据与线上数据<br>（2）使用线上流量（流量拷贝）<br>（3）流量应该从尽量靠近用户的CDN发起</p>
+<p>如何搭建：<br>（1）流量的隔离（区分压测流量与正式流量）<br>（2）风险控制（尽量避免压测对正常用户的影响）</p>
+<p><img src="http://cdn.b5mang.com/2021320214129.png" alt="自动化全链路压测系统"></p>
+<p>压测数据的产生：<br>  拷贝真实流量（可以从访问日志、可以抓取某个端口的数据等）<br>  打上压测标签<br>  放在合适的机房（尽量接近用户）<br>数据隔离：<br>  针对读请求，针对某些不能压测（例如推荐、数据分析等）的组件进行mock<br>  对于写请求，把流量产生的数据写入影子库（数据库-拷贝一份库表和数据；缓存-加压测前缀；ES-多搞一份索引）<br>压力测试的实施<br>  持续放大，做好系统过载的识别（例如超时率、resp time等）</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/breaker/index.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1032,193 +1380,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/os/os_structure.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/os/os_structure.html" class="post-title-link" itemprop="url">操作系统中碰到的数据结构汇总</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 10:35:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:35:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:41:33" itemprop="dateModified" datetime="2022-03-01T22:41:33+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/os/os_structure.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/os_structure.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="hash"><a href="#hash" class="headerlink" title="hash"></a>hash</h4><p>hlist_head hlist_node 散列表拉链</p>
-<p>根据PID定位task：PID哈希表</p>
-<h4 id="双向链表"><a href="#双向链表" class="headerlink" title="双向链表"></a>双向链表</h4><p>list_head 双向链表</p>
-<p>提高调度程序运行速度：建立多个可运行程序链表</p>
-<p>等待队列（双向链表）：用自旋锁加保护的等待队列头、等待队列链表的元素</p>
-<p>等待队列中睡眠进程的唤醒：互斥进程，非互斥进程</p>
-<p>链表维护节点；节点包括管理区【硬件限制，ZONE_DMA, ZONE_NORMAL, ZONE_HIGHMEM】+ page数组</p>
-<p>动态定时器的链表组（将同一时间段内即将到时的定时器归入一组）</p>
-<h4 id="bitmap"><a href="#bitmap" class="headerlink" title="bitmap"></a>bitmap</h4><p>pid分配管理：bitmap pidmap_array</p>
-<p>inode、磁盘文件数据块</p>
-<h4 id="并发与同步"><a href="#并发与同步" class="headerlink" title="并发与同步"></a>并发与同步</h4><h5 id="每CPU变量"><a href="#每CPU变量" class="headerlink" title="每CPU变量"></a>每CPU变量</h5><p>不需要同步的内核数组，为每个cpu分配数组一元素</p>
-<h5 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a>自旋锁</h5><h5 id="RCU机制"><a href="#RCU机制" class="headerlink" title="RCU机制"></a>RCU机制</h5><p>RCU(读取-拷贝-更新)：只保护被动态分配并通过指针引用的数据结构</p>
-<p>何时释放旧副本？ CPU经过静止状态后，定期检测！！</p>
-<h4 id="原子变量"><a href="#原子变量" class="headerlink" title="原子变量"></a>原子变量</h4><h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>thread 与 thread_info 紧密挨着；根据esp 屏蔽 低13位 可以最快的获取thread_info;<br>同时进程描述符指针在thread_info中的偏移为0!</p>
-<p>也就是将： OS将task_struct指针存放到了栈上（可以通过esp做简单的AND操作即可）</p>
-<p>jiffies:子系统启动的节拍总数</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/os/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/os/index.html" class="post-title-link" itemprop="url">操作系统 - 概览</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 10:33:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:33:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:41:24" itemprop="dateModified" datetime="2022-03-01T22:41:24+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/os/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="操作系统智慧"><a href="#操作系统智慧" class="headerlink" title="操作系统智慧"></a>操作系统智慧</h4><p>懒人哲学：越简单、越傻瓜、用户使用的学习成本越低越好</p>
-<p>让困于人：当我们遇到困难时，搞不定的或者我们自己搞成本很大的，交给别人来搞(一般让操作系统来搞，其实操作系统也是别人完成的软件系统)</p>
-<p>留有余地: 可扩展性，让系统有可扩展性</p>
-<p>足够智能：一个系统最好能解决所有的问题，跟人的感觉是一个万能的解决方案，也就是操作系统的魔术师的角色</p>
-<p>时空转换：在一个纬度遇到的瓶颈，那就改变方案把瓶颈移到另外一个纬度 【内存页表太大，占用内存资源；那就页表分级，不活跃的放到磁盘】</p>
-<p>策机分离和权利分离：一个系统或者平台在主要指定规则、提供通用化的插件即可</p>
-<p>简单与美：苛求于简，归于永恒</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1291,7 +1452,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">345</span>
+          <span class="site-state-item-count">346</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1304,7 +1465,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">62</span>
+        <span class="site-state-item-count">63</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

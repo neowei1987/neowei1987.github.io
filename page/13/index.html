@@ -203,6 +203,108 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/db/acid.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/db/acid.html" class="post-title-link" itemprop="url">数据库必知必会-事务篇</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-16 23:20:03" itemprop="dateCreated datePublished" datetime="2022-02-16T23:20:03+08:00">2022-02-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-10-29 09:49:36" itemprop="dateModified" datetime="2022-10-29T09:49:36+08:00">2022-10-29</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/db/acid.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/db/acid.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h5 id="事务的特性"><a href="#事务的特性" class="headerlink" title="事务的特性"></a>事务的特性</h5><ul>
+<li>A 原子性(Atomicity)，要么执行要么不执行</li>
+<li>C 一致性(Consistency)，事务将数据库从一种状态转变为下一种一致的状态。在事务开始之前和事务结束以后，数据库的完整性约束没有被破坏。（事务的acid不是完全正交的，尤其是一致性，可能跟原子性、隔离性都有一定关系。一致性是一个更宏观的要求。）</li>
+<li>I 隔离型(Isolation)，数据库允许多个并发事务同时对其数据进行读写和修改的能力，隔离性可以防止多个事务并发执行时由于交叉执行而导致数据的不一致。事务隔离分为不同级别，包括未提交读（Read uncommitted）、提交读（read committed）、可重复读（repeatable read）和串行化（Serializable</li>
+<li>D 持久性(Durability)，一旦事务提交，对数据的改变就是永久的，即便系统故障也不会丢失</li>
+</ul>
+<h4 id="事务同时运行可能出现的问题"><a href="#事务同时运行可能出现的问题" class="headerlink" title="事务同时运行可能出现的问题"></a>事务同时运行可能出现的问题</h4><ul>
+<li>脏读，事务B读到事务A还没有提交的数据</li>
+<li>不可重复读，一行被SELECT两次，返回的结果不一样</li>
+<li>幻读，两次读取返回的集合不一样</li>
+</ul>
+<h5 id="事务的四种隔离级别"><a href="#事务的四种隔离级别" class="headerlink" title="事务的四种隔离级别"></a>事务的四种隔离级别</h5><ul>
+<li>读未提交，在该隔离级别，会出现脏读、不可重复读、幻读等问题。</li>
+<li>读已提交，该隔离级别解决了脏读的问题，依旧会出现不可重复读、幻读问题。</li>
+<li>可重复读，该隔离解决进一步解决了不可重复读的问题，会出现幻读问题。（但是对于InnoDB存储引擎，通过间隙锁解决了该问题，不会出现幻读现象）</li>
+<li>串行，该隔离级别把所有操作都串行化了，没有并发访问，解决了以上所有问题。</li>
+</ul>
+<p><img src="https://images.gitbook.cn/d9fd08e0-a1b6-11ea-bf38-950ba54cfedc" alt="数据库各隔离级别会出现的问题"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210126002636194.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0OTA4ODM4,size_16,color_FFFFFF,t_70" alt="Mysql_InnoDB引擎各隔离级别会出现的问题"></p>
+<p>虽说希望你了解，但是友情提示一波：线上高并发应用，尽量<strong>不要用事务</strong>！</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/db/engine_index.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -445,7 +547,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 23:24:01" itemprop="dateModified" datetime="2022-03-01T23:24:01+08:00">2022-03-01</time>
+                <time title="Modified: 2022-12-14 00:00:39" itemprop="dateModified" datetime="2022-12-14T00:00:39+08:00">2022-12-14</time>
               </span>
 
           
@@ -473,7 +575,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <p>1、一张表，里面有 ID 自增主键，当 insert 了 17 条记录之后，删除了第 15,16,17 条记录，再把 Mysql 重启，再 insert 一条记录，这条记录的 ID 是 18 还是 15 ？</p>
+<p>(1) 如果表的类型是 MyISAM，那么是 18</p>
+<p>因为 MyISAM 表会把自增主键的最大 ID 记录到数据文件里，重启 MySQL 自增主键的最大ID 也不会丢失</p>
+<p>（2）如果表的类型是 InnoDB，那么是 15</p>
+<p>InnoDB 表只是把自增主键的最大 ID 记录到内存中，所以重启数据库或者是对表进OPTIMIZE 操作，都会导致最大 ID 丢失</p>
+
       
     </div>
 
@@ -527,7 +634,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
+                <time title="Modified: 2022-12-14 00:21:58" itemprop="dateModified" datetime="2022-12-14T00:21:58+08:00">2022-12-14</time>
               </span>
 
           
@@ -601,16 +708,29 @@
 </ul>
 <p>为什么要区分这两种读操作呢？因为MVCC并不能解决幻读的问题。即使是在可重复读级别，通过当前读依然会出现幻读问题。</p>
 <p>此问题最终是通过间隙锁（next-key lock)来解决的。</p>
-<h4 id="InnoDB是如何解决事务的持久性问题"><a href="#InnoDB是如何解决事务的持久性问题" class="headerlink" title="InnoDB是如何解决事务的持久性问题"></a>InnoDB是如何解决事务的持久性问题</h4><p>Redo log是什么？ 通过它解决了什么问题？</p>
+<h4 id="InnoDB是如何解决事务的持久性问题"><a href="#InnoDB是如何解决事务的持久性问题" class="headerlink" title="InnoDB是如何解决事务的持久性问题"></a>InnoDB是如何解决事务的持久性问题</h4><p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.55syz9b6quo0.webp" alt="image"></p>
+<p>redo log buffer (内存中)是由首尾相连的四个文件组成的，它们分别是：ib_logfile_1、ib_logfile_2、ib_logfile_3、ib_logfile_4。</p>
+<ul>
+<li>write pos 是当前记录的位置，一边写一边后移，写到第 3 号文件末尾后就回到 0 号文件开头。</li>
+<li>checkpoint 是当前要擦除的位置，也是往后推移并且循环的，擦除记录前要把记录更新到数据文件。</li>
+<li>write pos 和 checkpoint 之间的是“粉板”上还空着的部分，可以用来记录新的操作。</li>
+<li>如果 write pos 追上 checkpoint，表示“粉板”满了，这时候不能再执行新的更新，得停下来先擦掉一些记录，把 checkpoint 推进一下。</li>
+<li>有了 redo log，当数据库发生宕机重启后，可通过 redo log将未落盘的数据（check point之后的数据）恢复，保证已经提交的事务记录不会丢失，这种能力称为crash-safe。</li>
+</ul>
+<p>Redo log是什么？ 通过它解决了什么问题？</p>
 <p>redo log是InnoDB存储引擎为了解决事务持久性而引入的WAL技术。借助redo log，InnoDB存储引擎将事务的commit提交简化为一次内存操作与一次磁盘写入操作。如果磁盘页中的数据发生了丢失，也就是在崩溃恢复过程中，存储引擎会通过重做redo log中的操作来进行数据恢复。</p>
 <p>binlog又是什么？他是干什么用的？ 了解主从同步原理。</p>
 <p>binlog是Mysql server层为了解决主从数据同步而引入的一套日志系统。binlog中记录的是一个数据行发生了什么操作。</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.6y92ucy02380.webp" alt="image"></p>
 <p>Redo Log与binlog的两阶段提交</p>
 <ul>
 <li>prepare阶段，先写入rede log（状态为准备中）</li>
 <li>写入binlog（状态为已提交）—- TX_ID</li>
 <li>commit阶段，写入redo log（状态为已提交）</li>
 </ul>
+<p>而两阶段提交就是让这两个状态保持逻辑上的一致。redolog 用于恢复主机故障时的未更新的物理数据，binlog 用于备份操作。两者本身就是两个独立的个体，要想保持一致，就必须使用分布式事务的解决方案来处理。</p>
+<p>为什么需要两阶段提交呢?</p>
+<p>如果不用两阶段提交的话，可能会出现这样情况<br>先写 redo log，crash 后 bin log 备份恢复时少了一次更新，与当前数据不一致。<br>先写 bin log，crash 后，由于 redo log 没写入，事务无效，所以后续 bin log 备份恢复时，数据不一致。<br>两阶段提交就是为了保证 redo log 和 binlog 数据的安全一致性。只有在这两个日志文件逻辑上高度一致了才能放心的使用。<br>在恢复数据时，redolog 状态为 commit 则说明 binlog 也成功，直接恢复数据；如果 redolog 是 prepare，则需要查询对应的 binlog事务是否成功，决定是回滚还是执行。</p>
 <h4 id="InnoDB的几个关键特性"><a href="#InnoDB的几个关键特性" class="headerlink" title="InnoDB的几个关键特性"></a>InnoDB的几个关键特性</h4><p>insert buffer、double write、自适应hash索引、异步写等</p>
 <h3 id="binlog的三种格式"><a href="#binlog的三种格式" class="headerlink" title="binlog的三种格式"></a>binlog的三种格式</h3><p>binlog 有三种格式：</p>
 <p>Statement（Statement-Based Replication,SBR）：每一条会修改数据的 SQL 都会记录在 binlog 中。<br>Row（Row-Based Replication,RBR）：不记录 SQL 语句上下文信息，仅保存哪条记录被修改。<br>Mixed（Mixed-Based Replication,MBR）：Statement 和 Row 的混合体。</p>
@@ -623,6 +743,7 @@
 <p>2.2.3 Mixed<br>从 MySQL5.1.8 版开始，MySQL 又推出了 Mixed 格式，这种格式实际上就是 Statement 与 Row 的结合。</p>
 <p>在 Mixed 模式下，系统会自动判断 该 用 Statement 还是 Row：一般的语句修改使用 Statement 格式保存 binlog；对于一些 Statement 无法准确完成主从复制的操作，则采用 Row 格式保存 binlog。</p>
 <p>Mixed 模式中，MySQL 会根据执行的每一条具体的 SQL 语句来区别对待记录的日志格式，也就是在 Statement 和 Row 之间选择一种。</p>
+<p>参考：<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/hahazz233/article/details/125372412">https://blog.csdn.net/hahazz233/article/details/125372412</a></p>
 
       
     </div>
@@ -1315,91 +1436,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/core/%E8%BF%90%E8%90%A5%E5%8A%9B/%E7%94%B5%E5%95%86%E8%90%A5%E9%94%80.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/core/%E8%BF%90%E8%90%A5%E5%8A%9B/%E7%94%B5%E5%95%86%E8%90%A5%E9%94%80.html" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-16 20:43:27" itemprop="dateCreated datePublished" datetime="2022-02-16T20:43:27+08:00">2022-02-16</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/core/%E8%BF%90%E8%90%A5%E5%8A%9B/%E7%94%B5%E5%95%86%E8%90%A5%E9%94%80.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/core/%E8%BF%90%E8%90%A5%E5%8A%9B/%E7%94%B5%E5%95%86%E8%90%A5%E9%94%80.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a target="_blank" rel="noopener external nofollow noreferrer" href="http://www.woshipm.com/pd/2663713.html">http://www.woshipm.com/pd/2663713.html</a><br><a target="_blank" rel="noopener external nofollow noreferrer" href="http://www.woshipm.com/marketing/3857526.html">http://www.woshipm.com/marketing/3857526.html</a></p>
-<p>核心：<br>支持快速试错的通用营销产品模型</p>
-<p>营销体系至少包含：<br>效果广告投放、用户画像、标签系统、个性化推送、营销工具、分渠道流量效果统计</p>
-<p>数字化营销体系要满足三个特点：<br>营销策略体系化、营销方式工具化、效果统计数据化。</p>
-<p>真核心：<br>数据</p>
-<p>营销手段：</p>
-<p>比较简单的营销玩法：</p>
-<p>领取优惠券<br>购物返现</p>
-<p>一些比较复杂的、可自成体系的营销策略：</p>
-<p>社交电商的裂变玩法<br>MGM（顾客介绍顾客）<br>淘客模式<br>外部渠道裂变</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1472,7 +1508,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">345</span>
+          <span class="site-state-item-count">346</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1485,7 +1521,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">62</span>
+        <span class="site-state-item-count">63</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

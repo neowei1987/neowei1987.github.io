@@ -203,6 +203,135 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/greedy/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/greedy/index.html" class="post-title-link" itemprop="url">贪心算法</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-14 22:58:03" itemprop="dateCreated datePublished" datetime="2021-03-14T22:58:03+08:00">2021-03-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:52:06" itemprop="dateModified" datetime="2022-03-01T22:52:06+08:00">2022-03-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/greedy/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/greedy/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="贪心算法"><a href="#贪心算法" class="headerlink" title="贪心算法"></a>贪心算法</h3><p>在对问题求解的时候，总是做出在当前看来最好的选择。也就是说，找出局部最优解。通过求局部最优解得到最终问题的答案。贪心策略的选择必须具备无后效性，即某个状态以前的过程不会影响以后的状态，只与当前状态有关。</p>
+<h3 id="贪心问题的解决步骤"><a href="#贪心问题的解决步骤" class="headerlink" title="贪心问题的解决步骤"></a>贪心问题的解决步骤</h3><ol>
+<li>当我们看到这些问题，首先联想到贪心算法：针对一组数据，我们定义了限制值和期望值，希望从中选择几个数据，在满足限制值的情况下，期望值最大。</li>
+<li>尝试看这个问题能否用贪心问题解决：每次选择当前情况下，在对限制值同等贡献量的情况下，对期望值贡献最大的数据。</li>
+</ol>
+<h3 id="贪心的正确性"><a href="#贪心的正确性" class="headerlink" title="贪心的正确性"></a>贪心的正确性</h3><p>数学上如何证明两个值相等， 等价于： $A \ge B$ &amp;&amp; $A \le B$</p>
+<h3 id="经典问题"><a href="#经典问题" class="headerlink" title="经典问题"></a>经典问题</h3><h4 id="Huffman树问题"><a href="#Huffman树问题" class="headerlink" title="Huffman树问题"></a>Huffman树问题</h4><p>合并果子</p>
+<p>用堆来维护所有的叶节点，一次pop两个，添加和</p>
+<h4 id="排序不等式"><a href="#排序不等式" class="headerlink" title="排序不等式"></a>排序不等式</h4><p>排队打水问题，按照时间从小到大排序</p>
+<p>证明：调整法，假设最优解不是按照从小到大排好序的，通过调整可以减少等待时间，从而矛盾。</p>
+<p>比较严谨的证明：<br>数学归纳法<br>反证法</p>
+<h4 id="绝对值不等式"><a href="#绝对值不等式" class="headerlink" title="绝对值不等式"></a>绝对值不等式</h4><p>货仓选择问题：放中位数</p>
+<p>$f(x) = |x_1 - x| + |x_2 - x| +  |x_3 - x| + … +  |x_n - x|$<br>$f(x) = (|x_1 - x| + |x_n - x|) +  (|x_2 - x| + |x_{n-1}) + …$</p>
+<p>思想：分组（将前面的项与后面的项放在一起考虑） + 放缩</p>
+<h3 id="推公式"><a href="#推公式" class="headerlink" title="推公式"></a>推公式</h3><p>刷杂耍的牛：</p>
+<p><img src="http://cdn.b5mang.com/20201229224811.png" alt="20201229224811"></p>
+<p>分糖果问题</p>
+<p>钱币找零</p>
+<p>区间覆盖问题</p>
+<h3 id="相关题目"><a href="#相关题目" class="headerlink" title="相关题目"></a>相关题目</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>题目分类</th>
+<th>题目名称</th>
+<th>考察点</th>
+<th>其他说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>股票买卖系列</td>
+<td><a href="../stock_1time.html">仅买卖一次</a></td>
+<td>贪心算法、股票买卖、定序、新的变量与最值</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/%E5%BA%95%E5%B1%82%E6%80%9D%E7%BB%B4/%E6%95%B0%E5%AD%A6/math_for_coder.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1127,105 +1256,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/%E5%9B%A2%E9%98%9F%E7%AE%A1%E7%90%86%E8%83%BD%E5%8A%9B/%E8%81%8C%E5%9C%BA%E6%99%8B%E5%8D%87%E6%96%B9%E6%B3%95%E8%AE%BA.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/%E5%9B%A2%E9%98%9F%E7%AE%A1%E7%90%86%E8%83%BD%E5%8A%9B/%E8%81%8C%E5%9C%BA%E6%99%8B%E5%8D%87%E6%96%B9%E6%B3%95%E8%AE%BA.html" class="post-title-link" itemprop="url">职场晋升方法论</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-02-22 11:43:17" itemprop="dateCreated datePublished" datetime="2021-02-22T11:43:17+08:00">2021-02-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-26 23:35:30" itemprop="dateModified" datetime="2021-04-26T23:35:30+08:00">2021-04-26</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/%E5%9B%A2%E9%98%9F%E7%AE%A1%E7%90%86%E8%83%BD%E5%8A%9B/%E8%81%8C%E5%9C%BA%E6%99%8B%E5%8D%87%E6%96%B9%E6%B3%95%E8%AE%BA.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/%E5%9B%A2%E9%98%9F%E7%AE%A1%E7%90%86%E8%83%BD%E5%8A%9B/%E8%81%8C%E5%9C%BA%E6%99%8B%E5%8D%87%E6%96%B9%E6%B3%95%E8%AE%BA.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>晋升，不仅仅是对你过去工作价值的认可，更是对你未来工作价值的预期。<br>晋升三要素：<br>（1）出色的业绩 -》 业务足够出色 =》承担更大的责任，获得更大考验的机会<br>（2）职场领导力 -》 承担更大的责任，调动更多的资源，领导更大的团队 -》 提升整个团队的价值<br>（3）职场能见度 -》 能力让其他人看到，得到他们的公认（晋升一个人，疏远所有人） -》 只有能得到别人的认可，才可以调动跨团队的资源，从而做成更大的事情</p>
-<p>谁在决定你的晋升：<br>评估者（小老板）—-给出晋升评估方案（每一个直接下属的业绩表现、领导力、价值观等，提报晋升的候选人）<br>决策者（大老板）—-全局统筹安排，确定最终候选人，进入晋升评估期<br>影响者（平级、合作伙伴）—-他们对你的态度会影响评估者、决策者</p>
-<p>晋升的三个雷区：<br>（1）如果有跟大老板合作的机会，千万别把事情搞砸了（千万不要让老板给你打上一个负面标签）<br>（2）远离耀眼，不要在背后评论你的职场伙伴<br>（3）不要在职场考察期松懈</p>
-<p>出色的业绩-如何更加聪明的工作</p>
-<p>出色的业绩 = 客观的数字或者案例更加有说服力</p>
-<p>第一点：做正确的事<br>（1）跟上级一起沟通你的工作重点，并且定期沟通；当你的精力被其他工作占据过多的时候，必要时跟上级领导反馈和沟通，请他帮你减轻负担或者梳理优先级<br>（2）处理临时接到的任务时，跟老板确认他的期望</p>
-<p>第二点：正确的做事<br>（1）不要重复造轮子（你要相信，这个问题肯定不是你第一个遇到）<br>（2）成为改进者（通过改进，选择更多一些，速度更快一些，质量更好一些，成本更省一些）<br>    Why-Why分析法，多问几个为什么，定位到问题的原因，然后分析改进<br>（3）及时复盘（罗列这一次我们做的好的三个长处，做的不好的两个短处）</p>
-<p>职场领导力-给周边小伙伴带来：<br>（1）方向感-大局观<br>    原则1: 先目的后措施；先分类后解决；先整体后细节<br>    原则2: 比你目前的级别更高一级去思考问题<br>        基层：完成当前执行细节；中层：完成某个项目或者任务（进度）；高层：企业业务模式（安排资源和进度）<br>（2）能量感-赞美和驱动<br>    赞美公式：“你做的很好”， 你为什么做的这么好，我内心的感受<br>    批评公式：你今天哪里做的不好，为什么我认为做的不好，我内心的感受<br>    赞美/批评要及时<br>    正面的感受表现出来；负面的感受表达出来</p>
-<pre><code>驱动力：推着老板、同事、客户、项目前进的主动力量
-手头上的工作，每到一个节点，主动跟同事和上下级沟通，说清楚需要什么样的配合和协助，以及，及时分享好消息
-让别人觉得，他要做的事情，就是他自己的重要的事情（利益共享｜头脑风暴，让伙伴觉得他要做的事情是他自己的想法）
-</code></pre><p>（3）信任感<br>    职场资源有限，会被别人抢资源，来提升自己的业绩；遇到这种情况，我们的原则应该是：好合作、有原则、敢反击<br>    首先释放善意，但如果对方做了对不起你的事情，需要敢于捍卫自己的权利，要为自己的组织去争取；最后，从自己利益最大化的角度，去选择反击或者原谅他。</p>
-<p>职场能见度-影响力<br>（1）让你的名字与一个正面能力挂钩<br>    明确自己的统治区域，到处传播，让别人一遇到问题就想到你<br>    不要自己给自己搭上负面标签，永远不要说自己不行<br>（2）参加跨部门合作的公司级项目，让更多同事认识你<br>    招聘、培训、运动会等<br>（3）找到职场导师<br>    首先你得行，其次得有人说你行，最后说你行的人得行<br>    如何让他们帮你：（1）通过具体事情，寻求他们的帮助（2）说清楚“你自己想做什么 + 遇到什么困难”<br>（4）穿的高级一点<br>（5）营销自己的业绩<br>    经验总结会、内部邮件分享</p>
-<p>把握外部晋升机会-主动跳槽</p>
-<p>能实现更高的“职场价值”</p>
-<p>原因：<br>（1）公司成长快，业务好，但是轮得到你嘛？<br>（2）公司目前成长快，但是将来有可能会被取代。</p>
-<p>只要。。。。就。。。<br>只有。。。。才。。。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1298,7 +1328,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">345</span>
+          <span class="site-state-item-count">346</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1311,7 +1341,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">62</span>
+        <span class="site-state-item-count">63</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

@@ -30,8 +30,10 @@
 <meta property="og:description" content="我们通过几个问题来介绍InnoDB存储引擎 LBCC VS MVCCLock Based Concurrency Control（LBCC） 保证前后两次读取数据一致，那么我读取数据的时候，锁定我要操作的数据，不允许其他的事务修改就行了。如果仅仅是基于锁来实现事务隔离，一个事务读取的时候不允许其他时候修改，那就意味着不支持并发的读写操作，而我们的大多数应用都是读多写少的，这样会极大地影响操作数据的">
 <meta property="og:locale">
 <meta property="og:image" content="https://pic1.zhimg.com/80/v2-85a123161b23631a22e89313e76caa2c_1440w.jpg">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.55syz9b6quo0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.6y92ucy02380.webp">
 <meta property="article:published_time" content="2022-02-16T15:20:03.000Z">
-<meta property="article:modified_time" content="2022-11-01T14:17:47.945Z">
+<meta property="article:modified_time" content="2022-12-13T16:21:58.587Z">
 <meta property="article:author" content="NeoWei">
 <meta property="article:tag" content="数据库">
 <meta name="twitter:card" content="summary">
@@ -240,7 +242,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
+                <time title="Modified: 2022-12-14 00:21:58" itemprop="dateModified" datetime="2022-12-14T00:21:58+08:00">2022-12-14</time>
               </span>
 
           
@@ -314,16 +316,29 @@
 </ul>
 <p>为什么要区分这两种读操作呢？因为MVCC并不能解决幻读的问题。即使是在可重复读级别，通过当前读依然会出现幻读问题。</p>
 <p>此问题最终是通过间隙锁（next-key lock)来解决的。</p>
-<h4 id="InnoDB是如何解决事务的持久性问题"><a href="#InnoDB是如何解决事务的持久性问题" class="headerlink" title="InnoDB是如何解决事务的持久性问题"></a>InnoDB是如何解决事务的持久性问题</h4><p>Redo log是什么？ 通过它解决了什么问题？</p>
+<h4 id="InnoDB是如何解决事务的持久性问题"><a href="#InnoDB是如何解决事务的持久性问题" class="headerlink" title="InnoDB是如何解决事务的持久性问题"></a>InnoDB是如何解决事务的持久性问题</h4><p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.55syz9b6quo0.webp" alt="image"></p>
+<p>redo log buffer (内存中)是由首尾相连的四个文件组成的，它们分别是：ib_logfile_1、ib_logfile_2、ib_logfile_3、ib_logfile_4。</p>
+<ul>
+<li>write pos 是当前记录的位置，一边写一边后移，写到第 3 号文件末尾后就回到 0 号文件开头。</li>
+<li>checkpoint 是当前要擦除的位置，也是往后推移并且循环的，擦除记录前要把记录更新到数据文件。</li>
+<li>write pos 和 checkpoint 之间的是“粉板”上还空着的部分，可以用来记录新的操作。</li>
+<li>如果 write pos 追上 checkpoint，表示“粉板”满了，这时候不能再执行新的更新，得停下来先擦掉一些记录，把 checkpoint 推进一下。</li>
+<li>有了 redo log，当数据库发生宕机重启后，可通过 redo log将未落盘的数据（check point之后的数据）恢复，保证已经提交的事务记录不会丢失，这种能力称为crash-safe。</li>
+</ul>
+<p>Redo log是什么？ 通过它解决了什么问题？</p>
 <p>redo log是InnoDB存储引擎为了解决事务持久性而引入的WAL技术。借助redo log，InnoDB存储引擎将事务的commit提交简化为一次内存操作与一次磁盘写入操作。如果磁盘页中的数据发生了丢失，也就是在崩溃恢复过程中，存储引擎会通过重做redo log中的操作来进行数据恢复。</p>
 <p>binlog又是什么？他是干什么用的？ 了解主从同步原理。</p>
 <p>binlog是Mysql server层为了解决主从数据同步而引入的一套日志系统。binlog中记录的是一个数据行发生了什么操作。</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.6y92ucy02380.webp" alt="image"></p>
 <p>Redo Log与binlog的两阶段提交</p>
 <ul>
 <li>prepare阶段，先写入rede log（状态为准备中）</li>
 <li>写入binlog（状态为已提交）—- TX_ID</li>
 <li>commit阶段，写入redo log（状态为已提交）</li>
 </ul>
+<p>而两阶段提交就是让这两个状态保持逻辑上的一致。redolog 用于恢复主机故障时的未更新的物理数据，binlog 用于备份操作。两者本身就是两个独立的个体，要想保持一致，就必须使用分布式事务的解决方案来处理。</p>
+<p>为什么需要两阶段提交呢?</p>
+<p>如果不用两阶段提交的话，可能会出现这样情况<br>先写 redo log，crash 后 bin log 备份恢复时少了一次更新，与当前数据不一致。<br>先写 bin log，crash 后，由于 redo log 没写入，事务无效，所以后续 bin log 备份恢复时，数据不一致。<br>两阶段提交就是为了保证 redo log 和 binlog 数据的安全一致性。只有在这两个日志文件逻辑上高度一致了才能放心的使用。<br>在恢复数据时，redolog 状态为 commit 则说明 binlog 也成功，直接恢复数据；如果 redolog 是 prepare，则需要查询对应的 binlog事务是否成功，决定是回滚还是执行。</p>
 <h4 id="InnoDB的几个关键特性"><a href="#InnoDB的几个关键特性" class="headerlink" title="InnoDB的几个关键特性"></a>InnoDB的几个关键特性</h4><p>insert buffer、double write、自适应hash索引、异步写等</p>
 <h3 id="binlog的三种格式"><a href="#binlog的三种格式" class="headerlink" title="binlog的三种格式"></a>binlog的三种格式</h3><p>binlog 有三种格式：</p>
 <p>Statement（Statement-Based Replication,SBR）：每一条会修改数据的 SQL 都会记录在 binlog 中。<br>Row（Row-Based Replication,RBR）：不记录 SQL 语句上下文信息，仅保存哪条记录被修改。<br>Mixed（Mixed-Based Replication,MBR）：Statement 和 Row 的混合体。</p>
@@ -336,6 +351,7 @@
 <p>2.2.3 Mixed<br>从 MySQL5.1.8 版开始，MySQL 又推出了 Mixed 格式，这种格式实际上就是 Statement 与 Row 的结合。</p>
 <p>在 Mixed 模式下，系统会自动判断 该 用 Statement 还是 Row：一般的语句修改使用 Statement 格式保存 binlog；对于一些 Statement 无法准确完成主从复制的操作，则采用 Row 格式保存 binlog。</p>
 <p>Mixed 模式中，MySQL 会根据执行的每一条具体的 SQL 语句来区别对待记录的日志格式，也就是在 Statement 和 Row 之间选择一种。</p>
+<p>参考：<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/hahazz233/article/details/125372412">https://blog.csdn.net/hahazz233/article/details/125372412</a></p>
 
     </div>
 
@@ -499,7 +515,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">345</span>
+          <span class="site-state-item-count">346</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -512,7 +528,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">62</span>
+        <span class="site-state-item-count">63</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

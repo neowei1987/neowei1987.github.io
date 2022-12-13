@@ -203,6 +203,216 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/structures/string/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/structures/string/index.html" class="post-title-link" itemprop="url">字符串</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-03-01 13:03:03" itemprop="dateCreated datePublished" datetime="2022-03-01T13:03:03+08:00">2022-03-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-13 20:36:44" itemprop="dateModified" datetime="2022-11-13T20:36:44+08:00">2022-11-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/string/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/string/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="跟字符串关联很大的数据结构包括"><a href="#跟字符串关联很大的数据结构包括" class="headerlink" title="跟字符串关联很大的数据结构包括"></a>跟字符串关联很大的数据结构包括</h3><ol>
+<li>Trie</li>
+<li>后缀树</li>
+<li>后缀数组(Suffix Array)</li>
+</ol>
+<p>后缀树建树的时间和空间成本都很高。<strong>后缀数组</strong>和后缀自动机可以看作是对后缀树时间和空间上的优化，通过映射关系避免建树和提高树节点重复利用率。</p>
+<h3 id="跟字符串相关的hash算法"><a href="#跟字符串相关的hash算法" class="headerlink" title="跟字符串相关的hash算法"></a>跟字符串相关的hash算法</h3><ul>
+<li>P进制hash（滚动哈希）<ol>
+<li>例如：构造哈希比较前缀和后缀，快速判断回文串</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">字符串哈希 —— 模板题 AcWing <span class="number">841.</span> 字符串哈希</span><br><span class="line">核心思想：将字符串看成P进制数，P的经验值是<span class="number">131</span>或<span class="number">13331</span>，取这两个值的冲突概率低</span><br><span class="line">小技巧：取模的数用<span class="number">2</span>^<span class="number">64</span>，这样直接用<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span>存储，溢出的结果就是取模的结果</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> ULL;</span><br><span class="line">ULL h[N], p[N]; <span class="comment">// h[k]存储字符串前k个字母的哈希值, p[k]存储 P^k mod 2^64</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化</span></span><br><span class="line">p[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i ++ )</span><br><span class="line">&#123;</span><br><span class="line">    h[i] = h[i - <span class="number">1</span>] * P + str[i];</span><br><span class="line">    p[i] = p[i - <span class="number">1</span>] * P;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 计算子串 str[l ~ r] 的哈希值</span></span><br><span class="line"><span class="function">ULL <span class="title">get</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> h[r] - h[l - <span class="number">1</span>] * p[r - l + <span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="跟字符串有关系的技巧"><a href="#跟字符串有关系的技巧" class="headerlink" title="跟字符串有关系的技巧"></a>跟字符串有关系的技巧</h3><ol>
+<li>翻手定则</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">reverse</span><span class="params">(<span class="built_in">string</span>&amp; s, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (i &lt; j) &#123;</span><br><span class="line">            swap(s[i++], s[j--]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">trans</span><span class="params">(<span class="built_in">string</span> s, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> begin = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s.length();) &#123;</span><br><span class="line">            <span class="keyword">if</span> (s[i] == <span class="string">&#x27; &#x27;</span>) &#123;</span><br><span class="line">                reverse(s, begin, i - <span class="number">1</span>);</span><br><span class="line">                i++;</span><br><span class="line">                begin = i;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        reverse(s, begin, s.length() - <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        reverse(s, <span class="number">0</span>, s.length() - <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">         <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s.length(); ++i) &#123;</span><br><span class="line">             <span class="keyword">if</span> (s[i] &gt;= <span class="string">&#x27;a&#x27;</span> &amp;&amp; s[i] &lt;= <span class="string">&#x27;z&#x27;</span>) &#123;</span><br><span class="line">                 s[i] = <span class="string">&#x27;A&#x27;</span> + (s[i] - <span class="string">&#x27;a&#x27;</span>);</span><br><span class="line">             &#125; <span class="keyword">else</span> <span class="keyword">if</span> (s[i] &gt;= <span class="string">&#x27;A&#x27;</span> &amp;&amp; s[i] &lt;= <span class="string">&#x27;Z&#x27;</span>) &#123;</span><br><span class="line">                 s[i] = <span class="string">&#x27;a&#x27;</span> + (s[i] - <span class="string">&#x27;A&#x27;</span>);</span><br><span class="line">             &#125;  </span><br><span class="line">         &#125;</span><br><span class="line">        <span class="keyword">return</span> s;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="字符串匹配算法"><a href="#字符串匹配算法" class="headerlink" title="字符串匹配算法"></a>字符串匹配算法</h3>
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/structures/stack/mono_stack/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/structures/stack/mono_stack/index.html" class="post-title-link" itemprop="url">单调栈</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-28 23:34:03" itemprop="dateCreated datePublished" datetime="2022-02-28T23:34:03+08:00">2022-02-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-13 23:15:09" itemprop="dateModified" datetime="2022-11-13T23:15:09+08:00">2022-11-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/stack/mono_stack/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/stack/mono_stack/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>分类<br>单调递增栈，栈顶元素最大<br>单调递减栈，栈顶元素最小</p>
+<p>一般套路</p>
+<p>如果找右边更大的元素，则从前到后构造从底到顶的递减栈;<br>如果找右边更小的元素，则从前到后构造从底到顶的递增栈;<br>如果找左边更大的元素，则从后到前构造从底到顶的递减栈;<br>如果找左边更小的元素，则从后到前构造从底到顶的递增栈;</p>
+<p>举一个例子: n个整数的无序数组，找到每个元素后面比它大的第一个数，要求时间复杂度为O(N)。右边比我更大的问题</p>
+<p>栈里面存的是啥？<br>存的是还没有算出来的元素，为啥没有算出来呢，因为还没有遇到比栈顶元素更大的。并且栈顶元素是最小的，所以当前元素也不会大于栈里面的其他元素。</p>
+<p>什么时候可以算出来？<br>后面遇到比栈顶更大的元素，这时候就出栈，并更新数据。</p>
+<p>遍历到最后，栈里面还有啥内容？<br>整个列表中没有比这些元素更大的元素。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//单调栈 —— 模板题 AcWing 830. 单调栈</span></span><br><span class="line"><span class="comment">//常见模型：找出每个数左边离它最近的比它大/小的数</span></span><br><span class="line"><span class="keyword">int</span> tt = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i ++ )</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">while</span> (tt &amp;&amp; check(stk[tt], i)) tt -- ;</span><br><span class="line">    stk[ ++ tt] = i;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<hr>
+<p>Given a list of daily temperatures, produce a list that, for each day in the input, tells you how many days you would have to wait until a warmer temperature. If there is no future day for which this is possible, put 0 instead.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">dailyTemperatures</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; t)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = t.size();</span><br><span class="line">    <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; s;</span><br><span class="line">    <span class="keyword">int</span> top = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="keyword">while</span> (!s.empty() &amp;&amp; t[i] &gt; t[top = s.top()])&#123;</span><br><span class="line">            t[top] = i - top;</span><br><span class="line">            s.pop();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        s.push(i); <span class="comment">//压入了一个更小的，递减栈</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (!s.empty()) &#123;</span><br><span class="line">        t[s.top()] = <span class="number">0</span>;</span><br><span class="line">        s.pop();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> t;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/structures/stack/mono_stack/range_min_max.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -981,238 +1191,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/possibility.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/possibility.html" class="post-title-link" itemprop="url">概率相关问题</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-27 21:11:03" itemprop="dateCreated datePublished" datetime="2022-02-27T21:11:03+08:00">2022-02-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-19 00:25:09" itemprop="dateModified" datetime="2022-11-19T00:25:09+08:00">2022-11-19</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/possibility.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/possibility.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="根据1到m生成1到n随机数"><a href="#根据1到m生成1到n随机数" class="headerlink" title="根据1到m生成1到n随机数"></a>根据1到m生成1到n随机数</h4><p>问题1： 给定一个函数rand()能产生1到m之间的等概率随机数，产生1到n之间等概率的随机数？</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">rand10</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">int</span> x;</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">&#123;</span><br><span class="line">    x = (rand7()<span class="number">-1</span>)*<span class="number">7</span>+rand7();</span><br><span class="line">&#125;<span class="keyword">while</span>(x &gt; <span class="number">40</span>)  <span class="comment">//【1, 40】的范围</span></span><br><span class="line"><span class="keyword">return</span> (x<span class="number">-1</span>） / <span class="number">4</span>+<span class="number">1</span>; <span class="comment">//分为10段，0～9 + 1 =》 1 ～ 10</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>考虑如果rand（）返回的是浮点呢？</p>
-<p>这种情况下可以简化为，如何把[a,b]线段上的点等概率的映射到[c,d]</p>
-<p>另外， 为啥不能考虑rand（） * rand()呢？</p>
-<p>因为不等概率，7<em>6与6</em>7的计算结果都是42，这样子就使得出现42的概率是1/49 + 1/49；出现1的概率是1/49。</p>
-<p>参考：</p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.cnblogs.com/double-win/archive/2014/04/07/3650314.html">https://www.cnblogs.com/double-win/archive/2014/04/07/3650314.html</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://my.oschina.net/u/4401597/blog/4038277">https://my.oschina.net/u/4401597/blog/4038277</a></p>
-<h4 id="p-amp-1-p-生成等概率"><a href="#p-amp-1-p-生成等概率" class="headerlink" title="p &amp; 1 -p 生成等概率"></a>p &amp; 1 -p 生成等概率</h4><p>问题2： 有一个随机生成器randA()，以p的概率返回0，1-p的概率返回1，利用这个randA()构造randB()，使randB()等概率的返回0和1，即0.5的概率返回0，0.5的概率返回1。</p>
-<p>分析比较简单： 出现00的概率是p^2; 出现10的概率是p<em>(1-p)，出现01的概率是p</em>(1-p); 出现11的概率是（1-p）^2;</p>
-<p>以上，只要丢弃掉00，01的结果； 10与01的出现概率就是相等的；也就各为50%。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">randB</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">int</span> x1, x2;</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">&#123;</span><br><span class="line">    x1 = randA();</span><br><span class="line">    x2 = randA();</span><br><span class="line">&#125;<span class="keyword">while</span>(x1+x2 != <span class="number">1</span>)</span><br><span class="line"><span class="keyword">return</span> x1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>已知一随机发生器，产生0的概率是p，产生1的概率是1-p，<br>现在要你构造一个发生器，<br>使得它构造0和1的概率均为 1/2；<br>构造一个发生器，使得它构造1、2、3 的概率均为 1/3； …，<br>构造一个发生器，使得它构造 1、2、3、…n 的概率均为1/n，要求复杂度最低。</p>
-<p>思路：<br>由于需要产生1/2，而用1位0，或1位1无法产生等概率，<br>因此，考虑将随机数扩展成2位：<br>00   p<em>p<br>01  p</em>(1-p)<br>10  (1-p)<em>p<br>11 (1-p)</em>(1-p)<br>有上述分析知道，01和10是等概率的，因此我们只需要产生01和10就行了。<br>于是可以，遇到00和11就丢弃，只记录01和10。可以令，01表示0,10表示1，则等概率1/2产生0和1了。<br>对于n=2，一次性生成两个数字，认为01表示0，10表示1，<br>其它情况放弃，它们的概率都是p<em>(1-p)；<br>对于n=3，一次性生成三个数字，认为001表示0，010表示1，100表示2，<br>其它情况放弃，它们的概率都是p</em>p<em>(1-p)；<br>对于n=4，一次性生成是个数字，认为0001表示0，0010表示1，0100表示2，1000表示3，<br>其它情况放弃，它们的概率都是p</em>p<em>p</em>(1-p)；<br>5为例，此时我们取x=2，因为C(2x,x)=C(4,2)=6是比5大的最小的x，<br>此时我们就是一次性生成4位二进制，把1出现个数不是2的都丢弃，<br>这时候剩下六个:0011,0101,0110,1001,1010,1100，<br>取最小的5个，即丢弃1100，那么我们对于前5个分别编号1到5，<br>这时候他们的概率都是p<em>p</em>(1-p)*(1-p)相等了。<br>关键是找那个最小的x，使得C(2x,x)&gt;=n这样能提升查找效率。<br>因为C(n,i)最大是在i接近n/2的地方取得，此时我有更大比率的序列用于生成，<br>换句话说被抛掉的更少了，这样做是为了避免大量生成了丢弃序列而使得生成速率减慢，<br>实际上我之所以将x取定是为了让我取得的序列生成的概率互相相等，<br>比如C(2x,x)的概率就是[p(1-p)]^x，<br>互等的样例空间内保证了对应的每个值取得的样例等概率。</p>
-<h4 id="Shuffle算法"><a href="#Shuffle算法" class="headerlink" title="Shuffle算法"></a>Shuffle算法</h4><p>一个从1到n的序列，随机打乱，保证每个数出现在任意一个位置的概率相同。</p>
-<p>基于交换，将a[i]与arr[rand(i, n - 1)]随机交换；</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 得到一个在闭区间 [min, max] 内的随机整数</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">randInt</span><span class="params">(<span class="keyword">int</span> min, <span class="keyword">int</span> max)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">shuffle</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = arr.length();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="comment">// 从 i 到最后随机选一个元素</span></span><br><span class="line">        <span class="keyword">int</span> rand = randInt(i, n - <span class="number">1</span>);</span><br><span class="line">        swap(arr[i], arr[rand]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="N个数随机选M"><a href="#N个数随机选M" class="headerlink" title="N个数随机选M"></a>N个数随机选M</h4><p>问题3： 程序的输入包含两个整数m和n，其中$m \lt n $。输出是0~n-1范围内m个随机整数的有序列表，不允许重复。从概率的角度来说，我们希望得到没有重复的选择，其中每个选择出现的概率相等。</p>
-<p>选出这个序列的概率是：$m/n <em> (m-1) / (n-1) </em> … *  (1)/(n-m)$</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">generate</span><span class="params">(<span class="keyword">int</span> m,<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">int</span> t = m;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">    <span class="keyword">if</span>(Rand(<span class="number">0</span>,n<span class="number">-1</span>-i) &lt; t) <span class="comment">//即以t/(n-i)的概率执行下面的语句</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,i); <span class="comment">//这里打印的是i，一直在增长；所以不会重复！！！</span></span><br><span class="line">        t--;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//随着算法继续，i越大，rand（0，n-1-i)得到的数值越小，就容易被选中，</span></span><br><span class="line"><span class="comment">//如果i已经等于n-1-t了，则后面的必然全不都被选中。</span></span><br></pre></td></tr></table></figure>
-<h4 id="蓄水池采样算法"><a href="#蓄水池采样算法" class="headerlink" title="蓄水池采样算法"></a>蓄水池采样算法</h4><p>问题4： 如何数据流中随机选出N个元素</p>
-<p>蓄水池采样算法，具体步骤如下：</p>
-<p>（1）先把N个坑位填上</p>
-<p>（2）对于后面新来的第i元素，做如下概率处理：令X=rand(0, i), i &gt; N</p>
-<p>A. 如果X在[0, N]之间，则用swap(X, i)</p>
-<p>B. 否则啥也不做</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; res;</span><br><span class="line"><span class="keyword">while</span> (<span class="built_in">cin</span> &gt;&gt; Elem) &#123;</span><br><span class="line">    i++;</span><br><span class="line">    <span class="keyword">if</span> (i &lt; N) &#123;</span><br><span class="line">        res.push(Elem);</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    X = rand(<span class="number">0</span>, i); </span><br><span class="line">    <span class="keyword">if</span> (X &lt; N) &#123;</span><br><span class="line">        swap(res[X], res[i]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>深入一下，分布式蓄水池算法： <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.jianshu.com/p/7a9ea6ece2af">https://www.jianshu.com/p/7a9ea6ece2af</a></p>
-<h3 id="Probability-simulation"><a href="#Probability-simulation" class="headerlink" title="Probability simulation"></a>Probability simulation</h3><p>You are given a fair coin. Can you design a simple game using the fair coin so that your<br>probability of winning is p, 0 &lt; p &lt; 1</p>
-<p>把p表示为2进制小数；例如0.100011100110101</p>
-<p>开始抛硬币，正面1； 反面0，计作s[i]</p>
-<p>如果第i次抛出1，而p[i] = 0, 则win；<br>如果第i次抛出0，而p[i] = 1, 则lose；<br>如果s[i] == p[i]，则继续新的循环</p>
-<h3 id="概率分布"><a href="#概率分布" class="headerlink" title="概率分布"></a>概率分布</h3><p>男孩女孩问题</p>
-<p>如果一个地区所有人都生了女孩就继续生，直到生出男孩立马停下，这个地区会趋于什么样的男女比例？ </p>
-<p>1:1 ，几何分布</p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.zhihu.com/question/355605125">https://www.zhihu.com/question/355605125</a></p>
-<p>一根绳子分三段，能够合成三角形的概率</p>
-<p>线性规划 + 几何概率， 1/4</p>
-<p>如果在高速公路上30分钟内到一辆车开过的几率是0.95，那么在10分钟内看到一辆车开过的几率是多</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/sort/merge_sort/merge_k_byte.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/sort/merge_sort/merge_k_byte.html" class="post-title-link" itemprop="url">字节版-多路归并</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-27 20:53:03" itemprop="dateCreated datePublished" datetime="2022-02-27T20:53:03+08:00">2022-02-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-02 20:24:36" itemprop="dateModified" datetime="2022-03-02T20:24:36+08:00">2022-03-02</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%BB%8F%E5%85%B8%E9%A2%98%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">经典题目</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/sort/merge_sort/merge_k_byte.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/sort/merge_sort/merge_k_byte.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>算法题2：给定k个数组，每个数组都是有序的，且每个数组最大值-最小值&lt;1000，1 &lt; k&lt;1000，求所有数的中位数。</p>
-<p>解答思路：</p>
-<p>定义一个结构体 NumCount {<br>    int number;<br>    int cnt;<br>}</p>
-<p>预处理所有数据，将原来的数据用NumCount nums[k][1000]来保存。</p>
-<p>用一个大顶堆来维护K路的最小值。</p>
-<p>时间复杂度：$O(1000 * k)$</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1285,7 +1263,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">345</span>
+          <span class="site-state-item-count">346</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1298,7 +1276,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">62</span>
+        <span class="site-state-item-count">63</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

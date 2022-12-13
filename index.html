@@ -303,6 +303,448 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/cache/redis.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/cache/redis.html" class="post-title-link" itemprop="url">Redis缓存必知必会</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-12-13 23:20:03 / Modified: 23:57:19" itemprop="dateCreated datePublished" datetime="2022-12-13T23:20:03+08:00">2022-12-13</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/cache/redis.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/cache/redis.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ol>
+<li><p>如何评价redis的高性能？为何要把Redis设计成单线程？</p>
+<p>(1)redis全内存，单线程，无锁。</p>
+<p>(2)redis Rehash 渐进式hash,双缓冲 + 分而治之思想 </p>
+<p> 关于写入，仅写ht[1]，不再写入ht[0]；关于读取，优先读ht[1], 没有的话，再读取ht[0]</p>
+<p> 渐进式迁移的过程中，一次迁移一个bucket。包括用于解决冲突的hash链。</p>
+<p> 以下是哈希表渐进式 rehash 的详细步骤：</p>
+</li>
+</ol>
+<p>（1）为 ht[1] 分配空间， 让字典同时持有 ht[0] 和 ht[1] 两个哈希表。<br>（2）在字典中维持一个索引计数器变量 rehashidx ， 并将它的值设置为 0 ， 表示 rehash 工作正式开始。<br>（3）在 rehash 进行期间， 每次对字典执行添加、删除、查找或者更新操作时， 程序除了执行指定的操作以外， 还会顺带将 ht[0] 哈希表在 rehashidx 索引上的所有键值对 rehash 到 ht[1] ， 当 rehash 工作完成之后， 程序将 rehashidx 属性的值增一。<br>（4）随着字典操作的不断执行， 最终在某个时间点上， ht[0] 的所有键值对都会被 rehash 至 ht[1] ， 这时程序将 rehashidx 属性的值设为 -1 ， 表示 rehash 操作已完成。</p>
+<p>渐进式 rehash 的好处在于它采取分而治之的方式， 将 rehash 键值对所需的计算工作均滩到对字典的每个添加、删除、查找和更新操作上， 从而避免了集中式 rehash 而带来的庞大计算量。</p>
+<ol>
+<li>Redis提供了哪些数据结构；每一种数据结构的使用场景、大致实现（编码方式、内存占用、时间复杂度）</li>
+</ol>
+<h5 id="八种编码方式"><a href="#八种编码方式" class="headerlink" title="八种编码方式"></a>八种编码方式</h5><p><strong>INT</strong> 64 位有符号整数类型的时候将会采用 INT 编码。 值在[0,1000)之间。 如果存入整数的值在[0,1000)中Redis将不会创建新的对象,而是直接指向<strong>共享对象</strong>,键值不额外占用空间。</p>
+<p><strong>EMBSTR</strong>(EmbeddedString， 当存储的字符串长度较短时(len&lt;=44 字节),Redis将会采用 embstr 编码，避免再次分配内存， 复用redis object)。这个长度是咋计算出来的呢？ 跟redis的底层内存池（jcmalloc）有关系。 64字节减去一些元数据。</p>
+<p><strong>RAW</strong> 原始字符串</p>
+<p><strong>ZIPLIST</strong> (压缩列表，连续内存，内存利用率高，增删改查效率低下；当hash、zset、list元素少且内容不大时使用该编码),</p>
+<p>压缩列表是一块连续的内存空间，元素之间紧挨着存储，没有任何冗余空隙。每次有写操作的时候，会<strong>重新分配内存</strong>，例如insert, remove等操作。</p>
+<p><strong>QUICK_LIST</strong>（list元素较多时使用）</p>
+<p>double list of ziplist</p>
+<p><strong>INTSET</strong>(整数集合，当set元素较少且都为整数时，使用该编码,从小到大的顺序存储，方便做交、并、差集运算。</p>
+<p>intset是一个由整数组成的有序集合，从而便于在上面进行二分查找，用于快速地判断一个元素是否属于这个集合</p>
+<p>ziplist可以存储任意二进制串，而intset只能存储整数。<br>ziplist是无序的，而intset是从小到大有序的。因此，在ziplist上查找只能遍历，而在intset上可以进行二分查找，性能更高。<br>ziplist可以对每个数据项进行不同的变长编码（每个数据项前面都有数据长度字段len），而intset只能整体使用一个统一的编码（encoding）。</p>
+<p><strong>HASH</strong>（hash元素较多时使用） 渐进式扩容缩容策略</p>
+<p><strong>SKIPLIST</strong>（跳表，zset元素多时使用）</p>
+<h5 id="数据结构与编码关系"><a href="#数据结构与编码关系" class="headerlink" title="数据结构与编码关系"></a>数据结构与编码关系</h5><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>数据结构</th>
+<th>紧凑实现</th>
+<th>大致实现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>string</td>
+<td>INT(仅限long类型的string), EMBSTR(字符串比较短，44以内)</td>
+<td>RAW（普通字符串）</td>
+</tr>
+<tr>
+<td>hash</td>
+<td>ZIPLIST（元素较少，成员较小）</td>
+<td>HASH</td>
+</tr>
+<tr>
+<td>zset</td>
+<td>ZIPLIST（元素较少，成员较小）</td>
+<td>SKIPLIST + Dict</td>
+</tr>
+<tr>
+<td>set</td>
+<td>INTSET（集合元素不多, 且元素可以表示为int）</td>
+<td>HASH</td>
+</tr>
+<tr>
+<td>list</td>
+<td>ZIPLIST（元素较少，成员较小）</td>
+<td>QUICK_LIST</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><img src="https://images.gitbook.cn/0bc2bef0-a343-11ea-a506-f32f5295a5a9" alt="在这里插入图片描述"></p>
+<p>实际上，Redis中sorted set的实现是这样的：</p>
+<p>当数据较少时，sorted set是由一个ziplist来实现的。<br>当数据多的时候，sorted set是由一个dict + 一个skiplist来实现的。简单来讲，dict用来查询数据到分数的对应关系，而skiplist用来根据分数查询数据（可能是范围查找）。</p>
+<h3 id="Redis中的skiplist是什么样子的"><a href="#Redis中的skiplist是什么样子的" class="headerlink" title="Redis中的skiplist是什么样子的"></a>Redis中的skiplist是什么样子的</h3><p>score字段是数据对应的分数。</p>
+<p>backward字段是指向链表前一个节点的指针（前向指针）。节点只有1个前向指针，所以只有第1层链表是一个双向链表。</p>
+<p>level[]存放指向各层链表后一个节点的指针（后向指针）。每层对应1个后向指针，用forward字段表示。另外，每个后向指针还对应了一个<strong>span</strong>值，它表示当前的指针跨越了多少个节点。span用于计算元素排名(rank)，这正是前面我们提到的Redis对于skiplist所做的一个扩展。需要注意的是，level[]是一个柔性数组（flexible array member），因此它占用的内存不在zskiplistNode结构里面，而需要插入节点的时候单独为它分配。也正因为如此，skiplist的每个节点所包含的指针数目才是不固定的，我们前面分析过的结论——skiplist每个节点包含的指针数目平均为1/(1-p)——才能有意义。</p>
+<p>假设我们在这个skiplist中查找score=89.0的元素（即Bob的成绩数据），在查找路径中，我们会跨域图中标红的指针，这些指针上面的span值累加起来，就得到了Bob的排名(2+2+1)-1=4（减1是因为rank值以0起始）。需要注意这里算的是从小到大的排名，而如果要算从大到小的排名，只需要用skiplist长度减去查找路径上的span累加值，即6-(2+2+1)=1。</p>
+<p>可见，在查找skiplist的过程中，通过累加span值的方式，我们就能很容易算出排名。相反，如果指定排名来查找数据（类似zrange和zrevrange那样），也可以不断累加span并时刻保持累加值不超过指定的排名，通过这种方式就能得到一条O(log n)的查找路径。</p>
+<h4 id="skiplist与平衡树、哈希表的比较"><a href="#skiplist与平衡树、哈希表的比较" class="headerlink" title="skiplist与平衡树、哈希表的比较"></a>skiplist与平衡树、哈希表的比较</h4><p>skiplist和各种平衡树（如AVL、红黑树等）的元素是有序排列的，而哈希表不是有序的。因此，在哈希表上只能做单个key的查找，不适宜做范围查找。所谓范围查找，指的是查找那些大小在指定的两个值之间的所有节点。</p>
+<p>在做范围查找的时候，平衡树比skiplist操作要复杂。在平衡树上，我们找到指定范围的小值之后，还需要以中序遍历的顺序继续寻找其它不超过大值的节点。如果不对平衡树进行一定的改造，这里的中序遍历并不容易实现。而在skiplist上进行范围查找就非常简单，只需要在找到小值之后，对第1层链表进行若干步的遍历就可以实现。</p>
+<p>平衡树的插入和删除操作可能引发子树的调整，逻辑复杂，而skiplist的插入和删除只需要修改相邻节点的指针，操作简单又快速。</p>
+<p>从内存占用上来说，skiplist比平衡树更灵活一些。一般来说，平衡树每个节点包含2个指针（分别指向左右子树），而skiplist每个节点包含的指针数目平均为1/(1-p)，具体取决于参数p的大小。如果像Redis里的实现一样，取p=1/4，那么平均每个节点包含1.33个指针，比平衡树更有优势。</p>
+<p>查找单个key，skiplist和平衡树的时间复杂度都为O(log n)，大体相当；而哈希表在保持较低的哈希值冲突概率的前提下，查找时间复杂度接近O(1)，性能更高一些。所以我们平常使用的各种Map或dictionary结构，大都是基于哈希表实现的。</p>
+<p>从算法实现难度上来比较，skiplist比平衡树要简单得多。</p>
+<h4 id="Redis的可靠存储"><a href="#Redis的可靠存储" class="headerlink" title="Redis的可靠存储"></a>Redis的可靠存储</h4><p>redis是如何实现可靠存储的：真的可靠吗？ AOF、RDB有啥区别？ 分别适用于什么场景？</p>
+<p>借助AOF、RDB可以一定程度上减少数据的损失，但是都无法做到数据的100%。</p>
+<p>RDB，定期fork一个子进程，通过copy on write技术，来进行内存的dump，成本相对AOF较高，所以不可能很短时间内就dump一次，所以如果内存中的数据还没有来得及dump到RDB，那么会丢失比较多的数据，好处是借助RDB恢复数据比较快。 RDB最大的时间成本是clone页表。</p>
+<p>AOF，定期（通常是s级别）append 写操作命令到文件中，只是简单的写一次磁盘，所以性能较好，如果新的命令append到aof之间发生宕机，丢失的数据也比较少。缺点是每次基于AOF恢复数据会比较慢。</p>
+<p>AOF缓冲数据的写入策略：NO（依赖操作系统的flush盘机制）、always（性能最差，安全性最好）、everySecond（最多丢失1～2秒数据）</p>
+<p>AOF重写【BGREWRITEAOF】，AOF 重写缓冲区</p>
+<p>把主线程的内存拷贝一份给fork出来的 bgrewriteaof 子进程，这里面包含了Redis中最新的数据。</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.6804bfkyyxo0.webp" alt="image"></p>
+<p>下表是完整的AOF后台重写过程：</p>
+<p>时间    服务器进程（父进程）    子进程</p>
+<p>T1    执行命令 SET K1 V1<br>T2    执行命令 SET K1 V1<br>T3    执行命令 SET K1 V1<br>T4    创建子进程，执行AOF文件重写    开始AOF重写<br>T5    执行命令 SET K2 V2    执行重写<br>T6    执行命令 SET K3 V3    执行重写<br>T7    执行命令 SET K4 V4    完成AOF重写，向父进程发送信号<br>T8    接收到信号，将T5 T6 T7 服务器的写命令追加到新的AOF文件末尾<br>T9    用新的AOF替换旧的AOF</p>
+<p>T8 T9执行的任务会阻塞服务器处理命令。</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.51cto.com/article/694868.html">https://www.51cto.com/article/694868.html</a></p>
+<p>Redis 3.0 基于checkpoint思想的新持久化方式</p>
+<h4 id="Redis的高可用性"><a href="#Redis的高可用性" class="headerlink" title="Redis的高可用性"></a>Redis的高可用性</h4><p>redis tw代理模式与cluster集群模式分别是如何工作的？ 哪一种模式使用了一致性Hash?</p>
+<p>两者都是为了解决单机数据存不下的问题。数据存不下，只能通过多台来存。</p>
+<p>客户端通过tw代理模式访问redis集群，数据分片使用了一致性hash，以尽可能减少某台redis机器不可用造成的影响，但是还是会丢数据。</p>
+<p>官方的<strong>cluster集群</strong>方案是由客户端sdk来维护slot分布，数据分片分片是通过CRC32(key)%16834来实现。无中心化，node之间通过gossip协议来进行通信，选主等。</p>
+<p>另外，redis cluster还尝试解决高可用的问题，但是由于CAP理论，他选择了可用性，丢失了一致性。 丢失一致性的点在于：1）异步复制；2）网络分区。</p>
+<p><img src="https://pic2.zhimg.com/80/v2-1530e8c407dd674e77ee7dc36295b161_1440w.jpg" alt="异步复制导致数据丢失"></p>
+<p>另外值得一提的是<strong>Redis哨兵模式</strong>。这种模式只能解决高可用的问题（并不能保证数据不丢失），但是无法解决数据太大的问题。</p>
+<h4 id="Redis-实现分布式锁"><a href="#Redis-实现分布式锁" class="headerlink" title="Redis 实现分布式锁"></a>Redis 实现分布式锁</h4><ol>
+<li>如何通过Redis实现一个“可靠”的分布式锁？</li>
+</ol>
+<p>分布式锁的特性：排他性、无死锁、高可用。</p>
+<p>先说加锁，setnx命令，支持cas操作，并且支持设置超时时间。通过设置超时时间这个功能点，可以避免加锁后进程挂掉造成的锁没法释放的问题。但是这种加锁方案还有一个缺点，那就是超时时间很难设置的很合理，设置过短可能会引起加锁时间内不足以完成业务逻辑；设置过长又导致宕机恢复时间过长。这种情况下，我们可以额外启动一个WATCH-dog线程来监视这些锁，如果锁快要到期了，就调用expire命令对锁进行续期；业务完成时禁用watch-dog即可。</p>
+<p>再说解锁unlock，理想情况下，解锁时只要通过del命令来把锁定的key删除即可。但是实际情况可能会更复杂一些。第一个问题，如果删除的key不是加的锁怎么办？ 容易想到，加锁时，设置key的value为一个unique id。 解锁删除时，先get一下key，看看key对应的value是不是跟预期的id相符，如果相符，del；否则，noop，说明我正准备删除别人加的锁。但是刚才的方案，还有一个缺陷那就是get跟del两个操作不是一个原子的，中途可能会被打断。如果真的被打断，还是会出现误解锁的过程。此时我们可以借助lua脚本将刚才的两个步骤原子化。至此，解锁操作才算基本完成。</p>
+<p>上面的方案还有啥问题呢？ 如果主从同步未完成，而主挂掉了，从上位之后，会导致之前加的锁失效。 这个问题，官方给的解决方案是使用redis cluster的红锁来解决。</p>
+<p>最后再提一下，除了redis可以实现分布式锁，还可以通过mysql数据库（version乐观锁，for update悲观锁），zookeeper等来实现分布式锁。</p>
+<h4 id="redis-key过期的方式"><a href="#redis-key过期的方式" class="headerlink" title="redis key过期的方式"></a>redis key过期的方式</h4><ul>
+<li><p>惰性淘汰：在key请求时，判断key是否失效，失效就淘汰</p>
+</li>
+<li><p>定时策略：每隔100毫秒检测一次， 移除所有已过期的键<br>如果发现超过25%的键过期，会重复执行。</p>
+</li>
+</ul>
+<h4 id="redis-淘汰策略"><a href="#redis-淘汰策略" class="headerlink" title="redis 淘汰策略"></a>redis 淘汰策略</h4><p>当 Redis 的运行内存已经超过 Redis 设置的最大内存之后，则会使用内存淘汰策略删除符合条件的 key，以此来保障 Redis 高效的运行。</p>
+<p>2个维度的组合：</p>
+<ol>
+<li>回收哪些：仅仅回收有TTL的（volatile）、所有的、空集</li>
+<li>如何替换哪个： LRU、LFU、最短TTL、随机</li>
+</ol>
+<p>最多一共有$3^3$种组合，只是有一些没有意义。例如空集 + LRU、所有的 + 最短TTL。 剩下的有意义的包括：</p>
+<ul>
+<li>noeviction:返回错误当内存限制达到，并且客户端尝试执行会让更多内存被使用的命令。</li>
+<li>volatile-lfu:</li>
+<li>volatile-lru: 尝试回收最少使用的键（LRU），但仅限于在过期集合的键,使得新添加的数据有空间存放。</li>
+<li><p>volatile-random: 回收随机的键使得新添加的数据有空间存放，但仅限于在过期集合的键。</p>
+</li>
+<li><p>volatile-ttl: 回收在过期集合的键，并且优先回收存活时间（TTL）较短的键,使得新添加的数据有空间 存放。</p>
+</li>
+<li>allkeys-lru: 尝试回收最少使用的键（LRU），使得新添加的数据有空间存放。</li>
+<li>allkeys-lfu:  Least Frequently Used 最近最不常用的</li>
+<li>allkeys-random: 回收随机的键使得新添加的数据有空间存放。</li>
+</ul>
+<h3 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h3><p>事务，但 Redis 提供的不是严格的事务，Redis 只保证串行执行命令，并且能保证全部执行，但是执行命令失败时并不会回滚，而是会继续执行下去。</p>
+<ol>
+<li>命令入队报错，全部回滚，没有任何影响</li>
+<li>命令执行时报错，不会回滚，而是会继续执行余下的命令</li>
+</ol>
+<h4 id="watch机制"><a href="#watch机制" class="headerlink" title="watch机制"></a>watch机制</h4><p>watch 一个变量， multi exec 根据中间有没有其他线程更改watched的变量来决定，是commit事务还是rollback事务，有点像CAS操作，只是Redis的watch机制并没有ABA问题</p>
+<h3 id="高级用法"><a href="#高级用法" class="headerlink" title="高级用法"></a>高级用法</h3><p>Bitmap :<br>位图是支持按 bit 位来存储信息，可以用来实现 布隆过滤器（BloomFilter）；</p>
+<p>HyperLogLog:<br>供不精确的去重计数功能，比较适合用来做大规模数据的去重统计，例如统计 UV；</p>
+<p>Geospatial:<br>可以用来保存地理位置，并作位置距离计算或者根据半径计算位置等。有没有想过用Redis来实现附近的人？或者计算最优地图路径？</p>
+<p>这三个其实也可以算作一种数据结构，不知道还有多少朋友记得，我在梦开始的地方，Redis基础中提到过，你如果只知道五种基础类型那只能拿60分，如果你能讲出高级用法，那就觉得你有点东西。</p>
+<p>pub/sub：<br>功能是订阅发布功能，可以用作简单的消息队列。</p>
+<p>Pipeline：<br>可以批量执行一组指令，一次性返回全部结果，可以减少频繁的请求应答。</p>
+<p>Lua：<br>Redis 支持提交 Lua 脚本来执行一系列的功能。</p>
+<p>我在前电商老东家的时候，秒杀场景经常使用这个东西，讲道理有点香，利用他的原子性。</p>
+<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="http://zhangtielei.com/posts/blog-redis-ziplist.html">http://zhangtielei.com/posts/blog-redis-ziplist.html</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/language/go/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/language/go/index.html" class="post-title-link" itemprop="url">go语言陷阱</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-12-13 22:03:03 / Modified: 23:29:15" itemprop="dateCreated datePublished" datetime="2022-12-13T22:03:03+08:00">2022-12-13</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/language/go/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/language/go/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="变量-amp-类型相关"><a href="#变量-amp-类型相关" class="headerlink" title="变量&amp;类型相关"></a>变量&amp;类型相关</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> a = []<span class="keyword">interface</span>&#123;&#125;&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//变参函数忘记...展开</span></span><br><span class="line">    fmt.Println(a)</span><br><span class="line">    fmt.Println(a...)</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    x := [<span class="number">3</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//在函数调用参数中，数组是值传递，无法通过修改数组类型的参数返回结果。</span></span><br><span class="line">    <span class="function"><span class="keyword">func</span><span class="params">(arr [3]<span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">        arr[<span class="number">0</span>] = <span class="number">7</span></span><br><span class="line">        fmt.Println(arr)</span><br><span class="line">    &#125;(x)</span><br><span class="line"></span><br><span class="line">    fmt.Println(x)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Foo</span><span class="params">()</span> <span class="params">(err error)</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> err := Bar(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//map是一种hash表实现，每次遍历的顺序都可能不一样。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    m := <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>&#123;</span><br><span class="line">        <span class="string">&quot;1&quot;</span>: <span class="string">&quot;1&quot;</span>,</span><br><span class="line">        <span class="string">&quot;2&quot;</span>: <span class="string">&quot;2&quot;</span>,</span><br><span class="line">        <span class="string">&quot;3&quot;</span>: <span class="string">&quot;3&quot;</span>,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> k, v := <span class="keyword">range</span> m &#123;</span><br><span class="line">        <span class="built_in">println</span>(k, v)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/backend_knowledge_architecture/language/go/index.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/cache/consistency.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/cache/consistency.html" class="post-title-link" itemprop="url">关于缓存与数据库的一致性与过载保护机制</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-12-13 07:20:03 / Modified: 23:39:02" itemprop="dateCreated datePublished" datetime="2022-12-13T07:20:03+08:00">2022-12-13</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/cache/consistency.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/cache/consistency.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="数据库、缓存一致性问题"><a href="#数据库、缓存一致性问题" class="headerlink" title="数据库、缓存一致性问题"></a>数据库、缓存一致性问题</h2><p>先说最重要的数据库、缓存一致性问题，关于该问题，有以下几点需要考虑：</p>
+<ul>
+<li><p>当DB数据发生变更时，是删除缓存还是修改缓存？</p>
+<ol>
+<li><p>答案是删除缓存。相比修改缓存，删除缓存是幂等性操作。删除缓存可以避免出现<strong>双写并发</strong>问题。</p>
+</li>
+<li><p>另外一点，很多时候，在复杂点的缓存场景，缓存不单单是数据库中直接取出来的值，也就是说update的value是什么我无法简单得知。</p>
+</li>
+<li><p>懒加载思想： 更新了，但是没有读请求就白白浪费内存了。</p>
+</li>
+</ol>
+</li>
+<li><p>先写DB还是先写缓存？</p>
+<p> 答案是先操作DB。结合case1, 在读多写少的高并发场景下，如果先删缓存再操作DB，有一个很明显的逻辑错误，使得有极高的概率出现读写并发问题。虽然先db后缓存的方式也无法完全避免这类问题，但是出现的概率极低。【详细的问题时序见下文】</p>
+<p> 出现并发问题的时序如下：</p>
+<ol>
+<li>如果读的时候，key不存在，回源头读ReadDB</li>
+<li>写操作，UpdateDB</li>
+<li>写操作，删除缓存</li>
+<li>读操作，将第一步读到的数据写入缓存（此时，缓存已经过期）</li>
+</ol>
+</li>
+<li><p>高并发下，关于缓存的一致性会出现什么问题？</p>
+<p> case1, case2中提到了在高并发的情况下，会出现某种并发逻辑错误，导致数据不一致。</p>
+</li>
+<li><p>是否听说过订阅数据库binlog变更去清理缓存的方法？这个方法的使用场景是啥？</p>
+<p> 通过binlog变更的方式去清理缓存，有两个好处：第一，无业务侵入型；第二，支持无限重试。</p>
+</li>
+</ul>
+<h3 id="CacheAside模式"><a href="#CacheAside模式" class="headerlink" title="CacheAside模式"></a>CacheAside模式</h3><p>CacheAside模式，一定是最佳的吗？不一定，具体场景具体分析：</p>
+<p>（1）新用户注册场景，同时数据库主从延迟1s</p>
+<p>解决方案：新建数据库 + 新建缓存（避免读取到延迟的数据结果）</p>
+<p>（2）写入特别频繁的场景，而我们对命中率有一定的要求</p>
+<p>  解决方案：</p>
+<ol>
+<li>updateDB + updateCache(With Lock)</li>
+<li>updateDB + updateCache(with TTL)</li>
+</ol>
+<h3 id="Write-Read-Through模式"><a href="#Write-Read-Through模式" class="headerlink" title="Write/Read Through模式"></a>Write/Read Through模式</h3><p>两种应对write miss的办法：</p>
+<p>  （1）write-allocate 写cache，再由cache更新db<br>  （2）no write allocate 直接更新db</p>
+<h3 id="write-back模式"><a href="#write-back模式" class="headerlink" title="write back模式"></a>write back模式</h3><p><img src="http://cdn.b5mang.com/2021320144254.png" alt="write-back模式的读"></p>
+<p><img src="http://cdn.b5mang.com/2021320144312.png" alt="write-back模式的写"></p>
+<p>变种：在允许数据丢失的情况下，写入时只写缓存，而异步写入存储</p>
+<h2 id="经典问题"><a href="#经典问题" class="headerlink" title="经典问题"></a>经典问题</h2><h3 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h3><p>再说缓存穿透问题。</p>
+<p>首先明确什么是缓存穿透问题？考虑在很高的读并发下，如果某一个redis key突然过期，会发生什么？如果真的发生这种情况，并且我们没有任何预防措施，按照cache aside模式，程序会read from db，然后set cache。但是由于并发很高，所有的线程同时去请求db，造成db过载不可用。我们称这种现象就缓存穿透。通过分布式锁来控制仅一个线程去read db，而其他线程等待，可以一定程度上避免缓存穿透问题。</p>
+<p>缓存并发穿透（狗桩效应）：极热点缓存失效，大量请求穿透到DB，造成DB瞬时压力过大</p>
+<p>如何解决缓存并发穿透呢？<br>（1）热点发现，定时续期<br>（2）对于极热点，启用本地缓存</p>
+<p>还有一种情况，如果请求的<strong>某一个key在db中也不存在</strong>，我们需要设置一个拥有较短TTL的空缓存来避免每次请求都穿透到db。</p>
+<p>回种空值—-缺点在于：会占用很大的内存来存储好多无用请求，需要评估内存是否OK</p>
+<p>布隆过滤器—-在写入DB时，额外写一份数据到布隆过滤器，查询时优先访问过滤器</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.6w7buyfuv2s0.webp" alt="image"></p>
+<h3 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h3><p>最后谈一下缓存雪崩。</p>
+<p>同样先搞清楚什么是缓存雪崩。由于某些系统设计不合理，缓存会设置为相同的过期时间或者很接近。这样子在某个时间点，缓存便会近乎同时失效，造成业务请求全部回源db,造成db过载，我们称这种情况为缓存雪崩。一般情况下，我们需要有意的设置key的过期时间，让他们<strong>随机过期</strong>，从而解决缓存同时过期导致的缓存雪崩问题。</p>
+<h3 id="热key重建"><a href="#热key重建" class="headerlink" title="热key重建"></a>热key重建</h3><p>高并发多线程的情况下，热Key重键是使用redis比较典型的一个问题：</p>
+<p>解决方案：</p>
+<ol>
+<li>加锁重键（互斥锁）：</li>
+<li>热键不过期：在缓存中创建一个时间戳，先判断时间戳是否过期，如果没有过期返回原数据，过期了则访问数据源</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/hardware/cpu.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -954,297 +1396,6 @@ CISC的各种复杂的结构件，对于盖一种房子的时候效率确实高�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/math/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/math/index.html" class="post-title-link" itemprop="url">学习机器学习可能用到的数学</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-12-01 21:03:03" itemprop="dateCreated datePublished" datetime="2022-12-01T21:03:03+08:00">2022-12-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-02 23:34:07" itemprop="dateModified" datetime="2022-12-02T23:34:07+08:00">2022-12-02</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/math/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/math/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="0-背景介绍，把人吸引过来"><a href="#0-背景介绍，把人吸引过来" class="headerlink" title="0. 背景介绍，把人吸引过来"></a>0. 背景介绍，把人吸引过来</h2><p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.3k2ld3hyx4q0.jpg" alt="image"></p>
-<p>积分中值定理、微分中值定理</p>
-<hr>
-<p>泰勒公式</p>
-<p>出发点：</p>
-<pre><code>用简单的熟悉的多项式来近似代替复杂的函数
-
-易计算函数值，导数与积分仍是多项式
-
-多项式由它的系数完全确定，其系数又由它在一点的函数值及其导数所确定。
-</code></pre><p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.6xln7bk35440.jpg" alt="image"></p>
-<p>阶数</p>
-<p>阶乘：削弱高阶项的作用，让他晚一些起作用！</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/math/index.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/ai/logistic_regression.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/ai/logistic_regression.html" class="post-title-link" itemprop="url">逻辑回归</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-12-01 16:44:59" itemprop="dateCreated datePublished" datetime="2022-12-01T16:44:59+08:00">2022-12-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-02 01:10:37" itemprop="dateModified" datetime="2022-12-02T01:10:37+08:00">2022-12-02</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/ai/logistic_regression.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/ai/logistic_regression.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>逻辑回归，是一种分类算法，而并非回归算法。</p>
-<p>逻辑回归要解决的问题是，给你一组样本以及标签，你基于这些数据去训练你的模型。然后我再给你一个新的样本，你告诉我有多大概率的属于某一个分类【二分类问题，黑还是白】</p>
-<p>$Y = \theta * X + \epsilon $</p>
-<p>我们现在的目标是找到一组$\theta$可以让它乘以X之后尽可能的匹配Y</p>
-<p>$\epsilon$为误差，服从均值为0，方差为$\mu^2$的正态分布</p>
-<p>预测值与真实值之间有误差</p>
-<p>学习的关键在于：确定什么样的参数最符合于你的目标</p>
-<p>我们的目标是什么？ 让误差项尽可能的小，接近于0，loss函数等于0</p>
-<p>条件概率：<script type="math/tex">p(y|x;\theta) = p(\epsilon^{(i)})</script> 也服从正态分布。</p>
-<p>对于某一个样本，要找到一个theta， 跟x组合之后，成为真实值y的可能性最大</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/ai/logistic_regression.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/ai/exp_set.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/ai/exp_set.html" class="post-title-link" itemprop="url">指数分布族</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-12-01 16:03:03 / Modified: 20:28:10" itemprop="dateCreated datePublished" datetime="2022-12-01T16:03:03+08:00">2022-12-01</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/ai/exp_set.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/ai/exp_set.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="1-指数分布族"><a href="#1-指数分布族" class="headerlink" title="1. 指数分布族"></a>1. 指数分布族</h2><p>指数族分布是一大类分布，基本形式为：</p>
-<p><img src="https://images2015.cnblogs.com/blog/798706/201705/798706-20170507141449601-502615027.png" alt="指数族分布"></p>
-<p>分布函数框架中的h(x),η(θ),T(x)和A(θ)并不是任意定义的，每一部分都有其特殊的意义。</p>
-<p>θ是自然参数(natural parameter)，通常是一个实数；</p>
-<p>h(x)是底层观测值（underlying measure）；</p>
-<p>T(x)是充分统计量（sufficient statistic）；</p>
-<p>A(θ)被称为对数规则化（log normalizer）。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/ai/exp_set.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1317,7 +1468,7 @@ CISC的各种复杂的结构件，对于盖一种房子的时候效率确实高�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">345</span>
+          <span class="site-state-item-count">346</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1330,7 +1481,7 @@ CISC的各种复杂的结构件，对于盖一种房子的时候效率确实高�
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">62</span>
+        <span class="site-state-item-count">63</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

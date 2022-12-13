@@ -203,6 +203,274 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/ai/linear_regression.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/ai/linear_regression.html" class="post-title-link" itemprop="url">线性回归-linear regression</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-12-01 12:44:59 / Modified: 20:28:10" itemprop="dateCreated datePublished" datetime="2022-12-01T12:44:59+08:00">2022-12-01</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/ai/linear_regression.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/ai/linear_regression.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>$Y = \theta * X + \epsilon $</p>
+<p>我们现在的目标是找到一组$\theta$可以让它乘以X之后尽可能的匹配Y</p>
+<p>$\epsilon$为误差，服从均值为0，方差为$\mu^2$的正态分布</p>
+<p>预测值与真实值之间有误差</p>
+<p>学习的关键在于：确定什么样的参数最符合于你的目标</p>
+<p>我们的目标是什么？ 让误差项尽可能的小，接近于0，loss函数等于0</p>
+<p>条件概率：<script type="math/tex">p(y|x;\theta) = p(\epsilon^{(i)})</script> 也服从正态分布。</p>
+<p>对于某一个样本，要找到一个theta， 跟x组合之后，成为真实值y的可能性最大</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/ai/linear_regression.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/ai/sk_learn.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/ai/sk_learn.html" class="post-title-link" itemprop="url">sk learn介绍</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-12-01 11:36:40 / Modified: 12:34:50" itemprop="dateCreated datePublished" datetime="2022-12-01T11:36:40+08:00">2022-12-01</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/ai/sk_learn.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/ai/sk_learn.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>sk learn的六大功能：</p>
+<p>分类</p>
+<p>回归</p>
+<p>聚类</p>
+<p>预处理</p>
+<p>模型选择</p>
+<p>降维</p>
+<p>8:2<br>cross validation</p>
+<p>Training 切成N份（例如10）</p>
+<p>选前9份，进行交叉验证，对结果进行平均（准确率一般平均）。<br>Validation 验证数据</p>
+<p>Testing 比较宝贵</p>
+<p>confusion matrix 混淆矩阵，relative with 召回率，准确率</p>
+<p>TruePostive     FalsePostive<br>FalseNegative   TrueNegative    </p>
+<p>True 做到了；<br>Postive 正类</p>
+<p>评价指标有几个：</p>
+<p>recall 召回率</p>
+<p>precision 准确率</p>
+<p>F1 score (调和平均数) = 2 / （1 + precision） + 1 (1 + recall) 给予低值更高的权重</p>
+<p>various <strong>thresholds</strong>(阈值就是要求，越高越严格！) 跟 score比较 </p>
+<p>predict = score &gt; thresholds : True : False</p>
+<p>随着thresholds从低到高，精确率上升，召回率降低；</p>
+<p>准确率-召回率曲线</p>
+<p>ROC curves (ROC曲线)</p>
+<p>AUC 测量曲线下面积（综合评估），最好是1，最差是0.5</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/ai/math.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/ai/math.html" class="post-title-link" itemprop="url">数学公式用法</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-12-01 11:36:40 / Modified: 11:39:35" itemprop="dateCreated datePublished" datetime="2022-12-01T11:36:40+08:00">2022-12-01</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/ai/math.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/ai/math.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/fencecat/article/details/123530441">https://blog.csdn.net/fencecat/article/details/123530441</a></p>
+<script type="math/tex; mode=display">f(x) = \frac 1 {\sqrt{2\pi} \sigma}{\rm e} ^{-\frac{(x-\mu)^2}{2\sigma^2}}</script><script type="math/tex; mode=display">f(x) = \frac 1 {\sqrt{2\pi} \sigma}\exp\left [ {-\frac{(x-\mu)^2}{2\sigma^2}}\right ]</script><script type="math/tex; mode=display">\lim\limits_{N\to \infty} P \left\{ \left|\frac{I(\alpha_{i})}{N}-H(s) \right| <\varepsilon\right\}=1</script><script type="math/tex; mode=display">\frac{\partial f}{\partial x}|_{x=0}</script><script type="math/tex; mode=display">\left.\frac{\partial f}{\partial x}\right|_{x=0}</script>
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/code/better_code.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -907,273 +1175,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/thread_model/thread_pool.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/server/thread_model/thread_pool.html" class="post-title-link" itemprop="url">高性能服务器系列-线程池</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-11-01 22:17:47" itemprop="dateCreated datePublished" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/server/thread_model/thread_pool.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/thread_model/thread_pool.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="核心参数"><a href="#核心参数" class="headerlink" title="核心参数"></a>核心参数</h3><p>1、corePoolSize:线程池中的常驻核心线程数</p>
-<p>2、maximumPoolSize：线程池能容纳同时执行的最大线程数，此值必须&gt;=1</p>
-<p>3、keepAliveTime：多余的空闲线程的存活时间</p>
-<p>当前线程池数量超过corePoolSize时，当空闲的时间达到keepAliveTime值时，多余的空闲线程会被直接销毁直到只剩下corePoolSize个线程为止</p>
-<p>4、timeUtile：keepAliveTime的单位</p>
-<p>5、workQueue:任务队列，被提交但未被执行的任务</p>
-<p>6、threadFactory：表示生成线程池中工作线程的线程工厂，用于创建线程一般用默认的即可。</p>
-<p>7、handler：拒绝策略，表示当队列满了并且工作线程大于等于线程池的最大线程数</p>
-<h3 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h3><p>线程池内部是通过队列+线程实现的，当我们利⽤线程池执⾏任务时：</p>
-<ol>
-<li>如果此时线程池中的线程数量⼩于corePoolSize，即使线程池中的线程都处于空闲状态，也要创建<br>新的线程来处理被添加的任务。</li>
-<li>如果此时线程池中的线程数量等于corePoolSize，但是缓冲队列workQueue未满，那么任务被放⼊<br>缓冲队列。</li>
-<li>如果此时线程池中的线程数量⼤于等于corePoolSize，缓冲队列workQueue满，并且线程池中的数<br>量⼩于maximumPoolSize，建新的线程来处理被添加的任务。</li>
-<li>如果此时线程池中的线程数量⼤于corePoolSize，缓冲队列workQueue满，并且线程池中的数量等<br>于maximumPoolSize，那么通过 handler所指定的策略来处理此任务。</li>
-<li>当线程池中的线程数量⼤于 corePoolSize时，如果某线程空闲时间超过keepAliveTime，线程将被<br>终⽌。这样，线程池可以动态的调整池中的线程数</li>
-</ol>
-<h3 id="合理线程数"><a href="#合理线程数" class="headerlink" title="合理线程数"></a>合理线程数</h3><p>CPU密集型：CPU核数+1个线程的线程池</p>
-<p>IO密集型：a)CPU核数*2；b)CPU核数/(1-阻塞系数)。（阻塞系数：0.8～0.9）</p>
-<h3 id="拒绝策略"><a href="#拒绝策略" class="headerlink" title="拒绝策略"></a>拒绝策略</h3><p>第一种拒绝策略是 AbortPolicy，这种拒绝策略在拒绝任务时，会直接抛出异常 RejectedExecutionException （属于RuntimeException），让你感知到任务被拒绝了，于是你便可以根据业务逻辑选择重试或者放弃提交等策略。</p>
-<p>第二种拒绝策略是 DiscardPolicy，这种拒绝策略正如它的名字所描述的一样，当新任务被提交后直接被丢弃掉，也不会给你任何的通知，相对而言存在一定的风险，因为我们提交的时候根本不知道这个任务会被丢弃，可能造成数据丢失。</p>
-<p>第三种拒绝策略是 DiscardOldestPolicy，如果线程池没被关闭且没有能力执行，则会丢弃任务队列中的头结点，通常是存活时间最长的任务，这种策略与第二种不同之处在于它丢弃的不是最新提交的，而是队列中存活时间最长的，这样就可以腾出空间给新提交的任务，但同理它也存在一定的数据丢失风险。</p>
-<p>第四种拒绝策略是 CallerRunsPolicy，相对而言它就比较完善了，当有新任务提交后，如果线程池没被关闭且没有能力执行，则把这个任务交于提交任务的线程执行，也就是谁提交任务，谁就负责执行任务。这样做主要有两点好处。</p>
-<p>第一点新提交的任务不会被丢弃，这样也就不会造成业务损失。<br>第二点好处是，由于谁提交任务谁就要负责执行任务，这样提交任务的线程就得负责执行任务，而执行任务又是比较耗时的，在这段期间，提交任务的线程被占用，也就不会再提交新的任务，减缓了任务提交的速度，相当于是一个负反馈。在此期间，线程池中的线程也可以充分利用这段时间来执行掉一部分任务，腾出一定的空间，相当于是给了线程池一定的缓冲期。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/core/growth/user_growth.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/core/growth/user_growth.html" class="post-title-link" itemprop="url">用户增长</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-10-29 09:49:36" itemprop="dateCreated datePublished" datetime="2022-10-29T09:49:36+08:00">2022-10-29</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/core/growth/user_growth.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/core/growth/user_growth.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>用户增长的前提是你的产品是<strong>满足需求</strong>的，且与<strong>市场是匹配</strong>的（用户来了之后才能够留得住），但到达用户存在阻碍。</p>
-<p>所以用户增长的主要工作就是：要减少阻碍，降低交易成本（比如认知成本、信任成本、分享成本等等）。</p>
-<p>开始前，先问问自己 7 个与增长相关的基础问题，带着问题思考更高效。</p>
-<p>（1）XX公司的商业模式是什么？</p>
-<p>（2）XX公司所在的社会环境是什么？</p>
-<p>（3）XX公司处在企业生命周期的什么阶段？</p>
-<p>（4）XX公司的增长战略、增长策略、增长战术是什么？</p>
-<p>（5）XX公司的用户是谁？</p>
-<p>（6）XX公司当前是怎么做用户增长？</p>
-<p>（7）XX公司的北极星指标是什么？</p>
-<p>（因为）不同商业模式、不同阶段，则有不同的增长侧重。所以谈用户增长不能不谈<strong>商业模式</strong>、<strong>社会大环境</strong>、<strong>企业生命周期</strong>。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/timer/time_wheel.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/server/timer/time_wheel.html" class="post-title-link" itemprop="url">定时器系列｜时间轮</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-10-29 09:49:36" itemprop="dateCreated datePublished" datetime="2022-10-29T09:49:36+08:00">2022-10-29</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/server/timer/time_wheel.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/timer/time_wheel.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>时间轮</p>
-<p>逻辑形式：时间轮</p>
-<p>实际结构：链表数组</p>
-<p>实现原理：</p>
-<p>最小轮子走一圈，它的上层轮子走一格。</p>
-<p>假设图中每层轮子为20个格子，第一层轮子最小时间间隔为1ms，第二层为20ms，第三层为400ms，此时添加5ms后执行的任务，此时应该添加到第一层的第5格子中。</p>
-<p>如果此时添加445ms后执行的任务，则第一层表示的时间跨度不够，第二层表示的时间跨度也不够，第三层表示的时间跨度足够，该任务应该放到第三层轮子第二格子中，该轮子指针指到第二格子中时，计算离任务启动时间还有多长时间，慢慢将该任务移动到底层轮子上，最终任务到期执行。</p>
-<p>HashedWheelTimer时间轮是一个高性能，低消耗的数据结构，它适合用非准实时，延迟的短平快任务，例如心跳检测。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TimeWheel</span> &#123;</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">push</span><span class="params">()</span> </span>&#123;</span><br><span class="line">         <span class="comment">//利用当前时间与currentTs，计算目标offset。</span></span><br><span class="line">         <span class="comment">//把事件插入到offset对应的ticks链表中</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//利用当前时间与currentTs，计算目标offset。</span></span><br><span class="line">        <span class="comment">//确认需要往前移动多少格</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//把过期事件，trigger掉；</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//然后移动currIdx与currentTs;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">background_thread</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//每秒钟一次运行，exTicks中1s中后就要运行的item移动到ticks[(currentIdx - 1) % N]。</span></span><br><span class="line">        <span class="comment">//此处考虑并发</span></span><br><span class="line">        <span class="comment">//对currentIdx的读访问要考虑并发，可以考虑用原子变量</span></span><br><span class="line">        <span class="comment">//对链表的访问可以用互斥锁（理论上：并不是有实际冲突，因为这个tick还有接近1分钟才会被访问到。）</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">map</span>&lt;ts, Item&gt; exTicks; <span class="comment">//超过1分钟的事件；</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;List&gt; ticks;  <span class="comment">//假设60个格子，只能承载最近60s的事件。</span></span><br><span class="line">    currentIdx;</span><br><span class="line">    currentTs;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1246,7 +1247,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">345</span>
+          <span class="site-state-item-count">346</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1259,7 +1260,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">62</span>
+        <span class="site-state-item-count">63</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

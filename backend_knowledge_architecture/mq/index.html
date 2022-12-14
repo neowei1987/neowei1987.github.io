@@ -22,18 +22,20 @@
     var CONFIG = {"hostname":"www.fpthinker.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="可能的一些作用：  非核心逻辑异步化，追求高性能 解除耦合 实现广播 削峰填谷   具体可以用于：  分布式事务，单方生产，多个消费业务逻辑 数据复制：通过消息队列，将数据复制到多个目的地（多维度数据表、ES、Hadoop、搜索等） 日志同步：多个app生产日志并放入队列，然后消费队列完成日志的离线与实时处理 延迟队列：可靠的延迟队列，分布式环境定时器 广播通知：Cache失效通知   分布式消息">
+  <meta name="description" content="可能的一些作用：  非核心逻辑异步化，追求高性能 解除耦合，Event Driven 事件驱动设计 实现广播 削峰填谷，把峰值流量缓冲下来，后面慢慢处理   具体可以用于：  分布式事务，单方生产，多个消费业务逻辑 数据复制：通过消息队列，将数据复制到多个目的地（多维度数据表、ES、Hadoop、搜索等） 日志同步：多个app生产日志并放入队列，然后消费队列完成日志的离线与实时处理 延迟队列：可靠">
 <meta property="og:type" content="article">
 <meta property="og:title" content="消息队列-概览">
 <meta property="og:url" content="https://www.fpthinker.com/backend_knowledge_architecture/mq/index.html">
 <meta property="og:site_name" content="Neo&#39;s Blog">
-<meta property="og:description" content="可能的一些作用：  非核心逻辑异步化，追求高性能 解除耦合 实现广播 削峰填谷   具体可以用于：  分布式事务，单方生产，多个消费业务逻辑 数据复制：通过消息队列，将数据复制到多个目的地（多维度数据表、ES、Hadoop、搜索等） 日志同步：多个app生产日志并放入队列，然后消费队列完成日志的离线与实时处理 延迟队列：可靠的延迟队列，分布式环境定时器 广播通知：Cache失效通知   分布式消息">
+<meta property="og:description" content="可能的一些作用：  非核心逻辑异步化，追求高性能 解除耦合，Event Driven 事件驱动设计 实现广播 削峰填谷，把峰值流量缓冲下来，后面慢慢处理   具体可以用于：  分布式事务，单方生产，多个消费业务逻辑 数据复制：通过消息队列，将数据复制到多个目的地（多维度数据表、ES、Hadoop、搜索等） 日志同步：多个app生产日志并放入队列，然后消费队列完成日志的离线与实时处理 延迟队列：可靠">
 <meta property="og:locale">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.4p5f9xibq5m0.webp">
 <meta property="article:published_time" content="2022-02-25T05:03:03.000Z">
-<meta property="article:modified_time" content="2022-03-01T14:40:57.385Z">
+<meta property="article:modified_time" content="2022-12-14T13:04:38.700Z">
 <meta property="article:author" content="NeoWei">
 <meta property="article:tag" content="消息队列">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.4p5f9xibq5m0.webp">
 
 <link rel="canonical" href="https://www.fpthinker.com/backend_knowledge_architecture/mq/">
 
@@ -238,7 +240,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:40:57" itemprop="dateModified" datetime="2022-03-01T22:40:57+08:00">2022-03-01</time>
+                <time title="Modified: 2022-12-14 21:04:38" itemprop="dateModified" datetime="2022-12-14T21:04:38+08:00">2022-12-14</time>
               </span>
 
           
@@ -269,9 +271,9 @@
         <p>可能的一些作用：</p>
 <ol>
 <li>非核心逻辑异步化，追求高性能</li>
-<li>解除耦合</li>
+<li>解除耦合，Event Driven 事件驱动设计</li>
 <li>实现广播</li>
-<li>削峰填谷</li>
+<li>削峰填谷，把峰值流量缓冲下来，后面慢慢处理</li>
 </ol>
 <hr>
 <p>具体可以用于：</p>
@@ -283,26 +285,174 @@
 <li>广播通知：Cache失效通知</li>
 </ol>
 <hr>
-<p>分布式消息队列的评价指标</p>
-<h5 id="可靠"><a href="#可靠" class="headerlink" title="可靠"></a>可靠</h5><p>分布式消息队列提供更好的可靠性，主要体现在：</p>
+<h3 id="消息队列的缺点"><a href="#消息队列的缺点" class="headerlink" title="消息队列的缺点"></a>消息队列的缺点</h3><p>系统可用性降低：系统引入的外部依赖越多，越容易挂掉，本来你就是A系统调用BCD三个系统的接口就好了，人ABCD四个系统好好的，没啥问题，你偏加个MQ进来，万一MQ挂了咋整？MQ挂了，整套系统崩溃了，你不就完了么。</p>
+<p>系统复杂性提高：硬生生加个MQ进来，你怎么保证消息没有重复消费？怎么处理消息丢失的情况？怎么保证消息传递的顺序性？头大头大，问题一大堆，痛苦不已</p>
+<p>一致性问题：A系统处理完了直接返回成功了，人都以为你这个请求就成功了；但是问题是，要是BCD三个系统那里，BD两个系统写库成功了，结果C系统写库失败了，咋整？你这数据就不一致了。</p>
+<h3 id="主流消息队列对比"><a href="#主流消息队列对比" class="headerlink" title="主流消息队列对比"></a>主流消息队列对比</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>ActiveMQ</th>
+<th>RabbitMQ</th>
+<th>RocketMQ</th>
+<th>kafka</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单机吞吐量</td>
+<td>万级，吞吐量比RocketMQ和Kafka要低了1个数量级</td>
+<td>同ActiveMQ</td>
+<td>10万级，可支撑高吞吐</td>
+<td>10w量级</td>
+</tr>
+<tr>
+<td>topic数量对吞吐量的影响</td>
+<td></td>
+<td></td>
+<td>topic可达几百几千，吞吐小幅下降，<strong>一大优势</strong></td>
+<td>topic从几十到上百，吞吐大幅下降；单机支持topic不宜过多，如有需要可以加更多机器</td>
+</tr>
+<tr>
+<td>MasterSlave</td>
+<td>主-从</td>
+<td>主-从</td>
+<td>物理Master-Slave</td>
+<td>逻辑上Master-Slave,按照Partition</td>
+</tr>
+<tr>
+<td>分布式消息事务</td>
+<td></td>
+<td>支持</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>延迟消息</td>
+<td></td>
+<td></td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>消息投递实时性</td>
+<td></td>
+<td></td>
+<td>RocketMQ使用长轮询，同Push方式实时性一致，消息的投递延时通常在几个毫秒</td>
+<td>Kafka使用短轮询方式，实时性取决于轮询间隔时间</td>
+</tr>
+<tr>
+<td>消费失败重试</td>
+<td></td>
+<td></td>
+<td>RocketMQ消费失败支持定时重试，每次重试间隔时间顺延</td>
+<td>Kafka消费失败不支持重试</td>
+</tr>
+<tr>
+<td>消息顺序</td>
+<td></td>
+<td>RocketMQ支持严格的消息顺序，在顺序消息场景下，一台Broker宕机后，发送消息会失败，但是不会乱序</td>
+<td>支持</td>
+<td>Kafka支持消息顺序，但是一台Broker宕机后，就会产生消息乱序</td>
+</tr>
+<tr>
+<td>主从选举</td>
+<td></td>
+<td></td>
+<td>不需要选举NameServer</td>
+<td>KRaft选举</td>
+</tr>
+<tr>
+<td>时效性</td>
+<td>ms</td>
+<td>us，最大特点，延迟低</td>
+<td>ms</td>
+<td>ms</td>
+</tr>
+<tr>
+<td>可用性</td>
+<td>高，基于主从架构实现高可用性</td>
+<td>同ActiveMQ</td>
+<td>非常高，分布式架构</td>
+<td>非常高，分布式，单数据多个副本，少数机器宕机，不会丢失数据，不会导致不可用</td>
+</tr>
+<tr>
+<td>消息可靠性</td>
+<td>较低概率丢数据</td>
+<td></td>
+<td>经过参数优化配置，可以做到0丢失</td>
+<td>同RocketMQ</td>
+</tr>
+<tr>
+<td>功能支持</td>
+<td>极其完备</td>
+<td>基于erlang开发，所以并发能力很强，性能极其好，延时很低</td>
+<td>MQ功能较为元善，还是分布式的，扩展性好</td>
+<td>功能较为简单</td>
+</tr>
+<tr>
+<td>总体优劣势</td>
+<td>早期使用，社区不活跃</td>
+<td>吞吐低，语言不熟，开源社区活跃，小公司</td>
+<td>阿里品牌保障（利弊）要求技术研发力量，大公司</td>
+<td>大数据领域</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Master/Slave概念差异<br>Kafka：Master/Slave 是个逻辑概念，1 台机器同时是 Master 和 Slave。<br>RocketMQ：Master/Slave 是个物理概念，1 台机器只能是 Master 或者 Slave。</p>
+<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/wdj_yyds/article/details/123534023">https://blog.csdn.net/wdj_yyds/article/details/123534023</a></p>
+<h3 id="分布式消息队列评价指标"><a href="#分布式消息队列评价指标" class="headerlink" title="分布式消息队列评价指标"></a>分布式消息队列评价指标</h3><h4 id="可靠"><a href="#可靠" class="headerlink" title="可靠"></a>可靠</h4><p>分布式消息队列提供更好的可靠性，主要体现在：</p>
 <ol>
 <li>消息会被持久化到分布式存储中。这样避免了单台机器存储的消息由于机器问题导致消息的丢失；</li>
 <li>不佳的网络环境中，保证只有当消息的接收者确实收到消息时才从队列中删除消息。</li>
 </ol>
-<h5 id="可扩展"><a href="#可扩展" class="headerlink" title="可扩展"></a>可扩展</h5><p>可扩展性体现在访问量和数据量两个方面：</p>
+<h4 id="可扩展"><a href="#可扩展" class="headerlink" title="可扩展"></a>可扩展</h4><p>可扩展性体现在访问量和数据量两个方面：</p>
 <p>访问量：分布式消息队列服务，会随着访问量的增减而自动增减逻辑处理服务器；</p>
 <p>数据量：当数据量扩大时，后端分布式存储会自动扩容。</p>
-<h5 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h5><p>安全体现在以下两个方面：</p>
+<h4 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h4><p>安全体现在以下两个方面：</p>
 <ol>
 <li><p>同时使用消息队列的业务之间不会互相干扰。如果有多个业务同时在使用消息队列，对于单机的消息队列服务，一个业务的消息操作可能会影响其他业务的正常运行。比如，一个业务的消息操作特别频繁，占据了消息队列的绝大部分服务时间，也占据了这台服务器的绝大部分网络IO，导致其他业务无法正常地与消息队列通信。而且甚至可能由于服务控制不当，导致机器崩溃，服务停止，业务也跟着停止。分布式消息队列则不会出现这个问题：<br>（1）监控措施完善，系统性能指数会控制在一定范围之内，而且有任何异常也会报警；<br>（2）当访问量和数据量增大时，分布式消息队列服务可以自动扩展。</p>
 </li>
 <li><p>各业务的消息内容是安全存储的，其他业务不能访问到非自身业务的数据。<br>一方面是业务需要密钥来访问消息队列；另一方面，消息是被加密存储的。</p>
 </li>
 </ol>
-<h5 id="简单实用"><a href="#简单实用" class="headerlink" title="简单实用"></a>简单实用</h5><p>简单实用体现在：</p>
+<h4 id="简单实用"><a href="#简单实用" class="headerlink" title="简单实用"></a>简单实用</h4><p>简单实用体现在：</p>
 <ol>
 <li>透明：接收者和发送者无需知道具体的消息队列的服务器地址，服务器的增减对接收者和发送者透明。</li>
 <li>实用：对于两个服务之间不能通信的网络情况，消息队列为他们提供了恰到好处的桥梁。</li>
+</ol>
+<h3 id="如何保证消息不丢"><a href="#如何保证消息不丢" class="headerlink" title="如何保证消息不丢"></a>如何保证消息不丢</h3><h4 id="生产端不丢消息"><a href="#生产端不丢消息" class="headerlink" title="生产端不丢消息"></a>生产端不丢消息</h4><p>生产端如何保证不丢消息呢？确保生产的消息能到达存储端。</p>
+<p>如果是RocketMQ消息中间件，Producer生产者提供了三种发送消息的方式，分别是：</p>
+<ul>
+<li>同步发送</li>
+<li>异步发送</li>
+<li>单向发送</li>
+</ul>
+<p>生产者要想发消息时保证消息不丢失，可以：</p>
+<ul>
+<li>采用同步方式发送，send消息方法返回成功状态，就表示消息正常到达了存储端Broker。</li>
+<li>如果send消息异常或者返回非成功状态，可以重试。</li>
+<li>可以使用事务消息，RocketMQ的事务消息机制就是为了保证零丢失来设计的</li>
+</ul>
+<h4 id="存储端不丢消息"><a href="#存储端不丢消息" class="headerlink" title="存储端不丢消息"></a>存储端不丢消息</h4><p>如何保证存储端的消息不丢失呢？ 确保消息持久化到磁盘。大家很容易想到就是刷盘机制。</p>
+<p>刷盘机制分同步刷盘和异步刷盘：<br>生产者消息发过来时，只有持久化到磁盘，RocketMQ的存储端Broker才返回一个成功的ACK响应，这就是同步刷盘。它保证消息不丢失，但是影响了性能。<br>异步刷盘的话，只要消息写入PageCache缓存，就返回一个成功的ACK响应。这样提高了MQ的性能，但是如果这时候机器断电了，就会丢失消息。</p>
+<p>Broker一般是集群部署的，有master主节点和slave从节点。消息到Broker存储端，只有主节点和从节点都写入成功，才反馈成功的ack给生产者。这就是同步复制，它保证了消息不丢失，但是降低了系统的吞吐量。与之对应的就是异步复制，只要消息写入主节点成功，就返回成功的ack，它速度快，但是会有性能问题。</p>
+<h4 id="消费阶段不丢消息"><a href="#消费阶段不丢消息" class="headerlink" title="消费阶段不丢消息"></a>消费阶段不丢消息</h4><h3 id="如何保证消息顺序"><a href="#如何保证消息顺序" class="headerlink" title="如何保证消息顺序"></a>如何保证消息顺序</h3><p>消费者执行完业务逻辑，再反馈会Broker说消费成功，这样才可以保证消费阶段不丢消息。</p>
+<p>消息队列保证顺序性整体思路就是这样啦。比如Kafka的全局有序消息，就是这种思想的体现: 就是生产者发消息时，1个Topic只能对应1个Partition，一个 Consumer，内部单线程消费。</p>
+<p>但是这样吞吐量太低，一般保证消息局部有序即可。在发消息的时候指定Partition Key，Kafka对其进行Hash计算，根据计算结果决定放入哪个Partition。这样Partition Key相同的消息会放在同一个Partition。然后多消费者单线程消费指定的Partition。</p>
+<h3 id="如何实现消息事务"><a href="#如何实现消息事务" class="headerlink" title="如何实现消息事务"></a>如何实现消息事务</h3><p>下面是RabbitMQ/RocketMQ消息事务的实现机制</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.4p5f9xibq5m0.webp" alt="image"></p>
+<ol>
+<li>生产者产生消息，发送一条半事务消息到MQ服务器</li>
+<li>MQ收到消息后，将消息持久化到存储系统，这条消息的状态是待发送状态。</li>
+<li>MQ服务器返回ACK确认到生产者，此时MQ不会触发消息推送事件</li>
+<li>生产者执行本地事务</li>
+<li>如果本地事务执行成功，即commit执行结果到MQ服务器；如果执行失败，发送rollback。</li>
+<li>如果是正常的commit，MQ服务器更新消息状态为可发送；如果是rollback，即删除消息。</li>
+<li>如果消息状态更新为可发送，则MQ服务器会push消息给消费者。消费者消费完就回ACK。</li>
+<li>如果MQ服务器长时间没有收到生产者的commit或者rollback，它会反查生产者，然后根据查询到的结果执行最终状态。</li>
 </ol>
 
     </div>
@@ -453,7 +603,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%AF%E9%9D%A0"><span class="nav-number">1.</span> <span class="nav-text">可靠</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%AF%E6%89%A9%E5%B1%95"><span class="nav-number">2.</span> <span class="nav-text">可扩展</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%89%E5%85%A8"><span class="nav-number">3.</span> <span class="nav-text">安全</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E5%AE%9E%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text">简单实用</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="nav-number">1.</span> <span class="nav-text">消息队列的缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E6%B5%81%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E5%AF%B9%E6%AF%94"><span class="nav-number">2.</span> <span class="nav-text">主流消息队列对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E8%AF%84%E4%BB%B7%E6%8C%87%E6%A0%87"><span class="nav-number">3.</span> <span class="nav-text">分布式消息队列评价指标</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%AF%E9%9D%A0"><span class="nav-number">3.1.</span> <span class="nav-text">可靠</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%AF%E6%89%A9%E5%B1%95"><span class="nav-number">3.2.</span> <span class="nav-text">可扩展</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E5%85%A8"><span class="nav-number">3.3.</span> <span class="nav-text">安全</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E5%AE%9E%E7%94%A8"><span class="nav-number">3.4.</span> <span class="nav-text">简单实用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2"><span class="nav-number">4.</span> <span class="nav-text">如何保证消息不丢</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%9F%E4%BA%A7%E7%AB%AF%E4%B8%8D%E4%B8%A2%E6%B6%88%E6%81%AF"><span class="nav-number">4.1.</span> <span class="nav-text">生产端不丢消息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E7%AB%AF%E4%B8%8D%E4%B8%A2%E6%B6%88%E6%81%AF"><span class="nav-number">4.2.</span> <span class="nav-text">存储端不丢消息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B6%88%E8%B4%B9%E9%98%B6%E6%AE%B5%E4%B8%8D%E4%B8%A2%E6%B6%88%E6%81%AF"><span class="nav-number">4.3.</span> <span class="nav-text">消费阶段不丢消息</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E9%A1%BA%E5%BA%8F"><span class="nav-number">5.</span> <span class="nav-text">如何保证消息顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E4%BA%8B%E5%8A%A1"><span class="nav-number">6.</span> <span class="nav-text">如何实现消息事务</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -467,7 +617,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-count">348</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

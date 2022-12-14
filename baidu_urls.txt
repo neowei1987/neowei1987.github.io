@@ -1,3 +1,5 @@
+https://www.fpthinker.com/backend_knowledge_architecture/hardware/memory.html
+https://www.fpthinker.com/backend_knowledge_architecture/db/main_slave.html
 https://www.fpthinker.com/backend_knowledge_architecture/cache/redis.html
 https://www.fpthinker.com/backend_knowledge_architecture/language/go/index.html
 https://www.fpthinker.com/backend_knowledge_architecture/cache/consistency.html
@@ -136,6 +138,7 @@ https://www.fpthinker.com/invest/quota_os.html
 https://www.fpthinker.com/%E5%BA%95%E5%B1%82%E6%80%9D%E7%BB%B4/knowledge_arch.html
 https://www.fpthinker.com/smart/bit_mouse.html
 https://www.fpthinker.com/ai/recommend/common_recommend.html
+https://www.fpthinker.com/backend_knowledge_architecture/design/ddd.html
 https://www.fpthinker.com/%E5%BA%95%E5%B1%82%E6%80%9D%E7%BB%B4/%E9%87%91%E8%9E%8D/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93/%E9%87%8F%E5%8C%96%E6%8A%95%E8%B5%84.html
 https://www.fpthinker.com/core/%E8%BF%90%E8%90%A5%E5%8A%9B/%E5%B9%BF%E5%91%8A.html
 https://www.fpthinker.com/core/%E8%BF%90%E8%90%A5%E5%8A%9B/%E6%B5%81%E9%87%8F%E6%B1%A0.html
@@ -297,7 +300,6 @@ https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/alg
 https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/kthNode.html
 https://www.fpthinker.com/backend_knowledge_architecture/os/fs.html
 https://www.fpthinker.com/backend_knowledge_architecture/language/java/gc.html
-https://www.fpthinker.com/backend_knowledge_architecture/design/ddd.html
 https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/back_tracking/combination_permutation.html
 https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/problem/%20selection/index.html
 https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/problem/%20selection/max_min.html

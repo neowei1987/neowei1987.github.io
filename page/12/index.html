@@ -203,6 +203,191 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/high_scalability.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/distributed_system/high_scalability.html" class="post-title-link" itemprop="url">分布式系统-可扩展</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-04 22:55:48" itemprop="dateModified" datetime="2022-03-04T22:55:48+08:00">2022-03-04</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/distributed_system/high_scalability.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/high_scalability.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h2><p>有合理的办法应对系统的增长（数据量、流量、复杂性）</p>
+<p>一个良好适配应用的可扩展架构，是围绕着<strong>假设</strong>（assumption）建立的：哪些操作是常见的？哪些操作是罕见的？这就是所谓负载参数。如果假设最终是错误的，那么为扩展所做的工程投入就白费了，最糟糕的是适得其反。</p>
+<p>数据库、缓存、依赖的第三方、复杂均衡、交换机带宽都是系统扩展时需要考虑的点</p>
+<h3 id="分层"><a href="#分层" class="headerlink" title="分层"></a>分层</h3><p>首先要分层，分层是实现扩展的必要条件；分了层才能让系统有更好的可扩展能力；</p>
+<p><img src="http://cdn.b5mang.com/2021320104242.png" alt="架构分层"></p>
+<p>我们将系统分为如下几层：</p>
+<h4 id="接入层"><a href="#接入层" class="headerlink" title="接入层"></a>接入层</h4><p>主要负责负载均衡，要求负载均衡策略的时间复杂度要尽量简单，追求$O(lgn)$的时间复杂度，最坏不能超过$O(n)$。对于更坏时间复杂度的均衡策略，性能上会扛不住。</p>
+<h4 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h4><p>业务层：按照业务拆分、按照重要性拆分（轻重分离，核心、非核心）、按照请求来源（客户端、web、内网等）—这个跑偏了，这些点主要服务于可用性。</p>
+<p>这里侧重点在于无状态，我们一定要确保我们的服务无状态。</p>
+<h4 id="存储层"><a href="#存储层" class="headerlink" title="存储层"></a>存储层</h4><p>存储层做扩展会更麻烦一些。</p>
+<p>一般情况下，要求我们根据业务量提前估计好存储容量。根据计算出来的总的存储量，提前做足够的数据分片。</p>
+<p>换言之，对于存储层，我们的一种思路是：早做扩展，以确保将来不做扩展；</p>
+<p>另外一种思路是，添加必要的路由层（数据访问路由层）或者路由算法（数据表倍增法），来确保将来的扩展对上层不可见。</p>
+<h4 id="manager层"><a href="#manager层" class="headerlink" title="manager层"></a>manager层</h4><ol>
+<li>抽象service层可能提供的一些原子能力</li>
+<li>封装对第三方接口的调用</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/server.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/server.html" class="post-title-link" itemprop="url">高性能服务器设计-总览</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:44:49" itemprop="dateModified" datetime="2022-03-01T22:44:49+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/server.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/server.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>池化技术<br>核心思想：用空间换时间，期望使用预先创建好的对象来减少频繁创建对象的性能开销，同时还统一管理了对象，降低了对象的使用成本。<br>例子：<br>（1）数据库连接池-最小数量、最大数量、如果超过最大则等待<br>（2）线程池-最小数量、最大数量、有界队列（监控队列中元素的个数）<br>线程池大小：区分IO密集、CPU密集<br>（3）内存池</p>
+<p>超时事件管理</p>
+<p>IO模型</p>
+<p>线程模型，一般会综合考虑IO模型、超时事件如何管理、线程池、消息队列等</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/store/index.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1021,240 +1206,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/cache/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/cache/index.html" class="post-title-link" itemprop="url">缓存简要说明</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-16 23:20:03" itemprop="dateCreated datePublished" datetime="2022-02-16T23:20:03+08:00">2022-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-29 09:49:36" itemprop="dateModified" datetime="2022-10-29T09:49:36+08:00">2022-10-29</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/cache/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/cache/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>高速缓存服务器(Cache Server)是软硬件高度集成的专业功能服务器，主要做高速缓存加速服务，一般部署在网络边缘。</p>
-<p>根据加速对象不同，分为客户端加速和服务器加速</p>
-<p>客户端加速Cache部署在网络出口处，把常访问的内容缓存在本地，提高响应速度和节约带宽;</p>
-<p>服务器加速Cache部署在服务器前端，作为Web服务器的前置机，提高Web服务器的性能，加速访问速度。</p>
-<hr>
-<p>缓存有哪些类型？</p>
-<ul>
-<li>服务器LocalCache （有状态）</li>
-</ul>
-<p>将缓存内容放到服务器的本地内存或者磁盘；</p>
-<p>无法及时更新，一般都是设置一个合理的过期时间，让其自动过期；适用于实时性要求不高的场景；</p>
-<p>优缺点：本地缓存是内存访问，没有远程交互开销，性能最好，但是受限于单机容量，一般缓存较小且无法扩展。</p>
-<p>特例：数据库缓存</p>
-<ul>
-<li>分布式缓存（无状态）</li>
-</ul>
-<p>redis\memcache\tair</p>
-<ul>
-<li>客户端缓存（有状态）</li>
-</ul>
-<p>具体有哪些：<br>浏览器cookie；浏览器本地缓存；flash本地存储；html5的本地存储；native app 本地缓存</p>
-<p>缓存系统对比与选型</p>
-<hr>
-<p>在Web应用领域，Web缓存大致可以分为以下几种类型：</p>
-<h4 id="浏览器端缓存"><a href="#浏览器端缓存" class="headerlink" title="浏览器端缓存"></a>浏览器端缓存</h4><p>浏览器缓存根据一套与服务器约定的规则进行工作，在同一个会话过程中会检查一次并确定缓存的副本足够新。如果你浏览过程中，比如前进或后退，访问到同一个图片，这些图片可以从浏览器缓存中调出而即时显现。</p>
-<p>客户端浏览器缓存主要是通过在http头部增加<br>Last-Modified,If-Modified-Since,Expires,Cache-Control等标识，和服务器进行协商，是否是采用客户的本机缓存来实现。</p>
-<p>其中这里面也会分为三种方式</p>
-<p>1 通过Last-Modified，If-Modified-Since方式和服务器通信，客户发出http请求中包含If-Modified-Since，如果服务器端代码没有修改，服务器端返回302响应代码的请求响应头（内容不返回）客户端则直接用本机缓存的内容缓存显示结果。相<br>当于节省了服务器执行代码时间以及数据传输时间。</p>
-<p>2 通过Expires,Cache-Control控制，客户端发现如果上次请求的页面还未过期，通过Expires或者Cache-Control进行辨别，则直接显示本机缓存的内容，不与服务器进行通信。</p>
-<h4 id="服务器端缓存"><a href="#服务器端缓存" class="headerlink" title="服务器端缓存"></a>服务器端缓存</h4><h5 id="CDN缓存"><a href="#CDN缓存" class="headerlink" title="CDN缓存"></a>CDN缓存</h5><p>CDN（Content delivery networks）缓存，也叫网关缓存、反向代理缓存。CDN缓存一般是由网站管理员自己部署，为了让他们的网站更容易扩展并获得更好的性能。浏览器先向CDN网关发起Web请求，网关服务器后面对应着一台或多台负载均衡源服务器，会根据它们的负载请求，动态将请求转发到合适的源服务器上。虽然这种架构负载均衡源服务器之间的缓存没法共享，但却拥有更好的处扩展性。从浏览器角度来看，整个CDN就是一个源服务器，从这个层面来说，本文讨论浏览器和服务器之间的缓存机制，在这种架构下同样适用。</p>
-<h5 id="代理服务器缓存"><a href="#代理服务器缓存" class="headerlink" title="代理服务器缓存"></a>代理服务器缓存</h5><p>代理服务器是浏览器和源服务器之间的中间服务器，浏览器先向这个中间服务器发起Web请求，经过处理后（比如权限验证，缓存匹配等），再将请求转发到源服务器。代理服务器缓存的运作原理跟浏览器的运作原理差不多，只是规模更大。可以把它理解为一个共享缓存，不只为一个用户服务，一般为大量用户提供服务，因此在减少相应时间和带宽使用方面很有效，同一个副本会被重用多次。常见代理服务器缓存解决方案有Squid等</p>
-<h5 id="Web应用层缓存"><a href="#Web应用层缓存" class="headerlink" title="Web应用层缓存"></a>Web应用层缓存</h5><p>应用层缓存指的是从代码层面上，通过代码逻辑和缓存策略，实现对数据，页面，图片等资源的缓存，可以根据实际情况选择将数据存在文件系统或者内存中，减少数据库查询或者读写瓶颈，提高响应效率。</p>
-<h5 id="数据库数据缓存"><a href="#数据库数据缓存" class="headerlink" title="数据库数据缓存"></a>数据库数据缓存</h5><p>Web应用，特别是SNS类型的应用，往往关系比较复杂，数据库表繁多，如果频繁进行数据库查询，很容易导致数据库不堪重荷。为了提供查询的性能，会将查询后的数据放到内存中进行缓存，下次查询时，直接从内存缓存直接返回，提供响应效率。比如常用的缓存方案有memcached等。</p>
-<p>总结一下：<br>一般的高并发的应用程序，都在web层采用了以上几种缓存，一般静态资源（图片，js，css）都会采用nginx反向代理+客户端缓存来实现<br>对于门户网站，尤其是首页的新闻，一般都会缓存起来，可以通过反向代理也可以通过应用程序缓存实现方式<br>对于下载或者视频网站，由于数据传输比较大，直接采用浏览器本地缓存实现。</p>
-<hr>
-<p>业务需求可能涉及的缓存组件要求：</p>
-<h5 id="容量"><a href="#容量" class="headerlink" title="容量"></a>容量</h5><p>需要存储什么类型的内容？ 存储量多大？</p>
-<h5 id="并发（qps"><a href="#并发（qps" class="headerlink" title="并发（qps)"></a>并发（qps)</h5><p>缓存的读写比例以及qps如何？</p>
-<h5 id="响应时间"><a href="#响应时间" class="headerlink" title="响应时间"></a>响应时间</h5><p>更高的qps可以通过扩容来解决，但是一次响应的时间是有限制的，例如跨机房访问延迟0.5ms，就决定了响应时间不可能低于0.5ms;</p>
-<p>反过来，如果业务上要求的resp time必须小于0.5ms， 那么该缓存就一定满足不了我们的要求。</p>
-<h5 id="使用成本"><a href="#使用成本" class="headerlink" title="使用成本"></a>使用成本</h5><p>分为两部分：</p>
-<ol>
-<li>首先服务端，主要包括：运维成本、机器成本</li>
-<li>第二，客户端，主要包括程序员研发成本：单一的库依赖、简洁的配置和人性化的API丰富的文档和技术支持</li>
-</ol>
-<h5 id="扩展性要求"><a href="#扩展性要求" class="headerlink" title="扩展性要求"></a>扩展性要求</h5><p>在某方面出现瓶颈（qps或者容量）时，能否通过增加机器来快速在线扩容；这个主要涉及到系统的负载均衡能力；</p>
-<h5 id="容灾能力"><a href="#容灾能力" class="headerlink" title="容灾能力"></a>容灾能力</h5><p>缓存数据丢失；不同的系统有不同的容灾能力；一定要结合业务需求</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/cache/memcache.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/cache/memcache.html" class="post-title-link" itemprop="url">MC缓存必知必会</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-16 23:20:03" itemprop="dateCreated datePublished" datetime="2022-02-16T23:20:03+08:00">2022-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/cache/memcache.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/cache/memcache.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>memcached作为高速运行的分布式缓存服务器，具有以下的特点:</p>
-<p>（1）协议简单，文本协议</p>
-<p>（2）基于libevent的事件处理，对服务器的连接数增加，也能发挥O(1)的性能</p>
-<p>操作：</p>
-<p>（1）set， get， del</p>
-<p>（2）多key查询</p>
-<p>（3）原子自增，自减</p>
-<h3 id="memcache内存分配"><a href="#memcache内存分配" class="headerlink" title="memcache内存分配"></a>memcache内存分配</h3><p>Slab Allocator的基本原理是按照预先规定的大小，将分配的内存分割成特定长度的块，以完全解决内存碎片问题。但是存在内存浪费问题！！（外碎片没有了，但是当分配大小超过实际要用大小时，产生内部碎片）</p>
-<h3 id="memcache删除机制"><a href="#memcache删除机制" class="headerlink" title="memcache删除机制"></a>memcache删除机制</h3><p>Lazy Expiration</p>
-<p>基于LRU(Least Recently Used)算法自动删除不使用的缓存</p>
-<p>memcached内部不会监视记录是否过期，而是在get时查看记录的时间戳，检查记录是否过期。这种技术被称为lazy（惰性）expiration。因此，memcached不会在过期监视上耗费CPU时间。</p>
-<p>当容量存满时，会对缓存中的数据进行剔除，剔除时除了会对过期 key 进行清理，还会按 LRU 策略对数据进行剔除。</p>
-<p>1.4以前：</p>
-<p>维护一个双向链表，当被访问时，移动到head； 当需要淘汰时，从尾巴开始扫描，找到已经过期的item淘汰掉。</p>
-<p>1.5以后：</p>
-<p>维护子LRU（HOT\WARM\COLD),有点类似多级队列。</p>
-<h2 id="哈希算法"><a href="#哈希算法" class="headerlink" title="哈希算法"></a>哈希算法</h2><p>memcached不互相通信的分布式，由客户端来实现</p>
-<h3 id="根据余数计算分散"><a href="#根据余数计算分散" class="headerlink" title="根据余数计算分散"></a>根据余数计算分散</h3><p>数据的分散性也相当优秀，但也有其缺点。那就是当添加或移除服务器时，缓存重组的代价相当巨大。<br>添加服务器后，余数就会产生巨变，这样就无法获取与保存时相同的服务器，从而影响缓存的命中率。</p>
-<h3 id="一致性Hash"><a href="#一致性Hash" class="headerlink" title="一致性Hash"></a>一致性Hash</h3><p>但Consistent Hashing中，只有在continuum（统一连续体）上增加服务器的地点逆时针方向的第一台服务器上的键会受到影响。Consistent Hashing最大限度地抑制了键的重新分布。</p>
-<p>而且，有的Consistent Hashing的实现方法还采用了虚拟节点的思想。使用一般的hash函数的话，服务器的映射地点的分布非常不均匀。</p>
-<p>因此，使用虚拟节点的思想，为每个物理节点（服务器）在continuum上分配100～200个点。这样就能抑制分布不均匀，最大限度地减小服务器增减时的缓存重新分布。</p>
-<h3 id="hash表扩容"><a href="#hash表扩容" class="headerlink" title="hash表扩容"></a>hash表扩容</h3><p>基于双缓冲思想的扩容方案</p>
-<p>启动一个后台线程，监控hash表大小，如果快满了，则拷贝到新的hash表【扩大容量】</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1327,7 +1278,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-count">348</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

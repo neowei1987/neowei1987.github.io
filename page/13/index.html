@@ -203,6 +203,240 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/cache/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/cache/index.html" class="post-title-link" itemprop="url">缓存简要说明</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-16 23:20:03" itemprop="dateCreated datePublished" datetime="2022-02-16T23:20:03+08:00">2022-02-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-10-29 09:49:36" itemprop="dateModified" datetime="2022-10-29T09:49:36+08:00">2022-10-29</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/cache/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/cache/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>高速缓存服务器(Cache Server)是软硬件高度集成的专业功能服务器，主要做高速缓存加速服务，一般部署在网络边缘。</p>
+<p>根据加速对象不同，分为客户端加速和服务器加速</p>
+<p>客户端加速Cache部署在网络出口处，把常访问的内容缓存在本地，提高响应速度和节约带宽;</p>
+<p>服务器加速Cache部署在服务器前端，作为Web服务器的前置机，提高Web服务器的性能，加速访问速度。</p>
+<hr>
+<p>缓存有哪些类型？</p>
+<ul>
+<li>服务器LocalCache （有状态）</li>
+</ul>
+<p>将缓存内容放到服务器的本地内存或者磁盘；</p>
+<p>无法及时更新，一般都是设置一个合理的过期时间，让其自动过期；适用于实时性要求不高的场景；</p>
+<p>优缺点：本地缓存是内存访问，没有远程交互开销，性能最好，但是受限于单机容量，一般缓存较小且无法扩展。</p>
+<p>特例：数据库缓存</p>
+<ul>
+<li>分布式缓存（无状态）</li>
+</ul>
+<p>redis\memcache\tair</p>
+<ul>
+<li>客户端缓存（有状态）</li>
+</ul>
+<p>具体有哪些：<br>浏览器cookie；浏览器本地缓存；flash本地存储；html5的本地存储；native app 本地缓存</p>
+<p>缓存系统对比与选型</p>
+<hr>
+<p>在Web应用领域，Web缓存大致可以分为以下几种类型：</p>
+<h4 id="浏览器端缓存"><a href="#浏览器端缓存" class="headerlink" title="浏览器端缓存"></a>浏览器端缓存</h4><p>浏览器缓存根据一套与服务器约定的规则进行工作，在同一个会话过程中会检查一次并确定缓存的副本足够新。如果你浏览过程中，比如前进或后退，访问到同一个图片，这些图片可以从浏览器缓存中调出而即时显现。</p>
+<p>客户端浏览器缓存主要是通过在http头部增加<br>Last-Modified,If-Modified-Since,Expires,Cache-Control等标识，和服务器进行协商，是否是采用客户的本机缓存来实现。</p>
+<p>其中这里面也会分为三种方式</p>
+<p>1 通过Last-Modified，If-Modified-Since方式和服务器通信，客户发出http请求中包含If-Modified-Since，如果服务器端代码没有修改，服务器端返回302响应代码的请求响应头（内容不返回）客户端则直接用本机缓存的内容缓存显示结果。相<br>当于节省了服务器执行代码时间以及数据传输时间。</p>
+<p>2 通过Expires,Cache-Control控制，客户端发现如果上次请求的页面还未过期，通过Expires或者Cache-Control进行辨别，则直接显示本机缓存的内容，不与服务器进行通信。</p>
+<h4 id="服务器端缓存"><a href="#服务器端缓存" class="headerlink" title="服务器端缓存"></a>服务器端缓存</h4><h5 id="CDN缓存"><a href="#CDN缓存" class="headerlink" title="CDN缓存"></a>CDN缓存</h5><p>CDN（Content delivery networks）缓存，也叫网关缓存、反向代理缓存。CDN缓存一般是由网站管理员自己部署，为了让他们的网站更容易扩展并获得更好的性能。浏览器先向CDN网关发起Web请求，网关服务器后面对应着一台或多台负载均衡源服务器，会根据它们的负载请求，动态将请求转发到合适的源服务器上。虽然这种架构负载均衡源服务器之间的缓存没法共享，但却拥有更好的处扩展性。从浏览器角度来看，整个CDN就是一个源服务器，从这个层面来说，本文讨论浏览器和服务器之间的缓存机制，在这种架构下同样适用。</p>
+<h5 id="代理服务器缓存"><a href="#代理服务器缓存" class="headerlink" title="代理服务器缓存"></a>代理服务器缓存</h5><p>代理服务器是浏览器和源服务器之间的中间服务器，浏览器先向这个中间服务器发起Web请求，经过处理后（比如权限验证，缓存匹配等），再将请求转发到源服务器。代理服务器缓存的运作原理跟浏览器的运作原理差不多，只是规模更大。可以把它理解为一个共享缓存，不只为一个用户服务，一般为大量用户提供服务，因此在减少相应时间和带宽使用方面很有效，同一个副本会被重用多次。常见代理服务器缓存解决方案有Squid等</p>
+<h5 id="Web应用层缓存"><a href="#Web应用层缓存" class="headerlink" title="Web应用层缓存"></a>Web应用层缓存</h5><p>应用层缓存指的是从代码层面上，通过代码逻辑和缓存策略，实现对数据，页面，图片等资源的缓存，可以根据实际情况选择将数据存在文件系统或者内存中，减少数据库查询或者读写瓶颈，提高响应效率。</p>
+<h5 id="数据库数据缓存"><a href="#数据库数据缓存" class="headerlink" title="数据库数据缓存"></a>数据库数据缓存</h5><p>Web应用，特别是SNS类型的应用，往往关系比较复杂，数据库表繁多，如果频繁进行数据库查询，很容易导致数据库不堪重荷。为了提供查询的性能，会将查询后的数据放到内存中进行缓存，下次查询时，直接从内存缓存直接返回，提供响应效率。比如常用的缓存方案有memcached等。</p>
+<p>总结一下：<br>一般的高并发的应用程序，都在web层采用了以上几种缓存，一般静态资源（图片，js，css）都会采用nginx反向代理+客户端缓存来实现<br>对于门户网站，尤其是首页的新闻，一般都会缓存起来，可以通过反向代理也可以通过应用程序缓存实现方式<br>对于下载或者视频网站，由于数据传输比较大，直接采用浏览器本地缓存实现。</p>
+<hr>
+<p>业务需求可能涉及的缓存组件要求：</p>
+<h5 id="容量"><a href="#容量" class="headerlink" title="容量"></a>容量</h5><p>需要存储什么类型的内容？ 存储量多大？</p>
+<h5 id="并发（qps"><a href="#并发（qps" class="headerlink" title="并发（qps)"></a>并发（qps)</h5><p>缓存的读写比例以及qps如何？</p>
+<h5 id="响应时间"><a href="#响应时间" class="headerlink" title="响应时间"></a>响应时间</h5><p>更高的qps可以通过扩容来解决，但是一次响应的时间是有限制的，例如跨机房访问延迟0.5ms，就决定了响应时间不可能低于0.5ms;</p>
+<p>反过来，如果业务上要求的resp time必须小于0.5ms， 那么该缓存就一定满足不了我们的要求。</p>
+<h5 id="使用成本"><a href="#使用成本" class="headerlink" title="使用成本"></a>使用成本</h5><p>分为两部分：</p>
+<ol>
+<li>首先服务端，主要包括：运维成本、机器成本</li>
+<li>第二，客户端，主要包括程序员研发成本：单一的库依赖、简洁的配置和人性化的API丰富的文档和技术支持</li>
+</ol>
+<h5 id="扩展性要求"><a href="#扩展性要求" class="headerlink" title="扩展性要求"></a>扩展性要求</h5><p>在某方面出现瓶颈（qps或者容量）时，能否通过增加机器来快速在线扩容；这个主要涉及到系统的负载均衡能力；</p>
+<h5 id="容灾能力"><a href="#容灾能力" class="headerlink" title="容灾能力"></a>容灾能力</h5><p>缓存数据丢失；不同的系统有不同的容灾能力；一定要结合业务需求</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/cache/memcache.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/cache/memcache.html" class="post-title-link" itemprop="url">MC缓存必知必会</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-16 23:20:03" itemprop="dateCreated datePublished" datetime="2022-02-16T23:20:03+08:00">2022-02-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/cache/memcache.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/cache/memcache.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>memcached作为高速运行的分布式缓存服务器，具有以下的特点:</p>
+<p>（1）协议简单，文本协议</p>
+<p>（2）基于libevent的事件处理，对服务器的连接数增加，也能发挥O(1)的性能</p>
+<p>操作：</p>
+<p>（1）set， get， del</p>
+<p>（2）多key查询</p>
+<p>（3）原子自增，自减</p>
+<h3 id="memcache内存分配"><a href="#memcache内存分配" class="headerlink" title="memcache内存分配"></a>memcache内存分配</h3><p>Slab Allocator的基本原理是按照预先规定的大小，将分配的内存分割成特定长度的块，以完全解决内存碎片问题。但是存在内存浪费问题！！（外碎片没有了，但是当分配大小超过实际要用大小时，产生内部碎片）</p>
+<h3 id="memcache删除机制"><a href="#memcache删除机制" class="headerlink" title="memcache删除机制"></a>memcache删除机制</h3><p>Lazy Expiration</p>
+<p>基于LRU(Least Recently Used)算法自动删除不使用的缓存</p>
+<p>memcached内部不会监视记录是否过期，而是在get时查看记录的时间戳，检查记录是否过期。这种技术被称为lazy（惰性）expiration。因此，memcached不会在过期监视上耗费CPU时间。</p>
+<p>当容量存满时，会对缓存中的数据进行剔除，剔除时除了会对过期 key 进行清理，还会按 LRU 策略对数据进行剔除。</p>
+<p>1.4以前：</p>
+<p>维护一个双向链表，当被访问时，移动到head； 当需要淘汰时，从尾巴开始扫描，找到已经过期的item淘汰掉。</p>
+<p>1.5以后：</p>
+<p>维护子LRU（HOT\WARM\COLD),有点类似多级队列。</p>
+<h2 id="哈希算法"><a href="#哈希算法" class="headerlink" title="哈希算法"></a>哈希算法</h2><p>memcached不互相通信的分布式，由客户端来实现</p>
+<h3 id="根据余数计算分散"><a href="#根据余数计算分散" class="headerlink" title="根据余数计算分散"></a>根据余数计算分散</h3><p>数据的分散性也相当优秀，但也有其缺点。那就是当添加或移除服务器时，缓存重组的代价相当巨大。<br>添加服务器后，余数就会产生巨变，这样就无法获取与保存时相同的服务器，从而影响缓存的命中率。</p>
+<h3 id="一致性Hash"><a href="#一致性Hash" class="headerlink" title="一致性Hash"></a>一致性Hash</h3><p>但Consistent Hashing中，只有在continuum（统一连续体）上增加服务器的地点逆时针方向的第一台服务器上的键会受到影响。Consistent Hashing最大限度地抑制了键的重新分布。</p>
+<p>而且，有的Consistent Hashing的实现方法还采用了虚拟节点的思想。使用一般的hash函数的话，服务器的映射地点的分布非常不均匀。</p>
+<p>因此，使用虚拟节点的思想，为每个物理节点（服务器）在continuum上分配100～200个点。这样就能抑制分布不均匀，最大限度地减小服务器增减时的缓存重新分布。</p>
+<h3 id="hash表扩容"><a href="#hash表扩容" class="headerlink" title="hash表扩容"></a>hash表扩容</h3><p>基于双缓冲思想的扩容方案</p>
+<p>启动一个后台线程，监控hash表大小，如果快满了，则拷贝到新的hash表【扩大容量】</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/db/acid.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -547,7 +781,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-14 00:00:39" itemprop="dateModified" datetime="2022-12-14T00:00:39+08:00">2022-12-14</time>
+                <time title="Modified: 2022-12-14 20:01:35" itemprop="dateModified" datetime="2022-12-14T20:01:35+08:00">2022-12-14</time>
               </span>
 
           
@@ -575,11 +809,25 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>1、一张表，里面有 ID 自增主键，当 insert 了 17 条记录之后，删除了第 15,16,17 条记录，再把 Mysql 重启，再 insert 一条记录，这条记录的 ID 是 18 还是 15 ？</p>
+          <h3 id="自增ID"><a href="#自增ID" class="headerlink" title="自增ID"></a>自增ID</h3><p>1、一张表，里面有 ID 自增主键，当 insert 了 17 条记录之后，删除了第 15,16,17 条记录，再把 Mysql 重启，再 insert 一条记录，这条记录的 ID 是 18 还是 15 ？</p>
 <p>(1) 如果表的类型是 MyISAM，那么是 18</p>
 <p>因为 MyISAM 表会把自增主键的最大 ID 记录到数据文件里，重启 MySQL 自增主键的最大ID 也不会丢失</p>
 <p>（2）如果表的类型是 InnoDB，那么是 15</p>
 <p>InnoDB 表只是把自增主键的最大 ID 记录到内存中，所以重启数据库或者是对表进OPTIMIZE 操作，都会导致最大 ID 丢失</p>
+<h3 id="字符串索引"><a href="#字符串索引" class="headerlink" title="字符串索引"></a>字符串索引</h3><p>还有没有其他方式帮助字符串建立索引</p>
+<p>比如能够给确定业务需求里面只有按照身份证等值查询的需求，需要给身份证加索引，有没有什么办法，占用更小空间，也能达到相同的查询效率。</p>
+<p>第一种方式是使用倒序存储</p>
+<p>【基础假设】存储的字符串<strong>后半部分的区分度相对更高</strong></p>
+<p>身份证最后 6 位，没有重复逻辑，因此最后 6 位可能提供了足够的区分度。</p>
+<p>先倒序存储，然后再创建前缀索引。</p>
+<p>如果存储身份证的时候倒过来存，每次查询的时候,可以这样：</p>
+<p>select field list from t where id card reverse(‘input id card string);<br>第二种方式使用 hash 字段</p>
+<p>可以使用表上再创建一个整数字段，来保持身份证的校验码，同时在这个字段创建索引。</p>
+<p>alter table t add id card crc int unsigned, add index（id_card_crc);<br>每次插入新记录的时候，都同时使用 crc32 这个函数 得到校验码填到这个新字段，校验码可能存在冲突，也就是两个不同的身份证通过 crc32() 函数得到的结果可能是相同的，查询要查询语句  where 部分判断 id_card 的值是精确相同的。</p>
+<h3 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h3><p>全字段排序 VS row_id排序</p>
+<p>MySQL 的一个设计思想：如果内存够，就要多利用内存，尽量减少磁盘访问。 对于 InnoDB 表来说，rowid 排序会要求回表多造成磁盘读，因此不会被优先选择。</p>
+<p>如果数据量很大，内存中无法存下这么多，就会使用磁盘临时文件来辅助排序，称为外部排序；<br>外部排序，MySQL会分为好几份单独的临时文件来存放排序后的数据，一般是磁盘文件中进行归并，然后将这些文件合并成一个大文件；</p>
+<p>参考：<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/qq_29066329/article/details/90036836">https://blog.csdn.net/qq_29066329/article/details/90036836</a></p>
 
       
     </div>
@@ -634,7 +882,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-14 00:21:58" itemprop="dateModified" datetime="2022-12-14T00:21:58+08:00">2022-12-14</time>
+                <time title="Modified: 2022-12-14 20:06:10" itemprop="dateModified" datetime="2022-12-14T20:06:10+08:00">2022-12-14</time>
               </span>
 
           
@@ -732,17 +980,6 @@
 <p>为什么需要两阶段提交呢?</p>
 <p>如果不用两阶段提交的话，可能会出现这样情况<br>先写 redo log，crash 后 bin log 备份恢复时少了一次更新，与当前数据不一致。<br>先写 bin log，crash 后，由于 redo log 没写入，事务无效，所以后续 bin log 备份恢复时，数据不一致。<br>两阶段提交就是为了保证 redo log 和 binlog 数据的安全一致性。只有在这两个日志文件逻辑上高度一致了才能放心的使用。<br>在恢复数据时，redolog 状态为 commit 则说明 binlog 也成功，直接恢复数据；如果 redolog 是 prepare，则需要查询对应的 binlog事务是否成功，决定是回滚还是执行。</p>
 <h4 id="InnoDB的几个关键特性"><a href="#InnoDB的几个关键特性" class="headerlink" title="InnoDB的几个关键特性"></a>InnoDB的几个关键特性</h4><p>insert buffer、double write、自适应hash索引、异步写等</p>
-<h3 id="binlog的三种格式"><a href="#binlog的三种格式" class="headerlink" title="binlog的三种格式"></a>binlog的三种格式</h3><p>binlog 有三种格式：</p>
-<p>Statement（Statement-Based Replication,SBR）：每一条会修改数据的 SQL 都会记录在 binlog 中。<br>Row（Row-Based Replication,RBR）：不记录 SQL 语句上下文信息，仅保存哪条记录被修改。<br>Mixed（Mixed-Based Replication,MBR）：Statement 和 Row 的混合体。</p>
-<p>2.1.1 Statement<br>Statement 模式只记录执行的 SQL，不需要记录每一行数据的变化，因此极大的减少了 binlog 的日志量，避免了大量的 IO 操作，提升了系统的性能。</p>
-<p>但是，正是由于 Statement 模式只记录 SQL，而如果一些 SQL 中 包含了函数，那么可能会出现执行结果不一致的情况。比如说 uuid() 函数，每次执行的时候都会生成一个随机字符串，在 master 中记录了 uuid，当同步到 slave 之后，再次执行，就得到另外一个结果了。</p>
-<p>所以使用 Statement 格式会出现一些数据一致性问题。</p>
-<p>2.2.2 Row<br>从 MySQL5.1.5 版本开始，binlog 引入了 Row 格式，Row 格式不记录 SQL 语句上下文相关信息，仅仅只需要记录某一条记录被修改成什么样子了。</p>
-<p>Row 格式的日志内容会非常清楚地记录下每一行数据修改的细节，这样就不会出现 Statement 中存在的那种数据无法被正常复制的情况。</p>
-<p>不过 Row 格式也有一个很大的问题，那就是日志量太大了，特别是批量 update、整表 delete、alter 表等操作，由于要记录每一行数据的变化，此时会产生大量的日志，大量的日志也会带来 IO 性能问题。</p>
-<p>2.2.3 Mixed<br>从 MySQL5.1.8 版开始，MySQL 又推出了 Mixed 格式，这种格式实际上就是 Statement 与 Row 的结合。</p>
-<p>在 Mixed 模式下，系统会自动判断 该 用 Statement 还是 Row：一般的语句修改使用 Statement 格式保存 binlog；对于一些 Statement 无法准确完成主从复制的操作，则采用 Row 格式保存 binlog。</p>
-<p>Mixed 模式中，MySQL 会根据执行的每一条具体的 SQL 语句来区别对待记录的日志格式，也就是在 Statement 和 Row 之间选择一种。</p>
 <p>参考：<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/hahazz233/article/details/125372412">https://blog.csdn.net/hahazz233/article/details/125372412</a></p>
 
       
@@ -1223,219 +1460,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/%E6%A8%A1%E5%9E%8B/%E7%9B%AE%E6%A0%87%E5%8E%9F%E5%88%99%E6%96%B9%E6%B3%95.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/%E6%A8%A1%E5%9E%8B/%E7%9B%AE%E6%A0%87%E5%8E%9F%E5%88%99%E6%96%B9%E6%B3%95.html" class="post-title-link" itemprop="url">模型系列-目标、原则、方法</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-16 20:43:27" itemprop="dateCreated datePublished" datetime="2022-02-16T20:43:27+08:00">2022-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-03 22:06:59" itemprop="dateModified" datetime="2022-03-03T22:06:59+08:00">2022-03-03</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/%E6%A8%A1%E5%9E%8B/%E7%9B%AE%E6%A0%87%E5%8E%9F%E5%88%99%E6%96%B9%E6%B3%95.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/%E6%A8%A1%E5%9E%8B/%E7%9B%AE%E6%A0%87%E5%8E%9F%E5%88%99%E6%96%B9%E6%B3%95.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>当你决定做某件事情之前，应该<br>（1）先确定目标（目标制定，要符合SMART原则）<br>（2）再明确原则（原则制定，不要模棱两可）<br>（3）最后去找实现目标的方法（方法制定，要切实可行）</p>
-<h4 id="先说目标"><a href="#先说目标" class="headerlink" title="先说目标"></a>先说目标</h4><p>坦言之，要明确一件事情的目标，很难。其实很多事情，都会有至少两种解法，一种是长期的，收益会更大一些，但是需要的时间更长一些；一种是短期的，收益小一点，但是耗时短。这时候，我们的目标如何设定呢？其实特别考验一个人（领导者）的判断力，洞察力。</p>
-<p>判断力的话，体现在一个人（领导者）需要能够<strong>预判业务将来的需要</strong>，从而决定这件事情的目标应该瞄准长期还是短期。</p>
-<p>洞察力的话，体现在领导者能否看透这件事情的本质。我们的解法自然需要事情的本质相匹配。如果我们的目标解法跟事情的本质不匹配，耗时再短，这个目标也是不合理的（因为他的解法与本质不匹配，将来一定会出现冲突，一定需要推翻重来）</p>
-<h4 id="再说原则"><a href="#再说原则" class="headerlink" title="再说原则"></a>再说原则</h4><p>关于原则有以下几点：<br>1）原则要符合公司、团队、个人的价值观<br>2）我们需要沉淀某些做事情的原则，避免重复纠结。</p>
-<p>这些原则应该是我们团队达成的共识，是团队高效率协作的基础。</p>
-<h4 id="最后说方法"><a href="#最后说方法" class="headerlink" title="最后说方法"></a>最后说方法</h4><p>在符合原则的基础上，能够达成目标的方法有很多。关于这点，我的原则是：不设限，任其自由生长。</p>
-<p>但是事后一定要复盘，要总结。无论方法成功还是失败，都要复盘、分析、总结、分享。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/core/%E5%95%86%E4%B8%9A%E5%8A%9B/%E5%85%B3%E4%BA%8E%E5%95%86%E4%B8%9A%E5%8A%9B.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/core/%E5%95%86%E4%B8%9A%E5%8A%9B/%E5%85%B3%E4%BA%8E%E5%95%86%E4%B8%9A%E5%8A%9B.html" class="post-title-link" itemprop="url">跨界能力｜商业力（Business）</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-16 20:43:27" itemprop="dateCreated datePublished" datetime="2022-02-16T20:43:27+08:00">2022-02-16</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/core/%E5%95%86%E4%B8%9A%E5%8A%9B/%E5%85%B3%E4%BA%8E%E5%95%86%E4%B8%9A%E5%8A%9B.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/core/%E5%95%86%E4%B8%9A%E5%8A%9B/%E5%85%B3%E4%BA%8E%E5%95%86%E4%B8%9A%E5%8A%9B.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="商业"><a href="#商业" class="headerlink" title="商业"></a>商业</h3><p>自己定义：在交换的过程中，给消费者创造价值，同时自己获取利润的过程。</p>
-<p>商业的几个关键要素：交易、交易成本、阻力（信息与新人不对称）</p>
-<h3 id="商业模式"><a href="#商业模式" class="headerlink" title="商业模式"></a>商业模式</h3><p>商业模式，是利益相关者的交易结构。更优秀的商业结构，会有更低的交易成本。</p>
-<p>商业模式，是一个企业<strong>满足消费者需求</strong>的系统，这个系统组织管理企业的各种资源（资金、原材料、人力资源、作业方式。销售方式信息、品牌和知识产权、企业所在的环境、创新力又称输入变量）形成能够消费者无法自力而必须购买的<strong>产品和服务</strong>（输出变量），因而具有自己能复制且<strong>别人无法复制</strong>或者自己在复制中<strong>占据市场优势地位</strong>的特性。</p>
-<p>九宫图，可以清晰的罗列商业模式的关键点呢？分为四大类</p>
-<p>客户方面：客户细分、客户关系、渠道通路</p>
-<p>价值方面：价值定位</p>
-<p>基础设施方面：关键活动、核心资源（你想对其他人有哪些优势）、重要伙伴</p>
-<p>财务方面：描述运营这个模式引入的成本、收入来源</p>
-<p><img src="https://i.loli.net/2021/07/30/DkZPnVShcvINFUd.png" alt="20210730082154"></p>
-<p>换成几个问题：</p>
-<ol>
-<li>真实的用户是谁？ 选择什么的细分市场标准？ 空间如何？</li>
-<li>怎么样触达用户？是直销还是经销？ 线上还是线下？</li>
-<li>提供什么样的核心服务？ 核心价值？痛点何在？如何定价？如何收费？</li>
-<li>资源支撑？核心资源是什么？ 需要什么样的伙伴或者上下游？</li>
-<li>财务状况？收入与成本？现金流状况？可持续性？</li>
-</ol>
-<p>产业链，从原材料到最终用户的整个链条。</p>
-<p>产业链，颗粒度选择；当宏观拆到微观：</p>
-<ol>
-<li>通过细粒度拆分才能明确到细分人群</li>
-<li>通过拆分才能够各环节的价值占比，有效防止风险（例如手机行业的芯片）</li>
-<li>通过拆分才能够反映出竞争的格局与壁垒（新能源汽车 =》 燃料电池 =》 交换膜）</li>
-</ol>
-<p>市场规模</p>
-<p>潜在市场规模 = 目标用户群数量 X 客单价 X 目标渗透率 （对于消费品，需要考虑复购率和频次）</p>
-<p>市场规模 = 市场空间 * 当年渗透率（伴随市场会变的）</p>
-<h3 id="商业目标"><a href="#商业目标" class="headerlink" title="商业目标"></a>商业目标</h3><p>商业目标是怎么产生？ 商业目标源于愿景，使命。</p>
-<p>什么是增长的商业目标？<br>遵循<strong>商业指向</strong>和<strong>业务需求</strong>而制定的目标；在做增长的过程中，有<strong>明确的结果导向</strong>。</p>
-<p>增长中的北极星指标：OMTM(One Metrics That Matters)</p>
-<p>北极星指标怎么设定？</p>
-<ol>
-<li>能反映出你的产品的核心价值的指标</li>
-<li>能让用户价值得以体现的指标</li>
-<li>团队都能理解并息息相关的指标</li>
-</ol>
-<p>北极星指标的拆解</p>
-<p>输出型指标（负责最终产出的结果展示，更宏观、滞后性）  VS 输入型指标（负责知道我们更细节的执行，更落地、引导型）</p>
-<p>Output Metrics = N 个 Input Metric = N^2 Input Metrics = M X Task</p>
-<p><img src="http://cdn.b5mang.com/20210727134715.png" alt="20210727134715"></p>
-<p>公式化思维拆目标</p>
-<ol>
-<li>加法：指标指向的业务能否平行拆分为多个渠道来源</li>
-<li>乘法：指标能够拆为一个“量”，乘以一个“率”</li>
-<li>用公式化思维，对一些指标持续持续拆解下去</li>
-</ol>
-<p>MECE分析问题：不重不漏</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1508,7 +1532,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-count">348</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

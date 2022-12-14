@@ -203,6 +203,442 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/bit/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/bit/index.html" class="post-title-link" itemprop="url">位运算系列-分类索引</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-11 22:54:03" itemprop="dateCreated datePublished" datetime="2021-01-11T22:54:03+08:00">2021-01-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:46:20" itemprop="dateModified" datetime="2022-03-01T22:46:20+08:00">2022-03-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/bit/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/bit/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>位操作</p>
+<h2 id="关于位操作，你一定要知道的"><a href="#关于位操作，你一定要知道的" class="headerlink" title="关于位操作，你一定要知道的"></a>关于位操作，你一定要知道的</h2><h2 id="位操作的常见技巧"><a href="#位操作的常见技巧" class="headerlink" title="位操作的常见技巧"></a>位操作的常见技巧</h2><p>第一个需要掌握的技巧是<strong>n &amp; (n - 1)</strong>，通过该操作我们可以让n的<strong>最后一个1变为0</strong>。</p>
+<p>第二个需要掌握的技巧是<strong>lowbit(n) = n &amp; (-n)</strong> ,lowbit操作可以让我们获取到n的低位。</p>
+<p>第三个需要知道的是<strong>二进制表示下不进位</strong>，例如：XOR又称作不进位加法。</p>
+<p>第四个技巧在于 <strong>n XOR 1</strong>成对变换。</p>
+<p>最后，掌握二进制位状态压缩的常见操作</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>运算</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>取出n的第k位</td>
+<td>n &amp; (1 &lt;&lt; k)</td>
+<td>n &amp; (00010000)</td>
+</tr>
+<tr>
+<td>取出n的后k位</td>
+<td>n &amp; (1 &lt;&lt; k) - 1</td>
+<td>n &amp; (00011111)</td>
+</tr>
+<tr>
+<td>n的第k位取反</td>
+<td>n xor (1 &lt;&lt; k)</td>
+<td>n xor 00010000</td>
+</tr>
+<tr>
+<td>n的第k位置1</td>
+<td>n &#124; (1 &lt;&lt; k)</td>
+<td>n &#124; 000010000</td>
+</tr>
+<tr>
+<td>n的第k位置0</td>
+<td>n &amp; ~(1 &lt;&lt; k)</td>
+<td>n &amp; 1111101111</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="位操作相关的经典题目"><a href="#位操作相关的经典题目" class="headerlink" title="位操作相关的经典题目"></a>位操作相关的经典题目</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>题目分类</th>
+<th>题目名称</th>
+<th>考察点</th>
+<th>其他说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td><a href="bit_dp.html">比特位计数</a></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td><a href="findNumsAppearOnce.html">找到序列中仅出现一次的数字</a></td>
+<td>位操作-XOR操作</td>
+</tr>
+<tr>
+<td></td>
+<td><a href="NumberOf1.html">该数二进制表示中1的个数</a></td>
+<td>位操作-找1</td>
+</tr>
+<tr>
+<td></td>
+<td><a href="../bit_add.html">通过位运算来实现加法</a></td>
+<td>XOR技巧</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_01.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_01.html" class="post-title-link" itemprop="url">动态规划背包问题-01背包</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-11 22:54:03" itemprop="dateCreated datePublished" datetime="2021-01-11T22:54:03+08:00">2021-01-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-10 10:25:29" itemprop="dateModified" datetime="2022-11-10T10:25:29+08:00">2022-11-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_01.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_01.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <div class="table-container">
+<table>
+<thead>
+<tr>
+<th>01背包问题</th>
+<th>背包问题系列</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>问题描述</td>
+<td>给定N个物品，其中第i个物品的体积为$V_i$，价值为$W_i$。有一个容积为M的背包，要求选择一些物品放入背包，使得物品总体积不超过M的前提下，物品总价值和最大。<a target="_blank" rel="noopener external nofollow noreferrer" href="https://zhuanlan.zhihu.com/p/30959069">https://zhuanlan.zhihu.com/p/30959069</a></td>
+</tr>
+<tr>
+<td>状态表示</td>
+<td>F[i,j]表示从前i个物品中选出了总体积为j的物品放入背包，物品的最大价值</td>
+</tr>
+<tr>
+<td>阶段划分</td>
+<td>主阶段：已经处理的物品数，以背包中放入到的物品总体积为附加维度</td>
+</tr>
+<tr>
+<td>转移方程</td>
+<td>$F[i,j]=\begin{cases}F[i-1,j] &amp; \text { 不选第i个物品} \\ F[i-1,j-V_i] + W_i &amp; \text{if } j \ge V_i  \text{ 选第i个物品} \end{cases}$</td>
+</tr>
+<tr>
+<td>边界</td>
+<td>F[0,0]=0，其余为负无穷</td>
+</tr>
+<tr>
+<td>目标</td>
+<td>$\underset{0 \le j \le M}{\mathrm{max}}{F[N,j]}$</td>
+</tr>
+<tr>
+<td>优化</td>
+<td>仅依赖前一项，可以通过滚动数组或者倒序循环做空间优化</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>另外，还有一种状态表示：<br>即F[i; v] 表示前i 件物品恰放入一个容量为v 的背包可以获得的最大价值。则其状态转移方程便是：</p>
+<p>F[i,v] = max(F[i -1, v], F[i-1 , v-C[i]] + W[i])</p>
+<p>这样子表示状态后，目标变为F[N, M]</p>
+<p>eg. 划分数组为两个相等的子集</p>
+<p>找sum一半</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_complete.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_complete.html" class="post-title-link" itemprop="url">动态规划背包问题-完全背包</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-11 22:54:03" itemprop="dateCreated datePublished" datetime="2021-01-11T22:54:03+08:00">2021-01-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:48:36" itemprop="dateModified" datetime="2022-03-01T22:48:36+08:00">2022-03-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_complete.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_complete.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <div class="table-container">
+<table>
+<thead>
+<tr>
+<th>完全背包问题</th>
+<th>背包问题系列</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>问题描述</td>
+<td>给定N个物品，其中第i个物品的体积为$V_i$，价值为$W_i$，并且有无限个。有一个容积为M的背包，要求选择一些物品放入背包，使得物品总体积不超过M的前提下，物品总价值和最大。</td>
+</tr>
+<tr>
+<td>状态表示</td>
+<td>F[i,j]表示从前i个物品中选出了总体积为j的物品放入背包，物品的最大价值</td>
+</tr>
+<tr>
+<td>阶段划分</td>
+<td>主阶段：已经处理的物品数，以背包中放入到的物品总体积为附加维度</td>
+</tr>
+<tr>
+<td>转移方程</td>
+<td>$F[i,j]=\begin{cases}F[i-1,j] &amp; \text {不选第i个物品} \\ F[i,j-V_i] + W_i &amp; \text{if } j \ge V_i  &amp; \text{ 选第i个物品} \end{cases}$</td>
+</tr>
+<tr>
+<td>边界</td>
+<td>F[0,0]=0，其余为负无穷</td>
+</tr>
+<tr>
+<td>目标</td>
+<td>$\underset{0 \le j \le M}{\mathrm{max}}{F[N,j]}$</td>
+</tr>
+<tr>
+<td>优化</td>
+<td>正循环做空间优化</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/dp/bag/bag_group.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1736,288 +2172,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/bit/bit_dp.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/bit/bit_dp.html" class="post-title-link" itemprop="url">位运算系列-比特位计数</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-10 20:42:03" itemprop="dateCreated datePublished" datetime="2021-01-10T20:42:03+08:00">2021-01-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:46:12" itemprop="dateModified" datetime="2022-03-01T22:46:12+08:00">2022-03-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/bit/bit_dp.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/bit/bit_dp.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="比特位计数-题目描述"><a href="#比特位计数-题目描述" class="headerlink" title="比特位计数 - 题目描述"></a>比特位计数 - 题目描述</h2><p>给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回。</p>
-<h2 id="比特位计数-代码实现"><a href="#比特位计数-代码实现" class="headerlink" title="比特位计数 - 代码实现"></a>比特位计数 - 代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    int lowbit(int n) &#123;</span></span><br><span class="line"><span class="comment">        return n &amp; (~n);</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">countBits</span><span class="params">(<span class="keyword">int</span> num)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(num + <span class="number">1</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= num; ++i) &#123;</span><br><span class="line">            dp[i] = dp[i &amp; i - <span class="number">1</span>] + <span class="number">1</span>; <span class="comment">//每次n&amp;n-1会抹掉最后一个1</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> dp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/structures/array/firstMissingPositive.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/structures/array/firstMissingPositive.html" class="post-title-link" itemprop="url">本地交换系列-缺失的第一个正数</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-10 10:47:03" itemprop="dateCreated datePublished" datetime="2021-01-10T10:47:03+08:00">2021-01-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-02-28 21:14:54" itemprop="dateModified" datetime="2022-02-28T21:14:54+08:00">2022-02-28</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/array/firstMissingPositive.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/array/firstMissingPositive.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="缺失的第一个正数-题目描述"><a href="#缺失的第一个正数-题目描述" class="headerlink" title="缺失的第一个正数 - 题目描述"></a>缺失的第一个正数 - 题目描述</h2><p>给你一个未排序的整数数组，请你找出其中没有出现的最小的正整数。</p>
-<h2 id="缺失的第一个正数-总体思路"><a href="#缺失的第一个正数-总体思路" class="headerlink" title="缺失的第一个正数 - 总体思路"></a>缺失的第一个正数 - 总体思路</h2><p>本地交换法不太容易想到，所以该题目定级为困难。题目让我们找缺失的第一个正数？</p>
-<p>我们不妨做一下<strong>逆向思考</strong>，假设一个正数都不缺失呢？我们会得到什么？ 一般情况下，我们的元素下标与元素的值会一一对应，从1到N。</p>
-<p>所以，我们考虑尝试着把一个元素i都找到他对应的位置i上，如果位置i被占了，我也强制把位置i的元素移走，重复整个过程。</p>
-<h2 id="缺失的第一个正数-代码实现"><a href="#缺失的第一个正数-代码实现" class="headerlink" title="缺失的第一个正数 - 代码实现"></a>缺失的第一个正数 - 代码实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">firstMissingPositive</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = nums.size();</span><br><span class="line">        <span class="comment">//1~N</span></span><br><span class="line">        <span class="comment">//一定可以为i找到一个合适的坑；</span></span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) &#123;</span><br><span class="line">           <span class="keyword">int</span> x = nums[i - <span class="number">1</span>];</span><br><span class="line">            <span class="keyword">while</span> (x &gt;= <span class="number">1</span> &amp;&amp; x &lt;= n &amp;&amp; x != nums[x - <span class="number">1</span>]) &#123;</span><br><span class="line">                swap(nums[x - <span class="number">1</span>], nums[i - <span class="number">1</span>]);</span><br><span class="line">                x = nums[i - <span class="number">1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) &#123;</span><br><span class="line">           <span class="keyword">if</span> (nums[i - <span class="number">1</span>] != i) &#123;</span><br><span class="line">               <span class="keyword">return</span> i;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> n + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/structures/linked_list/reverse/reverse_m_n.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/reverse/reverse_m_n.html" class="post-title-link" itemprop="url">链表反转系列-m到n链表反转</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-08 23:04:03" itemprop="dateCreated datePublished" datetime="2021-01-08T23:04:03+08:00">2021-01-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-13 09:36:23" itemprop="dateModified" datetime="2022-11-13T09:36:23+08:00">2022-11-13</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/reverse/reverse_m_n.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/reverse/reverse_m_n.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>逆序第m～n个元素</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ListNode* successor;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//非递归实现</span></span><br><span class="line">    <span class="function">ListNode* <span class="title">reverseN</span><span class="params">(ListNode* head, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        ListNode* pre = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">auto</span> cur = head;</span><br><span class="line">        <span class="keyword">while</span> (cur &amp;&amp; n &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">auto</span> next = cur-&gt;next; <span class="comment">//记录下一个cur</span></span><br><span class="line">            cur-&gt;next = pre; <span class="comment">//核心步骤---操作cur的next指针，让其指向pre；</span></span><br><span class="line">            pre = cur;  <span class="comment">//记录前一个</span></span><br><span class="line">            cur = next; <span class="comment">//给下一个cur赋值</span></span><br><span class="line">            n--;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        head-&gt;next = cur;</span><br><span class="line">        <span class="keyword">return</span> pre;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">ListNode* <span class="title">reverseN</span><span class="params">(ListNode* head, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!head) <span class="keyword">return</span> head;</span><br><span class="line">        <span class="comment">//base </span></span><br><span class="line">        <span class="keyword">if</span> (n == <span class="number">1</span>) &#123;</span><br><span class="line">            successor = head-&gt;next; <span class="comment">//这一步特别关键，记录当前元素的后继节点，则外面会使用。</span></span><br><span class="line">            <span class="keyword">return</span> head;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//子问题-下一个节点</span></span><br><span class="line">        <span class="keyword">auto</span> x = reverseN(head-&gt;next, n - <span class="number">1</span>);</span><br><span class="line">        <span class="comment">//head-&gt;next 是递归之前的头，也就是递归之后的尾巴</span></span><br><span class="line">        (head-&gt;next)-&gt;next = head;</span><br><span class="line">        head-&gt;next = successor;</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">ListNode* <span class="title">reverseBetween</span><span class="params">(ListNode* head, <span class="keyword">int</span> m, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//base</span></span><br><span class="line">        <span class="keyword">if</span> (m == <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> reverseN(head, n);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">auto</span> x = reverseBetween(head-&gt;next, m - <span class="number">1</span>, n - <span class="number">1</span>);</span><br><span class="line">        head-&gt;next = x;</span><br><span class="line">        <span class="keyword">return</span> head; <span class="comment">//返回的是头</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2090,7 +2244,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-count">348</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

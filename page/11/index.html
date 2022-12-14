@@ -203,6 +203,490 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/design_pattern/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/design_pattern/index.html" class="post-title-link" itemprop="url">设计模式-概览</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-24 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-24T10:01:03+08:00">2022-02-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/design_pattern/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/design_pattern/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>软件设计模式的几种分类</p>
+<h4 id="创建型"><a href="#创建型" class="headerlink" title="创建型"></a>创建型</h4><p>创建对象时，不再由我们直接实例化对象；而是根据特定场景，由程序来确定创建对象的方式，从而保证更大的性能、更好的架构优势。</p>
+<p>创建型模式主要有：</p>
+<h5 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h5><h5 id="工厂方法"><a href="#工厂方法" class="headerlink" title="工厂方法"></a>工厂方法</h5><p>意图：定义一个创建对象的接口，让其子类自己决定实例化哪一个工厂类，工厂模式使其创建过程延迟到子类进行。</p>
+<p>主要解决：主要解决接口选择的问题。</p>
+<p>何时使用：我们明确地计划不同条件下创建不同实例时。</p>
+<p>如何解决：让其子类实现工厂接口，返回的也是一个抽象的产品。</p>
+<p>关键代码：创建过程在其子类执行。</p>
+<p>应用实例：<br> 1、您需要一辆汽车，可以直接从工厂里面提货，而不用去管这辆汽车是怎么做出来的，以及这个汽车里面的具体实现。<br> 2、Hibernate 换数据库只需换方言和驱动就可以。</p>
+<p>优点：<br>1、一个调用者想创建一个对象，只要知道其名称就可以了。<br>2、扩展性高，如果想增加一个产品，只要扩展一个工厂类就可以。<br>3、屏蔽产品的具体实现，调用者只关心产品的接口。</p>
+<p>缺点：每次增加一个产品时，都需要增加一个具体类和对象实现工厂，使得系统中类的个数成倍增加，在一定程度上增加了系统的复杂度，同时也增加了系统具体类的依赖。这并不是什么好事。</p>
+<p>使用场景：<br>1、日志记录器：记录可能记录到本地硬盘、系统事件、远程服务器等，用户可以选择记录日志到什么地方。<br>2、数据库访问，当用户不知道最后系统采用哪一类数据库，以及数据库可能有变化时。<br>3、设计一个连接服务器的框架，需要三个协议，”POP3”、”IMAP”、”HTTP”，可以把这三个作为产品类，共同实现一个接口。</p>
+<p>注意事项：作为一种创建类模式，在任何需要生成复杂对象的地方，都可以使用工厂方法模式。有一点需要注意的地方就是复杂对象适合使用工厂模式，而简单对象，特别是只需要通过 new 就可以完成创建的对象，无需使用工厂模式。如果使用工厂模式，就需要引入一个工厂类，会增加系统的复杂度。</p>
+<h5 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h5><p>就是建立一个工厂类，对实现了同一接口的一些类进行实例的创建。简单工厂模式的实质是由一个工厂类根据传入的参数，动态决定应该创建哪一个产品类（这些产品类继承自一个父类或接口）的实例。</p>
+<p>意图：提供一个创建一系列相关或相互依赖对象的接口，而无需指定它们具体的类。</p>
+<p>主要解决：主要解决接口选择的问题。</p>
+<p>何时使用：系统的产品有多于一个的产品族，而系统只消费其中某一族的产品。</p>
+<p>如何解决：在一个产品族里面，定义多个产品。</p>
+<p>关键代码：在一个工厂里聚合多个同类产品。</p>
+<p>应用实例：</p>
+<p>优点：当一个产品族中的多个对象被设计成一起工作时，它能保证客户端始终只使用同一个产品族中的对象。</p>
+<p>缺点：产品族扩展非常困难，要增加一个系列的某一产品，既要在抽象的 Creator 里加代码，又要在具体的里面加代码。</p>
+<p>使用场景： 1、QQ 换皮肤，一整套一起换。 2、生成不同操作系统的程序。</p>
+<p>注意事项：产品族难扩展，产品等级易扩展。</p>
+<h5 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h5><p>全局资源管理，简化访问。</p>
+<p>意图：保证一个类仅有一个实例，并提供一个访问它的全局访问点。</p>
+<p>主要解决：一个全局使用的类频繁地创建与销毁。</p>
+<p>何时使用：当您想控制实例数目，节省系统资源的时候。</p>
+<p>如何解决：判断系统是否已经有这个单例，如果有则返回，如果没有则创建。</p>
+<p>关键代码：构造函数是私有的。</p>
+<p>应用实例：</p>
+<p>1、一个班级只有一个班主任。<br>2、Windows 是多进程多线程的，在操作一个文件的时候，就不可避免地出现多个进程或线程同时操作一个文件的现象，所以所有文件的处理必须通过唯一的实例来进行。<br>3、一些设备管理器常常设计为单例模式，比如一个电脑有两台打印机，在输出的时候就要处理不能两台打印机打印同一个文件。</p>
+<p>优点：<br>1、在内存里只有一个实例，减少了内存的开销，尤其是频繁的创建和销毁实例（比如管理学院首页页面缓存）。<br>2、避免对资源的多重占用（比如写文件操作）。</p>
+<p>缺点：没有接口，不能继承，与单一职责原则冲突，一个类应该只关心内部逻辑，而不关心外面怎么样来实例化。</p>
+<p>使用场景：</p>
+<p>1、要求生产唯一序列号。<br>2、WEB 中的计数器，不用每次刷新都在数据库里加一次，用单例先缓存起来。<br>3、创建的一个对象需要消耗的资源过多，比如 I/O 与数据库的连接等。</p>
+<p>注意事项：getInstance() 方法中需要使用同步锁 synchronized (Singleton.class) 防止多线程同时进入造成 instance 被多次实例化。</p>
+<h5 id="建造者模式"><a href="#建造者模式" class="headerlink" title="建造者模式"></a>建造者模式</h5><p>意图：将一个复杂的构建与其表示相分离，使得同样的构建过程可以创建不同的表示。</p>
+<p>主要解决：主要解决在软件系统中，有时候面临着”一个复杂对象”的创建工作，其通常由各个部分的子对象用一定的算法构成；由于需求的变化，这个复杂对象的各个部分经常面临着剧烈的变化，但是将它们组合在一起的算法却相对稳定。</p>
+<p>何时使用：一些基本部件不会变，而其组合经常变化的时候。</p>
+<p>如何解决：将变与不变分离开。</p>
+<p>关键代码：建造者：创建和提供实例，导演：管理建造出来的实例的依赖关系。</p>
+<p>应用实例：<br>1、去肯德基，汉堡、可乐、薯条、炸鸡翅等是不变的，而其组合是经常变化的，生成出所谓的”套餐”。<br>2、JAVA 中的 StringBuilder。</p>
+<p>优点： 1、建造者独立，易扩展。 2、便于控制细节风险。</p>
+<p>缺点： 1、产品必须有共同点，范围有限制。 2、如内部变化复杂，会有很多的建造类。</p>
+<p>使用场景： 1、需要生成的对象具有复杂的内部结构。 2、需要生成的对象内部属性本身相互依赖。</p>
+<p>一个类的各个组成部分的具体实现类或者算法经常面临着变化，但是将他们组合在一起的算法却相对稳定。提供一种封装机制 将稳定的组合算法于易变的各个组成部分隔离开来。</p>
+<p>注意事项：与工厂模式的区别是：建造者模式更加关注与零件装配的顺序</p>
+<h5 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h5><p>意图：用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象。</p>
+<p>主要解决：在运行期建立和删除原型。</p>
+<p>何时使用：<br>1、当一个系统应该独立于它的产品创建，构成和表示时。<br>2、当要实例化的类是在运行时刻指定时，例如，通过动态装载。<br>3、为了避免创建一个与产品类层次平行的工厂类层次时。<br>4、当一个类的实例只能有几个不同状态组合中的一种时。建立相应数目的原型并克隆它们可能比每次用合适的状态手工实例化该类更方便一些。</p>
+<p>如何解决：利用已有的一个原型对象，快速地生成和原型对象一样的实例。</p>
+<p>关键代码：<br> 1、实现克隆操作，在 JAVA 实现 Cloneable 接口，重写 clone()，在 .NET 中可以使用 Object 类的 MemberwiseClone() 方法来实现对象的浅拷贝或通过序列化的方式来实现深拷贝。<br>2、原型模式同样用于隔离类对象的使用者和具体类型（易变类）之间的耦合关系，它同样要求这些”易变类”拥有稳定的接口。</p>
+<p>应用实例： 1、细胞分裂。 2、JAVA 中的 Object clone() 方法。</p>
+<p>优点： 1、性能提高。 2、逃避构造函数的约束。</p>
+<p>缺点： 1、配备克隆方法需要对类的功能进行通盘考虑，这对于全新的类不是很难，但对于已有的类不一定很容易，特别当一个类引用不支持串行化的间接对象，或者引用含有循环结构的时候。 2、必须实现 Cloneable 接口。</p>
+<p>使用场景： 1、资源优化场景。 2、类初始化需要消化非常多的资源，这个资源包括数据、硬件资源等。 3、性能和安全要求的场景。 4、通过 new 产生一个对象需要非常繁琐的数据准备或访问权限，则可以使用原型模式。 5、一个对象多个修改者的场景。 6、一个对象需要提供给其他对象访问，而且各个调用者可能都需要修改其值时，可以考虑使用原型模式拷贝多个对象供调用者使用。 7、在实际项目中，原型模式很少单独出现，一般是和工厂方法模式一起出现，通过 clone 的方法创建一个对象，然后由工厂方法提供给调用者。原型模式已经与 Java 融为浑然一体，大家可以随手拿来使用。</p>
+<p>注意事项：与通过对一个类进行实例化来构造新对象不同的是，原型模式是通过拷贝一个现有对象生成新对象的。浅拷贝实现 Cloneable，重写，深拷贝是通过实现 Serializable 读取二进制流。</p>
+<h4 id="结构型"><a href="#结构型" class="headerlink" title="结构型"></a>结构型</h4><p>用于帮助将多个对象组织成更大的结构。</p>
+<p>结构型模式主要有：</p>
+<h5 id="适配器模式adapter"><a href="#适配器模式adapter" class="headerlink" title="适配器模式adapter"></a>适配器模式adapter</h5><p>适配器模式（Adapter Pattern）是作为两个不兼容的接口之间的桥梁。这种类型的设计模式属于结构型模式，它结合了两个独立接口的功能。</p>
+<p>意图：将一个类的接口转换成客户希望的另外一个接口。适配器模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。</p>
+<p>主要解决：主要解决在软件系统中，常常要将一些”现存的对象”放到新的环境中，而新环境要求的接口是现对象不能满足的。</p>
+<p>何时使用：<br>1、系统需要使用现有的类，而此类的接口不符合系统的需要。<br>2、想要建立一个可以重复使用的类，用于与一些彼此之间没有太大关联的一些类，包括一些可能在将来引进的类一起工作，这些源类不一定有一致的接口。<br>3、通过接口转换，将一个类插入另一个类系中。（比如老虎和飞禽，现在多了一个飞虎，在不增加实体的需求下，增加一个适配器，在里面包容一个虎对象，实现飞的接口。）</p>
+<p>如何解决：继承或依赖（推荐）。</p>
+<p>关键代码：适配器继承或依赖已有的对象，实现想要的目标接口。</p>
+<p>应用实例：<br>1、美国电器 110V，中国 220V，就要有一个适配器将 110V 转化为 220V。<br>2、JAVA JDK 1.1 提供了 Enumeration 接口，而在 1.2 中提供了 Iterator 接口，想要使用 1.2 的 JDK，则要将以前系统的 Enumeration 接口转化为 Iterator 接口，这时就需要适配器模式。<br>3、在 LINUX 上运行 WINDOWS 程序。 4、JAVA 中的 jdbc。</p>
+<p>优点： 1、可以让任何两个没有关联的类一起运行。 2、提高了类的复用。 3、增加了类的透明度。 4、灵活性好。</p>
+<p>缺点： 1、过多地使用适配器，会让系统非常零乱，不易整体进行把握。比如，明明看到调用的是 A 接口，其实内部被适配成了 B 接口的实现，一个系统如果太多出现这种情况，无异于一场灾难。因此如果不是很有必要，可以不使用适配器，而是直接对系统进行重构。 2.由于 JAVA 至多继承一个类，所以至多只能适配一个适配者类，而且目标类必须是抽象类。</p>
+<p>使用场景：有动机地修改一个正常运行的系统的接口，这时应该考虑使用适配器模式。</p>
+<p>注意事项：适配器不是在详细设计时添加的，而是解决正在服役的项目的问题。</p>
+<h5 id="桥接模式bridge"><a href="#桥接模式bridge" class="headerlink" title="桥接模式bridge"></a>桥接模式bridge</h5><p>意图：将抽象部分与实现部分分离，使它们都可以独立的变化。</p>
+<p>主要解决：在有多种可能会变化的情况下，用继承会造成类爆炸问题，扩展起来不灵活。</p>
+<p>何时使用：实现系统可能有多个角度分类，每一种角度都可能变化。</p>
+<p>如何解决：把这种多角度分类分离出来，让它们独立变化，减少它们之间耦合。</p>
+<p>关键代码：抽象类依赖实现类。</p>
+<p>应用实例： </p>
+<p>1、猪八戒从天蓬元帅转世投胎到猪，转世投胎的机制将尘世划分为两个等级，即：灵魂和肉体，前者相当于抽象化，后者相当于实现化。生灵通过功能的委派，调用肉体对象的功能，使得生灵可以动态地选择。 </p>
+<p>2、墙上的开关，可以看到的开关是抽象的，不用管里面具体怎么实现的。</p>
+<p>优点： </p>
+<p>1、抽象和实现的分离。<br>2、优秀的扩展能力。<br>3、实现细节对客户透明。</p>
+<p>缺点：桥接模式的引入会增加系统的理解与设计难度，由于聚合关联关系建立在抽象层，要求开发者针对抽象进行设计与编程。</p>
+<p>使用场景： 1、如果一个系统需要在构件的抽象化角色和具体化角色之间增加更多的灵活性，避免在两个层次之间建立静态的继承联系，通过桥接模式可以使它们在抽象层建立一个关联关系。 2、对于那些不希望使用继承或因为多层次继承导致系统类的个数急剧增加的系统，桥接模式尤为适用。 3、一个类存在两个独立变化的维度，且这两个维度都需要进行扩展。</p>
+<p>注意事项：对于两个独立变化的维度，使用桥接模式再适合不过了。</p>
+<h5 id="组合器模式component"><a href="#组合器模式component" class="headerlink" title="组合器模式component"></a>组合器模式component</h5><p>意图：将对象组合成树形结构以表示”部分-整体”的层次结构。组合模式使得用户对单个对象和组合对象的使用具有一致性。</p>
+<p>主要解决：它在我们树型结构的问题中，模糊了简单元素和复杂元素的概念，客户程序可以像处理简单元素一样来处理复杂元素，从而使得客户程序与复杂元素的内部结构解耦。</p>
+<p>何时使用： </p>
+<p>1、您想表示对象的部分-整体层次结构（树形结构）。<br>2、您希望用户忽略组合对象与单个对象的不同，用户将统一地使用组合结构中的所有对象。</p>
+<p>如何解决：树枝和叶子实现统一接口，树枝内部组合该接口。</p>
+<p>关键代码：树枝内部组合该接口，并且含有内部属性 List，里面放 Component。</p>
+<p>应用实例：<br>1、算术表达式包括操作数、操作符和另一个操作数，其中，另一个操作数也可以是操作数、操作符和另一个操作数。<br>2、在 JAVA AWT 和 SWING 中，对于 Button 和 Checkbox 是树叶，Container 是树枝。</p>
+<p>优点： </p>
+<p>1、高层模块调用简单。 2、节点自由增加。</p>
+<p>缺点：在使用组合模式时，其叶子和树枝的声明都是实现类，而不是接口，违反了依赖倒置原则。</p>
+<p>使用场景：部分、整体场景，如树形菜单，文件、文件夹的管理。</p>
+<p>注意事项：定义时为具体类。</p>
+<h5 id="外观门面模式Facade"><a href="#外观门面模式Facade" class="headerlink" title="外观门面模式Facade"></a>外观门面模式Facade</h5><p>意图：为子系统中的一组接口提供一个一致的界面，外观模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。</p>
+<p>主要解决：降低访问复杂系统的内部子系统时的复杂度，简化客户端之间的接口。</p>
+<p>何时使用： 1、客户端不需要知道系统内部的复杂联系，整个系统只需提供一个”接待员”即可。 2、定义系统的入口。</p>
+<p>如何解决：客户端不与系统耦合，外观类与系统耦合。</p>
+<p>关键代码：在客户端和复杂系统之间再加一层，这一层将调用顺序、依赖关系等处理好。</p>
+<p>应用实例： </p>
+<p>1、去医院看病，可能要去挂号、门诊、划价、取药，让患者或患者家属觉得很复杂，如果有提供接待人员，只让接待人员来处理，就很方便。<br>2、JAVA 的三层开发模式。</p>
+<p>优点： 1、减少系统相互依赖。 2、提高灵活性。 3、提高了安全性。</p>
+<p>缺点：不符合开闭原则，如果要改东西很麻烦，继承重写都不合适。</p>
+<p>使用场景：<br>1、为复杂的模块或子系统提供外界访问的模块。<br>2、子系统相对独立。 3、预防低水平人员带来的风险。</p>
+<p>注意事项：在层次化结构中，可以使用外观模式定义系统中每一层的入口。</p>
+<h5 id="亨元模式flyweight"><a href="#亨元模式flyweight" class="headerlink" title="亨元模式flyweight"></a>亨元模式flyweight</h5><p>意图：运用共享技术有效地支持大量细粒度的对象。</p>
+<p>主要解决：在有大量对象时，有可能会造成内存溢出，我们把其中共同的部分抽象出来，如果有相同的业务请求，直接返回在内存中已有的对象，避免重新创建。</p>
+<p>何时使用： </p>
+<p>1、系统中有大量对象。<br>2、这些对象消耗大量内存。<br>3、这些对象的状态大部分可以外部化。<br>4、这些对象可以按照内蕴状态分为很多组，当把外蕴对象从对象中剔除出来时，每一组对象都可以用一个对象来代替。<br>5、系统不依赖于这些对象身份，这些对象是不可分辨的。</p>
+<p>如何解决：用唯一标识码判断，如果在内存中有，则返回这个唯一标识码所标识的对象。</p>
+<p>关键代码：用 HashMap 存储这些对象。</p>
+<p>应用实例：<br>1、JAVA 中的 String，如果有则返回，如果没有则创建一个字符串保存在字符串缓存池里面。<br>2、数据库的数据池。</p>
+<p>优点：大大减少对象的创建，降低系统的内存，使效率提高。</p>
+<p>缺点：提高了系统的复杂度，需要分离出外部状态和内部状态，而且外部状态具有固有化的性质，不应该随着内部状态的变化而变化，否则会造成系统的混乱。</p>
+<p>使用场景： 1、系统有大量相似对象。 2、需要缓冲池的场景。</p>
+<p>注意事项： 1、注意划分外部状态和内部状态，否则可能会引起线程安全问题。 2、这些类必须有一个工厂对象加以控制。</p>
+<h5 id="装饰器模式decorator"><a href="#装饰器模式decorator" class="headerlink" title="装饰器模式decorator"></a>装饰器模式decorator</h5><p>对已有的业务逻辑进一步的封装，使其增加额外的功能，如java中的<strong>IO流</strong>就使用了装饰者模式，用户在使用的时候，可以任意组装，达到自己想要的效果。</p>
+<h5 id="代理模式proxy"><a href="#代理模式proxy" class="headerlink" title="代理模式proxy"></a>代理模式proxy</h5><p>代理模式是给某一个对象提供一个代理，并由代理对象控制对原对象的引用。</p>
+<p>优点：代理模式能够协调调用者和被调用者，在一定程度上降低了系统的耦合度；可以灵活地隐藏被代理对象的部分功能和服务，也增加额外的功能和服务。</p>
+<p>缺点：</p>
+<p>由于使用了代理模式，因此程序的性能没有直接调用性能高；使用代理模式提高了代码的复杂度。</p>
+<p>举一个生活中的例子：比如买飞机票，由于离飞机场太远，直接去飞机场买票不太现实，这个时候我们就可以上携程 App 上购买飞机票，这个时候携程 App 就相当于是飞机票的代理商。</p>
+<h4 id="行为型"><a href="#行为型" class="headerlink" title="行为型"></a>行为型</h4><p>用于帮助系统间各对象的通信，以及如何控制复杂系统中流程。</p>
+<p>行为型模式主要有：</p>
+<h5 id="解释器模式"><a href="#解释器模式" class="headerlink" title="解释器模式"></a>解释器模式</h5><p>用的比较少，可能出现的地方：<strong>语法解析</strong></p>
+<h5 id="中介者模式"><a href="#中介者模式" class="headerlink" title="中介者模式"></a>中介者模式</h5><p>作用：<br>通过使用一个中间对象来进行消息分发以及减少类之间的直接依赖。</p>
+<p>本质：</p>
+<p>ComponentA,ComponentB,ComponentC 都拥有一个Mediator（拥有一个方法notify)</p>
+<p>当某一个Component执行某一个操作的时候, 除了做完自己的事情，还需要Mediator::Notify</p>
+<p>Mediator有一个具体的子类叫：ConcreteMediator，他拥有所有的Component，并overwrite了Notify接口</p>
+<h5 id="命令模式command"><a href="#命令模式command" class="headerlink" title="命令模式command"></a>命令模式command</h5><p>命令模式：将一个请求封装为一个对象，从而使你可以用不同的请求对客户进行参数化，对请求排队和记录请求日志，以及支持可撤销的操作。</p>
+<p>应用场景：将命令者与执行者完全解耦。</p>
+<p>Java中的Runnable就是命令模式</p>
+<h5 id="迭代器模式"><a href="#迭代器模式" class="headerlink" title="迭代器模式"></a>迭代器模式</h5><p>STL::iterator</p>
+<h5 id="备忘录模式"><a href="#备忘录模式" class="headerlink" title="备忘录模式"></a>备忘录模式</h5><p>Originator 发起者；<br>CareTaker 备忘录管理者，管理所有的备忘录快照<br>Memoto 备忘录，有getState, setState两个方法</p>
+<p>一个游戏，玩一会儿，自动存档，再玩一会，自动存档。就可以考虑用备忘录模式</p>
+<h5 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h5><p>发布订阅模式</p>
+<p>对象间一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。Android中的<strong>各种Listener</strong>就使用到了这一设计模式，只要用户对手机进行操作，对应的listener就会被通知，并作出响应的处理。</p>
+<h5 id="状态模式state"><a href="#状态模式state" class="headerlink" title="状态模式state"></a>状态模式state</h5><p>状态模式：允许对象在其内部状态改变时改变他的行为。对象看起来似乎改变了他的类。</p>
+<p>应用场景：一个对象的内部状态改变时，他的行为剧烈的变化。</p>
+<p>context 使用 State</p>
+<p>concreteStateA，B，C继承自State</p>
+<p>concreteStateA 可以在实现时切换状态到B</p>
+<h5 id="模板模式"><a href="#模板模式" class="headerlink" title="模板模式"></a>模板模式</h5><p>模板方法模式是指定义一个模板结构，将具体内容延迟到子类去实现。</p>
+<p>让子类可以重写方法的一部分，而不是整个重写，你可以控制子类需要重写那些操作。</p>
+<p>做一件事情需要1，2，3三步，父类提供了基本实现，子类也可以选择overwrite。</p>
+<h5 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h5><p>答：策略模式是指定义一系列算法，将每个算法都封装起来，并且使他们之间可以相互替换。</p>
+<p>优点：遵循了开闭原则，扩展性良好。</p>
+<p>缺点：随着策略的增加，对外暴露越来越多。</p>
+<p>策略模式则是以接口形式提供抽象接口。由具体实现类提供不同算法。</p>
+<p>策略模式一般由3部分组成</p>
+<ul>
+<li>一个Context持有所有策略实现类引用，提供给客户端运行</li>
+<li>一个策略接口提供</li>
+<li>具体的策略实现类</li>
+</ul>
+<p>通过上面可以看到，策略模式和模板模式有一个最重要的区别，即模板模式一般只针对一套算法，注重对<strong>同一个算法的不同细节进行抽象提供不同的实现</strong>。而策略模式注重多套算法多套实现，在算法中间不应该有交集，因此算法和算法只间一般不会有冗余代码！因为不同算法之间的实现一般不同很相近。</p>
+<p>因此我们可以看到，策略模式的关注点更广，模板模式的关注点更深。而且两种模式可以一起使用，即具体某个策略下可以通过模板减少不同步骤的冗余代码。</p>
+<p>例如：限流是服务器要实现的功能，但是实现策略有基于滑动窗口的限流策略、基于令牌桶的限流策略等。</p>
+<h5 id="访问者模式"><a href="#访问者模式" class="headerlink" title="访问者模式"></a>访问者模式</h5><p>用途：文件遍历<br>java.nio.file.FileVisitor接口<br>类功能：一个用于访问文件的接口。这一接口的实现类通过Files.walkFileTree方法实现对文件树中每一个文件的访问。<br>public static Path walkFileTree(Path start,Set options,<br>int maxDepth,FileVisitor&lt; super Path&gt; visitor) ，这一方法中回调了visitor的方法。<br>方法实现上：访问者对每一个被访问者都有一个实现方法。每一个被访问者都有一个通用方法，输入参数为访问者，此方法用于调用访问者的方法。</p>
+<h5 id="责任链"><a href="#责任链" class="headerlink" title="责任链"></a>责任链</h5><p>webserver的filter</p>
+<p>通过把请求从一个对象传递到链条中下一个对象的方式来解除对象之间的耦合，直到请求被处理完毕。链中的对象是同一接口或抽象类的不同实现。</p>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/sinat_34166518/article/details/89206059">https://blog.csdn.net/sinat_34166518/article/details/89206059</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/high_availability.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/distributed_system/high_availability.html" class="post-title-link" itemprop="url">分布式系统-可用性</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-24 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-24T10:01:03+08:00">2022-02-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-26 22:26:13" itemprop="dateModified" datetime="2022-11-26T22:26:13+08:00">2022-11-26</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/distributed_system/high_availability.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/high_availability.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>系统在困境（adversity）（硬件故障、软件故障、人为错误）中仍可正常工作（正确完成功能，并能达到期望的性能水准）。</p>
+<p>plan挂了之后，系统能不能活下来？ 有没有负责兜底的PlanB。</p>
+<p>造成错误的原因叫做故障（fault），能预料并应对故障的系统特性可称为容错（fault-tolerant）或韧性（resilient）。</p>
+<p>注意故障（fault）不同于失效（failure）【2】。故障通常定义为系统的<strong>一部分</strong>状态偏离其标准，而失效则是系统作为一个<strong>整体</strong>停止向用户提供服务。故障的概率不可能降到零，因此最好设计容错机制以防因故障而导致失效。</p>
+<h2 id="影响可用性的因素"><a href="#影响可用性的因素" class="headerlink" title="影响可用性的因素"></a>影响可用性的因素</h2><p>首先我们先梳理一下影响系统稳定性的一些常见的问题场景，大致可分为三类：</p>
+<h3 id="人为因素"><a href="#人为因素" class="headerlink" title="人为因素"></a>人为因素</h3><p>不合理的变更、外部攻击等等</p>
+<h3 id="软件因素"><a href="#软件因素" class="headerlink" title="软件因素"></a>软件因素</h3><p>代码bug、设计漏洞、GC问题、线程池异常、上下游异常</p>
+<h3 id="硬件因素"><a href="#硬件因素" class="headerlink" title="硬件因素"></a>硬件因素</h3><p>网络故障、机器故障等 </p>
+<h3 id="可用性速降到最低的表现-雪崩"><a href="#可用性速降到最低的表现-雪崩" class="headerlink" title="可用性速降到最低的表现-雪崩"></a>可用性速降到最低的表现-雪崩</h3><p>两个导火索：</p>
+<ul>
+<li>下游或者本身机器故障导致latency增加</li>
+<li>上游请求qps变高</li>
+</ul>
+<p>实际的并发超过了最大能支持的并发（当下游变慢后，该值迅速会下降），过载就发生了。过载不可怕，如果上游不重试，系统终将恢复。</p>
+<h2 id="如何提高可用性"><a href="#如何提高可用性" class="headerlink" title="如何提高可用性"></a>如何提高可用性</h2><h3 id="系统拆分"><a href="#系统拆分" class="headerlink" title="系统拆分"></a>系统拆分</h3><p>拆分不是以减少不可用时间为目的，而是以减少故障影响面为目的。因为一个大的系统拆分成了几个小的独立模块，一个模块出了问题不会影响到其他的模块，从而降低故障的影响面。系统拆分又包括接入层拆分、服务拆分、数据库拆分。</p>
+<h4 id="接入层-amp-服务层"><a href="#接入层-amp-服务层" class="headerlink" title="接入层&amp;服务层"></a>接入层&amp;服务层</h4><p>【轻重分离】<br>一般是按照业务模块、重要程度、变更频次等维度拆分。</p>
+<h4 id="数据层"><a href="#数据层" class="headerlink" title="数据层"></a>数据层</h4><p>【轻重分离】、【冷热分离】、【读写分离】<br>一般先按照业务拆分后，如果有需要还可以做垂直拆分也就是数据分片、读写分离、数据冷热分离等。</p>
+<h3 id="解耦"><a href="#解耦" class="headerlink" title="解耦"></a>解耦</h3><p>系统进行拆分之后，会分成多个模块。模块之间的依赖有强弱之分。</p>
+<p>如果是强依赖的，那么如果依赖方出问题了，也会受到牵连出问题。</p>
+<p>这时可以梳理整个流程的调用关系，做成弱依赖调用。</p>
+<p>弱依赖调用可以用MQ的方式来实现解耦。即使下游出现问题，也不会影响当前模块。</p>
+<h3 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h3><p>可以在适用性、优缺点、产品口碑、社区活跃度、实战案例、扩展性等多个方面进行全量评估，挑选出<strong>适合当前业务场景的中间件&amp;数据库</strong>。前期的调研一定要充分，先对比、测试、研究，再决定，磨刀不误砍柴工。</p>
+<h3 id="冗余部署-amp-故障自动转移"><a href="#冗余部署-amp-故障自动转移" class="headerlink" title="冗余部署&amp;故障自动转移"></a>冗余部署&amp;故障自动转移</h3><p>服务层的冗余部署很好理解，一个服务部署多个节点，有了冗余之后还不够，每次出现故障需要人工介入恢复势必会增加系统的不可服务时间。</p>
+<p>所以，又往往是通过“自动故障转移”来实现系统的高可用。即某个节点宕机后需要能自动摘除上游流量，这些能力基本上都可以通过<strong>负载均衡的探活机制</strong>来实现。</p>
+<p>涉及到数据层就比较复杂了，但是一般都有成熟的方案可以做参考。</p>
+<p>一般分为一主一从、一主多从、多主多从。不过大致的原理都是数据同步实现多从，数据分片实现多主，故障转移时都是通过选举算法选出新的主节点后在对外提供服务（这里如果写入的时候不做强一致同步，故障转移时会丢失一部分数据）。具体可以参考Redis Cluster、ZK、Kafka等集群架构。</p>
+<h3 id="容量评估"><a href="#容量评估" class="headerlink" title="容量评估"></a>容量评估</h3><ol>
+<li>每个系统，自己的最大处理能力是多少要做到清清楚楚。</li>
+</ol>
+<p>在系统上线前需要对整个服务用到的机器、DB、cache都要做容量评估，机器容量的容量可以采用以下方式评估：</p>
+<ol>
+<li>明确预期流量指标-QPS；</li>
+<li>明确可接受的时延和安全水位指标（比如CPU%≤40%，核心链路RT≤50ms）；</li>
+</ol>
+<p>通过压测评估单机在安全水位以下能支持的最高QPS（建议通过混合场景来验证，比如按照预估流量配比同时压测多个核心接口）；</p>
+<p>最后就可以估算出具体的机器数量了。</p>
+<p>DB和cache评估除了QPS之外还需要评估数据量，方法大致相同，等到系统上线后就可以根据监控指标做扩缩容了。</p>
+<h3 id="服务快速扩容能力-amp-泄洪能力"><a href="#服务快速扩容能力-amp-泄洪能力" class="headerlink" title="服务快速扩容能力&amp;泄洪能力"></a>服务快速扩容能力&amp;泄洪能力</h3><p>现阶段不论是容器还是ECS，单纯的节点复制扩容是很容易的，扩容的重点需要评估的是服务本身是不是无状态的，比如：</p>
+<ol>
+<li><p>下游DB的连接数最多支持当前服务扩容几台？</p>
+</li>
+<li><p>扩容后缓存是否需要预热？</p>
+</li>
+<li><p>放量策略</p>
+</li>
+</ol>
+<p>这些因素都是需要提前做好准备，整理出完备的SOP文档，当然最好的方式是进行演练，实际上手操作，有备无患。</p>
+<p><strong>泄洪能力</strong>一般是指冗余部署的情况下，选择几个节点作为备用节点，平时承担很小一部分流量，当流量洪峰来临时，通过调整流量路由策略把热节点的一部分流量转移到备用节点上。</p>
+<p>对比扩容方案这种成本相对较高，但是好处就是响应快，风险小。</p>
+<h3 id="限流-amp-熔断降级"><a href="#限流-amp-熔断降级" class="headerlink" title="限流&amp;熔断降级"></a>限流&amp;熔断降级</h3><p><img src="http://images.elecfans.top/uploads/20221109/491f36c6-6037-11ed-8abf-dac502259ad0.png" alt="限流"></p>
+<ol>
+<li><p>每个系统要有能力发现哪些是有效的请求，哪些是无效的请求。</p>
+</li>
+<li><p>前端系统有保护后端系统的义务，sla中承诺多大的能力，就只给到后端多大的压力。这就要求每一个前后端接口的地方，都有明确的负载约定，一环扣一环。</p>
+</li>
+<li><p>当过载发生时，该拒绝的请求（1、超出整个系统处理能力范围的；2、已经超时的无效请求）越早拒绝越好</p>
+</li>
+<li><p>中间层server对后端发送请求，重试机制要慎用，一定要用的话要有严格频率控制。</p>
+</li>
+<li><p>对于用户的重试行为，要适当的延缓。例如登录发现后端响应失败，再重新展现登录页面前，可以适当延时几秒钟，并展现进度条等友好界面。当多次重试还失败的情况下，要安抚用户。</p>
+</li>
+<li><p>当雪球发生了，直接清空雪球队列（例如重启进程可以清空socket缓冲区）可能是快速恢复的有效方法。</p>
+</li>
+<li><p>过载保护很重要的一点，不是说要加强系统性能、容量，成功应答所有请求，而是保证在高压下，系统的服务能力不要陡降到0，而是顽强的对外展现最大有效处理能力。</p>
+</li>
+</ol>
+<p>流量整形也就是常说的限流，主要是防止超过预期外的流量把服务打垮，熔断则是为了自身组件或者依赖下游故障时，可以快速失败防止长期阻塞导致雪崩。</p>
+<p>关于限流熔断的能力，开源组件Sentinel基本上都具备了，用起来也很简单方便，但是有一些点需要注意。</p>
+<p>【自适应限流】限流阈值一般是配置为服务的某个资源能支撑的最高水位，这个需要通过压测摸底来评估。随着系统的迭代，这个值可能是需要持续调整的。如果配置的过高，会导致系统崩溃时还没触发保护，配置的过低会导致误伤。</p>
+<p>熔断降级-某个接口或者某个资源熔断后，要根据业务场景跟熔断资源的重要程度来评估应该抛出异常还是返回一个兜底结果。</p>
+<p>比如下单场景如果扣减库存接口发生熔断，由于扣减库存在下单接口是必要条件，所以熔断后只能抛出异常让整个链路失败回滚，如果是获取商品评论相关的接口发生熔断，那么可以选择返回一个空，不影响整个链路。</p>
+<h3 id="资源隔离"><a href="#资源隔离" class="headerlink" title="资源隔离"></a>资源隔离</h3><p>如果一个服务的多个下游同时出现阻塞，单个下游接口一直达不到熔断标准（比如异常比例跟慢请求比例没达到阈值），那么将会导致整个服务的吞吐量下降和更多的线程数占用，极端情况下甚至导致线程池耗尽。引入资源隔离后，可以限制单个下游接口可使用的最大线程资源，确保在未熔断前尽可能小的影响整个服务的吞吐量。</p>
+<p>说到隔离机制，这里可以扩展说一下，由于每个接口的流量跟ResponseTime都不一样，很难去设置一个比较合理的可用最大线程数，并且随着业务迭代，这个阈值也难以维护。</p>
+<p>这里可以采用<strong>共享加独占</strong>来解决这个问题，每个接口有自己的独占线程资源，当独占资源占满后，使用共享资源，共享池在达到一定水位后，强制使用独占资源，排队等待。</p>
+<p>这种机制优点比较明显就是可以在资源利用最大化的同时保证隔离性。</p>
+<p>这里的线程数只是资源的一种，资源也可以是连接数、内存等等。</p>
+<h3 id="系统性保护"><a href="#系统性保护" class="headerlink" title="系统性保护"></a>系统性保护</h3><p><img src="http://images.elecfans.top/uploads/20221109/494d16cc-6037-11ed-8abf-dac502259ad0.png" alt=""></p>
+<p>系统性保护是一种无差别限流，一句话概念就是在系统快要崩溃之前对所有流量入口进行无差别限流，当系统恢复到健康水位后停止限流。具体一点就是结合应用的 Load、总体平均 RT、入口 QPS 和线程数等几个维度的监控指标，让系统的入口流量和系统的负载达到一个平衡，让系统尽可能跑在最大吞吐量的同时保证系统整体的稳定性。</p>
+<h3 id="4-10-可观测性-amp-告警"><a href="#4-10-可观测性-amp-告警" class="headerlink" title="4.10 可观测性&amp;告警"></a>4.10 可观测性&amp;告警</h3><p><img src="http://images.elecfans.top/uploads/20221109/496b13ca-6037-11ed-8abf-dac502259ad0.png" alt=""></p>
+<p>当系统出现故障时，我们首先需找到故障的原因，然后才是解决问题，最后让系统恢复。排障的速度很大程度上决定了整个故障恢复的时长，而可观测性的最大价值在于快速排障。其次基于Metrics、Traces、Logs三大支柱配置告警规则，可以提前发现系统可能存在的风险&amp;问题，避免故障的发生。</p>
+<h3 id="4-11-变更流程三板斧"><a href="#4-11-变更流程三板斧" class="headerlink" title="4.11 变更流程三板斧"></a>4.11 变更流程三板斧</h3><p>变更是可用性最大的敌人，99%的故障都是来自于变更，可能是配置变更，代码变更，机器变更等等。那么如何减少变更带来的故障呢？</p>
+<h4 id="可灰度"><a href="#可灰度" class="headerlink" title="可灰度"></a>可灰度</h4><p>用小比例的一部分流量来验证变更后的内容，减小影响用户群。</p>
+<p>产品特性设计和发布上，要尽量避免某个时刻导致大量用户集体触发某些请求的设计。发布的时候注意灰度。</p>
+<h4 id="可回滚"><a href="#可回滚" class="headerlink" title="可回滚"></a>可回滚</h4><p>出现问题后，能有有效的回滚机制。涉及到数据修改的，发布后会引起脏数据的写入，需要有可靠的回滚流程，保证脏数据的清除。</p>
+<h4 id="可观测"><a href="#可观测" class="headerlink" title="可观测"></a>可观测</h4><p>通过观察变更前后的指标变化，很大程度上可以提前发现问题。 除了以上三板斧外，还应该在其他开发流程上做规范，比如代码控制，集成编译、自动化测试、静态代码扫描等。</p>
+<p>五、总结</p>
+<p>对于一个动态演进的系统而言，我们没有办法将故障发生的概率降为0，能做的只有尽可能的预防和缩短故障时的恢复时间。当然我们也不用一味的追求可用性，毕竟提升稳定性的同时，维护成本、机器成本等也会跟着上涨，所以需要结合系统的业务SLO要求，适合的才是最好的。</p>
+<h3 id="冗余"><a href="#冗余" class="headerlink" title="冗余"></a>冗余</h3><p>解决高可用，只有一个方法，就是冗余。</p>
+<p>通过冗余更多的机器，来应对机器的硬件故障或者彼此之间的网络故障。</p>
+<h4 id="多机房部署"><a href="#多机房部署" class="headerlink" title="多机房部署"></a>多机房部署</h4><p>通过多机房部署来增加冗余。</p>
+<p>多活的好处</p>
+<ol>
+<li>响应时间短、提升用户体验</li>
+<li>服务高可用</li>
+<li>降低成本</li>
+</ol>
+<ul>
+<li>廉价的机器（非洲用户访问非洲的机器）</li>
+<li>流量的分摊（西方节日时，流量通过亚洲来分摊）</li>
+</ul>
+<p>如何做到异地多活（必须要解决的一些问题）</p>
+<ol>
+<li><p>接入层流量控制：用户默认访问哪个DC？什么时候做切换？ 如何控制这个切换过程？</p>
+</li>
+<li><p>各DC业务逻辑一致：对于用户来说， 他的流量被调度前后，业务逻辑是一致的。 比如facebook上有一些内容对于亚洲用户是不可见的，不能因为亚洲用户的流量被迁移到了美洲机房，这个限制就失效了。</p>
+</li>
+<li><p>跨DC的实时数据同步与冲突处理：还是以fb为例， 如果访问非洲机房的用户A给访问南美洲机房的用户B的一个帖子点了赞， 那么B应该能及时收到相关的通知。这背后就依赖数据的实时同步。<br>在多活情况下， 多DC的数据写入势必会引入数据的冲突， 比如facebook位于美东的的审核系统和位于东南亚的用户同时操作了一条帖子， 就会产生数据的冲突。</p>
+</li>
+<li><p>提供全球级别的强一致性<br>对于大多数业务而言， 我们只需要最终一致性即可（比如点赞之类的计数）。 但是某些业务，需要全球的强一致保障(比如下<br>单、支付之类的操作）。</p>
+</li>
+</ol>
+<p><strong>同城多机房</strong>：延迟1～3ms</p>
+<p>主要看接口的实现（如果有几十次的跨机房交互，这种是不可接受的）</p>
+<p>实现相对比较简单</p>
+<p>单机房写入；每一个机房近读取本机房的缓存与数据</p>
+<p>如果数据发生变更，需要做两边机房缓存的清理，一般通过canal订阅数据库变更</p>
+<p><img src="http://cdn.b5mang.com/202132021118.png" alt="同城多活示意图"></p>
+<p><strong>国内异地多机房</strong>:延迟50ms以内</p>
+<p>尽量减少跨机房的调用；而应该避免跨机房的数据库与缓存操作</p>
+<p>多机房写入，按照用户或者其他业务维度来进行流量分割，使得一部分流量总是请求A机房，而另外的总是请求B机房。</p>
+<p>根据业务需要，选择满足：<br>(1）一致性（如果选择了一致性，那么可用性便得不到100%保障）<br>(2）可用性（如果选择了可用性，那么一致性需要事后做补偿）</p>
+<p>数据同步方式有两种：<br>（1）基于存储系统主从复制：同步redis、Mysql等<br>（2）基于消息队列：同步缓存、HBase的数据</p>
+<p><img src="http://cdn.b5mang.com/20213202149.png" alt="异步多活示意图"></p>
+<p><strong>跨国多机房</strong>：延迟在100～200ms</p>
+<p>避免跨机房的调用，而只能做异步同步</p>
+<hr>
+<p>除此以外，我们还需要提一点，就是防止系统被瞬间的异常拖死，也就是系统能够自己保护好自己。</p>
+<h3 id="过载保护"><a href="#过载保护" class="headerlink" title="过载保护"></a>过载保护</h3><p>异常有内外两种，一种是外部流量特别高，一种是某一个依赖故障导致系统响应变慢。</p>
+<p>这里的课题应该包括：熔断、限流、超时控制、全局超时控制、服务降级（区分核心流程与非核心流程）</p>
+<h4 id="过载保护方案"><a href="#过载保护方案" class="headerlink" title="过载保护方案"></a>过载保护方案</h4><p>这里推荐一种方案：在该系统每个机器上新增一个进程：interface进程。</p>
+<p>Interface进程能够快速的从socket缓冲区中取得请求，打上当前时间戳，压入channel。</p>
+<p>业务处理进程从channel中获取请求和该请求的时间戳，如果发现时间戳早于当前时间减去超时时间（即已经超时，处理也没有意义），就直接丢弃该请求，或者应答一个失败报文。</p>
+<p>Channel是一个先进先出的通信方式，可以是socket，也可以是共享内存、消息队列、或者管道，不限。</p>
+<p>Socket缓冲区要设置合理，如果过大，导致及时interface进程都需要处理长时间才能清空该队列，就不合适了。</p>
+<p>建议的大小上限是：缓存住超时时间内interface进程能够处理掉的请求个数（注意考虑网络通讯中的元数据）。</p>
+<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.sohu.com/a/211248633_472869">https://www.sohu.com/a/211248633_472869</a></p>
+<h2 id="每个SLA级别需要做的事情"><a href="#每个SLA级别需要做的事情" class="headerlink" title="每个SLA级别需要做的事情"></a>每个SLA级别需要做的事情</h2><p>感觉一下提高1个9，难度有多大。</p>
+<p>三个9: 非核心业务可以容忍</p>
+<p>四个9: 核心业务</p>
+<p>运维值班体系、业务变更流程、故障处理流程、更加完善的系统故障排查工具、灰度发布（确保服务可回滚）</p>
+<p>五个9: 必须让机器来自动处理恢复！</p>
+<p>尽量思考故障发生后应该怎么办</p>
+<p>考虑点：如何自动的发现故障、如何自动化的应对故障、系统运维-尽量避免故障发生</p>
+<p>具体方法：failover(故障转移)、超时控制、服务降级、熔断限流</p>
+<p>failover:</p>
+<ul>
+<li>完全对等</li>
+<li>非完全对等（例如存在主备节点，心跳，选择paxos, raft等）</li>
+</ul>
+<p>系统分层<br>（1）接入层、服务层、数据层</p>
+<p>服务本身<br>（1）容量预估、合理的超时<br>（2）服务拆分、异步化解耦</p>
+<p>基础架构层面需要支持：<br>（1）监控&amp;告警<br>（2）自动化（快速）扩容&amp;泄洪能力<br>（1）熔断、限流、负载均衡、降级<br>（2）资源隔离（线程池、内存池、连接池）</p>
+<p>中间件&amp;存储，综合考虑业务场景、可运维性来进行技术选型</p>
+<p>控制变更流程<br>（1）可回滚、可灰度、可观测</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/memory_pool/index.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -980,191 +1464,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/high_scalability.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/distributed_system/high_scalability.html" class="post-title-link" itemprop="url">分布式系统-可扩展</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-04 22:55:48" itemprop="dateModified" datetime="2022-03-04T22:55:48+08:00">2022-03-04</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/distributed_system/high_scalability.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/high_scalability.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h2><p>有合理的办法应对系统的增长（数据量、流量、复杂性）</p>
-<p>一个良好适配应用的可扩展架构，是围绕着<strong>假设</strong>（assumption）建立的：哪些操作是常见的？哪些操作是罕见的？这就是所谓负载参数。如果假设最终是错误的，那么为扩展所做的工程投入就白费了，最糟糕的是适得其反。</p>
-<p>数据库、缓存、依赖的第三方、复杂均衡、交换机带宽都是系统扩展时需要考虑的点</p>
-<h3 id="分层"><a href="#分层" class="headerlink" title="分层"></a>分层</h3><p>首先要分层，分层是实现扩展的必要条件；分了层才能让系统有更好的可扩展能力；</p>
-<p><img src="http://cdn.b5mang.com/2021320104242.png" alt="架构分层"></p>
-<p>我们将系统分为如下几层：</p>
-<h4 id="接入层"><a href="#接入层" class="headerlink" title="接入层"></a>接入层</h4><p>主要负责负载均衡，要求负载均衡策略的时间复杂度要尽量简单，追求$O(lgn)$的时间复杂度，最坏不能超过$O(n)$。对于更坏时间复杂度的均衡策略，性能上会扛不住。</p>
-<h4 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h4><p>业务层：按照业务拆分、按照重要性拆分（轻重分离，核心、非核心）、按照请求来源（客户端、web、内网等）—这个跑偏了，这些点主要服务于可用性。</p>
-<p>这里侧重点在于无状态，我们一定要确保我们的服务无状态。</p>
-<h4 id="存储层"><a href="#存储层" class="headerlink" title="存储层"></a>存储层</h4><p>存储层做扩展会更麻烦一些。</p>
-<p>一般情况下，要求我们根据业务量提前估计好存储容量。根据计算出来的总的存储量，提前做足够的数据分片。</p>
-<p>换言之，对于存储层，我们的一种思路是：早做扩展，以确保将来不做扩展；</p>
-<p>另外一种思路是，添加必要的路由层（数据访问路由层）或者路由算法（数据表倍增法），来确保将来的扩展对上层不可见。</p>
-<h4 id="manager层"><a href="#manager层" class="headerlink" title="manager层"></a>manager层</h4><ol>
-<li>抽象service层可能提供的一些原子能力</li>
-<li>封装对第三方接口的调用</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/server.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/server/server.html" class="post-title-link" itemprop="url">高性能服务器设计-总览</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:44:49" itemprop="dateModified" datetime="2022-03-01T22:44:49+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/server/server.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/server.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>池化技术<br>核心思想：用空间换时间，期望使用预先创建好的对象来减少频繁创建对象的性能开销，同时还统一管理了对象，降低了对象的使用成本。<br>例子：<br>（1）数据库连接池-最小数量、最大数量、如果超过最大则等待<br>（2）线程池-最小数量、最大数量、有界队列（监控队列中元素的个数）<br>线程池大小：区分IO密集、CPU密集<br>（3）内存池</p>
-<p>超时事件管理</p>
-<p>IO模型</p>
-<p>线程模型，一般会综合考虑IO模型、超时事件如何管理、线程池、消息队列等</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1237,7 +1536,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">346</span>
+          <span class="site-state-item-count">348</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

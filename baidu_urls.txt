@@ -1,3 +1,4 @@
+https://www.fpthinker.com/backend_knowledge_architecture/network/devices.html
 https://www.fpthinker.com/backend_knowledge_architecture/hardware/memory.html
 https://www.fpthinker.com/backend_knowledge_architecture/db/main_slave.html
 https://www.fpthinker.com/backend_knowledge_architecture/cache/redis.html

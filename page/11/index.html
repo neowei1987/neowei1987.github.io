@@ -203,6 +203,125 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/distributed_system/index.html" class="post-title-link" itemprop="url">分布式系统介绍</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-24 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-24T10:01:03+08:00">2022-02-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-10-30 22:32:12" itemprop="dateModified" datetime="2022-10-30T22:32:12+08:00">2022-10-30</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/distributed_system/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="为什么会有分布式"><a href="#为什么会有分布式" class="headerlink" title="为什么会有分布式"></a>为什么会有分布式</h3><p>两点：算得慢（算力不足），存不下（数据分散）。</p>
+<p>无论是线程、进程，还是协程，本质上，目的都是为了计算的并行化，解决的是算的慢的问题。</p>
+<p>因为一个CPU算不过来，而单机扩容CPU数量成本极高（有空间这个刚性限制），所以需要水平扩容，多搞几台机器。</p>
+<p>计算的分布式化：基于分治思想，出现了分布式框架。</p>
+<p>MapReduce: 分布式计算的总体思想。</p>
+<p>分布式计算框架更多尝试对资源的调度做优化。ResourceManager, yarn, k8s;<br>（多租户，隔离，软隔离，租借，抢占等）</p>
+<h3 id="高并发系统的三个目标与挑战"><a href="#高并发系统的三个目标与挑战" class="headerlink" title="高并发系统的三个目标与挑战"></a>高并发系统的三个目标与挑战</h3><p>高并发是一个系统的<strong>挑战</strong></p>
+<p>如何衡量一个系统的并发有多高呢？ 同时在线人数</p>
+<p>高性能、高可用、可扩展是一个牛B系统<strong>目标</strong></p>
+<h4 id="三者的关系"><a href="#三者的关系" class="headerlink" title="三者的关系"></a>三者的关系</h4><p>为了保证高可用，需要冗余更多的相同功能机器（replication)，要求系统可扩展；</p>
+<p>为了保证高性能，必须需要更多的相同功能的机器（存储的replication、应用的无状态）或者服务于不同对象的机器（shard)，也要求可扩展；</p>
+<p>一份完整的数据，分为多个shard的过程需要可扩展；</p>
+<p>一份数据冗余了多份，前端对下游访问时用到的负载均衡策略需要可扩展。</p>
+<h4 id="如何衡量一个吞吐量有多大呢？"><a href="#如何衡量一个吞吐量有多大呢？" class="headerlink" title="如何衡量一个吞吐量有多大呢？"></a>如何衡量一个吞吐量有多大呢？</h4><p>系统的QPS，吞吐量 = 并发进程数 / 响应时间</p>
+<h4 id="如何衡量一个系统的性能有多高呢？"><a href="#如何衡量一个系统的性能有多高呢？" class="headerlink" title="如何衡量一个系统的性能有多高呢？"></a>如何衡量一个系统的性能有多高呢？</h4><p>一旦系统的负载被描述好，就可以研究当负载增加会发生什么。我们可以从两种角度来看：</p>
+<ul>
+<li>增加负载参数并保持系统资源（CPU、内存、网络带宽等）不变时，系统性能将受到什么影响？（接口响应时间，分位耗时）</li>
+<li>增加负载参数并希望保持性能不变时，需要增加多少系统资源？</li>
+</ul>
+<h4 id="如何衡量一个系统的可用性有多高呢？"><a href="#如何衡量一个系统的可用性有多高呢？" class="headerlink" title="如何衡量一个系统的可用性有多高呢？"></a>如何衡量一个系统的可用性有多高呢？</h4><p>平均故障间隔，平均故障恢复时间</p>
+<p><img src="http://cdn.b5mang.com/202132011926.png" alt="不同可用性标准下允许的故障时间"></p>
+<h4 id="如何衡量一个系统的可扩展能力？"><a href="#如何衡量一个系统的可扩展能力？" class="headerlink" title="如何衡量一个系统的可扩展能力？"></a>如何衡量一个系统的可扩展能力？</h4><p>考察一个问题：能够通过增加进程来应对更高的并发？ 如果一直加机器，我一直能线性的提高系统的处理能力吗？</p>
+<h3 id="如何应对系统的挑战"><a href="#如何应对系统的挑战" class="headerlink" title="如何应对系统的挑战"></a>如何应对系统的挑战</h3><p>架构通用原则：“4 要 1 不要”</p>
+<p>(1) 数据要尽量少</p>
+<ul>
+<li>用户请求的数据能少就少</li>
+<li>系统依赖的数据能少就少</li>
+</ul>
+<p>(2) 请求数要尽量少</p>
+<p>例如，静态文件合并</p>
+<p>（3）路径要尽量短</p>
+<p>将强依赖的服务进行单机部署</p>
+<p>（4）依赖要尽量少</p>
+<p>系统服务分级，高等级服务尽量少依赖低等级服务</p>
+<p>（5）不要有单点</p>
+<p>服务无状态，可扩展；存储层做副本备份</p>
+<p><img src="https://vonng.gitbooks.io/ddia-cn/content/img/fig1-1.png" alt="主流系统架构"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/design_pattern/index.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -720,7 +839,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-30 18:50:38" itemprop="dateModified" datetime="2022-10-30T18:50:38+08:00">2022-10-30</time>
+                <time title="Modified: 2022-12-15 16:21:43" itemprop="dateModified" datetime="2022-12-15T16:21:43+08:00">2022-12-15</time>
               </span>
 
           
@@ -821,6 +940,7 @@
 <li>节省内存，按需分配</li>
 <li>查询性能也还不错，等价于树高度</li>
 </ol>
+<p>参考：<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.cnblogs.com/wangshaowei/p/14287125.html">https://www.cnblogs.com/wangshaowei/p/14287125.html</a></p>
 
       
     </div>
@@ -1362,108 +1482,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/high_perfermance.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/distributed_system/high_perfermance.html" class="post-title-link" itemprop="url">分布式系统-低延迟，高性能</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-02 08:54:55" itemprop="dateModified" datetime="2022-03-02T08:54:55+08:00">2022-03-02</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/distributed_system/high_perfermance.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/high_perfermance.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在我看来，高性能指的是，我们的系统能够在尽可能短的时间内完成用户的请求，也就是说latency尽可能的低。</p>
-<p>如果说系统能够支撑更大的吞吐量，能够承载更多的同时在线。我们除了降低latency，还可以考虑加机器（如果还没有reach到某个系统平瓶颈的前提下）</p>
-<h3 id="提高吞吐量"><a href="#提高吞吐量" class="headerlink" title="提高吞吐量"></a>提高吞吐量</h3><h4 id="增加并发进程数"><a href="#增加并发进程数" class="headerlink" title="增加并发进程数"></a>增加并发进程数</h4><p>注意：无限增加，不会无限提升性能(对系统的扩展性有要求)</p>
-<p><img src="http://cdn.b5mang.com/202132011337.png" alt="性能拐点模型"></p>
-<h4 id="减少响应时间"><a href="#减少响应时间" class="headerlink" title="减少响应时间"></a>减少响应时间</h4><p>IO密集型：优化数据库索引、加缓存</p>
-<p>CPU密集型：优化算法时间复杂度、减少不必要运算等</p>
-<p>并发读的核心优化理念是尽量减少用户到服务端来“读”数据，或者让他们读更少的数据；</p>
-<p>并发写的处理原则也一样，它要求我们在数据库层面独立出来一个库，做特殊的处理。</p>
-<p>从一个架构师的角度来看，要想打造并维护一个超大流量并发读写、高性能、高可用的系统，在整个用户请求路径上从浏览器到服务端我们要遵循几个原则，就是要保证</p>
-<ol>
-<li>用户请求的数据尽量少</li>
-<li>完成这个请求的路径尽量短、依赖尽量少 =》 上游到下游的请求数尽量少</li>
-</ol>
-<p>也就两个大的方向：提升单次效率、减少不必要的请求</p>
-<ol>
-<li>动静分离方案（移除无关依赖、减少请求）</li>
-<li>热点的发现与隔离（缩短热点的服务路径）</li>
-<li>请求的削峰与分层过滤（异步化，减少无必要的依赖）</li>
-<li>服务端的极致优化（缩短热点的服务路径）</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1536,7 +1554,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">348</span>
+          <span class="site-state-item-count">349</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1549,7 +1567,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">63</span>
+        <span class="site-state-item-count">64</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

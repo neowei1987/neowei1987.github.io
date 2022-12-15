@@ -203,6 +203,124 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/language/java/sync.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/language/java/sync.html" class="post-title-link" itemprop="url">java语言-线程同步</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-03 19:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T19:47:03+08:00">2021-01-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-12-01 12:58:50" itemprop="dateModified" datetime="2022-12-01T12:58:50+08:00">2022-12-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index"><span itemprop="name">编程语言</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/language/java/sync.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/language/java/sync.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h3><p>volatile 的三点：<br>（1）保证可见性（ 主内存 VS JAVA内存）<br>（2）禁止指令重排</p>
+<p>Instance = new Singleton();可以分为以下三步：<br>Memory = allocate();//1.分配对象内存空间<br>Instance(memory)//2.初始化对象<br>Instance = memeory //3.设置初始化的对象指向刚分配的内存地址，此时instacne ! =null</p>
+<p>步骤2和步骤3不存在数据依赖关系，所以这种重排序是允许的</p>
+<p>Memory = allocate();<br>Instance = memeory<br>Instance(memory)//2.初始化对象</p>
+<p>所以这个时候出现的问题为多个线程在这里获得单例对象，第一个访问者在instance = new Singleton();这一步骤时由于指令重排序，底层先给对象分配好了地址，此时不为空，这个时候其他线程访问，instacne不为空，但是得不到实例对象。</p>
+<p>（3）不保证原子性</p>
+<p>volatile的应用场景</p>
+<p>DCL（Double Check Lock双端检索机制）</p>
+<p>双端检索机制不一定安全，原因是有指令重排序的存在，加入volatile可以禁止指令重排。 在某一个线程执行到第一次检测时，此时instance不为null，但是insatnce的引用对象可能没有初始化完成</p>
+<p>如何保证原子性</p>
+<p> 这种问题可以使用synchronized 或者使用原子变量 来解决。原子变量通过调用unsafe类的cas方法实现了原子操作，由于CAS是一种系统原语,原语属于操作系统用于范畴,是由若干条指令组成,用于完成某个功能的一个过程,并且原语的执行必须是连续的,在执行过程中不允许中断,也即是说CAS是一条原子指令,不会造成所谓的数据不一致的问题。</p>
+<h3 id="synchronized-的锁升级过程"><a href="#synchronized-的锁升级过程" class="headerlink" title="synchronized 的锁升级过程"></a>synchronized 的锁升级过程</h3><p>无锁-》偏向锁-》轻量级CAS自旋锁-》重量级锁<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/weixin_45606067/article/details/126766885">https://blog.csdn.net/weixin_45606067/article/details/126766885</a></p>
+<h3 id="synchronized-与-lock的区别"><a href="#synchronized-与-lock的区别" class="headerlink" title="synchronized 与 lock的区别"></a>synchronized 与 lock的区别</h3><p>区别如下：</p>
+<p>1.Lock是显示锁（手动开启和关闭锁）, synchronized时隐式锁，出来作用域自动释放</p>
+<p>2.Lock只有代码块锁，synchronized有代码块锁和方法锁</p>
+<p>3.使用Lock锁，JVM将花费较少的时间来调度线程，性能更好。并且具有更好的扩展性（提供了更多子类）</p>
+<p>4.lock是一个接口，而synchronized是java的一个关键字，synchronized是内置的语言实现；</p>
+<p>5.异常是否释放锁：<br>    synchronized在发生异常时候会自动释放占有的锁，因此不会出现死锁；而lock发生异常时候，不会主动释放占有的锁，必须手动unlock来释放锁，可能引起死锁的发生。（所以最好将同步代码块用try catch包起来，finally中写入unlock，避免死锁的发生。）</p>
+<p>6.是否响应中断<br>    lock等待锁过程中可以用interrupt来中断等待，而synchronized只能等待锁的释放，不能响应中断；</p>
+<p>7.是否知道获取锁<br>    Lock可以通过trylock来知道有没有获取锁，而synchronized不能；</p>
+<p>8.Lock可以提高多个线程进行读操作的效率。（可以通过readwritelock实现读写分离）</p>
+<p>9.在性能上来说，如果竞争资源不激烈，两者的性能是差不多的，而当竞争资源非常激烈时（即有大量线程同时竞争），此时Lock的性能要远远优于synchronized。所以说，在具体使用时要根据适当情况选择。</p>
+<p>10.synchronized使用Object对象本身的wait 、notify、notifyAll调度机制，而Lock可以使用Condition进行线程之间的调度</p>
+<p>AQS</p>
+<p>condtion是通过Reentlock的newCondtion方法创建出来的</p>
+<p>rwlock也是基于AQS实现的读写锁</p>
+<p>Semaphore 是一套单独的机制，用来实现信号量，多个线程共同访问一个资源。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/language/java/spring.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -634,7 +752,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-15 21:46:04" itemprop="dateModified" datetime="2022-11-15T21:46:04+08:00">2022-11-15</time>
+                <time title="Modified: 2022-12-15 18:13:41" itemprop="dateModified" datetime="2022-12-15T18:13:41+08:00">2022-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1090,95 +1208,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/intersect.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/intersect.html" class="post-title-link" itemprop="url">双指针-集合交集</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-03 19:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T19:47:03+08:00">2021-01-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-01 13:03:59" itemprop="dateModified" datetime="2022-12-01T13:03:59+08:00">2022-12-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/intersect.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/skills/double_pointer/intersect.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>两个集合的交集</p>
-<p>（1）排序 + 双指针<br>（2）hashmap + counter</p>
-<p>如果内存放不下如何办？</p>
-<p>通过归并外排将两个数组排序后再使用排序双指针查找</p>
-<p>最终，集合1和集合2的交集，是x与y与z的并集，即集合{3,5,7,30,50,70}。</p>
-<p>画外音：多线程、水平切分都是常见的优化手段。</p>
-<p>skiplist 跳表来维护有序结构，搜索引擎如此做</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1251,7 +1280,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">348</span>
+          <span class="site-state-item-count">349</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1264,7 +1293,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">63</span>
+        <span class="site-state-item-count">64</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

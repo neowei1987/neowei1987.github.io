@@ -203,6 +203,108 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/high_perfermance.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/distributed_system/high_perfermance.html" class="post-title-link" itemprop="url">分布式系统-低延迟，高性能</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-02 08:54:55" itemprop="dateModified" datetime="2022-03-02T08:54:55+08:00">2022-03-02</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/distributed_system/high_perfermance.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/high_perfermance.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在我看来，高性能指的是，我们的系统能够在尽可能短的时间内完成用户的请求，也就是说latency尽可能的低。</p>
+<p>如果说系统能够支撑更大的吞吐量，能够承载更多的同时在线。我们除了降低latency，还可以考虑加机器（如果还没有reach到某个系统平瓶颈的前提下）</p>
+<h3 id="提高吞吐量"><a href="#提高吞吐量" class="headerlink" title="提高吞吐量"></a>提高吞吐量</h3><h4 id="增加并发进程数"><a href="#增加并发进程数" class="headerlink" title="增加并发进程数"></a>增加并发进程数</h4><p>注意：无限增加，不会无限提升性能(对系统的扩展性有要求)</p>
+<p><img src="http://cdn.b5mang.com/202132011337.png" alt="性能拐点模型"></p>
+<h4 id="减少响应时间"><a href="#减少响应时间" class="headerlink" title="减少响应时间"></a>减少响应时间</h4><p>IO密集型：优化数据库索引、加缓存</p>
+<p>CPU密集型：优化算法时间复杂度、减少不必要运算等</p>
+<p>并发读的核心优化理念是尽量减少用户到服务端来“读”数据，或者让他们读更少的数据；</p>
+<p>并发写的处理原则也一样，它要求我们在数据库层面独立出来一个库，做特殊的处理。</p>
+<p>从一个架构师的角度来看，要想打造并维护一个超大流量并发读写、高性能、高可用的系统，在整个用户请求路径上从浏览器到服务端我们要遵循几个原则，就是要保证</p>
+<ol>
+<li>用户请求的数据尽量少</li>
+<li>完成这个请求的路径尽量短、依赖尽量少 =》 上游到下游的请求数尽量少</li>
+</ol>
+<p>也就两个大的方向：提升单次效率、减少不必要的请求</p>
+<ol>
+<li>动静分离方案（移除无关依赖、减少请求）</li>
+<li>热点的发现与隔离（缩短热点的服务路径）</li>
+<li>请求的削峰与分层过滤（异步化，减少无必要的依赖）</li>
+<li>服务端的极致优化（缩短热点的服务路径）</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/high_scalability.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1108,104 +1210,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/thread_model/libsvrkit.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/server/thread_model/libsvrkit.html" class="post-title-link" itemprop="url">高性能服务器系列-libsvrkit RPC框架</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-17 21:45:12" itemprop="dateCreated datePublished" datetime="2022-02-17T21:45:12+08:00">2022-02-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-02 09:04:39" itemprop="dateModified" datetime="2022-03-02T09:04:39+08:00">2022-03-02</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/server/thread_model/libsvrkit.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/thread_model/libsvrkit.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <ol>
-<li><p>同时只有一个worker来accept接受新的连接请求。一个连接上的所有请求都是由同一个worker来处理。</p>
-</li>
-<li><p>通过iovec来接收输入, iovec可以直接交给pb来解析。</p>
-</li>
-<li><p>如果是一个新的请求包，则开启一个co由它来进行处理。</p>
-</li>
-<li><p>如果是一个回复包，则根据回复包的seqno, 查询map， 找到对应的co， co_resume， 执行原来的业务逻辑。</p>
-</li>
-<li><p>通过时间轮来管理所有的超时时间。</p>
-</li>
-<li><p>epoll_wait的timeout 是 min(1ms, 下次超时时间)</p>
-</li>
-<li><p>通过pipe来进行线程同步。</p>
-</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1278,7 +1282,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">348</span>
+          <span class="site-state-item-count">349</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1291,7 +1295,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">63</span>
+        <span class="site-state-item-count">64</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

@@ -203,6 +203,126 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/concurrency_limiter/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/concurrency_limiter/index.html" class="post-title-link" itemprop="url">高性能服务器设计-限流模型</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 13:30:03" itemprop="dateCreated datePublished" datetime="2022-02-25T13:30:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-03 20:08:45" itemprop="dateModified" datetime="2022-11-03T20:08:45+08:00">2022-11-03</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/concurrency_limiter/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/concurrency_limiter/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>服务的处理能力是有客观上限的。当请求速度超过服务的处理速度时，服务就会过载。</p>
+<p>如果服务持续过载，会导致越来越多的请求积压，最终所有的请求都必须等待较长时间才能被处理，从而使整个服务处于瘫痪状态。</p>
+<p>与之相对的，如果直接拒绝掉一部分请求，反而能够让服务能够”及时”处理更多的请求。 我们称这种做法为限流。限流是过载保护的手段之一，目的在于保护系统不被超过服务吞吐能力的流量（或突发）打死。</p>
+<p>常见的限流手段有固定窗口、滑动窗口、令牌桶、漏桶、BBR、brpc自适应限流等。</p>
+<p>下面挨个介绍每一种限流算法的原理以及优缺点。</p>
+<h3 id="传统的基于配置的单机限流算法"><a href="#传统的基于配置的单机限流算法" class="headerlink" title="传统的基于配置的单机限流算法"></a>传统的基于配置的单机限流算法</h3><h4 id="第一，固定窗口"><a href="#第一，固定窗口" class="headerlink" title="第一，固定窗口"></a>第一，固定窗口</h4><p>原理：维护一个窗口的两个信息：窗口开始时间、经过窗口的请求数。如果窗口内超出限制数则拒绝。如果已经进入新的窗口，则reset计数。</p>
+<p>不足：存在临界点（窗口reset前后的瞬时）的qps会飙高，从而打死系统。</p>
+<h4 id="第二，滑动窗口"><a href="#第二，滑动窗口" class="headerlink" title="第二，滑动窗口"></a>第二，滑动窗口</h4><p>原理：将总的时间窗口划分为N个小格，并单独维护每一个小格的计数。通过这种方式，可以把过去一段时间内的计数信息也用上，从而让限流的统计更精确一些。</p>
+<p>不足：窗口不可能无限划分</p>
+<h4 id="第三，漏桶"><a href="#第三，漏桶" class="headerlink" title="第三，漏桶"></a>第三，漏桶</h4><p>原理：漏桶具有固定容量，出水速率是固定常量（流出请求）如果桶是空的，则不需流出水滴。可以以任意速率流入水滴到漏桶（流入请求）如果流入水滴超出了桶的容量，则流入的水滴溢出（新请求被拒绝）</p>
+<p>不足：无法应对突发流量</p>
+<p><img src="http://cdn.b5mang.com/20201222223148.png" alt="20201222223148"></p>
+<h4 id="第四，令牌桶"><a href="#第四，令牌桶" class="headerlink" title="第四，令牌桶"></a>第四，令牌桶</h4><p>原理：假如用户配置的平均发送速率为r，则每隔1/r秒一个令牌被加入到桶中。假设桶最多可以存发b个令牌。如果令牌到达时令牌桶已经满了，那么这个令牌会被丢弃。当一个n个字节的数据包到达时，就从令牌桶中删除n个令牌，并且数据包被发送到网络。如果令牌桶中少于n个令牌，那么不会删除令牌，并且认为这个数据包在流量限制之外。</p>
+<p>算法允许最长b个字节的突发，但从长期运行结果看，数据包的速率被限制成常量r。</p>
+<p><img src="http://cdn.b5mang.com/20201222223820.png" alt="20201222223820"></p>
+<h3 id="自适应限流"><a href="#自适应限流" class="headerlink" title="自适应限流"></a>自适应限流</h3><p>上面的几种算法，一定程度上确实能够保护系统不被拖垮, 但不管漏斗桶还是令牌桶, 其防护思路都是设定一个指标, 当超过该指标后就阻止或减少流量的继续进入，当系统负载降低到某一水平后则恢复流量的进入。但其通常都是被动的，其实际效果取决于限流阈值设置是否合理，但往往设置合理不是一件容易的事情。具体有如下几个弊端：</p>
+<ol>
+<li>集群增加机器或者减少机器限流阈值是否要重新设置?</li>
+<li>设置限流阈值的依据是什么?</li>
+<li>人力运维成本是否过高?</li>
+<li>只针对局部服务端的限流，无法掌控全局资源，</li>
+<li>当调用方反馈限流错误时, 这个时候重新设置限流, 其实流量高峰已经过了。重新评估限流是否有意义？</li>
+</ol>
+<h4 id="第五，B站BBR限流"><a href="#第五，B站BBR限流" class="headerlink" title="第五，B站BBR限流"></a>第五，B站BBR限流</h4><p>底层原理：并发 = qps * latency</p>
+<p>自适应限流能动态调整服务的最大并发，在保证服务不过载的前提下，让服务尽可能多的处理请求。</p>
+<p>具体逻辑：如果cpu &gt; 800 &amp;&amp; inflight &gt;  rt * max_qps，则启用限流</p>
+<p>为什么要用 CPU\IOPS 作为启发值呢？</p>
+<p>因为自适应限流与 TCP 拥塞控制还存在不同之处，TCP 中客户端可以控制发送率，从而探测到 maxPass，但是 RPC <strong>线上无法控制流量的速率</strong>，所以必须以 CPU 作为标准，当 CPU 快满载的时候再开启，这时我们认为之前探测到的 maxPass 已经接近了系统的瓶颈，乘以 minRtt 就可以得到 InFlight</p>
+<h4 id="第六，BRPC自适应限流"><a href="#第六，BRPC自适应限流" class="headerlink" title="第六，BRPC自适应限流"></a>第六，BRPC自适应限流</h4><ul>
+<li>peek_qps 峰值qps</li>
+<li>nodelay_latency 系统无负载或者低负载的响应时间，理论值无法计算</li>
+<li>Min_latency 用来替代nodelay_latency</li>
+<li>max_cocurrent  = max_qps * ((2+alpha) * min_latency - latency)</li>
+</ul>
+<p>服务的noload_latency并非是一成不变的，自适应限流必须能够正确的探测noload_latency的变化。当noload_latency下降时，是很容感知到的，因为这个时候latency也会下降。难点在于当latency上涨时，需要能够正确的辨别到底是服务过载了，还是noload_latency上涨了。</p>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="http://www.mianshigee.com/tutorial/incubator-brpc/1778a50865eb3518.md">BRPC开发手册</a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://xueqiu.com/9217191040/139169952">B站在微服务治理中如何探索与实践</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/mq/kafka.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1167,7 +1287,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-30 21:10:19" itemprop="dateModified" datetime="2022-10-30T21:10:19+08:00">2022-10-30</time>
+                <time title="Modified: 2022-12-15 15:19:48" itemprop="dateModified" datetime="2022-12-15T15:19:48+08:00">2022-12-15</time>
               </span>
 
           
@@ -1232,6 +1352,7 @@
 <li>借助内存访问WORD的原子性</li>
 </ol>
 <p>参考：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://xie.infoq.cn/article/c7045d48ccb28872277445ff8">https://xie.infoq.cn/article/c7045d48ccb28872277445ff8</a></p>
 <p><a target="_blank" rel="noopener external nofollow noreferrer" href="http://jm.taobao.org/2011/12/07/1347/">http://jm.taobao.org/2011/12/07/1347/</a></p>
 <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/heiyeshuwu/article/details/9722443">https://blog.csdn.net/heiyeshuwu/article/details/9722443</a></p>
 <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.cnblogs.com/jing99/p/11984966.html">https://www.cnblogs.com/jing99/p/11984966.html</a></p>
@@ -1469,107 +1590,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/os/page_cache.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/os/page_cache.html" class="post-title-link" itemprop="url">操作系统 - PageCache</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 10:43:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:43:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:41:50" itemprop="dateModified" datetime="2022-03-01T22:41:50+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/os/page_cache.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/page_cache.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://img-blog.csdnimg.cn/img_convert/af14c365336b91762e0818c657b29b2f.png" alt="linux-io"></p>
-<p>Page Cache 用于缓存文件的页数据，</p>
-<p>buffer cache 用于缓存块设备（如磁盘）的块数据。</p>
-<p>页是逻辑上的概念，因此 Page Cache 是与文件系统同级的；</p>
-<p>块是物理上的概念，因此 buffer cache 是与块设备驱动程序同级的。</p>
-<hr>
-<p>Page Cache 与 buffer cache 的共同目的都是加速数据 I/O</p>
-<p>写数据时首先写到缓存，将写入的页标记为 dirty，然后向外部存储 flush，也就是缓存写机制中的 write-back（另一种是 write-through，Linux 默认情况下不采用）；</p>
-<p>读数据时首先读取缓存，如果未命中，再去外部存储读取，并且将读取来的数据也加入缓存。</p>
-<p>操作系统总是积极地将所有空闲内存都用作 Page Cache 和 buffer cache，当内存不够用时也会用 LRU 等算法淘汰缓存页。</p>
-<hr>
-<p>在 Linux 2.4 版本的内核之前，Page Cache 与 buffer cache 是完全分离的。但是，块设备大多是磁盘，磁盘上的数据又大多通过文件系统来组织，这种设计导致很多数据被缓存了两次，浪费内存。</p>
-<p>所以在 2.4 版本内核之后，两块缓存近似融合在了一起：如果一个文件的页加载到了 Page Cache，那么同时 buffer cache 只需要维护块指向页的指针就可以了。</p>
-<p>只有那些没有文件表示的块，或者绕过了文件系统直接操作（如dd命令）的块，才会真正放到 buffer cache 里。</p>
-<p>因此，我们现在提起 Page Cache，基本上都同时指 Page Cache 和 buffer cache 两者，本文之后也不再区分，直接统称为 Page Cache。</p>
-<p>下图近似地示出 32-bit Linux 系统中可能的一种 Page Cache 结构，其中 block size 大小为 1KB，page size 大小为 4KB。</p>
-<p><img src="https://img-blog.csdnimg.cn/img_convert/38d0c14994613a0342e0158ec82d04eb.png" alt="page_cache_and_buffer_cache"></p>
-<p>Page Cache 中的每个文件都是一棵<strong>基数树</strong>（radix tree，本质上是Trie、多叉搜索树），树的每个节点都是一个页。根据文件内的偏移量就可以快速定位到所在的页，如下图所示。关于基数树的原理可以参见英文维基，这里就不细说了。</p>
-<p><img src="https://img-blog.csdnimg.cn/img_convert/a4763bd4d3d093dc7fee3da90247ba5d.png" alt="page_cache_radix_tree"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1642,7 +1662,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">348</span>
+          <span class="site-state-item-count">349</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1655,7 +1675,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">63</span>
+        <span class="site-state-item-count">64</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

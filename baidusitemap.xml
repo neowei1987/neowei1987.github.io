@@ -1,6 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://www.fpthinker.com/backend_knowledge_architecture/server/io_model/co.html</loc>
+    <lastmod>2022-12-16</lastmod>
+  </url>
+  <url>
+    <loc>https://www.fpthinker.com/backend_knowledge_architecture/server/io_model/thundering.html</loc>
+    <lastmod>2022-12-16</lastmod>
+  </url>
+  <url>
+    <loc>https://www.fpthinker.com/backend_knowledge_architecture/server/io_model/multiplex_io.html</loc>
+    <lastmod>2022-12-16</lastmod>
+  </url>
+  <url>
+    <loc>https://www.fpthinker.com/backend_knowledge_architecture/os/epoll.html</loc>
+    <lastmod>2022-12-16</lastmod>
+  </url>
+  <url>
+    <loc>https://www.fpthinker.com/pro_skill/better.html</loc>
+    <lastmod>2022-12-16</lastmod>
+  </url>
+  <url>
+    <loc>https://www.fpthinker.com/math/index.html</loc>
+    <lastmod>2022-12-16</lastmod>
+  </url>
+  <url>
+    <loc>https://www.fpthinker.com/backend_knowledge_architecture/system_design/rt_av.html</loc>
+    <lastmod>2022-12-16</lastmod>
+  </url>
+  <url>
+    <loc>https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/structures/linked_list/lru.html</loc>
+    <lastmod>2022-12-16</lastmod>
+  </url>
+  <url>
+    <loc>https://www.fpthinker.com/backend_knowledge_architecture/system_design/cloud_game.html</loc>
+    <lastmod>2022-12-16</lastmod>
+  </url>
+  <url>
+    <loc>https://www.fpthinker.com/backend_knowledge_architecture/server/load_balance/index.html</loc>
+    <lastmod>2022-12-16</lastmod>
+  </url>
+  <url>
+    <loc>https://www.fpthinker.com/backend_knowledge_architecture/mq/kafka.html</loc>
+    <lastmod>2022-12-16</lastmod>
+  </url>
+  <url>
+    <loc>https://www.fpthinker.com/backend_knowledge_architecture/language/go/index.html</loc>
+    <lastmod>2022-12-16</lastmod>
+  </url>
+  <url>
+    <loc>https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/tx/index.html</loc>
+    <lastmod>2022-12-16</lastmod>
+  </url>
+  <url>
+    <loc>https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/high_availability.html</loc>
+    <lastmod>2022-12-16</lastmod>
+  </url>
+  <url>
     <loc>https://www.fpthinker.com/backend_knowledge_architecture/network/tcp.html</loc>
     <lastmod>2022-12-15</lastmod>
   </url>
@@ -73,10 +129,6 @@
     <lastmod>2022-12-14</lastmod>
   </url>
   <url>
-    <loc>https://www.fpthinker.com/backend_knowledge_architecture/mq/kafka.html</loc>
-    <lastmod>2022-12-14</lastmod>
-  </url>
-  <url>
     <loc>https://www.fpthinker.com/backend_knowledge_architecture/mq/index.html</loc>
     <lastmod>2022-12-14</lastmod>
   </url>
@@ -101,15 +153,7 @@
     <lastmod>2022-12-13</lastmod>
   </url>
   <url>
-    <loc>https://www.fpthinker.com/backend_knowledge_architecture/language/go/index.html</loc>
-    <lastmod>2022-12-13</lastmod>
-  </url>
-  <url>
     <loc>https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/max_product.html</loc>
-    <lastmod>2022-12-06</lastmod>
-  </url>
-  <url>
-    <loc>https://www.fpthinker.com/backend_knowledge_architecture/os/epoll.html</loc>
     <lastmod>2022-12-06</lastmod>
   </url>
   <url>
@@ -123,10 +167,6 @@
   <url>
     <loc>https://www.fpthinker.com/ai/classification/svm.html</loc>
     <lastmod>2022-12-05</lastmod>
-  </url>
-  <url>
-    <loc>https://www.fpthinker.com/math/index.html</loc>
-    <lastmod>2022-12-02</lastmod>
   </url>
   <url>
     <loc>https://www.fpthinker.com/ai/logistic_regression.html</loc>
@@ -217,10 +257,6 @@
     <lastmod>2022-12-01</lastmod>
   </url>
   <url>
-    <loc>https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/tx/index.html</loc>
-    <lastmod>2022-12-01</lastmod>
-  </url>
-  <url>
     <loc>https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/tx/paxos.html</loc>
     <lastmod>2022-12-01</lastmod>
   </url>
@@ -262,10 +298,6 @@
   </url>
   <url>
     <loc>https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/structures/linked_list/delete_duplicated.html</loc>
-    <lastmod>2022-11-26</lastmod>
-  </url>
-  <url>
-    <loc>https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/high_availability.html</loc>
     <lastmod>2022-11-26</lastmod>
   </url>
   <url>
@@ -374,10 +406,6 @@
   </url>
   <url>
     <loc>https://www.fpthinker.com/backend_knowledge_architecture/system_design/im.html</loc>
-    <lastmod>2022-11-03</lastmod>
-  </url>
-  <url>
-    <loc>https://www.fpthinker.com/backend_knowledge_architecture/server/load_balance/index.html</loc>
     <lastmod>2022-11-03</lastmod>
   </url>
   <url>
@@ -494,10 +522,6 @@
   </url>
   <url>
     <loc>https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/structures/hash/index.html</loc>
-    <lastmod>2022-10-29</lastmod>
-  </url>
-  <url>
-    <loc>https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/structures/linked_list/lru.html</loc>
     <lastmod>2022-10-29</lastmod>
   </url>
   <url>
@@ -1070,10 +1094,6 @@
   </url>
   <url>
     <loc>https://www.fpthinker.com/backend_knowledge_architecture/server/memory_pool/memcache_for_go.html</loc>
-    <lastmod>2022-03-01</lastmod>
-  </url>
-  <url>
-    <loc>https://www.fpthinker.com/backend_knowledge_architecture/server/io_model/multiplex_io.html</loc>
     <lastmod>2022-03-01</lastmod>
   </url>
   <url>

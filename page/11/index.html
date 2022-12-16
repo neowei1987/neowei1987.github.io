@@ -203,6 +203,486 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/network/http.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/network/http.html" class="post-title-link" itemprop="url">计算机网络 - HTTP协议</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 10:20:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:20:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-12-15 22:48:47" itemprop="dateModified" datetime="2022-12-15T22:48:47+08:00">2022-12-15</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/network/http.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/network/http.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://pic.rmb.bdstatic.com/bjh/news/6722dbdf63eabaa62b59486f2c51df6e.png" alt="HTTP对比"></p>
+<h3 id="HTTP1-0"><a href="#HTTP1-0" class="headerlink" title="HTTP1.0"></a>HTTP1.0</h3><p>301: 永久重定向<br>302: 临时重定向</p>
+<p>！默认关闭！<br>在HTTP 1.0中，服务器始终在发送响应后关闭连接， 除非客户端发送了Connection: keep-alive请求标头，并且服务器发送了一个Connection: keep-alive响应标头。 如果不存在这样的响应报头，则客户端在收到响应后必须关闭连接的结束。  </p>
+<p>！默认打开！<br>在HTTP 1.1中，服务器在发送响应之后不关闭连接， 除非客户端发送了Connection: close请求标头，或者服务器发送了Connection: close响应标头。 如果存在这样的响应头，则客户端在收到响应后必须关闭连接的结束。</p>
+<h3 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h3><p>可以参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/xiaoming100001/article/details/81109617">https://blog.csdn.net/xiaoming100001/article/details/81109617</a></p>
+<p>对称加密与非对称加密相结合</p>
+<p>通信内容，通过对称加密算法来加解密；其中有一个重要的东西叫：密钥</p>
+<p><strong>密钥</strong>是通过<strong>非对称加密</strong>算法来加密传输，客户端使用服务器的public key来加密，服务端通过自己的private key来解密。</p>
+<p>服务器的public key，浏览器如何得知呢？ <strong>通过SSL证书</strong>。</p>
+<p>SSL证书组织是一个树形组织，最上面的几层是hardcode在系统中的。</p>
+<p>当需要验证证书有效性时，浏览器会通过根认证组织逐层认证！</p>
+<h3 id="HTTP2-0"><a href="#HTTP2-0" class="headerlink" title="HTTP2.0"></a>HTTP2.0</h3><p>服务器推送、头信息压缩、等</p>
+<h4 id="二进制分帧"><a href="#二进制分帧" class="headerlink" title="二进制分帧"></a>二进制分帧</h4><p>先来理解几个概念：</p>
+<p>帧：HTTP/2 数据通信的最小单位消息：指 HTTP/2 中逻辑上的 HTTP 消息。例如请求和响应等，消息由一个或多个帧组成。</p>
+<p>流：存在于连接中的一个虚拟通道。流可以承载双向消息，每个流都有一个唯一的整数ID。</p>
+<p>HTTP/2 采用二进制格式传输数据，而非 HTTP 1.x 的文本格式，二进制协议解析起来更高效。 HTTP / 1 的请求和响应报文，都是由起始行，首部和实体正文（可选）组成，各部分之间以文本换行符分隔。HTTP/2 将请求和响应数据分割为更小的帧，并且它们采用二进制编码。</p>
+<p>HTTP/2 中，同域名下所有通信都在单个连接上完成，该连接可以承载任意数量的双向数据流。每个数据流都以消息的形式发送，而消息又由一个或多个帧组成。多个帧之间可以乱序发送，根据帧首部的流标识可以重新组装。</p>
+<h4 id="多路复用"><a href="#多路复用" class="headerlink" title="多路复用"></a>多路复用</h4><p>在 HTTP/2 中，有了二进制分帧之后，HTTP /2 不再依赖 TCP 链接去实现多流并行了，在 HTTP/2中：</p>
+<p>同域名下所有通信都在单个连接上完成。<br>单个连接可以承载任意数量的双向数据流。<br>数据流以消息的形式发送，而消息又由一个或多个帧组成，多个帧之间可以乱序发送，因为根据帧首部的流标识可以重新组装。</p>
+<h4 id="服务器推送"><a href="#服务器推送" class="headerlink" title="服务器推送"></a>服务器推送</h4><p>服务端可以在发送页面HTML时主动推送其它资源，而不用等到浏览器解析到相应位置，发起请求再响应。例如服务端可以主动把JS和CSS文件推送给客户端，而不需要客户端解析HTML时再发送这些请求。</p>
+<p>服务端可以主动推送，客户端也有权利选择是否接收。如果服务端推送的资源已经被浏览器缓存过，浏览器可以通过发送RST_STREAM帧来拒收。主动推送也遵守同源策略，服务器不会随便推送第三方资源给客户端。</p>
+<h4 id="头部压缩"><a href="#头部压缩" class="headerlink" title="头部压缩"></a>头部压缩</h4><p>HTTP 1.1请求的大小变得越来越大，有时甚至会大于TCP窗口的初始大小，因为它们需要等待带着ACK的响应回来以后才能继续被发送。HTTP/2对消息头采用HPACK（专为http/2头部设计的压缩格式）进行压缩传输，能够节省消息头占用的网络的流量。而HTTP/1.x每次请求，都会携带大量冗余头信息，浪费了很多带宽资源。</p>
+<p>为了减少这块的资源消耗并提升性能， HTTP/2对这些首部采取了压缩策略：</p>
+<p>HTTP/2在客户端和服务器端使用“首部表”来跟踪和存储之前发送的键－值对，对于相同的数据，不再通过每次请求和响应发送；</p>
+<p>首部表在HTTP/2的连接存续期内始终存在，由客户端和服务器共同渐进地更新;</p>
+<p>每个新的首部键－值对要么被追加到当前表的末尾，要么替换表中之前的值。</p>
+<h3 id="HTTP3-0"><a href="#HTTP3-0" class="headerlink" title="HTTP3.0"></a>HTTP3.0</h3><p><img src="https://s3.51cto.com/images/blog/202107/01/2d9b80a4cd6fadcf1e08fee31669d61a.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt="HTTP23对比"></p>
+<p>QUIC（Quick UDP Internet Connections）基于 UDP 实现，是 HTTP/3 中的底层支撑协议，该协议基于 UDP，又取了 TCP 中的精华，实现了即快又可靠的协议</p>
+<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.51cto.com/u_6315133/3122045">https://blog.51cto.com/u_6315133/3122045</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/hardware/number.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/hardware/number.html" class="post-title-link" itemprop="url">计算机硬件-数字的表示</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:01:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-12-14 22:31:55" itemprop="dateModified" datetime="2022-12-14T22:31:55+08:00">2022-12-14</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/hardware/number.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/hardware/number.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="负数"><a href="#负数" class="headerlink" title="负数"></a>负数</h2><p>负数用补码来表示，补码等于数的反码 + 1</p>
+<h2 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h2><p>两种表示小数的数据类型，分别是双精度浮点数和单精度浮点数</p>
+<p>双精度浮点数类型用64位:符号位（1位） + 阶码（11位） + 尾数（52位）</p>
+<p>单精度浮点数类型用32位:符号位（1位） + 阶码（8位） + 尾数（23位）</p>
+<p>符号位：正数为0，负数为1；</p>
+<p>指数位：<strong>阶数+偏移量</strong>，阶数是2^(e-1)-1，e为阶码的位数，也就是指数位的位数。偏移量是把小数点移动到整数位只有1时移动的位数，正数表示向左移，负数表示向右移；</p>
+<p>小数位：即二进制小数点后面的数。</p>
+<h3 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h3><p>把0.1(10)转成的二进制0.00011 0011 0011 …(2)转成浮点数形式的二进制：</p>
+<p>（能够<strong>精确表示</strong>的小数为：0.5，0.25，0.125…等的自由组合）</p>
+<p>转化过程见：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://cloud.tencent.com/developer/article/1856972">https://cloud.tencent.com/developer/article/1856972</a></p>
+<p>1、先要把小数点移动到整数位只有1，要向右移动4位，故偏移量为-4，通过指数位的计算公式2^(e-1)-1+偏移量 = 2^(11-1)-1-4 = 1019，把1019转成二进制为1111111011，不够11位要补零，最终得出指数位位01111111011；</p>
+<p>2、移位后的小数位为.1 0011 0011 …，因为小数位只能保留52位，第50、51、52位、53位分别为0011，故对第52位进1使第51位为1，使第50、51、52位为010。</p>
+<p>注意：此处的<strong>精度丢失</strong>问题，有很多小数（例如本例中的0.1）在转二进制时会出现无限循环的情况，所以在位数有限的境况下，肯定需要舍弃后面的精度。这一点，就与1/3这种小数是在十进制下无限循环类似。</p>
+<h2 id="定点数"><a href="#定点数" class="headerlink" title="定点数"></a>定点数</h2><p>只能表示纯小数，例如0.999991212</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/hardware/tlb.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/hardware/tlb.html" class="post-title-link" itemprop="url">计算机硬件-TLB</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:01:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:40:21" itemprop="dateModified" datetime="2022-03-01T22:40:21+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/hardware/tlb.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/hardware/tlb.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>TLB（Translation Lookaside Buffer）是一块高速缓存。</p>
+<p>TLB缓存虚拟地址和其映射的物理地址。</p>
+<p>数据cache缓存地址(虚拟地址或者物理地址)和数据。</p>
+<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://zhuanlan.zhihu.com/p/108425561">https://zhuanlan.zhihu.com/p/108425561</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/fs.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/distributed_system/fs.html" class="post-title-link" itemprop="url">分布式文件系统</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-24 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-24T10:01:03+08:00">2022-02-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/distributed_system/fs.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/fs.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>存储的分布式化</p>
+<p>高效存储的一些考虑：</p>
+<ol>
+<li>很长时间没有人访问的老数据，怎么办？</li>
+<li>是不是减少副本的同时，还能还原出数据？（例如，RAID）</li>
+<li>数据压缩，平成好压缩效果与压缩/解压速度</li>
+<li>数据的分层存储：根据数据的冷热来选择不同的存储介质（局部性原理），内存、硬盘（SSD、SATA)</li>
+<li>存储与计算分离（底层基础：网络IO不再是瓶颈，而CPU性能、磁盘IO性能跟不上）</li>
+</ol>
+<h4 id="分布式存储引擎"><a href="#分布式存储引擎" class="headerlink" title="分布式存储引擎"></a>分布式存储引擎</h4><p>主要解决数据如何拆分、数据如何冗余、数据如何定位的问题。</p>
+<p>（1）parititioning 方式，即数据在逻辑上怎么切分</p>
+<p>（2）localization 方式，即数据在物理上怎么分布</p>
+<p>一个系统要想拥有高可用性，有且只有一个办法 — 副本（replication），因为物理故障是无法避免的，只能花钱做备份。</p>
+<p>主从和时效性是 replication 要考虑的两个重要问题。</p>
+<p>主从主要有单主、多主和无主三种方式。</p>
+<p>时效性主要有同步、异步、半同步三种方式。</p>
+<p>（3）rebalance 方式，即在节点数变化后，数据在物理上怎么重新分布.</p>
+<h4 id="分布式文件系统"><a href="#分布式文件系统" class="headerlink" title="分布式文件系统"></a>分布式文件系统</h4><p>按照Block拆分文件，然后通过一个管理员来管理Block到对应及其的映射关系。</p>
+<p>新的问题：<br>如果存储block的机器挂了怎么办？ 如果管理员挂了怎么办？</p>
+<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://zhuanlan.zhihu.com/p/141775358">https://zhuanlan.zhihu.com/p/141775358</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/high_consistency.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/distributed_system/high_consistency.html" class="post-title-link" itemprop="url">分布式系统-一致性</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-24 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-24T10:01:03+08:00">2022-02-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 23:20:26" itemprop="dateModified" datetime="2022-03-01T23:20:26+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/distributed_system/high_consistency.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/distributed_system/high_consistency.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="CAP-VS-BASE"><a href="#CAP-VS-BASE" class="headerlink" title="CAP VS BASE"></a>CAP VS BASE</h4><h4 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h4><h5 id="强一致性"><a href="#强一致性" class="headerlink" title="强一致性"></a>强一致性</h5><p>保证手段：单机落磁盘、数据库事务、分布式事务等</p>
+<h5 id="弱一致性"><a href="#弱一致性" class="headerlink" title="弱一致性"></a>弱一致性</h5><p>可能丢失一定的数据：异步复制、PageCache的write back</p>
+<h5 id="最终一致性"><a href="#最终一致性" class="headerlink" title="最终一致性"></a>最终一致性</h5><p>带TTL的缓存</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/distributed_system/index.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -603,7 +1083,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-26 22:26:13" itemprop="dateModified" datetime="2022-11-26T22:26:13+08:00">2022-11-26</time>
+                <time title="Modified: 2022-12-16 21:04:00" itemprop="dateModified" datetime="2022-12-16T21:04:00+08:00">2022-12-16</time>
               </span>
 
           
@@ -638,21 +1118,25 @@
 <h2 id="影响可用性的因素"><a href="#影响可用性的因素" class="headerlink" title="影响可用性的因素"></a>影响可用性的因素</h2><p>首先我们先梳理一下影响系统稳定性的一些常见的问题场景，大致可分为三类：</p>
 <h3 id="人为因素"><a href="#人为因素" class="headerlink" title="人为因素"></a>人为因素</h3><p>不合理的变更、外部攻击等等</p>
 <h3 id="软件因素"><a href="#软件因素" class="headerlink" title="软件因素"></a>软件因素</h3><p>代码bug、设计漏洞、GC问题、线程池异常、上下游异常</p>
-<h3 id="硬件因素"><a href="#硬件因素" class="headerlink" title="硬件因素"></a>硬件因素</h3><p>网络故障、机器故障等 </p>
+<h3 id="硬件因素"><a href="#硬件因素" class="headerlink" title="硬件因素"></a>硬件因素</h3><p>网络故障、机器故障等</p>
 <h3 id="可用性速降到最低的表现-雪崩"><a href="#可用性速降到最低的表现-雪崩" class="headerlink" title="可用性速降到最低的表现-雪崩"></a>可用性速降到最低的表现-雪崩</h3><p>两个导火索：</p>
 <ul>
 <li>下游或者本身机器故障导致latency增加</li>
 <li>上游请求qps变高</li>
 </ul>
 <p>实际的并发超过了最大能支持的并发（当下游变慢后，该值迅速会下降），过载就发生了。过载不可怕，如果上游不重试，系统终将恢复。</p>
-<h2 id="如何提高可用性"><a href="#如何提高可用性" class="headerlink" title="如何提高可用性"></a>如何提高可用性</h2><h3 id="系统拆分"><a href="#系统拆分" class="headerlink" title="系统拆分"></a>系统拆分</h3><p>拆分不是以减少不可用时间为目的，而是以减少故障影响面为目的。因为一个大的系统拆分成了几个小的独立模块，一个模块出了问题不会影响到其他的模块，从而降低故障的影响面。系统拆分又包括接入层拆分、服务拆分、数据库拆分。</p>
+<h2 id="如何提高可用性"><a href="#如何提高可用性" class="headerlink" title="如何提高可用性"></a>如何提高可用性</h2><h3 id="系统拆分"><a href="#系统拆分" class="headerlink" title="系统拆分"></a>系统拆分</h3><p>拆分不是以减少不可用时间为目的，而是以减少故障影响面为目的。</p>
+<p>因为一个大的系统拆分成了几个小的独立模块，一个模块（大概率是变更导致，例如升级代码）出了问题不会影响到其他的模块，从而降低故障的影响面。</p>
+<p>系统拆分又包括接入层拆分、服务拆分、数据库拆分。</p>
 <h4 id="接入层-amp-服务层"><a href="#接入层-amp-服务层" class="headerlink" title="接入层&amp;服务层"></a>接入层&amp;服务层</h4><p>【轻重分离】<br>一般是按照业务模块、重要程度、变更频次等维度拆分。</p>
 <h4 id="数据层"><a href="#数据层" class="headerlink" title="数据层"></a>数据层</h4><p>【轻重分离】、【冷热分离】、【读写分离】<br>一般先按照业务拆分后，如果有需要还可以做垂直拆分也就是数据分片、读写分离、数据冷热分离等。</p>
+<p>把核心库与非核心库分机器部署，避免相互影响。</p>
 <h3 id="解耦"><a href="#解耦" class="headerlink" title="解耦"></a>解耦</h3><p>系统进行拆分之后，会分成多个模块。模块之间的依赖有强弱之分。</p>
-<p>如果是强依赖的，那么如果依赖方出问题了，也会受到牵连出问题。</p>
+<p>如果是强依赖的，那么如果依赖方出问题了，也会受到牵连出问题，强依赖需要基于被依赖放的SLA做好超时熔断配置以及本服务自身的容量预估。</p>
 <p>这时可以梳理整个流程的调用关系，做成弱依赖调用。</p>
 <p>弱依赖调用可以用MQ的方式来实现解耦。即使下游出现问题，也不会影响当前模块。</p>
-<h3 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h3><p>可以在适用性、优缺点、产品口碑、社区活跃度、实战案例、扩展性等多个方面进行全量评估，挑选出<strong>适合当前业务场景的中间件&amp;数据库</strong>。前期的调研一定要充分，先对比、测试、研究，再决定，磨刀不误砍柴工。</p>
+<h3 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h3><p>可以在适用性、优缺点、产品口碑、社区活跃度、实战案例、扩展性等多个方面进行全量评估，挑选出<strong>适合当前业务场景的中间件&amp;数据库</strong>。</p>
+<p>前期的调研一定要充分，先对比、测试、研究，再决定，磨刀不误砍柴工。</p>
 <h3 id="冗余部署-amp-故障自动转移"><a href="#冗余部署-amp-故障自动转移" class="headerlink" title="冗余部署&amp;故障自动转移"></a>冗余部署&amp;故障自动转移</h3><p>服务层的冗余部署很好理解，一个服务部署多个节点，有了冗余之后还不够，每次出现故障需要人工介入恢复势必会增加系统的不可服务时间。</p>
 <p>所以，又往往是通过“自动故障转移”来实现系统的高可用。即某个节点宕机后需要能自动摘除上游流量，这些能力基本上都可以通过<strong>负载均衡的探活机制</strong>来实现。</p>
 <p>涉及到数据层就比较复杂了，但是一般都有成熟的方案可以做参考。</p>
@@ -681,27 +1165,26 @@
 <p><strong>泄洪能力</strong>一般是指冗余部署的情况下，选择几个节点作为备用节点，平时承担很小一部分流量，当流量洪峰来临时，通过调整流量路由策略把热节点的一部分流量转移到备用节点上。</p>
 <p>对比扩容方案这种成本相对较高，但是好处就是响应快，风险小。</p>
 <h3 id="限流-amp-熔断降级"><a href="#限流-amp-熔断降级" class="headerlink" title="限流&amp;熔断降级"></a>限流&amp;熔断降级</h3><p><img src="http://images.elecfans.top/uploads/20221109/491f36c6-6037-11ed-8abf-dac502259ad0.png" alt="限流"></p>
-<ol>
-<li><p>每个系统要有能力发现哪些是有效的请求，哪些是无效的请求。</p>
-</li>
-<li><p>前端系统有保护后端系统的义务，sla中承诺多大的能力，就只给到后端多大的压力。这就要求每一个前后端接口的地方，都有明确的负载约定，一环扣一环。</p>
-</li>
-<li><p>当过载发生时，该拒绝的请求（1、超出整个系统处理能力范围的；2、已经超时的无效请求）越早拒绝越好</p>
-</li>
-<li><p>中间层server对后端发送请求，重试机制要慎用，一定要用的话要有严格频率控制。</p>
-</li>
-<li><p>对于用户的重试行为，要适当的延缓。例如登录发现后端响应失败，再重新展现登录页面前，可以适当延时几秒钟，并展现进度条等友好界面。当多次重试还失败的情况下，要安抚用户。</p>
-</li>
-<li><p>当雪球发生了，直接清空雪球队列（例如重启进程可以清空socket缓冲区）可能是快速恢复的有效方法。</p>
-</li>
-<li><p>过载保护很重要的一点，不是说要加强系统性能、容量，成功应答所有请求，而是保证在高压下，系统的服务能力不要陡降到0，而是顽强的对外展现最大有效处理能力。</p>
-</li>
-</ol>
+<p>对于用户的重试行为，要适当的延缓。例如登录发现后端响应失败，再重新展现登录页面前，可以适当延时几秒钟，并展现进度条等友好界面。当多次重试还失败的情况下，要安抚用户。</p>
+<p>过载保护很重要的一点，不是说要加强系统性能、容量，成功应答所有请求，而是保证在高压下，系统的服务能力不要陡降到0，而是顽强的对外展现最大有效处理能力。</p>
+<p>前端系统有保护后端系统的义务，sla中承诺多大的能力，就只给到后端多大的压力。这就要求每一个前后端接口的地方，都有明确的负载约定，一环扣一环。</p>
+<p>每个系统要有能力发现哪些是有效的请求，哪些是无效的请求。当过载发生时，该拒绝的请求（1、超出整个系统处理能力范围的；2、已经超时的无效请求）越早拒绝越好</p>
+<p>中间层server对后端发送请求，重试机制要慎用，一定要用的话要有严格频率控制。</p>
+<p>当雪球发生了，直接清空雪球队列（例如重启进程可以清空socket缓冲区）可能是快速恢复的有效方法。</p>
 <p>流量整形也就是常说的限流，主要是防止超过预期外的流量把服务打垮，熔断则是为了自身组件或者依赖下游故障时，可以快速失败防止长期阻塞导致雪崩。</p>
 <p>关于限流熔断的能力，开源组件Sentinel基本上都具备了，用起来也很简单方便，但是有一些点需要注意。</p>
 <p>【自适应限流】限流阈值一般是配置为服务的某个资源能支撑的最高水位，这个需要通过压测摸底来评估。随着系统的迭代，这个值可能是需要持续调整的。如果配置的过高，会导致系统崩溃时还没触发保护，配置的过低会导致误伤。</p>
 <p>熔断降级-某个接口或者某个资源熔断后，要根据业务场景跟熔断资源的重要程度来评估应该抛出异常还是返回一个兜底结果。</p>
 <p>比如下单场景如果扣减库存接口发生熔断，由于扣减库存在下单接口是必要条件，所以熔断后只能抛出异常让整个链路失败回滚，如果是获取商品评论相关的接口发生熔断，那么可以选择返回一个空，不影响整个链路。</p>
+<h3 id="过载保护"><a href="#过载保护" class="headerlink" title="过载保护"></a>过载保护</h3><p>异常有内外两种，一种是外部流量特别高，一种是某一个依赖故障导致系统响应变慢。</p>
+<p>这里的课题应该包括：熔断、限流、超时控制、全局超时控制、服务降级（区分核心流程与非核心流程）</p>
+<h4 id="过载保护方案"><a href="#过载保护方案" class="headerlink" title="过载保护方案"></a>过载保护方案</h4><p>这里推荐一种方案：在该系统每个机器上新增一个进程：interface进程。</p>
+<p>Interface进程能够快速的从socket缓冲区中取得请求，打上当前时间戳，压入channel。</p>
+<p>业务处理进程从channel中获取请求和该请求的时间戳，如果发现时间戳早于当前时间减去超时时间（即已经超时，处理也没有意义），就直接丢弃该请求，或者应答一个失败报文。</p>
+<p>Channel是一个先进先出的通信方式，可以是socket，也可以是共享内存、消息队列、或者管道，不限。</p>
+<p>Socket缓冲区要设置合理，如果过大，导致及时interface进程都需要处理长时间才能清空该队列，就不合适了。</p>
+<p>建议的大小上限是：缓存住超时时间内interface进程能够处理掉的请求个数（注意考虑网络通讯中的元数据）。</p>
+<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.sohu.com/a/211248633_472869">https://www.sohu.com/a/211248633_472869</a></p>
 <h3 id="资源隔离"><a href="#资源隔离" class="headerlink" title="资源隔离"></a>资源隔离</h3><p>如果一个服务的多个下游同时出现阻塞，单个下游接口一直达不到熔断标准（比如异常比例跟慢请求比例没达到阈值），那么将会导致整个服务的吞吐量下降和更多的线程数占用，极端情况下甚至导致线程池耗尽。引入资源隔离后，可以限制单个下游接口可使用的最大线程资源，确保在未熔断前尽可能小的影响整个服务的吞吐量。</p>
 <p>说到隔离机制，这里可以扩展说一下，由于每个接口的流量跟ResponseTime都不一样，很难去设置一个比较合理的可用最大线程数，并且随着业务迭代，这个阈值也难以维护。</p>
 <p>这里可以采用<strong>共享加独占</strong>来解决这个问题，每个接口有自己的独占线程资源，当独占资源占满后，使用共享资源，共享池在达到一定水位后，强制使用独占资源，排队等待。</p>
@@ -718,8 +1201,7 @@
 <h4 id="可观测"><a href="#可观测" class="headerlink" title="可观测"></a>可观测</h4><p>通过观察变更前后的指标变化，很大程度上可以提前发现问题。 除了以上三板斧外，还应该在其他开发流程上做规范，比如代码控制，集成编译、自动化测试、静态代码扫描等。</p>
 <p>五、总结</p>
 <p>对于一个动态演进的系统而言，我们没有办法将故障发生的概率降为0，能做的只有尽可能的预防和缩短故障时的恢复时间。当然我们也不用一味的追求可用性，毕竟提升稳定性的同时，维护成本、机器成本等也会跟着上涨，所以需要结合系统的业务SLO要求，适合的才是最好的。</p>
-<h3 id="冗余"><a href="#冗余" class="headerlink" title="冗余"></a>冗余</h3><p>解决高可用，只有一个方法，就是冗余。</p>
-<p>通过冗余更多的机器，来应对机器的硬件故障或者彼此之间的网络故障。</p>
+<h3 id="冗余"><a href="#冗余" class="headerlink" title="冗余"></a>冗余</h3><p>从根本上讲，解决高可用，只有一个方法，就是冗余。通过冗余更多的机器，来应对机器的硬件故障或者彼此之间的网络故障。</p>
 <h4 id="多机房部署"><a href="#多机房部署" class="headerlink" title="多机房部署"></a>多机房部署</h4><p>通过多机房部署来增加冗余。</p>
 <p>多活的好处</p>
 <ol>
@@ -756,17 +1238,6 @@
 <p><img src="http://cdn.b5mang.com/20213202149.png" alt="异步多活示意图"></p>
 <p><strong>跨国多机房</strong>：延迟在100～200ms</p>
 <p>避免跨机房的调用，而只能做异步同步</p>
-<hr>
-<p>除此以外，我们还需要提一点，就是防止系统被瞬间的异常拖死，也就是系统能够自己保护好自己。</p>
-<h3 id="过载保护"><a href="#过载保护" class="headerlink" title="过载保护"></a>过载保护</h3><p>异常有内外两种，一种是外部流量特别高，一种是某一个依赖故障导致系统响应变慢。</p>
-<p>这里的课题应该包括：熔断、限流、超时控制、全局超时控制、服务降级（区分核心流程与非核心流程）</p>
-<h4 id="过载保护方案"><a href="#过载保护方案" class="headerlink" title="过载保护方案"></a>过载保护方案</h4><p>这里推荐一种方案：在该系统每个机器上新增一个进程：interface进程。</p>
-<p>Interface进程能够快速的从socket缓冲区中取得请求，打上当前时间戳，压入channel。</p>
-<p>业务处理进程从channel中获取请求和该请求的时间戳，如果发现时间戳早于当前时间减去超时时间（即已经超时，处理也没有意义），就直接丢弃该请求，或者应答一个失败报文。</p>
-<p>Channel是一个先进先出的通信方式，可以是socket，也可以是共享内存、消息队列、或者管道，不限。</p>
-<p>Socket缓冲区要设置合理，如果过大，导致及时interface进程都需要处理长时间才能清空该队列，就不合适了。</p>
-<p>建议的大小上限是：缓存住超时时间内interface进程能够处理掉的请求个数（注意考虑网络通讯中的元数据）。</p>
-<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.sohu.com/a/211248633_472869">https://www.sohu.com/a/211248633_472869</a></p>
 <h2 id="每个SLA级别需要做的事情"><a href="#每个SLA级别需要做的事情" class="headerlink" title="每个SLA级别需要做的事情"></a>每个SLA级别需要做的事情</h2><p>感觉一下提高1个9，难度有多大。</p>
 <p>三个9: 非核心业务可以容忍</p>
 <p>四个9: 核心业务</p>
@@ -780,11 +1251,6 @@
 <li>完全对等</li>
 <li>非完全对等（例如存在主备节点，心跳，选择paxos, raft等）</li>
 </ul>
-<p>系统分层<br>（1）接入层、服务层、数据层</p>
-<p>服务本身<br>（1）容量预估、合理的超时<br>（2）服务拆分、异步化解耦</p>
-<p>基础架构层面需要支持：<br>（1）监控&amp;告警<br>（2）自动化（快速）扩容&amp;泄洪能力<br>（1）熔断、限流、负载均衡、降级<br>（2）资源隔离（线程池、内存池、连接池）</p>
-<p>中间件&amp;存储，综合考虑业务场景、可运维性来进行技术选型</p>
-<p>控制变更流程<br>（1）可回滚、可灰度、可观测</p>
 
       
     </div>
@@ -1048,444 +1514,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/memory_pool/memcache_for_go.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/server/memory_pool/memcache_for_go.html" class="post-title-link" itemprop="url">内存池系列｜Go内存分配</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-23 22:41:04" itemprop="dateCreated datePublished" datetime="2022-02-23T22:41:04+08:00">2022-02-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:44:05" itemprop="dateModified" datetime="2022-03-01T22:44:05+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/server/memory_pool/memcache_for_go.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/memory_pool/memcache_for_go.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/memory_pool/memcache_for_mc.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/server/memory_pool/memcache_for_mc.html" class="post-title-link" itemprop="url">内存池系列｜MC内存分配</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-23 22:41:04" itemprop="dateCreated datePublished" datetime="2022-02-23T22:41:04+08:00">2022-02-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:44:10" itemprop="dateModified" datetime="2022-03-01T22:44:10+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/server/memory_pool/memcache_for_mc.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/memory_pool/memcache_for_mc.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>slab allcator的机制</p>
-<p><img src="http://cdn.b5mang.com/2021320115717.png" alt="memcache内存分配示意图"></p>
-<p>综合上面的介绍，memcached的内存分配策略就是：按slab需求分配page，各slab按需使用chunk存储。</p>
-<p>这里有几个特点要注意，</p>
-<p>Memcached分配出去的page不会被回收或者重新分配</p>
-<p>Memcached申请的内存不会被释放</p>
-<p>slab空闲的chunk不会借给任何其他slab使用</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/memory_pool/memcache_for_nginx.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/server/memory_pool/memcache_for_nginx.html" class="post-title-link" itemprop="url">内存池系列｜nginx内存分配</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-23 22:41:04" itemprop="dateCreated datePublished" datetime="2022-02-23T22:41:04+08:00">2022-02-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:44:13" itemprop="dateModified" datetime="2022-03-01T22:44:13+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/server/memory_pool/memcache_for_nginx.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/memory_pool/memcache_for_nginx.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.it610.com%2Fimage%2Finfo5%2F7488f6235cda4dabaa7beed536bac0ba.jpg&amp;refer=http%3A%2F%2Fimg.it610.com&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=jpeg" alt="nginx内存池"></p>
-<p>有几个：</p>
-<ol>
-<li>nginx_pool_s 虽然包含了 ngx_pool_data，但是nginx_pool_s本身的内存管理还是通过ngx_pool_data来进行分配的</li>
-<li>可以理解为：nginx_pool_s是一种特殊类型的ngx_pool_data。</li>
-<li>nginx_pool_s 维护了current指针，来指向下一个用来分配内存的小内存块链表节点</li>
-<li>nginx_pool_s 维护了large指针，来指向下一个用来分配内存的d大内存块链表节点</li>
-<li>ngx_pool_data 维护了next指针 来指向下一个nginx_pool_s</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/memory_pool/memcache_for_stl.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/server/memory_pool/memcache_for_stl.html" class="post-title-link" itemprop="url">内存池系列｜STL内存分配</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-23 22:41:04" itemprop="dateCreated datePublished" datetime="2022-02-23T22:41:04+08:00">2022-02-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:44:16" itemprop="dateModified" datetime="2022-03-01T22:44:16+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/server/memory_pool/memcache_for_stl.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/memory_pool/memcache_for_stl.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <ol>
-<li>基于hash的freelist</li>
-<li>由于STL知道分配出去的内存对象大小，所以他技巧性地用了union来减少内碎片。</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/design_pattern/reactor.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/design_pattern/reactor.html" class="post-title-link" itemprop="url">设计模式-reactor模式</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 23:23:36" itemprop="dateModified" datetime="2022-03-01T23:23:36+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/design_pattern/reactor.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/design_pattern/reactor.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Reactor 模式首先是事件驱动的，有一个或多个并发输入源，有一个Service Handler，有多个Request Handlers；这个Service Handler会同步的将输入的请求（Event）多路复用的分发给相应的Request Handler。如果用图表示的如下：</p>
-<p><img src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/4/5/169ed823caf32d30~tplv-t2oaga2asx-watermark.awebp" alt="Reactor模式"></p>
-<p>其实在设计模式层面，IO多路复用也是采用 Reactor 模式的。</p>
-<p>IO 多路复用模型可以看成是 Reactor 模式在 IO 模型上的应用。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/10/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/35/">35</a><a class="extend next" rel="next" href="/page/12/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/10/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/36/">36</a><a class="extend next" rel="next" href="/page/12/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1554,7 +1586,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">349</span>
+          <span class="site-state-item-count">354</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1567,7 +1599,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">64</span>
+        <span class="site-state-item-count">66</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

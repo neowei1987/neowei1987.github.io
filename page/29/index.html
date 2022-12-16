@@ -203,6 +203,513 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/getNumberOfK.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/getNumberOfK.html" class="post-title-link" itemprop="url">二分系列-数字在排序数组中出现的次数</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-03 20:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T20:47:03+08:00">2021-01-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:46:42" itemprop="dateModified" datetime="2022-03-01T22:46:42+08:00">2022-03-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/getNumberOfK.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/getNumberOfK.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>统计一个数字在排序数组中出现的次数。<br>例如输入排序数组[1, 2, 3, 3, 3, 3, 4, 5]和数字3，由于3在这个数组中出现了4次，因此输出4。</p>
+<p>样例<br>输入：[1, 2, 3, 3, 3, 3, 4, 5] ,  3</p>
+<p>输出：4</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getNumberOfK</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums , <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (nums.empty())  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> l = <span class="number">0</span>, r = nums.size() - <span class="number">1</span>;</span><br><span class="line">    <span class="comment">// 左边界</span></span><br><span class="line">    <span class="keyword">while</span> (l &lt; r) &#123;</span><br><span class="line">        <span class="keyword">int</span> mid = l + r &gt;&gt; <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (nums[mid] &lt; k) &#123;</span><br><span class="line">            l = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            r = mid;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (nums[r] != k) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> left = r;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 右边界</span></span><br><span class="line">    l = <span class="number">0</span>, r = nums.size() - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (l &lt; r) &#123;</span><br><span class="line">        <span class="keyword">int</span> mid = l + r  + <span class="number">1</span> &gt;&gt; <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (nums[mid] &gt; k) &#123;</span><br><span class="line">            r = mid - <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            l = mid;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> r - left + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/getNumberSameAsIndex.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/getNumberSameAsIndex.html" class="post-title-link" itemprop="url">二分系列-找数值等于下标的元素</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-03 20:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T20:47:03+08:00">2021-01-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:46:45" itemprop="dateModified" datetime="2022-03-01T22:46:45+08:00">2022-03-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/getNumberSameAsIndex.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/getNumberSameAsIndex.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>假设一个单调递增的数组里的每个元素都是整数并且是唯一的。</p>
+<p>请编程实现一个函数找出数组中任意一个数值等于其下标的元素。</p>
+<p>例如，在数组[-3, -1, 1, 3, 5]中，数字3和它的下标相等。</p>
+<p>样例<br>输入：[-3, -1, 1, 3, 5]</p>
+<p>输出：3<br>注意:如果不存在，则返回-1。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getNumberSameAsIndex</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> l = <span class="number">0</span>, r = nums.size();</span><br><span class="line">        <span class="keyword">while</span> (l &lt; r) &#123;</span><br><span class="line">            <span class="keyword">int</span> mid = l + r &gt;&gt; <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (nums[mid] &gt;= mid) &#123;</span><br><span class="line">                r = mid;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123; <span class="comment">//[mid + 1, r] 都不可能满足满足；因为递增</span></span><br><span class="line">                l = mid + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (nums[r] != r) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> r;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/lowest_ancestor.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/lowest_ancestor.html" class="post-title-link" itemprop="url">二叉树遍历系列-最低公共祖先</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-03 20:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T20:47:03+08:00">2021-01-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-02 21:18:09" itemprop="dateModified" datetime="2022-03-02T21:18:09+08:00">2022-03-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/lowest_ancestor.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/lowest_ancestor.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给出一个二叉树，输入两个树节点，求它们的最低公共祖先。</p>
+<p>一个树节点的祖先节点包括它本身。</p>
+<p>注意：</p>
+<p>输入的二叉树不为空；<br>输入的两个节点一定不为空，且是二叉树中的节点；<br>样例<br>二叉树[8, 12, 2, null, null, 6, 4, null, null, null, null]如下图所示：<br>    8<br>   / \<br>  12  2<br>     / \<br>    6   4</p>
+<ol>
+<li><p>如果输入的树节点为2和12，则输出的最低公共祖先为树节点8。</p>
+</li>
+<li><p>如果输入的树节点为2和6，则输出的最低公共祖先为树节点2。</p>
+</li>
+</ol>
+<h2 id="最普通的实现思路"><a href="#最普通的实现思路" class="headerlink" title="最普通的实现思路"></a>最普通的实现思路</h2><p>实现考虑容易想到的实现思路：</p>
+<p>第一步，找到从root到节点A的路径，计作pa；时间复杂度$O(n)$，空间复杂度$O(n)$</p>
+<p>第二步，找到从root到节点B的路径，计作pb；时间复杂度$O(n)$，空间复杂度$O(n)$</p>
+<p>第三步，同时遍历pa、pb，找到最后一个相同的元素，便是A、B的最低公共祖先。时间复杂度$O(n)$</p>
+<p>综上，总的时间复杂度为$O(3n)$，空间复杂度$O(2n)$</p>
+<h2 id="常规的二叉树遍历讨论"><a href="#常规的二叉树遍历讨论" class="headerlink" title="常规的二叉树遍历讨论"></a>常规的二叉树遍历讨论</h2><p>拿到一个二叉树遍历的题目，</p>
+<p>（1）我们首先要思考的是：要解决这个问题，哪种遍历方式最合适？</p>
+<p>前序遍历、后序遍历、中序遍历还是层次遍历？</p>
+<p>（2）其次，我们做出一个假设：假设我已经调用了dfs(child),并解决了这个子问题</p>
+<p>（3）最后，基于上面的假设去思考如何解决整个问题。</p>
+<p>针对上面的第一个问题，我们想要<strong>从下往上遍历整棵树，所以我们需要后序遍历</strong>。</p>
+<p>同时我们做出假设，dfs(child,p,q)会返回p,q在child子树中的最低公共祖先。那么我们的代码大概会长这样：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">TreeNod* <span class="title">dfs</span><span class="params">(TreeNode* root, TreeNode* p, TreeNode* q)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//基本情况</span></span><br><span class="line">    TreeNode* left = dfs(root-&gt;left, p, q);</span><br><span class="line">    TreeNode* right = dfs(root-&gt;right, p, q);</span><br><span class="line">    <span class="comment">//更多处理：要充分理解题目的要求，明确每一个概念的定义，将其转换为代码。</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果在left中找到了p/q， 并且在right中也找到了p/q, 那么显然root就是最低公共祖先。</p>
+<p>如果left中p/q, 而right没有找到，显然遍历left得到的返回值就是最低公公祖先。</p>
+<p>另外需要注意，此处你有一个假设：p\q一定在tree中能够找到；如果该假设被打破的话，这段代码会出问题。</p>
+<h2 id="最终代码"><a href="#最终代码" class="headerlink" title="最终代码"></a>最终代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">TreeNod* <span class="title">dfs</span><span class="params">(TreeNode* root, TreeNode* p, TreeNode* q)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == p || root == q || root == null) <span class="keyword">return</span> root;</span><br><span class="line">    TreeNode* left = dfs(root-&gt;left, p, q);</span><br><span class="line">    TreeNode* right = dfs(root-&gt;right, p, q);</span><br><span class="line">    <span class="keyword">if</span> (left &amp;&amp; right) <span class="keyword">return</span> root;</span><br><span class="line">    <span class="keyword">if</span> (left) <span class="keyword">return</span> left; <span class="keyword">else</span> <span class="keyword">return</span> right;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/network/trace_rt.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/network/trace_rt.html" class="post-title-link" itemprop="url">网络-traceroute</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-03 19:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T19:47:03+08:00">2021-01-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-12-14 22:36:30" itemprop="dateModified" datetime="2022-12-14T22:36:30+08:00">2022-12-14</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/network/trace_rt.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/network/trace_rt.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>traceroute</p>
+<p>ICMP  ttl递减</p>
+<p>给目标主机的不可达端口（30000+）发送UDP数据包，并且设置TTL</p>
+<p>他从源主机到目的主机发送一连串的IP数据报p1-pn，并且数据报是无法交付的udp数据报。第一个数据报的TTL设置为1，这样当这个数据报转发到第一个路由器的时候，路由器收到后TTL减1，减完1之后发现TTL变为0，路由器会向源主机发送一个超时差错报告报文。</p>
+<p>然后是第二个，第二个数据报的TTL设置为2，这样转发到第二个路由器的时候，TTL变为0，并会向源主机在发送一个超时差错报告报文，依次进行此操作。直到第n个数据报pn到达目的主机，但是由于数据报无法交付，因此目的主机会向源主机发送终点不可达差错报告报文。<br>通过这种方式，源主机就可以通过发送过来的超时差错报告报文和终点不可达差错报告报文来的得到经过的路由器以及往返时间等信息，达到路由跟踪的目的。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/os/epoll.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/os/epoll.html" class="post-title-link" itemprop="url">操作系统之epoll</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-03 19:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T19:47:03+08:00">2021-01-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-12-16 21:49:24" itemprop="dateModified" datetime="2022-12-16T21:49:24+08:00">2022-12-16</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/os/epoll.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/epoll.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.40pnce8w2uy0.webp" alt="image"></p>
+<p>正常一个fd会有等待队列，表示有哪一些进程在等待fd可用；</p>
+<p>当一个进程在等待一个fd时，内核会把进程结构体从运行队列摘除，放在fd的等待队列上【这样子内核就不会调度到该进程了】</p>
+<p>当某个端口有数据可读时，内核会跟进端口查索引表，找到对应的fd</p>
+<p>对于select，会频繁的将进程挂在所有FD的等待队列上，然后在select返回的时候，再重新将进程从等待队列中移除，放回到运行队列上。</p>
+<p>当进程被唤醒的时候，用户程序也需要遍历fd array，去GET哪些FD可读。</p>
+<p>性能极其差！</p>
+<hr>
+<p>eventpoll作为一个中间结构，替代进程，挂在对应的等待队列</p>
+<p>而调用epoll_wait的进程当被阻塞的时候是挂在在eventpoll的等待队列上。</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.4ifaujjeqx40.webp" alt="image"></p>
+<p>select低效的另一个原因在于程序不知道哪些socket收到数据，只能一个一个的遍历。如果内核维护一个“就绪列表”，引用收到的数据的socket，就能避免遍历。</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.4lmelvefxg80.webp" alt="image"></p>
+<hr>
+<p>使用场景：</p>
+<p>epoll 在应对大量网络连接时，只有活跃连接很少的情况下才能表现的性能优异。换句话说，epoll 在处理大量非活跃的连接时性能才会表现的优异。如果15000个 socket 都是活跃的，epoll 和 select 其实差不了太多。</p>
+<hr>
+<p>epoll 的 edge-trigger 和 level-trigger 模式处理逻辑差异极小，性能测试结果表明常规应用场景 中二者性能差异可以忽略。<br>? 使用 edge-trigger 的 user app 比使用 level-trigger 的逻辑复杂，出错概率更高。<br>? edge-trigger 和 level-trigger 的性能差异主要在于 epoll_wait 系统调用的处理速度，是否是 user app 的性能瓶颈需要视应用场景而定，不可一概而论。</p>
+<p>但从 kernel 代码来看，edge-trigger/level-trigger 模式的处理逻辑几乎完全相同，差别仅在于 level-trigger 模式在 event 发生时不会将其从 ready list 中移除，略为增大了 event 处理过程中 kernel space 中记录数据的大小。</p>
+<p>然而，edge-trigger 模式一定要配合 user app 中的 ready list 结构，以便收集已出现 event 的 fd，再通过 round-robin 方式挨个处理，以此避免通信数据量很大时出现忙于处理热点 fd 而导致非热点 fd 饿死的现象。统观 kernel 和 user space，由于 user app 中 ready list 的实现千奇百怪，不一定都经过仔细的推敲优化，因此 edge-trigger 的总内存开销往往还大于 level-trigger 的开销。</p>
+<p>一般号称 edge-trigger 模式的优势在于能够减少 epoll 相关系统调用，这话不假，但 user app 里可不是只有 epoll 相关系统调用吧？为了绕过饿死问题，edge-trigger 模式的 user app 要自行进行 read/write 循环处理，这其中增加的系统调用和减少的 epoll 系统调用加起来，有谁能说一定就能明显地快起来呢？</p>
+<hr>
+<p>当然操作系统开发人员也会意识到这些缺陷，并且在设计poll接口时解决了大部分问题，因此你会问，还有任何理由使用select吗？为什么不直接淘汰它了？其实还有两个理由使用它：</p>
+<p>1.第一个原因是可移植性。select已经存在很长时间了，你可以确定每个支持网络和非阻塞套接字的平台都会支持select，而它可能还不支持poll。另一种选择是你仍然使用poll然后在那些没有poll的平台上使用select来模拟它。<br>2.第二个原因是select的超时时间理论上可以精确到微秒级别。而poll和epoll的精度只有毫秒级。这对于桌面或者服务器系统来说没有任何区别，因为它们不会运行在纳秒精度的时钟上，但是在某些与硬件交互的实时嵌入式平台，降低控制棒关闭核反应堆．可能是需要的。(这就可以作为一个更加精确的sleep()来用)</p>
+<hr>
+<p>什么时候应该选择使用Poll：<br>跨平台<br>同一时刻你的应用程序监听的套接字少于1000（这种情况下使用epoll不会得到任何益处）。<br>您的应用程序需要一次监视超过1000个套接字，但连接非常短暂（这是一个接近的情况，但很可能在这种情况下，您不太可能看到使用epoll的任何好处，因为epoll 的加速将这些新描述符添加到集合中会浪费等待 - 见下文<br>您的应用程序的设计方式不是在另一个线程正在等待它们更改事件（即您没有使用kqueue或IO完成端口移植应用程序）。</p>
+<hr>
+<p>EPoll的缺点：<br>1.改变监听事件的类型（例如从读事件改为写事件）需要调用epoll_ctl系统调用，而这在poll中只需要在用户空间简单的设置一下对应的掩码。如果需要改变5000个套接字的监听事件类型就需要5000次系统调用和上下文切换（直到2014年epoll_ctl函数仍然不能批量操作，每个描述符只能单独操作），这在poll中只需要循环一次pollfd结构体。<br>2.每一个被accept()的套接字都需要添加到集合中，在epoll中必须使用epoll_ctl来添加–这就意味着每一个新的连接都需要两次系统调用，而在poll中只需要一次。如果你的服务有非常多的短连接它们都接受或者发送少量数据，epoll所花费的时间可能比poll更长。(解释了上文)<br>3.epoll是Linux上独有的，虽然其他平台上也有类似的机制但是他们的区别非常大，例如边沿触发这种模式是非常独特的（FreeBSD的kqueue对它的支持非常粗糙）。<br>什么情况下使用Epoll：<br>1.你的程序通过多个线程来处理大量的网络连接。如果你的程序只是单线程的那么将会失去epoll的很多优点。并且很有可能不会比poll更好。<br>2.你需要监听的套接字数量非常大（至少1000）；如果监听的套接字数量很少则使用epoll不会有任何性能上的优势甚至可能还不如poll。<br>3.你的网络连接相对来说都是长连接；就像上面提到的epoll处理短连接的性能还不如poll因为epoll需要额外的系统调用来添加描述符到集合中。<br>4.你的应用程序依赖于Linux上的其他特性</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/os/fork.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -414,7 +921,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-01 12:57:08" itemprop="dateModified" datetime="2022-12-01T12:57:08+08:00">2022-12-01</time>
+                <time title="Modified: 2022-12-16 21:04:00" itemprop="dateModified" datetime="2022-12-16T21:04:00+08:00">2022-12-16</time>
               </span>
 
           
@@ -648,515 +1155,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/language/cpp/base.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/language/cpp/base.html" class="post-title-link" itemprop="url">cpp语言-内存模型</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-03 19:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T19:47:03+08:00">2021-01-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-14 22:34:29" itemprop="dateModified" datetime="2022-12-14T22:34:29+08:00">2022-12-14</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index"><span itemprop="name">编程语言</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/language/cpp/base.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/language/cpp/base.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>virtual destructor()</p>
-<p>将Base析构函数声明为virtual函数时，执行delete base ;语句就会删除subModel的对象；</p>
-<p>exception</p>
-<p>try catch</p>
-<p><img src="https://img-blog.csdnimg.cn/bf280dc2bc534d07a21a559aa6f643b6.png" alt="CPP内存模型"></p>
-<p>void <em>operator new (size_t size,void </em>pbuffer)</p>
-<p>可以做某一个类的静态成员函数</p>
-<p>参考：<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.toutiao.com/article/6956573052414984712/?wid=1670850368129">https://www.toutiao.com/article/6956573052414984712/?wid=1670850368129</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/language/java/class_load.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/language/java/class_load.html" class="post-title-link" itemprop="url">java语言-classloader</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-03 19:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T19:47:03+08:00">2021-01-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-01 12:57:58" itemprop="dateModified" datetime="2022-12-01T12:57:58+08:00">2022-12-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index"><span itemprop="name">编程语言</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/language/java/class_load.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/language/java/class_load.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>bootstrap classloader<br>extension classloader<br>application classloader<br>custom classloader</p>
-<p>双亲委派模型</p>
-<p>当一个类收到了类加载请求，他首先不会尝试自己去加载这个类，而是把这个请求委派给父类去完成，每一个层次类加载器都是如此，因此所有的加载请求都应该传送到启动类加载其中，只有当父类加载器反馈自己无法完成这个请求的时候（在它的加载路径下没有找到所需加载的Class），子类加载器才会尝试自己去加载</p>
-<p>参考：<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/w1lgy/article/details/126434976">https://blog.csdn.net/w1lgy/article/details/126434976</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/language/java/cpu_mem.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/language/java/cpu_mem.html" class="post-title-link" itemprop="url">问题排查系统命令</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-03 19:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T19:47:03+08:00">2021-01-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-01 12:59:55" itemprop="dateModified" datetime="2022-12-01T12:59:55+08:00">2022-12-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/language/java/cpu_mem.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/language/java/cpu_mem.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>top 查看cpu使用率，重点关注：内核还是用户态、load值</p>
-<p>cpu使用率2500%左右(40核系统，但平时才300%左右)，并确认当前系统load值是否很高，如果很高(超过cpu核数)，说明当前系统出现大量线程排队现象，如果load比较低但cpu很高，说明系统运行很顺畅，而是业务比较繁忙导致。</p>
-<p>top -H pid 查看哪些线程cpu占比高</p>
-<p>jstat -gc pid 查看java内部状态</p>
-<p>jstack 查看调用stack </p>
-<p>strace 查看系统调用</p>
-<p>查看函数/接口耗时</p>
-<p>调整jvm 内存参数，调整gc方式（cms-&gt;g1)</p>
-<p>arthas</p>
-<p>dashboard：当前系统的实时数据面板</p>
-<p>thread：查看当前 JVM 的线程堆栈信息</p>
-<p>jvm：查看当前 JVM 的信息</p>
-<p>sc：查看JVM已加载的类信息</p>
-<p>sm：查看已加载类的方法信息</p>
-<p>jad：反编译指定已加载类的源码</p>
-<p>classloader：查看classloader的继承树，urls，类加载信息，使用classloader去getResource</p>
-<p>monitor：方法执行监控</p>
-<p>watch：方法执行数据观测</p>
-<p>trace：方法内部调用路径，并输出方法路径上的每个节点上耗时</p>
-<p>stack：输出当前方法被调用的调用路径</p>
-<p>tt：方法执行数据的时空隧道，记录下指定方法每次调用的入参和返回信息，并能对这些不同的时间下调用进行观测</p>
-<p>reset：重置增强类，将被 Arthas 增强过的类全部还原，Arthas 服务端关闭时会重置所有增强过的类</p>
-<p>quit：退出当前 Arthas 客户端，其他 Arthas 客户端不受影响</p>
-<p>shutdown：关闭 Arthas 服务端，所有 Arthas 客户端全部退出</p>
-<hr>
-<p>memory 各种查看</p>
-<hr>
-<p>netstat 查看timewait closewait, 查看数据包长什么样，是否符合预期等</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/language/java/object.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/language/java/object.html" class="post-title-link" itemprop="url">java语言-object</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-03 19:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T19:47:03+08:00">2021-01-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-01 12:58:24" itemprop="dateModified" datetime="2022-12-01T12:58:24+08:00">2022-12-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index"><span itemprop="name">编程语言</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/language/java/object.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/language/java/object.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>equals VS  == </p>
-<p>（1）对象类型不同(一个是object的成员方法，一个是操作符)</p>
-<p>（2）比较的对象不同 一个是对象内容是否ok， 一个是引用或者地址是否ok</p>
-<p>（3）执行速度不同</p>
-<p>在每个类中，在重写equals方法的时侯，一定要重写hashcode方法。</p>
-<p>根据Object规范，规范约定：</p>
-<p>如果两个对象通过equals方法比较是相等的，那么它们的hashCode方法结果值也是相等的。</p>
-<p>如果两个对象通过equals方法比较是不相等的，那么不要求它们的hashCode方法结果值是相等的。</p>
-<p>当在一个应用程序执行过程中， 如果equals方法比较中没有修改任何信息，那么在同一个对象上重复调用hashCode方法时，它必须始终返回相同的值。但如果从一个应用程序到了另一个应用程序，两个应用程序汇中调用hashCode方法的返回值可以是不一致的。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/language/java/reflect.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/language/java/reflect.html" class="post-title-link" itemprop="url">java语言-reflect</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-03 19:47:03" itemprop="dateCreated datePublished" datetime="2021-01-03T19:47:03+08:00">2021-01-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-01 12:58:31" itemprop="dateModified" datetime="2022-12-01T12:58:31+08:00">2022-12-01</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index"><span itemprop="name">编程语言</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/language/java/reflect.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/language/java/reflect.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://cloud.tencent.com/developer/article/1856972">https://cloud.tencent.com/developer/article/1856972</a></p>
-<p>优点：</p>
-<p>1.能够运行时动态地获取类的实例，提高灵活性</p>
-<p>2.与动态编译结合</p>
-<p>缺点：<br>1）使用反射性能较低，需要解析字节码，将内存中的对象进行解析。</p>
-<p>解决方案：</p>
-<p>1、通过setAccessible(true)关闭JDK的安全检查来提升反射速度；</p>
-<p>2、多次创建一个类的实例时，有缓存会快很多</p>
-<p>3、ReflflectASM工具类，通过字节码生成的方式加快反射速度</p>
-<p>2）相对不安全，破坏了封装性（因为通过反射可以获得私有方法和属性）</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/28/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/28/">28</a><span class="page-number current">29</span><a class="page-number" href="/page/30/">30</a><span class="space">&hellip;</span><a class="page-number" href="/page/35/">35</a><a class="extend next" rel="next" href="/page/30/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/28/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/28/">28</a><span class="page-number current">29</span><a class="page-number" href="/page/30/">30</a><span class="space">&hellip;</span><a class="page-number" href="/page/36/">36</a><a class="extend next" rel="next" href="/page/30/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1225,7 +1227,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">349</span>
+          <span class="site-state-item-count">354</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1238,7 +1240,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">64</span>
+        <span class="site-state-item-count">66</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

@@ -203,6 +203,554 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/search_2d_array.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/search_2d_array.html" class="post-title-link" itemprop="url">有序矩阵查找</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 23:34:03" itemprop="dateCreated datePublished" datetime="2022-02-25T23:34:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:48:10" itemprop="dateModified" datetime="2022-03-01T22:48:10+08:00">2022-03-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87Offer/" itemprop="url" rel="index"><span itemprop="name">剑指Offer</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/search_2d_array.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/search_2d_array.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在一个二维数组中，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。</p>
+<p>请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。</p>
+<p>样例<br>输入数组：</p>
+<p>[<br>[1,2,8,9]，<br>[2,4,9,12]，<br>[4,7,10,13]，<br>[6,8,11,15]<br>]</p>
+<p>如果输入查找数值为7，则返回true，</p>
+<p>如果输入查找数值为5，则返回false。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">searchArray</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; <span class="built_in">array</span>, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">array</span>.empty() || <span class="built_in">array</span>[<span class="number">0</span>].empty()) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="built_in">array</span>[<span class="number">0</span>].size() - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (i &lt; <span class="built_in">array</span>.size() &amp;&amp; j &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">array</span>[i][j] == target) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">array</span>[i][j] &gt; target) j--;</span><br><span class="line">            <span class="keyword">else</span> i++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/index.html" class="post-title-link" itemprop="url">二分系列-概览</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 22:47:03" itemprop="dateCreated datePublished" datetime="2022-02-25T22:47:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-03 19:40:16" itemprop="dateModified" datetime="2022-03-03T19:40:16+08:00">2022-03-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/algorithm/divide_conquer/binary/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="关于二分"><a href="#关于二分" class="headerlink" title="关于二分"></a>关于二分</h3><p>二分是分治的一种；问题收敛速度最快的一种。</p>
+<p>通过每次把问题搜索空间排除一半，进而得到lgN的时间复杂度。</p>
+<p>将区间分为两部分，第一部分满足某一个特征；第二部分满足另一个特征</p>
+<p>通过二分来解决的问题包括：</p>
+<ol>
+<li>二分查找一个数组</li>
+<li>通过二分的方式，遍历所有可能的结果。然后判定结果是否ok。也就是把查找问题转换为判定问题。</li>
+</ol>
+<p>二分答案：答案具有“单调性”，外层花费$logN$的时间转化为判定性问题.</p>
+<p>答案具有“单调性”：注意是先0后1函数，还是先1后0函数，和二分的实现形式，是一直保持小于，还是能累加就累加？</p>
+<p>一般定义判定是“是否存在一个小于等于、是否存在一个大于等于”，这么定义是显然有单调性的</p>
+<p>二分出的答案一般对check的进行有所帮助</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//整数二分算法模板 https://www.cnblogs.com/smallocean/p/11913963.html</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">check</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;<span class="keyword">return</span> <span class="literal">true</span>;<span class="comment">/* ... */</span>&#125; <span class="comment">// 检查x是否满足某种性质</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 区间[l, r]被划分成[l, mid]和[mid + 1, r]时使用：</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bsearch_1</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (l &lt; r)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> mid = l + r &gt;&gt; <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (check(mid)) r = mid;    <span class="comment">// check()判断mid是否满足性质</span></span><br><span class="line">        <span class="keyword">else</span> l = mid + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> l;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 区间[l, r]被划分成[l, mid - 1]和[mid, r]时使用：</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bsearch_2</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (l &lt; r)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> mid = l + r + <span class="number">1</span> &gt;&gt; <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (check(mid)) l = mid;</span><br><span class="line">        <span class="keyword">else</span> r = mid - <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> l;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//浮点数二分算法模板 —— 模板题 AcWing 790. 数的三次方根</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">check</span><span class="params">(<span class="keyword">double</span> x)</span> </span>&#123;<span class="comment">/* ... */</span>&#125; <span class="comment">// 检查x是否满足某种性质</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">bsearch_3</span><span class="params">(<span class="keyword">double</span> l, <span class="keyword">double</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">double</span> eps = <span class="number">1e-6</span>;   <span class="comment">// eps 表示精度，取决于题目对精度的要求</span></span><br><span class="line">    <span class="keyword">while</span> (r - l &gt; eps)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">double</span> mid = (l + r) / <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">if</span> (check(mid)) r = mid;</span><br><span class="line">        <span class="keyword">else</span> l = mid;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> l;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="二分相关题目索引"><a href="#二分相关题目索引" class="headerlink" title="二分相关题目索引"></a>二分相关题目索引</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>题目分类</th>
+<th>题目名称</th>
+<th>考察点</th>
+<th>其他说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td><a href="getNumberOfK.html">查第一个出现的位置</a></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td><a href="getNumberSameAsIndex.html">递增找number与index相等</a></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td><a href="moving_cnt.html">重复数字出现次数</a></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td><a href="find_min_in_rotated_array.html">旋转数组找最值</a></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>求两个有序数组前K大的数</td>
+<td>考虑A的中间元素m/2和B的中间元素n/2</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>多路归并</td>
+<td>求m个有序数组前K大的数</td>
+<td>维护一个大小为m的堆</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://zhuanlan.zhihu.com/p/157779732">https://zhuanlan.zhihu.com/p/157779732</a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.dazhuanlan.com/2019/12/16/5df6e82127d88/">https://www.dazhuanlan.com/2019/12/16/5df6e82127d88/</a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/weixin_34355715/article/details/94465888">https://blog.csdn.net/weixin_34355715/article/details/94465888</a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/weixin_43626741/article/details/104364387">https://blog.csdn.net/weixin_43626741/article/details/104364387</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/distributed_lock.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/system_design/distributed_lock.html" class="post-title-link" itemprop="url">常见系统设计题系列-分布式锁</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-02-25 17:29:03 / Modified: 17:29:41" itemprop="dateCreated datePublished" datetime="2022-02-25T17:29:03+08:00">2022-02-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">系统设计</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/system_design/distributed_lock.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/system_design/distributed_lock.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="分布式锁应该具备哪些条件"><a href="#分布式锁应该具备哪些条件" class="headerlink" title="分布式锁应该具备哪些条件"></a>分布式锁应该具备哪些条件</h3><ol>
+<li>在分布式系统环境下，一个方法在同一时间只能被一个机器的一个线程执行</li>
+<li>高可用的获取锁与释放锁</li>
+<li>高性能的获取锁与释放锁</li>
+<li>具备可重入特性（可理解为重新进入，由多于一个任务并发使用，而不必担心数据错误）</li>
+<li>具备锁失效机制，防止死锁</li>
+<li>具备非阻塞锁特性，即没有获取到锁将直接返回获取锁失败</li>
+</ol>
+<p>ps. 考虑幂等性</p>
+<h3 id="分布式锁实现"><a href="#分布式锁实现" class="headerlink" title="分布式锁实现"></a>分布式锁实现</h3><p>基于数据库</p>
+<p>基于Redis SET命令</p>
+<p>基于Memcache CAS命令</p>
+<p>基于Zookeeper</p>
+<h3 id="具体参考"><a href="#具体参考" class="headerlink" title="具体参考"></a>具体参考</h3><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.jianshu.com/p/a1ebab8ce78a">https://www.jianshu.com/p/a1ebab8ce78a</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/timer/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/timer/index.html" class="post-title-link" itemprop="url">高性能服务器设计-定时器</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 15:01:03" itemprop="dateCreated datePublished" datetime="2022-02-25T15:01:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:44:41" itemprop="dateModified" datetime="2022-03-01T22:44:41+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/timer/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/timer/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>设计目标：</p>
+<ol>
+<li>高性能，更快的找到下一个超时的Task</li>
+<li>高分辨率，例如毫秒定时器</li>
+</ol>
+<p>实现方式：</p>
+<ul>
+<li>时间轮、多级时间轮</li>
+<li>堆</li>
+<li>基于排序链表 O(N)</li>
+<li>红黑树</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/concurrency_limiter/little_raw.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/concurrency_limiter/little_raw.html" class="post-title-link" itemprop="url">高性能服务器设计-littile's raw定律</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-25 13:40:03" itemprop="dateCreated datePublished" datetime="2022-02-25T13:40:03+08:00">2022-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-10-30 18:32:37" itemprop="dateModified" datetime="2022-10-30T18:32:37+08:00">2022-10-30</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/concurrency_limiter/little_raw.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/concurrency_limiter/little_raw.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>并发 = rt * qps</p>
+<h4 id="N-X-R"><a href="#N-X-R" class="headerlink" title="N = X * R"></a>N = X * R</h4><p>N表示系统中同时活动的用户，包括正在处理中和队列中的；X表示用户相继到达系统的速率，在平衡状态时即为系统吞吐量（到达=离开）；R表示每个用户在系统中平均的驻留时间</p>
+<p>eg. 一个请求在系统中的停留时间，1s; 一秒钟平均过来100个请求（当然一秒钟也会离开100个请求）那么系统同时处理的请求数是多少？</p>
+<p>应该是1s * 100 (个/s) = 100个。</p>
+<h4 id="Eric的估算公式-C-L-n-T"><a href="#Eric的估算公式-C-L-n-T" class="headerlink" title="Eric的估算公式 C = L * n / T"></a>Eric的估算公式 C = L * n / T</h4><p>n表示同时在线；L表示平均停留时间；T表示高峰期持续时间；C为并发用户数量。</p>
+<p>eg. 一个用户在系统中的停留时间，30分钟；晚高峰5～7点，有500在线；问系统的并发用户是多少？</p>
+<p>假设系统后端维护session，那么这个session的长度即为30分钟，L=30minutes；用户活跃时长已经得知是从5点到7点共2个小时，T=2 hours；那么并发用户数C=n<em>L/T=500</em>30/(5*60)=50</p>
+<h4 id="等价性说明"><a href="#等价性说明" class="headerlink" title="等价性说明"></a>等价性说明</h4><p>我们再来从另外的角度分解Eric的估算公式：</p>
+<p>C=n<em>L/T  可以表示为  C=(n/T)</em>L</p>
+<p>n/T 是不是和我们刚才在上面Little中第一步一样，是计算到达率X的。</p>
+<p>而L（session时长）不就是R（驻留时间）吗？都等同于session时间长度。</p>
+<p>也就是说C=(n/T)<em>L=X</em>R=N</p>
+<p>结论：由以上得知，Eric’s 估算公式跟Little定律是等价的.</p>
+<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.cnblogs.com/hundredsofyears/p/3360305.html">https://www.cnblogs.com/hundredsofyears/p/3360305.html</a></p>
+<p>并发  = 到达率X * 停留时间R</p>
+<p>并发 = （同时在线人数c  / 高峰期持续时长T） * 平均停留时间L</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/concurrency_limiter/index.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -356,7 +904,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-14 21:13:46" itemprop="dateModified" datetime="2022-12-14T21:13:46+08:00">2022-12-14</time>
+                <time title="Modified: 2022-12-16 21:04:00" itemprop="dateModified" datetime="2022-12-16T21:04:00+08:00">2022-12-16</time>
               </span>
 
           
@@ -409,7 +957,10 @@
 <p>AR:Assigned Replicas 所有副本</p>
 <p>ISR是由leader维护，follower从leader同步数据有一些延迟（包括延迟时间replica.lag.time.max.ms和延迟条数replica.lag.max.messages两个维度, 当前最新的版本0.10.x中只支持replica.lag.time.max.ms这个维度），任意一个超过阈值都会把follower剔除出ISR, 存入OSR（Outof-Sync Replicas）列表，新加入的follower也会先存放在OSR中。AR=ISR+OSR。</p>
 <p>ISR数据同步、ACK选项（全部ack、只有一个ack）</p>
-<p>Kafka的复制机制既不是完全的同步复制，也不是单纯的异步复制。完全同步复制要求All Alive Follower都复制完，这条消息才会被认为commit，这种复制方式极大的影响了吞吐率。而异步复制方式下，Follower异步的从Leader复制数据，数据只要被Leader写入log就被认为已经commit，这种情况下，如果leader挂掉，会丢失数据，kafka使用ISR的方式很好的均衡了确保数据不丢失以及吞吐率。Follower可以批量的从Leader复制数据，而且Leader充分利用磁盘顺序读以及send file(zero copy)机制，这样极大的提高复制性能，内部批量写磁盘，大幅减少了Follower与Leader的消息量差。</p>
+<p>Kafka的复制机制既不是完全的同步复制，也不是单纯的异步复制。</p>
+<p>完全同步复制要求All Alive Follower都复制完，这条消息才会被认为commit，这种复制方式极大的影响了吞吐率。</p>
+<p>而异步复制方式下，Follower异步的从Leader复制数据，数据只要被Leader写入log就被认为已经commit，这种情况下，如果leader挂掉，会丢失数据。</p>
+<p>kafka使用ISR的方式很好的均衡了确保数据不丢失以及吞吐率。Follower可以批量的从Leader复制数据，而且Leader充分利用磁盘顺序读以及send file(zero copy)机制，这样极大的提高复制性能，内部批量写磁盘，大幅减少了Follower与Leader的消息量差。</p>
 <p>leader会维护一个与其基本保持同步的Replica列表，该列表称为ISR(in-sync Replica)，每个Partition都会有一个ISR，而且是由leader动态维护 ，如果一个follower比一个leader落后太多，或者超过一定时间未发起数据复制请求，则leader将其重ISR中移除</p>
 <h4 id="Log-End-Offset"><a href="#Log-End-Offset" class="headerlink" title="Log End Offset"></a>Log End Offset</h4><p>当前broker收到的最新offset</p>
 <h4 id="HighWatermark"><a href="#HighWatermark" class="headerlink" title="HighWatermark"></a>HighWatermark</h4><p>已经同步到其他slave中的offset</p>
@@ -1051,549 +1602,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/breaker/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/server/breaker/index.html" class="post-title-link" itemprop="url">高性能服务器设计-熔断模型</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 11:56:03" itemprop="dateCreated datePublished" datetime="2022-02-25T11:56:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:43:15" itemprop="dateModified" datetime="2022-03-01T22:43:15+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/server/breaker/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/breaker/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="熔断简单说明"><a href="#熔断简单说明" class="headerlink" title="熔断简单说明"></a>熔断简单说明</h2><p>在分布式系统中，一次完整的请求可能需要经过多个服务模块的调用，请求在多个服务中传递，服务对服务的调用会产生新的请求，这些请求共同组成了这次请求的调用链。当调用链中的某个环节，特别是下游服务不可用时，将会导致上游服务调用方不可用，最终将这种不可用的影响扩大到整个系统，导致整个分布式的不可用，引起服务雪崩现象。</p>
-<p>为了避免这种情况，在下游服务不可用时，保护上游服务的可用性显得极其重要。对此我们可以通过熔断的方式，通过及时熔断服务调用方和服务提供方的调用链，保护服务调用方资源，防止服务雪崩现象的出现。</p>
-<p>使用服务熔断，能够有效地保护服务调用方的稳定性，它能够避免服务调用者频繁调用可能失败的服务提供者，防止服务调用者浪费cpu、线程和IO资源等，提高服务整体的可用性。</p>
-<p>所以，熔断设计的目的是在服务提供方不可用时保护服务调用方的资源，减少服务调用中无用的远程调用。</p>
-<h2 id="常见熔断策略"><a href="#常见熔断策略" class="headerlink" title="常见熔断策略"></a>常见熔断策略</h2><h3 id="google-SRE-自适应熔断"><a href="#google-SRE-自适应熔断" class="headerlink" title="google SRE 自适应熔断"></a>google SRE 自适应熔断</h3><p>基于失败率</p>
-<p>drop_ratio = $max(0, （requests - K * accepts） / (requests + 1))$</p>
-<p>算法参数：</p>
-<ul>
-<li>requests：窗口时间内的请求总数</li>
-<li>accepts：正常请求数量</li>
-<li>K：敏感度，K 越小越容易丢请求，一般推荐 1.5-2 之间</li>
-</ul>
-<p>算法解释：</p>
-<ul>
-<li>正常情况下 requests=accepts，所以概率是 0。</li>
-<li>随着正常请求数量减少，当达到 requests == K* accepts 继续请求时，概率 P 会逐渐比 0 大开始按照概率逐渐丢弃一些请求，如果故障严重则丢包会越来越多，假如窗口时间内 accepts==0 则完全熔断。</li>
-<li>当应用逐渐恢复正常时，accepts、requests 同时都在增加，但是 K*accepts 会比 requests 增加的更快，所以概率很快就会归 0，关闭熔断。</li>
-</ul>
-<h3 id="brpc熔断策略"><a href="#brpc熔断策略" class="headerlink" title="brpc熔断策略"></a>brpc熔断策略</h3><p>在开启了熔断之后，CircuitBreaker会记录每一个请求的处理结果，并维护一个累计出错时长，记为acc_error_cost，当acc_error_cost &gt; max_error_cost时，熔断该节点。</p>
-<p>两个小技巧：</p>
-<ol>
-<li>利用EMA（移动平均值）策略计算接口的平均响应时间</li>
-<li>利用双时间窗口统计来平衡短期抖动与长期错误率过高；</li>
-</ol>
-<p>具体见：<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/apache/incubator-brpc/blob/master/docs/cn/circuit_breaker.md">CircuitBreaker</a></p>
-<h3 id="netflix-断路器"><a href="#netflix-断路器" class="headerlink" title="netflix 断路器"></a>netflix 断路器</h3><p><img src="https://img-blog.csdnimg.cn/20201201181047280.png" alt="熔断器策略"></p>
-<p>三种断路器状态：关闭、打开、半开</p>
-<p>最近一段时间内的错误率 = 错误数 / 总数</p>
-<p>最近一段时间内的错误数与总数，通过<strong>滑动窗口</strong>来实现，而滑动窗口又通过<strong>环形队列</strong>来实现。</p>
-<p>错误率超过多少，则进入打开状态，持续一段时间。</p>
-<p>持续一段时间后，进入半开状态，允许定量的请求通过，如果成功的比例足够大，则进入关闭状态，否则重新加入打开状态。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/parallel/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/parallel/index.html" class="post-title-link" itemprop="url">并行算法 - 概览</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 11:31:03" itemprop="dateCreated datePublished" datetime="2022-02-25T11:31:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-01 22:42:17" itemprop="dateModified" datetime="2022-03-01T22:42:17+08:00">2022-03-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/parallel/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/parallel/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>并行排序（并行归并排序、并行快速排序）</p>
-<p>并行查找（并行的散列表，随机分为K份）</p>
-<p>并行字符串匹配（任何算法都可以，只是分割后，需要补上2m个char）</p>
-<p>并行搜索（对于BFS，使用两个队列，循环使用）</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/os/sync.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/os/sync.html" class="post-title-link" itemprop="url">操作系统 - 线程同步</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 11:12:03" itemprop="dateCreated datePublished" datetime="2022-02-25T11:12:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-15 15:19:48" itemprop="dateModified" datetime="2022-12-15T15:19:48+08:00">2022-12-15</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/os/sync.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/sync.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>多线程问题的本质：有序性，可见性，原子性</p>
-<p>我们处理线程安全可以有几个层次：</p>
-<ol>
-<li>能否做成无状态的不变对象。无状态是最安全的。</li>
-<li>能否线程封闭<br>（1）栈封闭，多采用局部变量<br>（2）线程局部存储（用空间换性能）<br>（3）程序控制线程封闭（Hash，将同一hash val的的请求丢给同一个线程去处理）</li>
-<li>采用何种同步技术</li>
-</ol>
-<h4 id="多线程同步的方式"><a href="#多线程同步的方式" class="headerlink" title="多线程同步的方式"></a>多线程同步的方式</h4><p>线程同步</p>
-<p>多个线程间的一种协作机制。谈到线程我们经常想到的是线程间的竞争，比如去争夺锁，但这并不是故事的全部，线程间也会有协作机制。就是在一个线程进行了规定操作后，就进入等待状态， 等待其他线程执行完他们的指定代码过后 再将其唤醒;<br>（在有多个线程进行等待时， 如果需要，可以使用 notifyAll()来唤醒所有的等待线程。）</p>
-<p>(1) 信号量 semphore</p>
-<p>(2) 共享内存 shared_memory</p>
-<p>(3) 读写锁 rw_lock</p>
-<p>(4) 条件变量 condition</p>
-<p>线程间存在依赖</p>
-<p><img src="https://img-blog.csdnimg.cn/img_convert/edb8f67325ff3f693d58f635eeff9650.jpeg" alt="条件变量的使用"></p>
-<p>(5) 互斥量 mutex</p>
-<h4 id="互斥锁"><a href="#互斥锁" class="headerlink" title="互斥锁"></a>互斥锁</h4><p>对于互斥锁，如果资源已经被占用，资源申请者只能进入睡眠状态。</p>
-<ol>
-<li>临界区：通过对多线程的串行化来访问公共资源或一段代码，速度快，适合控制数据访问。</li>
-<li>互斥量：为协调共同对一个共享资源的单独访问而设计的。</li>
-<li>信号量：为控制一个具有有限数量用户资源而设计。</li>
-<li>读写锁</li>
-</ol>
-<h5 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a>自旋锁</h5><p>但是自旋锁不会引起调用者睡眠，如果自旋锁已经被别的执行单元保持，调用者就一直循环在那里看是否该自旋锁的保持者已经释放了锁。如果等待的时间比较短，适合使用自旋锁，占用大量的CPU资源</p>
-<h4 id="锁的实现机制"><a href="#锁的实现机制" class="headerlink" title="锁的实现机制"></a>锁的实现机制</h4><p>在硬件层面，CPU提供了原子操作、关中断、锁内存总线的机制。</p>
-<h4 id="禁中断"><a href="#禁中断" class="headerlink" title="禁中断"></a>禁中断</h4><p>既然只有中断才能把上锁过程打断，造成多线程操作失败。我先关中断不就得了，在加锁操作完成后再开中断。</p>
-<h4 id="普通的原子指令"><a href="#普通的原子指令" class="headerlink" title="普通的原子指令"></a>普通的原子指令</h4><p>上面这个手段太笨重了，能不能硬件做一种加锁的原子操作呢？能，大名鼎鼎的“test and set”指令就是做这个事情的。</p>
-<h5 id="锁内存总线-原子指令"><a href="#锁内存总线-原子指令" class="headerlink" title="锁内存总线 + 原子指令"></a>锁内存总线 + 原子指令</h5><p>通过上面的手段，单核环境下，锁的实现问题得到了圆满的解决。</p>
-<p>那么多核环境呢？简单嘛，还是“test and set”不就得了，这是一条指令，原子的，不会有问题的。</p>
-<p>真的吗，单独一条指令能够保证该指令在单个核上执行过程中不会被中断打断，但是两个核同时执行这个指令呢？。。。</p>
-<p>我再想想，硬件执行时还是得从内存中读取lock，判断并设置状态到内存，貌似这个过程也不是那么原子嘛。对，多个核执行确实会存在这个问题。怎么办呢？首先我们得明白这个地方的关键点，关键点是两个核会并行操作内存而且从操作内存这个调度来看“test and set”不是原子的，需要先读内存然后再写内存，如果我们保证这个内存操作是原子的，就能保证锁的正确性了。</p>
-<p>确实，硬件提供了锁内存总线的机制，我们在锁内存总线的状态下执行test and set操作，就能保证同时只有一个核来test and set，从而避免了多核下发生的问题。</p>
-<h4 id="无锁"><a href="#无锁" class="headerlink" title="无锁"></a>无锁</h4><ol>
-<li>无锁算法的底层实现 — CAS</li>
-<li>借助内存访问WORD的原子性</li>
-</ol>
-<p>参考：</p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://xie.infoq.cn/article/c7045d48ccb28872277445ff8">https://xie.infoq.cn/article/c7045d48ccb28872277445ff8</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="http://jm.taobao.org/2011/12/07/1347/">http://jm.taobao.org/2011/12/07/1347/</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/heiyeshuwu/article/details/9722443">https://blog.csdn.net/heiyeshuwu/article/details/9722443</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.cnblogs.com/jing99/p/11984966.html">https://www.cnblogs.com/jing99/p/11984966.html</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.qbitai.com/2019/12/9895.html">https://www.qbitai.com/2019/12/9895.html</a><br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.jianshu.com/p/d585b3938dea">https://www.jianshu.com/p/d585b3938dea</a></p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/ITer_ZC/article/details/40392787">https://blog.csdn.net/ITer_ZC/article/details/40392787</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/hardware/cpu_cache.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/hardware/cpu_cache.html" class="post-title-link" itemprop="url">计算机硬件-CPU高速缓存</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 11:01:03" itemprop="dateCreated datePublished" datetime="2022-02-25T11:01:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-01 22:17:47" itemprop="dateModified" datetime="2022-11-01T22:17:47+08:00">2022-11-01</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/hardware/cpu_cache.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/hardware/cpu_cache.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="高速缓存"><a href="#高速缓存" class="headerlink" title="高速缓存"></a>高速缓存</h4><p>思想：索引思想、折中思想</p>
-<ul>
-<li>直接映射ByHash</li>
-</ul>
-<p>主存中的一个块只能映射到Cache的某一特定块中去。例如，主存的第0块、第16块、……、第2032块，只能映射到Cache的第0块；而主存的第1块、第17块、……、第2033块，只能映射到Cache的第1块……</p>
-<p><img src="https://static.oschina.net/uploads/img/201803/07163540_dO4M.gif" alt="直接映射"></p>
-<p>直接映射是最简单的地址映射方式，它的硬件简单，成本低，地址变换速度快，而且不涉及替换算法问题。</p>
-<p>但是这种方式不够灵活，Cache的存储空间得不到充分利用，每个主存块只有一个固定位置可存放，容易产生冲突，使Cache效率下降，</p>
-<p>因此只适合大容量Cache采用。</p>
-<p>例如，如果一个程序需要重复引用主存中第0块与第16块，最好将主存第0块与第16块同时复制到Cache中，但由于它们都只能复制到Cache的第0块中去，即使Cache中别的存储空间空着也不能占用，因此这两个块会不断地交替装入Cache中，导致命中率降低</p>
-<ul>
-<li>全相连映射ByAll</li>
-</ul>
-<p>图3-15 是全相联映射的Cache组织，主存中任何一块都可以映射到Cache中的任何一块位置上</p>
-<p><img src="https://static.oschina.net/uploads/img/201803/07163541_oEp6.gif" alt="全相连映射"></p>
-<p>全相联映射方式比较灵活，主存的各块可以映射到Cache的任一块中，Cache的利用率高，块冲突概率低，只要淘汰Cache中的某一块，即可调入主存的任一块。</p>
-<p>但是，由于Cache比较电路的设计和实现比较困难，这种方式只适合于小容量Cache采用。</p>
-<ul>
-<li>组相连映射ByGroup</li>
-</ul>
-<p>组间直接相连，组内全相连</p>
-<p> 组相联映射实际上是直接映射和全相联映射的折中方案，其组织结构如图3-16所示。主存和Cache都分组，主存中一个组内的块数与Cache中的分组数相同，组间采用直接映射，组内采用全相联映射。也就是说，将Cache分成u组，每组v块，主存块存放到哪个组是固定的，至于存到该组哪一块则是灵活的。例如，主存分为256组，每组8块，Cache分为8组，每组2块。</p>
-<p> <img src="https://static.oschina.net/uploads/img/201803/07163541_YspG.gif" alt="组相连映射"></p>
-<p>主存中的各块与Cache的组号之间有固定的映射关系，但可自由映射到对应Cache组中的任何一块。例如，主存中的第0块、第8块……均映射于Cache的第0组，但可映射到Cache第0组中的第0块或第1块；主存的第1块、第9块……均映射于Cache的第1组，但可映射到Cache第1组中的第2块或第3块。</p>
-<p>常采用的组相联结构Cache，每组内有2、4、8、16块，称为2路、4路、8路、16路组相联Cache。</p>
-<p>组相联结构Cache是前两种方法的折中方案，适度兼顾二者的优点，尽量避免二者的缺点，因而得到普遍采用。</p>
-<p>具体参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/weixin_34319111/article/details/92562285">https://blog.csdn.net/weixin_34319111/article/details/92562285</a></p>
-<h4 id="一致性协议"><a href="#一致性协议" class="headerlink" title="一致性协议"></a>一致性协议</h4><p>MESI 缓存一致性协议</p>
-<p>Modified、Exclusive、Shared、Invalid</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/os/vm_mem.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/os/vm_mem.html" class="post-title-link" itemprop="url">操作系统系列｜虚拟内存</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-25 10:55:03" itemprop="dateCreated datePublished" datetime="2022-02-25T10:55:03+08:00">2022-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-30 21:15:33" itemprop="dateModified" datetime="2022-10-30T21:15:33+08:00">2022-10-30</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/os/vm_mem.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/os/vm_mem.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://pics7.baidu.com/feed/95eef01f3a292df5ed263835cecf2b6835a8732b.png?token=d3599f2975744c1d572bd6e62b2daf04" alt="虚拟地址转换为物理地址的本质"></p>
-<p>我们知道linux采用了分页机制，通常采用四级页表，页全局目录(PGD)，页上级目录(PUD)，页中间目录(PMD)，页表(PTE)。如下：</p>
-<p><img src="https://pics2.baidu.com/feed/728da9773912b31b18d3813af7e64172dbb4e169.png?token=c455dcb1766f6df26c45bc14d987b355" alt="虚拟地址转换为物理地址硬件过程"></p>
-<ol>
-<li>从CR3寄存器中读取页目录所在物理页面的基址(即所谓的页目录基址)，从线性地址的第一部分获取页目录项的索引，两者相加得到页目录项的物理地址。</li>
-<li>第一次读取内存得到pgd_t结构的目录项，从中取出物理页基址取出，即页上级页目录的物理基地址。</li>
-<li>从线性地址的第二部分中取出页上级目录项的索引，与页上级目录基地址相加得到页上级目录项的物理地址。</li>
-<li>第二次读取内存得到pud_t结构的目录项，从中取出页中间目录的物理基地址。</li>
-<li>从线性地址的第三部分中取出页中间目录项的索引，与页中间目录基址相加得到页中间目录项的物理地址。</li>
-<li>第三次读取内存得到pmd_t结构的目录项，从中取出页表的物理基地址。</li>
-<li>从线性地址的第四部分中取出页表项的索引，与页表基址相加得到页表项的物理地址。</li>
-<li>第四次读取内存得到pte_t结构的目录项，从中取出物理页的基地址。</li>
-<li>从线性地址的第五部分中取出物理页内偏移量，与物理页基址相加得到最终的物理地址。</li>
-<li>第五次读取内存得到最终要访问的数据。</li>
-</ol>
-<p>整个过程是比较机械的，每次转换先获取物理页基地址，再从线性地址中获取索引，合成物理地址后再访问内存。不管是页表还是要访问的数据都是以页为单位存放在主存中的，因此每次访问内存时都要先获得基址，再通过索引(或偏移)在页内访问数据，因此可以将线性地址看作是若干个索引的集合。</p>
-<h3 id="虚拟内存管理"><a href="#虚拟内存管理" class="headerlink" title="虚拟内存管理"></a>虚拟内存管理</h3><h4 id="Linux通过红黑树管理"><a href="#Linux通过红黑树管理" class="headerlink" title="Linux通过红黑树管理"></a>Linux通过红黑树管理</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">task_struct</span> &#123;</span></span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span> *<span class="title">mm</span>;</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">vm_area_struct</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span> * <span class="title">vm_mm</span>;</span>    <span class="comment">/* 所属的内存描述符 */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> vm_start;    <span class="comment">/* vma的起始地址 */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> vm_end;        <span class="comment">/* vma的结束地址 */</span></span><br><span class="line"> </span><br><span class="line">    <span class="comment">/* 该vma的在一个进程的vma链表中的前驱vma和后驱vma指针，链表中的vma都是按地址来排序的*/</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">vm_area_struct</span> *<span class="title">vm_next</span>, *<span class="title">vm_prev</span>;</span></span><br><span class="line"> </span><br><span class="line">    <span class="keyword">pgprot_t</span> vm_page_prot;        <span class="comment">/* vma的访问权限 */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> vm_flags;    <span class="comment">/* 标识集 */</span></span><br><span class="line"> </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">rb_node</span> <span class="title">vm_rb</span>;</span>      <span class="comment">/* 红黑树中对应的节点 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>该结构体是一段虚拟内存，从vm_start到vm_end，他们拥有相同的权限；<br>vm_prev 、vm_next 是双向链表的next与pre；<br>vm_rb 是红黑树节点</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span> &#123;</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">vm_area_struct</span> * <span class="title">mmap</span>;</span>       <span class="comment">/* list of VMAs */</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">rb_root</span> <span class="title">mm_rb</span>;</span><span class="comment">/*又是红黑树的根节点*/</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">vm_area_struct</span> * <span class="title">mmap_cache</span>;</span>      <span class="comment">/* last find_vma result */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>mmap是双向链表；按照地址大小来顺序管理所有的area</p>
-<p>mm_rb是红黑树的根节点</p>
-<p>红黑树的Key-Value: 虚拟地址 =&gt; 对应的area.</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/35/">35</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/36/">36</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1662,7 +1674,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">349</span>
+          <span class="site-state-item-count">354</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1675,7 +1687,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">64</span>
+        <span class="site-state-item-count">66</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

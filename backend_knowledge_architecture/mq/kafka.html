@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://img-blog.csdn.net/20180317020648952?watermark/2/text/Ly9ibG9nLmNzZG4ubmV0L2RvZzI1MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
 <meta property="og:image" content="https://pics4.baidu.com/feed/d833c895d143ad4b76bc3f8833f912a7a60f06ef.jpeg">
 <meta property="article:published_time" content="2022-02-25T05:06:03.000Z">
-<meta property="article:modified_time" content="2022-12-14T13:13:46.336Z">
+<meta property="article:modified_time" content="2022-12-16T13:04:00.099Z">
 <meta property="article:author" content="NeoWei">
 <meta property="article:tag" content="消息队列">
 <meta name="twitter:card" content="summary">
@@ -243,7 +243,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-14 21:13:46" itemprop="dateModified" datetime="2022-12-14T21:13:46+08:00">2022-12-14</time>
+                <time title="Modified: 2022-12-16 21:04:00" itemprop="dateModified" datetime="2022-12-16T21:04:00+08:00">2022-12-16</time>
               </span>
 
           
@@ -296,7 +296,10 @@
 <p>AR:Assigned Replicas 所有副本</p>
 <p>ISR是由leader维护，follower从leader同步数据有一些延迟（包括延迟时间replica.lag.time.max.ms和延迟条数replica.lag.max.messages两个维度, 当前最新的版本0.10.x中只支持replica.lag.time.max.ms这个维度），任意一个超过阈值都会把follower剔除出ISR, 存入OSR（Outof-Sync Replicas）列表，新加入的follower也会先存放在OSR中。AR=ISR+OSR。</p>
 <p>ISR数据同步、ACK选项（全部ack、只有一个ack）</p>
-<p>Kafka的复制机制既不是完全的同步复制，也不是单纯的异步复制。完全同步复制要求All Alive Follower都复制完，这条消息才会被认为commit，这种复制方式极大的影响了吞吐率。而异步复制方式下，Follower异步的从Leader复制数据，数据只要被Leader写入log就被认为已经commit，这种情况下，如果leader挂掉，会丢失数据，kafka使用ISR的方式很好的均衡了确保数据不丢失以及吞吐率。Follower可以批量的从Leader复制数据，而且Leader充分利用磁盘顺序读以及send file(zero copy)机制，这样极大的提高复制性能，内部批量写磁盘，大幅减少了Follower与Leader的消息量差。</p>
+<p>Kafka的复制机制既不是完全的同步复制，也不是单纯的异步复制。</p>
+<p>完全同步复制要求All Alive Follower都复制完，这条消息才会被认为commit，这种复制方式极大的影响了吞吐率。</p>
+<p>而异步复制方式下，Follower异步的从Leader复制数据，数据只要被Leader写入log就被认为已经commit，这种情况下，如果leader挂掉，会丢失数据。</p>
+<p>kafka使用ISR的方式很好的均衡了确保数据不丢失以及吞吐率。Follower可以批量的从Leader复制数据，而且Leader充分利用磁盘顺序读以及send file(zero copy)机制，这样极大的提高复制性能，内部批量写磁盘，大幅减少了Follower与Leader的消息量差。</p>
 <p>leader会维护一个与其基本保持同步的Replica列表，该列表称为ISR(in-sync Replica)，每个Partition都会有一个ISR，而且是由leader动态维护 ，如果一个follower比一个leader落后太多，或者超过一定时间未发起数据复制请求，则leader将其重ISR中移除</p>
 <h4 id="Log-End-Offset"><a href="#Log-End-Offset" class="headerlink" title="Log End Offset"></a>Log End Offset</h4><p>当前broker收到的最新offset</p>
 <h4 id="HighWatermark"><a href="#HighWatermark" class="headerlink" title="HighWatermark"></a>HighWatermark</h4><p>已经同步到其他slave中的offset</p>
@@ -468,7 +471,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">349</span>
+          <span class="site-state-item-count">354</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -481,7 +484,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">64</span>
+        <span class="site-state-item-count">66</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

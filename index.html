@@ -303,6 +303,291 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/io_model/co.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/io_model/co.html" class="post-title-link" itemprop="url">协程</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-12-16 23:03:03" itemprop="dateCreated datePublished" datetime="2022-12-16T23:03:03+08:00">2022-12-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-12-17 00:03:13" itemprop="dateModified" datetime="2022-12-17T00:03:13+08:00">2022-12-17</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/io_model/co.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/io_model/co.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="0-协程优缺点"><a href="#0-协程优缺点" class="headerlink" title="0. 协程优缺点"></a>0. 协程优缺点</h2><p>协程是使用同步的编程思想，达到异步的效率</p>
+<p>核心点：</p>
+<p>1.使用异步IO未就绪，就切换到已经准备就绪的IO去操作<br>解决了异步代码逻辑复杂，同步效率低的问题，效率接近异步</p>
+<p>2.协程的栈可以设置比线程更小，使得更加容易</p>
+<p>解决了线程占用栈空间更大的问题，硬件的使用率更高，同异步的效率，硬件成本会更低</p>
+<p>3.线程的创建代价和调度代价相对比较高</p>
+<p>缺点 ：</p>
+<ol>
+<li>缺点是无法利用多核资源，本质是单核的，它不能同时将单个CPU的多个核用上，协程需要和进程配合才能运行在多CPU上。</li>
+<li>跨平台性挑战较大</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/backend_knowledge_architecture/server/io_model/co.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/io_model/thundering.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/io_model/thundering.html" class="post-title-link" itemprop="url">惊群现象</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-12-16 22:03:03 / Modified: 22:58:21" itemprop="dateCreated datePublished" datetime="2022-12-16T22:03:03+08:00">2022-12-16</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/io_model/thundering.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/io_model/thundering.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>A、accept 惊群<br>以多进程为例，在主进程创建监听描述符listenfd后，fork()多个子进程，多个进程共享listenfd，accept是在每个子进程中，当一个新连接来的时候，会发生惊群。</p>
+<p>在内核2.6之前，所有进程accept都会惊醒，但只有一个可以accept成功，其他返回EGAIN。</p>
+<p>在内核2.6及之后，解决了惊群问题，办法是在内核中增加了一个互斥等待变量。一个互斥等待的行为与睡眠基本类似，主要的不同点在于：<br>a）当一个等待队列入口有 WQ_FLAG_EXCLUSEVE 标志置位, 它被添加到等待队列的尾部。若没有这个标志的入口项，则添加到队首。</p>
+<p>b）当wake up被在一个等待队列上调用时,它在唤醒第一个有 WQ_FLAG_EXCLUSIVE 标志的进程后停止。<br>执行步骤：<br>对于互斥等待的行为，比如对一个 listen 后的socket描述符，多线程阻塞 accept 时，系统内核只会唤醒所有正在等待此时间的队列的第一个，队列中的其他人则继续等待下一次事件的发生。这样就避免的多个线程同时监听同一个socket描述符时的惊群问题。</p>
+<p>B、epoll惊群<br>epoll惊群分两种：</p>
+<p>a)是在fork之前创建 epollfd，所有进程共用一个epoll。</p>
+<p>b)是在fork之后创建 epollfd，每个进程独用一个epoll。</p>
+<p>a)fork之前创建epollfd(新版内核已解决)</p>
+<p>主进程创建 listenfd，创建epollfd;</p>
+<p>主进程 fork多个子进程;</p>
+<p>每个子进程把listenfd，加到epollfd 中。</p>
+<p>当一个连接进来时，会触发epoll惊群，多个子进程的epoll同时会触发。</p>
+<p>这里的epoll惊群跟 accept 惊群是类似的，共享一个 epollfd，加锁或标记解决，在新版本的epoll中已解决，但在内核2.6及之前是存在的。</p>
+<p>b)fork之后创建epollfd(内核未解决)</p>
+<p>主进程创建 listendfd;</p>
+<p>主进程创建多个子进程;</p>
+<p>每个子进程创建自已的epollfd;</p>
+<p>每个子进程把listenfd加入到epollfd中;</p>
+<p>当一个连接进来时，会触发epoll 惊群，多个子进程epoll同时会触发。</p>
+<p>因为每个子进程的epoll是不同的epoll, 虽然listenfd是同一个，但新连接过来时,accept会触发惊群。因为内核不知道该发给哪个监听进程，因为不是同一个epoll。所以这种惊群内核并没有处理，惊群还是会出现。<br>————————————————<br>版权声明：本文为CSDN博主「84岁带头冲锋」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。<br>原文链接：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/L2111533547/article/details/125982204">https://blog.csdn.net/L2111533547/article/details/125982204</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/pro_skill/better.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/pro_skill/better.html" class="post-title-link" itemprop="url">成为一个出色的工程师，做到这几点就够了</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-12-16 21:04:00" itemprop="dateCreated datePublished" datetime="2022-12-16T21:04:00+08:00">2022-12-16</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/pro_skill/better.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/pro_skill/better.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>本文我们探讨如何成为一个出色的工程师？</p>
+<p>按照SKA模型，我的答案会分为三大块：</p>
+<ul>
+<li>第一，正确的态度(Attitude)或者思维方式。<br>当遇到问题时，你会用什么样的态度去应对处理它？当你尝试去解决一个问题时，你又是如何思考的？</li>
+<li>第二，尽可能娴熟的必要技能(Skill)。<br>当你知晓了如何去思考问题之后，我们需要借助很多技能去把问题解决。例如，沟通协作技能、编程能力、问题排查能力等。</li>
+<li>第三，尽可能完备的知识(Knowledge)体系。<br>很多时候有些人知道问题的答案或者解决方案,仅仅是由于他知道一块我们不知道的知识。</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/pro_skill/better.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/network/devices.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -813,10 +1098,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2022-12-13 22:03:03 / Modified: 23:29:15" itemprop="dateCreated datePublished" datetime="2022-12-13T22:03:03+08:00">2022-12-13</time>
+              <time title="Created: 2022-12-13 22:03:03" itemprop="dateCreated datePublished" datetime="2022-12-13T22:03:03+08:00">2022-12-13</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-12-16 21:04:00" itemprop="dateModified" datetime="2022-12-16T21:04:00+08:00">2022-12-16</time>
+              </span>
 
           
   
@@ -1003,378 +1294,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/hardware/cpu.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/hardware/cpu.html" class="post-title-link" itemprop="url">计算机硬件-CPU寄存器简介</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-12-06 22:18:03" itemprop="dateCreated datePublished" datetime="2022-12-06T22:18:03+08:00">2022-12-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-14 22:31:48" itemprop="dateModified" datetime="2022-12-14T22:31:48+08:00">2022-12-14</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/hardware/cpu.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/hardware/cpu.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="CPU寄存器"><a href="#CPU寄存器" class="headerlink" title="CPU寄存器"></a>CPU寄存器</h2><p>在用途方面，他们有各自默认的用途：</p>
-<ul>
-<li>Eax用来保存所有API函数的返回值。寄存器AX和AL通常称为累加器(Accumulator)，用累加器进行的操作可能需要更少时间。累加器可用于乘、除、输入/输出等操作，它们的使用频率很高；</li>
-<li>寄存器BX称为基地址寄存器(Base Register)。它可作为存储器指针来使用；</li>
-<li>寄存器CX称为计数寄存器(Count Register)。在循环和字符串操作时，要用它来控制循环次数；在位操作中，当移多位时，要用CL来指明移位的位数；</li>
-<li>寄存器DX称为数据寄存器(Data Register)。在进行乘、除运算时，它可作为默认的操作数参与运算，也可用于存放I/O的端口地址。</li>
-</ul>
-<p>寄存器ESI、EDI、SI和DI称为变址寄存器(Index Register)，</p>
-<p>它们主要用于存放存储单元在段内的偏移量，用它们可实现多种存储器操作数的寻址方式，为以不同的地址形式访问存储单元提供方便。</p>
-<p>那么ESP和EBP指的分别是什么呢？</p>
-<ul>
-<li>ESP：栈指针寄存器(extended stack pointer)，其内存放着一个指针，该指针永远指向系统栈最上面一个栈帧的栈顶。</li>
-<li>EBP：基址指针寄存器(extended base pointer)，其内存放着一个指针，该指针永远指向系统栈最上面一个栈帧的底部。</li>
-</ul>
-<p>对于64位CPU，EAX —-&gt; RAX</p>
-<h3 id="CPU指令的执行"><a href="#CPU指令的执行" class="headerlink" title="CPU指令的执行"></a>CPU指令的执行</h3><p>一个基本的CPU执行计算的过程如下：</p>
-<ol>
-<li>程序以及数据被加载到主内存</li>
-<li>指令和数据被加载到CPU的高速缓存</li>
-<li>CPU执行指令，把结果写到高速缓存</li>
-<li>高速缓存中的数据写回主内存</li>
-</ol>
-<h3 id="一次函数调用"><a href="#一次函数调用" class="headerlink" title="一次函数调用"></a>一次函数调用</h3><p>栈的增长方向：向下增长，ESP越来愈小、ESP比EBP小</p>
-<p>一个函数执行步骤：</p>
-<ol>
-<li>函数参数压入stack中<br> push p1<br> push p2</li>
-<li>CPU<strong>自己</strong>把返回地址压入stack中<br> push eip</li>
-<li>CPU自己跳转到新的函数地址(call func)，开始执行（先保存EBP，然后让EBP指向当前ESP）<br> push ebp 保存老函数的EBP到新的stack中<br> mov esp =&gt; ebp  让ebp保存新函数的stack base</li>
-<li>分配局部变量<br> sub esp 100 分配100字节的局部变量</li>
-<li>局部变量赋值与访问<br> 通过ebp - $Offset$ 来访问局部变量</li>
-<li>访问参数<br> 通过ebp + $Offset$ 来访问参数</li>
-<li>函数返回<br> add esp 100<br> mov ebp =&gt; esp<br> 注意：上面这一句应该是重复的，理论上只要对esp进行了完成逆操作，esp应该等于ebp了。是不需要额外通过ebp来还原的；当然如果要通过ebp来还原，也就不需要去显示操作esp了。<br> pop ebp 还原ebp<br> ret（pop eip）</li>
-<li>将压入的参数POP出来<br> pop p2<br> pop p1</li>
-</ol>
-<h2 id="指令集"><a href="#指令集" class="headerlink" title="指令集"></a>指令集</h2><p> 所谓指令集，是CPU中用来计算和控制计算机系统的一套指令的集合。指令的强弱是CPU的重要指标，指令集是提高微处理器效率的最有效工具之一。</p>
-<p>CPU依靠指令来计算和控制系统，每款CPU在设计时就规定了一系列与其硬件电路相配合的指令系统。与其他硬件电路相配合，决定的是这一款CPU的生态系统。因此，指令集搭建的是一个桥梁，是软硬件之间沟通的桥梁，简单来说，软件通过指令集和硬件讲话。因此，指令集对形成生态至关重要，从这个意义上讲，不同的CPU指令集，决定了这款CPU设计的复杂程度。</p>
-<p>从现阶段的主流体系结构讲，指令集可分为复杂指令集(CISC, complex instruction set computer)和精简指令集(RISC, reduced instruction set computer)两部分。简单来讲，RISC功能简洁，代表着简洁的CPU设计，CISC功能完备，代表着复杂的CPU设计。<br>这里引用步日欣老师文章中的一段话：</p>
-<pre><code>CPU的指令，就如同盖房子的砖，如果都是小块的标准砖头，也能盖起各种不同的房子，这就是RISC；
-如果除了标准砖头，还设计了很多的砖瓦结构件，适用于拐角、吊梁等，这就是CISC。
-不同的模式，都能盖起房子，但是效率却大不一样，RISC的标准砖头，小平房可以盖，
-摩天大楼也可以盖，底层的原材料很简单，都是标准化的砖头；
-CISC的各种复杂的结构件，对于盖一种房子的时候效率确实高，吊起结构件随便一拼装就ok，
-但是如果要盖的房子种类多了，就需要定义更多更复杂的结构件，结构件的管理就会越来越复杂，
-而且在建设某种常见建筑的时候，大部分特殊的结构架是闲置不用的，大大影响了施工效率。
-基于CISC模式下的CPU设计，在各种新需求下，堆叠的功能越来越复杂，芯片设计难度也越来越高，效率低下，
-因此就出现了RISC精简指令集的概念。
-</code></pre><h3 id="对比CISC和RISC"><a href="#对比CISC和RISC" class="headerlink" title="对比CISC和RISC"></a>对比CISC和RISC</h3><p>CISC的指令能力强，单多数指令使用率低却增加了CPU的复杂度，指令是可变长格式；RISC的指令大部分为单周期指令，指令长度固定，操作寄存器，只有Load/Store操作内存</p>
-<p>CISC支持多种寻址方式；RISC支持方式少</p>
-<p>CISC通过微程序控制技术实现；RISC增加了通用寄存器，硬布线逻辑控制为主，是和采用流水线</p>
-<p>CISC的研制周期长</p>
-<p>RISC优化编译，有效支持高级语言</p>
-<p>大白话就是：</p>
-<p>CISC架构，性能好，但是耗电多，电压高。主要用于桌面服务。</p>
-<p>RISC架构：耗电少，电压低，但是单核性能比不上CISC架构，主要用于嵌入式开发，或者移动设备开发。</p>
-<h3 id="CPU架构"><a href="#CPU架构" class="headerlink" title="CPU架构"></a>CPU架构</h3><ol>
-<li><p>ARM架构，过去称作进阶精简指令集机器（Advanced RISC Machine，更早称作：Acorn RISC Machine），是一个32位精简指令集（RISC）处理器架构</p>
-</li>
-<li><p>x86或80x86是英代尔Intel首先开发制造的一种微处理器体系结构的泛称。x86架构是重要地可变指令长度的CISC（复杂指令集电脑，Complex Instruction Set Computer）。</p>
-</li>
-<li><p>MIPS是世界上很流行的一种RISC处理器。MIPS的意思是“无内部互锁流水级的微处理器”(Microprocessor without interlockedpipedstages)</p>
-</li>
-<li><p>PowerPC 是一种精简指令集（RISC）架构的中央处理器（CPU），其基本的设计源自IBM（国际商用机器公司）的IBMPowerPC 601 微处理器POWER（PerformanceOptimized With Enhanced RISC</p>
-</li>
-</ol>
-<h3 id="intel-amd和arm的关系"><a href="#intel-amd和arm的关系" class="headerlink" title="intel,amd和arm的关系"></a>intel,amd和arm的关系</h3><p>Intel 与 AMD是两个公司，amd 与 arm 又是同一个公司（AMD）的两款产品</p>
-<p>Intel与AMD共同采用x86架构，都采用CICS指令集，一般用于桌面应用；</p>
-<p>而arm 采用 ARM架构，采用RICS指令集，例如家用游戏机、平板、手机等会采用arm CPU</p>
-<p>可以说，AMD CPU是 AMD公司为对抗Intel公司的Intel CPU推出的第一代产品；</p>
-<p>而 ARM CPU 是AMD公司为了对抗Intel公司的Intel CPU推出的第二代产品，</p>
-<h2 id="co-实现"><a href="#co-实现" class="headerlink" title="co 实现"></a>co 实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">co_ctx</span>&#123;</span></span><br><span class="line"><span class="keyword">void</span>* regs[<span class="number">14</span>]; <span class="comment">//用于保存或者设定特定寄存器</span></span><br><span class="line"><span class="keyword">size_t</span> ss_size; <span class="comment">//栈帧区域大小</span></span><br><span class="line"><span class="keyword">char</span>* ss_sp; <span class="comment">// 协程栈帧内存区域，这个区域一般在堆上分配</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">co_make (co_ctx* co, func* p, p1, p2) &#123;</span><br><span class="line">    使用p, p1, p2把co填充起来</span><br><span class="line">    co.ss_sp都是分配在堆上</span><br><span class="line">    co的EIP与ESP需要被单独赋值</span><br><span class="line">&#125;</span><br><span class="line">co_swap（）&#123;</span><br><span class="line">    主要要保存当前寄存器到要swap_out的co_ctx中</span><br><span class="line">    将要swap_in的co_ctx设置到寄存器中</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>具体参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://vinsflyfish.github.io/posts/thinking-in-libco/">https://vinsflyfish.github.io/posts/thinking-in-libco/</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/max_product.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/max_product.html" class="post-title-link" itemprop="url">分裂二叉树的最大乘积</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-12-06 22:03:03 / Modified: 22:18:04" itemprop="dateCreated datePublished" datetime="2022-12-06T22:03:03+08:00">2022-12-06</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/max_product.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/max_product.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="0-题目"><a href="#0-题目" class="headerlink" title="0. 题目"></a>0. 题目</h2><p>给你一棵二叉树，它的根为 root<br>请你删除 1 条边，使二叉树分裂成两棵子树<br>且它们子树和的乘积尽可能大</p>
-<p>由于答案可能会很大<br>请你将结果对 10^9 + 7 取模后再返回</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/max_product.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/language/cpp/call_convention.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/language/cpp/call_convention.html" class="post-title-link" itemprop="url">函数调用约定</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-12-06 20:40:03 / Modified: 21:02:20" itemprop="dateCreated datePublished" datetime="2022-12-06T20:40:03+08:00">2022-12-06</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/language/cpp/call_convention.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/language/cpp/call_convention.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="0-函数调用约定"><a href="#0-函数调用约定" class="headerlink" title="0. 函数调用约定"></a>0. 函数调用约定</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>谁来清理入栈参数</th>
-<th>参数压栈顺序</th>
-<th>函数名转换规则</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>__stdcall</td>
-<td>被调用函数在返回前清理入栈参数</td>
-<td>参数自右向左压栈</td>
-<td>C语言时，_function@number，number为参数的字节数；C++编译时函数名的转换：?function@@YG<em>**</em>@Z或者?function@@YG*XZ；若函数有参数，以@Z结束；若函数无参数，则以Z结束</td>
-</tr>
-<tr>
-<td>__cdecl</td>
-<td>调用函数在返回后清理入栈参数</td>
-<td>参数自右向左压栈</td>
-<td>_function，其中function为函数名；C++编译时函数名的转换：同__stdcall，把YG改为YA</td>
-</tr>
-<tr>
-<td>__fastcall</td>
-<td>被调用函数在返回前清理入栈参数</td>
-<td>使用ECX传递第一个参数，EDX传递第二个参数，其余参数自右向左压栈</td>
-<td>C编译时函数名的转换：@function@number；C++编译时函数名的转换：同__stdcall，把YG改为YI</td>
-</tr>
-<tr>
-<td>__pascal</td>
-<td>被调用函数在返回前清理入栈参数</td>
-<td>参数自左向右压栈</td>
-<td>较为复杂，参加pascal文档</td>
-</tr>
-</tbody>
-</table>
-</div>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/backend_knowledge_architecture/language/cpp/call_convention.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/35/">35</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/36/">36</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1443,7 +1366,7 @@ CISC的各种复杂的结构件，对于盖一种房子的时候效率确实高�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">349</span>
+          <span class="site-state-item-count">354</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1456,7 +1379,7 @@ CISC的各种复杂的结构件，对于盖一种房子的时候效率确实高�
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">64</span>
+        <span class="site-state-item-count">66</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

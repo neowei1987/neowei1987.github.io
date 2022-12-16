@@ -203,6 +203,502 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/structures/linked_list/odd_even.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/odd_even.html" class="post-title-link" itemprop="url">链表系列-奇偶重排</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-30 22:54:03" itemprop="dateCreated datePublished" datetime="2021-01-30T22:54:03+08:00">2021-01-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-11-13 19:06:58" itemprop="dateModified" datetime="2022-11-13T19:06:58+08:00">2022-11-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/odd_even.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/odd_even.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">oddEvenList</span><span class="params">(ListNode* head)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">auto</span> evenHead = <span class="keyword">new</span> ListNode(<span class="number">-1</span>);</span><br><span class="line">        <span class="keyword">auto</span> oddHead = <span class="keyword">new</span> ListNode(<span class="number">-1</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">auto</span> evenTail = evenHead, oddTail = oddHead;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> k = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (head) &#123;</span><br><span class="line">            <span class="keyword">if</span> (k &amp; <span class="number">0x1</span>) &#123; <span class="comment">//奇</span></span><br><span class="line">                evenTail-&gt;next = head;</span><br><span class="line">                evenTail = head;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                oddTail-&gt;next = head;</span><br><span class="line">                oddTail = head;</span><br><span class="line">            &#125;</span><br><span class="line">            k++;</span><br><span class="line">            head = head-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        oddTail-&gt;next = <span class="literal">NULL</span>; <span class="comment">//最后的尾巴需要设置为空</span></span><br><span class="line">        evenTail-&gt;next = oddHead-&gt;next;</span><br><span class="line">        <span class="keyword">return</span> evenHead-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/deleteDuplication.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/deleteDuplication.html" class="post-title-link" itemprop="url">链表系列-排序链表删除重复节点</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-30 22:54:03" itemprop="dateCreated datePublished" datetime="2021-01-30T22:54:03+08:00">2021-01-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 23:03:44" itemprop="dateModified" datetime="2022-03-01T23:03:44+08:00">2022-03-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/deleteDuplication.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/structure_algorithm/structures/linked_list/slow_fast_pointer/deleteDuplication.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在一个排序的链表中，存在重复的结点，请删除该链表中重复的结点，重复的结点不保留。</p>
+<p>样例1<br>输入：1-&gt;2-&gt;3-&gt;3-&gt;4-&gt;4-&gt;5</p>
+<p>输出：1-&gt;2-&gt;5<br>样例2<br>输入：1-&gt;1-&gt;1-&gt;2-&gt;3</p>
+<p>输出：2-&gt;3</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">deleteDuplication</span><span class="params">(ListNode* head)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">auto</span> dummy = <span class="keyword">new</span> ListNode(<span class="number">-1</span>);</span><br><span class="line">        dummy-&gt;next = head;</span><br><span class="line">        <span class="keyword">auto</span> p = dummy;</span><br><span class="line">        <span class="keyword">while</span> (p-&gt;next) &#123;</span><br><span class="line">            <span class="keyword">auto</span> q = p-&gt;next;</span><br><span class="line">            <span class="keyword">while</span> (q-&gt;next &amp;&amp; q-&gt;next-&gt;val == q-&gt;val) q = q-&gt;next;</span><br><span class="line">            <span class="keyword">if</span> (p-&gt;next == q) p = q;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                p-&gt;next = q-&gt;next; </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> dummy-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>扩展问题：</p>
+<p>移除重复节点，无排序版本</p>
+<p>编写代码，移除未排序链表中的重复节点。保留最开始出现的节点。</p>
+<p>解答思路：</p>
+<ol>
+<li>借助hash来记录val之前是否出现过</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode *next;</span></span><br><span class="line"><span class="comment"> *     ListNode(int x) : val(x), next(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">removeDuplicateNodes</span><span class="params">(ListNode* head)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//hash + 链表</span></span><br><span class="line">        <span class="built_in">unordered_map</span>&lt;<span class="keyword">int</span>, <span class="keyword">bool</span>&gt; <span class="built_in">map</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">auto</span> dummy = <span class="keyword">new</span> ListNode(<span class="number">-1</span>);</span><br><span class="line">        dummy-&gt;next = head;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">auto</span> p = head, pre = dummy;</span><br><span class="line">        <span class="keyword">while</span> (p) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">map</span>[p-&gt;val]) &#123; <span class="comment">//出现过</span></span><br><span class="line">                pre-&gt;next = p-&gt;next;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                pre = p;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">map</span>[p-&gt;val] = <span class="literal">true</span>;</span><br><span class="line">            p = p-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> dummy-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/distributed_log.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/system_design/distributed_log.html" class="post-title-link" itemprop="url">常见系统设计题系列-分布式日志系统</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-19 23:23:03" itemprop="dateCreated datePublished" datetime="2021-01-19T23:23:03+08:00">2021-01-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-02-25 17:30:32" itemprop="dateModified" datetime="2022-02-25T17:30:32+08:00">2022-02-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">系统设计</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/system_design/distributed_log.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/system_design/distributed_log.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>ELK方案</p>
+<ul>
+<li>elastic search</li>
+</ul>
+<p>对日志进行分词，并建立倒排索引</p>
+<ul>
+<li>log stash</li>
+</ul>
+<p>日志采集</p>
+<ul>
+<li>Kibana</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/dns.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/system_design/dns.html" class="post-title-link" itemprop="url">常见系统设计题系列- DNS系统</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-19 23:23:03" itemprop="dateCreated datePublished" datetime="2021-01-19T23:23:03+08:00">2021-01-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-02-25 17:31:21" itemprop="dateModified" datetime="2022-02-25T17:31:21+08:00">2022-02-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">系统设计</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/system_design/dns.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/system_design/dns.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>设计DNS服务器中cache的数据结构。</p>
+<p>要求设计一个DNS的Cache结构，要求能够满足每秒5000以上的查询，满足IP数据的快速插入，查询的速度要快。（题目还给出了一系列的数据，比如：站点数总共为5000万，IP地址有1000万，等等）</p>
+<p>回答：</p>
+<p>DNS服务器实现域名到IP地址的转换。</p>
+<p>每个域名的平均长度为25个字节（估计值），每个IP为4个字节，所以Cache的每个条目需要大概30个字节。</p>
+<p>总共50M个条目，所以需要1.5G个字节的空间。可以放置在内存中。（考虑到每秒5000次操作的限制，也只能放在内存中。）</p>
+<p>可以考虑的数据结构包括hash_map，字典树，红黑树等等。</p>
+<p>核心思想：估算、哈希</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/online_stat.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/system_design/online_stat.html" class="post-title-link" itemprop="url">常见系统设计题系列-在线人数统计</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-19 23:23:03" itemprop="dateCreated datePublished" datetime="2021-01-19T23:23:03+08:00">2021-01-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 23:13:56" itemprop="dateModified" datetime="2022-03-01T23:13:56+08:00">2022-03-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">系统设计</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/system_design/online_stat.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/system_design/online_stat.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>问题：<br>求一个论坛的在线人数，假设有一个论坛，其注册ID有两亿个，每个ID从登陆到退出会向一个日志文件中记下登陆时间和退出时间，要求写一个算法统计一天中论坛的用户在线分布，取样粒度为秒。<br>回答：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/backend_knowledge_architecture/system_design/online_stat.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/url_uniq.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -702,578 +1198,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/hot_top_k.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/system_design/hot_top_k.html" class="post-title-link" itemprop="url">常见系统设计题系列-热门搜索TopK</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-19 15:48:03" itemprop="dateCreated datePublished" datetime="2021-01-19T15:48:03+08:00">2021-01-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-03-29 12:37:50" itemprop="dateModified" datetime="2022-03-29T12:37:50+08:00">2022-03-29</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">系统设计</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/system_design/hot_top_k.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/system_design/hot_top_k.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>问题：</p>
-<p>从300万字符串中找到最热门的10条搜索的输入信息是一个字符串，统计300万输入信息中的最热门的前10条，我们每次输入的一个字符串为不超过255byte，内存使用只有1G。请描述思想，写出算法（c语言），空间和时间复杂度。</p>
-<p>答案：</p>
-<p>300万个字符串最多（假设没有重复，都是最大长度）占用内存3M*1K/4=0.75G。所以可以将所有字符串都存放在内存中进行处理。</p>
-<p>可以使用key为字符串（事实上是字符串的hash值），值为字符串出现次数的hash来统计每个字符串出现的次数。</p>
-<p>并用一个长度为K的堆来的数组/链表存储目前出现次数最多的10个字符串。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/im.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/system_design/im.html" class="post-title-link" itemprop="url">常见系统设计题系列-即时通信系统</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-19 15:48:03" itemprop="dateCreated datePublished" datetime="2021-01-19T15:48:03+08:00">2021-01-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-03 20:08:45" itemprop="dateModified" datetime="2022-11-03T20:08:45+08:00">2022-11-03</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">系统设计</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/system_design/im.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/system_design/im.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>设计要点：</p>
-<p>长链接接入网关</p>
-<ul>
-<li>接入层：如何做负载均衡（基于IP 还是 基于7层的用户唯一标识）</li>
-<li>就近接入</li>
-<li>接入层如何升级：尽量减少升级，拆分为负责连接的进程与负责处理业务的进程，两者之间通过共享内存通信</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/backend_knowledge_architecture/system_design/im.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/kv_ttl.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/system_design/kv_ttl.html" class="post-title-link" itemprop="url">常见系统设计题系列- 带TTL的KV存储</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-19 15:48:03" itemprop="dateCreated datePublished" datetime="2021-01-19T15:48:03+08:00">2021-01-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-02-25 17:44:51" itemprop="dateModified" datetime="2022-02-25T17:44:51+08:00">2022-02-25</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">系统设计</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/system_design/kv_ttl.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/system_design/kv_ttl.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>设计一个带有有效时间TTL的KV存储系统，包含set（key，value，ttl）、get（key）方法、怎么优化</p>
-<p>首先是KV存储，可以使用levelDB作为我们的存储引擎；</p>
-<p>另外，需要考虑数据的复制与分片、去中心化等</p>
-<p>把TTL当作value，当进行compaction时，过期的数据会被忽略。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/push.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/system_design/push.html" class="post-title-link" itemprop="url">常见系统设计题系列-推送系统</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-19 15:48:03" itemprop="dateCreated datePublished" datetime="2021-01-19T15:48:03+08:00">2021-01-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-02-25 19:42:30" itemprop="dateModified" datetime="2022-02-25T19:42:30+08:00">2022-02-25</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">系统设计</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/system_design/push.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/system_design/push.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>设计要点：</p>
-<ol>
-<li>业务接入：频率限制、quota管理</li>
-<li>接入队列：分队列，按照优先级、重要性等进行隔离</li>
-<li>客户端接入：维护与客户端的长链接</li>
-<li>用户状态的识别与路由：是否在线、是否获取、第三方接入等</li>
-<li>调用第三方时的频率控制</li>
-<li>接入安全：数据的加密</li>
-<li>心跳保活</li>
-<li>推模式，拉模式，推拉结合</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/system_design/second_kill.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/system_design/second_kill.html" class="post-title-link" itemprop="url">常见系统设计题系列-秒杀系统</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-01-19 13:20:03" itemprop="dateCreated datePublished" datetime="2021-01-19T13:20:03+08:00">2021-01-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-02-25 15:22:12" itemprop="dateModified" datetime="2022-02-25T15:22:12+08:00">2022-02-25</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">系统设计</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/system_design/second_kill.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/system_design/second_kill.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>如何才能更好地理解秒杀系统呢？</p>
-<p>一个秒杀系统的架构，包括CDN，反向代理，session共享，由于分布式数据库我不熟，所以数据一致性那部分没有解决。</p>
-<p><img src="http://cdn.b5mang.com/2021319231635.png" alt="10wQPS量级架构"></p>
-<p>主要技术点：</p>
-<p>（1）缓存</p>
-<p>（2）独立秒杀系统、独立集群</p>
-<p>（3）验证系统，防秒杀器</p>
-<p><img src="http://cdn.b5mang.com/2021319231913.png" alt="100wQPS量级架构"></p>
-<p>主要技术点：</p>
-<p>（1）动静分离</p>
-<p>（2）本地缓存</p>
-<p>（3）热点隔离</p>
-<p>权衡点：要想获得极致性能，必然会牺牲通用型、易用性等</p>
-<h4 id="动静分离"><a href="#动静分离" class="headerlink" title="动静分离"></a>动静分离</h4><p>“动态数据”和“静态数据”的主要区别就是看页面中输出的数据是否和 URL、浏览者、时间、地域相关，以及是否含有 Cookie 等私密数据</p>
-<p>第一，你应该把静态数据缓存到离用户最近的地方。</p>
-<p>第二，静态化改造就是要直接缓存 HTTP 连接。</p>
-<p>第三，让谁来缓存静态数据也很重要。（一般是web服务器来做，而不是应用服务器）</p>
-<p>URL 唯一化；分离浏览者相关的因素；分离时间因素；异步化地域因素；去掉 Cookie</p>
-<p>动态内容的处理通常有两种方案：ESI（Edge Side Includes）、CSI（Client Side Include）</p>
-<p><img src="http://cdn.b5mang.com/2021319233932.png" alt="实体机单机部署方案"></p>
-<p>Cache 分成若干组，是希望能达到命中率和访问热点的平衡。Hash 分组越少，缓存的命中率肯定就会越高，但短板是也会使单个商品集中在一个分组中，容易导致 Cache 被击穿，所以我们应该适当增加多个相同的分组，来平衡访问热点和命中率的问题。</p>
-<p>不容易运维；浪费CPU</p>
-<p><img src="http://cdn.b5mang.com/2021319234014.png" alt="统一Cache 层"></p>
-<p>网卡瓶颈、丢失数据</p>
-<p><img src="http://cdn.b5mang.com/2021319234237.png" alt="CDN部署"></p>
-<p>CDN：失效问题、命中率问题、发布更新问题</p>
-<p>二级cache是指cdn设置了多级回源机制，就是如果缓存没有命中再到二级缓存中去取，而不是直接回服务端来请求。本质是减少回源的请求量</p>
-<h4 id="二八原则：有针对性地处理好系统的“热点数据”"><a href="#二八原则：有针对性地处理好系统的“热点数据”" class="headerlink" title="二八原则：有针对性地处理好系统的“热点数据”"></a>二八原则：有针对性地处理好系统的“热点数据”</h4><p>热点：热点操作（读操作、写操作）、热点数据（静态热点数据、动态热点数据）</p>
-<p>热点发现：对于静态热点（人工标识、大数据统计计算），以及实时热点发现方案</p>
-<p><img src="http://cdn.b5mang.com/2021319235220.png" alt="动态热点发现系统"></p>
-<p>热点处理：</p>
-<p>（1）优化：缓存、LRU</p>
-<p>（2）限制：hash分桶，避免相互影响</p>
-<p>（3）隔离：从上到下三个层次，业务隔离、系统隔离、数据隔离</p>
-<h4 id="流量削峰"><a href="#流量削峰" class="headerlink" title="流量削峰"></a>流量削峰</h4><p>常见做法：</p>
-<p>（1）排队-对发出来的请求进行缓冲（消息队列、文件缓存、内存队列、线程池加锁等）</p>
-<p>（2）答题-少发请求（两个功效：防止秒杀器；延缓请求，将请求峰值按照时间分片-从1s延长到2~10s）</p>
-<p>（3）分层过滤-不符合条件的请求进行过滤（交易性的写请求）</p>
-<p><img src="http://cdn.b5mang.com/20213200139.png" alt="分层过滤"></p>
-<p>分层校验的目的是：在读系统中，尽量减少由于一致性校验带来的系统瓶颈，但是尽量将不影响性能的检查条件提前，如用户是否具有秒杀资格、商品状态是否正常、用户答题是否正确、秒杀是否已经结束、是否非法请求、营销等价物是否充足等；在写数据系统中，主要对写的数据（如“库存”）做一致性检查，最后在数据库层保证数据的最终准确性（如“库存”不能减为负数）。</p>
-<h4 id="极致优化"><a href="#极致优化" class="headerlink" title="极致优化"></a>极致优化</h4><p>首先是“发现短板”，比如考虑以下因素的一些限制：光速（光速：C = 30 万千米 / 秒；光纤：V = C/1.5=20 万千米 / 秒，即数据传输是有物理距离的限制的）、网速（2017 年 11 月知名测速网站 Ookla 发布报告，全国平均上网带宽达到 61.24 Mbps，千兆带宽下 10KB 数据的极限 QPS 为 1.25 万 QPS=1000Mbps/8/10KB）、网络结构（交换机 / 网卡的限制）、TCP/IP、虚拟机（内存 /CPU/IO 等资源的限制）和应用本身的一些瓶颈等。</p>
-<p>其次是减少数据。事实上，有两个地方特别影响性能，一是服务端在处理数据时不可避免地存在字符到字节的相互转化，二是 HTTP 请求时要做 Gzip 压缩，还有网络传输的耗时，这些都和数据大小密切相关。</p>
-<p>再次，就是数据分级，也就是要保证首屏为先、重要信息为先，次要信息则异步加载，以这种方式提升用户获取数据的体验。</p>
-<p>最后就是要减少中间环节，减少字符到字节的转换，增加预处理（提前做字符到字节的转换）去掉不需要的操作。</p>
-<p>此外，要做好优化，你还需要做好应用基线，比如性能基线（何时性能突然下降）、成本基线（去年双 11 用了多少台机器）、链路基线（我们的系统发生了哪些变化），你可以通过这些基线持续关注系统的性能，做到在代码上提升编码质量，在业务上改掉不合理的调用，在架构和调用链路上不断的改进。</p>
-<h4 id="防超卖"><a href="#防超卖" class="headerlink" title="防超卖"></a>防超卖</h4><p>减库存的三种时机：</p>
-<p>（1）下单后</p>
-<p>优点：体验好，不超买</p>
-<p>不足：恶意下单</p>
-<p>（2）支付后</p>
-<p>优点：不会被人恶意刷单</p>
-<p>不足：存在付款后超卖的情况</p>
-<p>（3）预扣库存（为用户保留一段时间）</p>
-<p>优点：一定程度上缓解上面的问题</p>
-<p>不足：没有根治，需要结合风控策略来综合考虑</p>
-<p>解决大并发读问题，可以采用 LocalCache（即在秒杀系统的单机上缓存商品相关的数据）和对数据进行分层过滤的方式。</p>
-<p>像减库存这种大并发写无论如何还是避免不了，这也是秒杀场景下最为核心的一个技术难题</p>
-<p>一般的电商系统，通常采用第三种减库存的方式；</p>
-<p>而对于秒杀系统，我们更多的采用第一种方式。原因在于：</p>
-<p>（1）秒杀系统的商品对库存都有比较严格的管控</p>
-<p>（2）下单后不支付的概率比较小</p>
-<p>秒杀商品和普通商品的减库存还是有些差异的，例如商品数量比较少，交易时间段也比较短，因此这里有一个大胆的假设，即能否把秒杀商品减库存直接放到缓存系统中实现，也就是直接在缓存中减库存或者在一个带有持久化功能的缓存系统（如 Redis）中完成呢？</p>
-<p>应用层做排队。按照商品维度设置队列顺序执行，这样能减少同一台机器对数据库同一行记录进行操作的并发度，同时也能控制单个商品占用数据库连接的数量，防止热点商品占用太多的数据库连接。</p>
-<p>数据库层做排队。应用层只能做到单机的排队，但是应用机器数本身很多，这种排队方式控制并发的能力仍然有限，所以如果能在数据库层做全局排队是最理想的。阿里的数据库团队开发了针对这种 MySQL 的 InnoDB 层上的补丁程序（patch），可以在数据库层上对单行记录做到并发排队。</p>
-<p>在活动开始之前一段时间，把商品库存放在Redis中。</p>
-<p>手段：通过Redis来抗，Lua脚本来完成CAS操作</p>
-<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.yuque.com/chenboxue/kb/gmy24m">https://www.yuque.com/chenboxue/kb/gmy24m</a></p>
-<h4 id="高可用建设"><a href="#高可用建设" class="headerlink" title="高可用建设"></a>高可用建设</h4><p><img src="http://cdn.b5mang.com/202132003655.png" alt="高可用建设"></p>
-<p>运行时：<br>体验降级：牺牲了一部分次要的功能和用户的体验效果<br>限流<br>拒绝服务，避免打死长时间无法恢复<br>熔断</p>
-<p>网站的高可用建设是基础，可以说要深入到各个环节，更要长期规划并进行体系化建设，要在预防（建立常态的压力体系，例如上线前的单机压测到上线后的全链路压测）、管控（做好线上运行时的降级、限流和兜底保护）、监控（建立性能基线来记录性能的变化趋势以及线上机器的负载报警体系，发现问题及时预警）和恢复体系（遇到故障要及时止损，并提供快速的数据订正工具等）等这些地方加强建设，每一个环节可能都有很多事情要做。</p>
-<h2 id="设计难点"><a href="#设计难点" class="headerlink" title="设计难点"></a>设计难点</h2><p>解决秒杀这种特定业务场景，可以使用 CDN 的边缘结点来扛流量，然后过滤用户请求（限流用户请求），来保护数据中心的系统，这样才让整个秒杀得以顺利进行。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/backend_knowledge_architecture/system_design/second_kill.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/20/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><span class="page-number current">21</span><a class="page-number" href="/page/22/">22</a><span class="space">&hellip;</span><a class="page-number" href="/page/35/">35</a><a class="extend next" rel="next" href="/page/22/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/20/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><span class="page-number current">21</span><a class="page-number" href="/page/22/">22</a><span class="space">&hellip;</span><a class="page-number" href="/page/36/">36</a><a class="extend next" rel="next" href="/page/22/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1342,7 +1270,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">349</span>
+          <span class="site-state-item-count">354</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1355,7 +1283,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">64</span>
+        <span class="site-state-item-count">66</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

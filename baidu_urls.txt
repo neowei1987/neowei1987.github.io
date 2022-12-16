@@ -1,9 +1,14 @@
+https://www.fpthinker.com/backend_knowledge_architecture/server/io_model/co.html
+https://www.fpthinker.com/backend_knowledge_architecture/server/io_model/thundering.html
+https://www.fpthinker.com/pro_skill/better.html
 https://www.fpthinker.com/backend_knowledge_architecture/network/devices.html
 https://www.fpthinker.com/backend_knowledge_architecture/hardware/memory.html
 https://www.fpthinker.com/backend_knowledge_architecture/db/main_slave.html
 https://www.fpthinker.com/backend_knowledge_architecture/cache/redis.html
 https://www.fpthinker.com/backend_knowledge_architecture/language/go/index.html
 https://www.fpthinker.com/backend_knowledge_architecture/cache/consistency.html
+https://www.fpthinker.com/backend_knowledge_architecture/system_design/cloud_game.html
+https://www.fpthinker.com/backend_knowledge_architecture/system_design/rt_av.html
 https://www.fpthinker.com/backend_knowledge_architecture/hardware/cpu.html
 https://www.fpthinker.com/backend_knowledge_architecture/structure_algorithm/structures/tree/binary_tree/max_product.html
 https://www.fpthinker.com/backend_knowledge_architecture/language/cpp/call_convention.html

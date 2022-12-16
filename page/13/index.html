@@ -203,6 +203,565 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/io_model/io_model_for_nginx.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/io_model/io_model_for_nginx.html" class="post-title-link" itemprop="url">高性能服务器设计-Nginx IO模型</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-10-30 18:33:31" itemprop="dateModified" datetime="2022-10-30T18:33:31+08:00">2022-10-30</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/io_model/io_model_for_nginx.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/io_model/io_model_for_nginx.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>端口复用，通过互斥锁来避免<strong>惊群</strong>效应</p>
+<p>为什么不采用多线程模型管理连接</p>
+<ol>
+<li>无状态服务，无需共享进程内存</li>
+<li>采用独立的进程，可以让互相之间不会影响。一个进程异常崩溃，其他进程的服务不会中断，提升了架构的可靠性。</li>
+<li>进程之间不共享资源，不需要加锁，所以省掉了锁带来的开销。</li>
+</ol>
+<p>为什么不采用多线程处理逻辑业务？</p>
+<ol>
+<li>进程数已经等于核心数，再新建线程处理任务，只会抢占现有进程，增加切换代价。</li>
+<li>作为接入层，基本上都是数据转发业务，网络 IO 任务的等待耗时部分，已经被处理为非阻塞/全异步/事件驱动模式，在没有更多 CPU 的情况下，再利用多线程处理，意义不大。</li>
+<li>并且如果进程中有阻塞的处理逻辑，应该由各个业务进行解决，比如 openResty 中利用了 Lua 协程，对阻塞业务进行了优化。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/io_model/multiplex_io.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/io_model/multiplex_io.html" class="post-title-link" itemprop="url">高性能服务器设计-常见IO多路复用技术介绍</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-12-16 22:21:17" itemprop="dateModified" datetime="2022-12-16T22:21:17+08:00">2022-12-16</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/io_model/multiplex_io.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/io_model/multiplex_io.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="select"><a href="#select" class="headerlink" title="select"></a>select</h2><p>不足：</p>
+<ol>
+<li>通过数组来管理fd，数量限制</li>
+<li>触发方式单一，仅支持水平触发（LT)</li>
+</ol>
+<h2 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h2><p>优点：通过链条来管理fd，突破数量限制</p>
+<p>不足：</p>
+<ol>
+<li>当你拥有一个很大的socket集合，不过由于网络延时，任一时间只有部分socket是“活跃”的，但是select/poll每次调用都会线性扫描全部的集合（时间复杂度是$O(n)$，导致效率呈线性下降。</li>
+<li>内核与用户态的数据拷贝</li>
+</ol>
+<h2 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h2><p>特点：</p>
+<ol>
+<li>没有最大并发连接的限制</li>
+<li>通过红黑树管理所有的fd，时间复杂度为$O(lgn)$</li>
+<li>更丰富的触发方式，同时支持水平触发（LT)与边缘触发（ET)</li>
+</ol>
+<hr>
+<p>Reactor模型</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.2mm6jjukluo0.webp" alt="image"></p>
+<p>单线程Reactor模型<br>优点：单 Reactor 单进程的方案因为全部工作都在同一个进程内完成，所以实现起来比较简单，不需要考虑进程间通信，也不用担心多进程竞争。<br>不足：<br>（1）第一个缺点，因为只有一个进程，无法充分利用 多核 CPU 的性能；【该缺点可以部署多个进程来解决】<br>（2）第二个缺点，Handler 对象在业务处理时，整个进程是无法处理其他连接的事件的，如果业务处理耗时比较长，那么就造成响应的延迟；<br>使用场景：CPU密集型<br>例子：Redis</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.4ifee5h5pqm0.webp" alt="image"></p>
+<p>单 Reactor 多线程 / 多进程<br>优点：能够充分利用多核CPU<br>不足：<br>（1）子线程完成业务处理后，要把结果传递给主线程的 Reactor 进行发送，这里涉及共享数据的竞争。<br>（2）因为一个 Reactor 对象承担所有事件的监听和响应，而且只在主线程中运行，在面对瞬间高并发的场景时，容易成为性能的瓶颈的地方。<br>使用场景：<br>例子：?</p>
+<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.45unud2y5380.webp" alt="image"></p>
+<p>多 Reactor 多线程 / 多进程<br>优点：克服单 Reactor 多线程 / 多进程的缺点2，主线程不会成为瓶颈；【相对上面的方案，实现更加简单一些】主线程和子线程分工明确，主线程只负责接收新连接，子线程负责完成后续的业务处理；主线程和子线程的交互很简单，主线程只需要把新连接传给子线程，子线程无须返回数据，直接就可以在子线程将处理结果发送给客户端。<br>不足：<br>使用场景：<br>例子：memcache、Netty</p>
+<p>多 Reactor 多线程 / 多进程（变种）<br>思路：进一步的放大子线程/子进程的工作，把accept的工作也交给了子进程。<br>使用场景：<br>例子：Nginx</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/io_model/sync_or_aysnc.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/io_model/sync_or_aysnc.html" class="post-title-link" itemprop="url">高性能服务器设计-同步OR异步</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-10-30 18:37:48" itemprop="dateModified" datetime="2022-10-30T18:37:48+08:00">2022-10-30</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/io_model/sync_or_aysnc.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/io_model/sync_or_aysnc.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="判断使用同步或异步"><a href="#判断使用同步或异步" class="headerlink" title="判断使用同步或异步"></a>判断使用同步或异步</h4><p>计算qps * latency(in seconds)【最大并发】，如果和cpu核数是同一数量级，就用同步，否则用异步。</p>
+<p>eg. qps = 2000，latency = 10ms，计算结果 = 2000 * 0.01s = 20<br>和常见的32核在同一个数量级，用同步。</p>
+<p>eg. qps = 100, latency = 5s, 计算结果 = 100 * 5s = 500。和核数不在同一个数量级，用异步。</p>
+<p>eg. qps = 500, latency = 100ms，计算结果 = 500 * 0.1s = 50。基本在同一个数量级，可用同步。如果未来延时继续增长，考虑异步。</p>
+<p>这个公式计算的是同时进行的平均请求数（你可以尝试证明一下），和线程数，cpu核数是可比的。当这个值远大于cpu核数时，说明大部分操作并不耗费cpu，而是让大量线程阻塞着，使用异步可以明显节省线程资源（栈占用的内存）。当这个值小于或和cpu核数差不多时，异步能节省的线程资源就很有限了，这时候简单易懂的同步代码更重要。</p>
+<h4 id="异步或bthread"><a href="#异步或bthread" class="headerlink" title="异步或bthread"></a>异步或bthread</h4><p>有了bthread这个工具，用户甚至可以自己实现异步。以“半同步”为例，在brpc中用户有多种选择：</p>
+<p>发起多个异步RPC后挨个Join，这个函数会阻塞直到RPC结束。（这儿是为了和bthread对比，实现中我们建议你使用ParallelChannel，而不是自己Join）<br>启动多个bthread各自执行同步RPC后挨个join bthreads。<br>哪种效率更高呢？显然是前者。后者不仅要付出创建bthread的代价，在RPC过程中bthread还被阻塞着，不能用于其他用途。</p>
+<p>如果仅仅是为了并发RPC，别用bthread。</p>
+<p>不过当你需要并行计算时，问题就不同了。使用bthread可以简单地构建树形的并行计算，充分利用多核资源。比如检索过程中有三个环节可以并行处理，你可以建立两个bthread运行两个环节，在原地运行剩下的环节，最后join那两个bthread。过程大致如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">search</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  ...</span><br><span class="line">  bthread th1, th2;</span><br><span class="line">  <span class="keyword">if</span> (bthread_start_background(&amp;th1, <span class="literal">NULL</span>, part1, part1_args) != <span class="number">0</span>) &#123;</span><br><span class="line">    LOG(ERROR) &lt;&lt; <span class="string">&quot;Fail to create bthread for part1&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (bthread_start_background(&amp;th2, <span class="literal">NULL</span>, part2, part2_args) != <span class="number">0</span>) &#123;</span><br><span class="line">    LOG(ERROR) &lt;&lt; <span class="string">&quot;Fail to create bthread for part2&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  part3(part3_args);</span><br><span class="line">  bthread_join(th1);</span><br><span class="line">  bthread_join(th2);</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这么实现的point：</p>
+<ul>
+<li>你当然可以建立三个bthread分别执行三个部分，最后join它们，但相比这个方法要多耗费一个线程资源。</li>
+<li>bthread从建立到执行是有延时的（调度延时），在不是很忙的机器上，这个延时的中位数在3微秒左右，90%在10微秒内，99.99%在30微秒内。这说明两点：计算时间超过1ms时收益比较明显。如果计算非常简单，几微秒就结束了，用bthread是没有意义的。尽量让原地运行的部分最慢，那样bthread中的部分即使被延迟了几微秒，最后可能还是会先结束，而消除掉延迟的影响。并且join一个已结束的bthread时会立刻返回，不会有上下文切换开销。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/load_balance/index.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/load_balance/index.html" class="post-title-link" itemprop="url">高性能服务器设计-负载均衡模型</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-12-16 21:04:00" itemprop="dateModified" datetime="2022-12-16T21:04:00+08:00">2022-12-16</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/load_balance/index.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/load_balance/index.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="round-robin"><a href="#round-robin" class="headerlink" title="round-robin"></a>round-robin</h3><p>总是选择列表中的下一台服务器，结尾的下一台是开头，无需其他设置。比如有3台机器a,b,c，那么brpc会依次向a, b, c, a, b, c, …发送请求。注意这个算法的前提是服务器的配置，网络条件，负载都是<strong>类似</strong>的</p>
+<h3 id="Weighted-Round-Robin"><a href="#Weighted-Round-Robin" class="headerlink" title="Weighted Round Robin"></a>Weighted Round Robin</h3><p>根据服务器列表配置的权重值来选择服务器。服务器被选到的机会正比于其权重值，并且该算法能保证同一服务器被选到的结果较均衡的散开</p>
+<p>不足：</p>
+<ol>
+<li>无法快速摘除有问题的节点</li>
+<li>无法均衡后端负载</li>
+<li>无法降低总体延迟</li>
+</ol>
+<p>nginx的WRR算法原理如下：</p>
+<p>每个服务器都有两个权重变量：</p>
+<p>a：weight，配置文件中指定的该服务器的权重，这个值是固定不变的；</p>
+<p>b：current_weight，服务器目前的权重。一开始为0，之后会动态调整。</p>
+<p>每次当请求到来，选取服务器时，会遍历数组中所有服务器。对于每个服务器，让它的current_weight增加它的weight；同时累加所有服务器的weight，并保存为total。</p>
+<p>遍历完所有服务器之后，如果该服务器的current_weight是最大的，就选择这个服务器处理本次请求。最后把该服务器的current_weight减去total。</p>
+<p><img src="https://img-blog.csdn.net/20160731092902416?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="nginx_WRR"></p>
+<h3 id="动态感知版的Weighted-Round-Robin"><a href="#动态感知版的Weighted-Round-Robin" class="headerlink" title="动态感知版的Weighted Round Robin"></a>动态感知版的Weighted Round Robin</h3><p>动态感知的WRR<br>peer.score = success_rate /(lantency * cpuUsage)</p>
+<p>具体做法：</p>
+<ol>
+<li>利用每次RPC请求返回的Response夹带CPU使用率</li>
+<li>每隔一段时间整体调整一次节点的权重分数</li>
+</ol>
+<p>不足：</p>
+<p>自动刷新权重值，但是在刷新时无法做到完全的实时，再快也不可能超过一个 RTT，都会存在一些信息延迟差。当后台资源比较稀缺时，遇到网络抖动时，就可能会把该节点炸掉，但是在监控上面是感觉不到的，因为 CPU 已经被平均掉了。</p>
+<h4 id="best-of-two-random-choice"><a href="#best-of-two-random-choice" class="headerlink" title="best of two random choice"></a>best of two random choice</h4><p>repsonse中附带cpu使用率，信息滞后造成了严重的羊群效应</p>
+<p>计算权重分数，每次请求来时我们都会更新延迟，并且把之前获得的时间延迟进行权重的衰减，新获得的时间提高权重，这样就实现了滚动更新</p>
+<p><img src="http://cdn.b5mang.com/2020123022446.png" alt="带系数的滑动平均值"><br>时间衰减系数的滑动平均值：伴随时间，老的均值，权重越来越小，新的response time，越来越高</p>
+<h3 id="randomized"><a href="#randomized" class="headerlink" title="randomized"></a>randomized</h3><p>随机法，是随机选择一台服务器来分配任务。它保证了请求的分散性达到了均衡的目的。同时它是没有状态的不需要维持上次的选择状态和均衡因子。但是随着任务量的增大，它的效果趋向轮询后也会具有轮询算法的部分缺点。</p>
+<p>根据随机算法，将请求随机分配到后端服务器中，请求的均匀请求依赖于随机算法，该实现方式较为简单，常常可以配合处理一些极端的请求，例如热点请求情况。不适合对命中率有要求的场景。</p>
+<h3 id="consistent-hashing"><a href="#consistent-hashing" class="headerlink" title="consistent-hashing"></a>consistent-hashing</h3><p>Hash哈希是根据Source IP、 Destination IP、URL、或者其它，算hash值或者md5，再采用取模，相同的请求会请求到同一个后端服务器中。该算法无法解决热点请求，会把某个时间段的热点请求路由到某个单机上，造成雪崩效应，同时在扩充和节点宕机时发生命中率急剧降低的问题（hash算法导致），该策略适合维护长连接和提高命中率。Consistanct Hash是对Hash 算法的优化，可以有效的解决宕机和扩充造成的命中率急剧降低的问题。</p>
+<p>一致性Hash算法也是使用取模的方法，只是，刚才描述的取模法是对服务器的数量进行取模，而一致性Hash算法是对2^32取模，什么意思呢？简单来说，一致性Hash算法将整个哈希值空间组织成一个虚拟的圆环，如假设某哈希函数H的值空间为0~2^32-1（即哈希值是一个32位无符号整形）。</p>
+<p>整个空间按顺时针方向组织，圆环的正上方的点代表0，0点右侧的第一个点代表1，以此类推，2、3、4、5、6……直到2^32-1，也就是说0点左侧的第一个点代表2^32-1， 0和2^32-1在零点中方向重合，我们把这个由2^32个点组成的圆环称为Hash环。</p>
+<p>下一步将各个服务器使用Hash进行一个哈希，具体可以选择服务器的IP或主机名作为关键字进行哈希，这样每台机器就能确定其在哈希环上的位置。</p>
+<h3 id="brpc-locality-aware"><a href="#brpc-locality-aware" class="headerlink" title="brpc locality-aware"></a>brpc locality-aware</h3><p>优先选择延时低的下游，直到其延时高于其他机器，无需其他设置</p>
+<p>在DP 2.0中我们使用了一种新的算法: Locality-aware load balancing，能根据下游节点的负载分配流量，还能快速规避失效的节点，在很大程度上，这种算法的延时也是全局最优的。基本原理非常简单：</p>
+<p>以下游节点的吞吐除以延时作为分流权值。</p>
+<p>比如只有两台下游节点，W代表权值，QPS代表吞吐，L代表延时，那么W1 = QPS1 / L1和W2 = QPS2 / L2分别是这两个节点的分流权值，分流时随机数落入的权值区间就是流量的目的地了。</p>
+<p>一种分析方法如下：</p>
+<p>稳定状态时的QPS显然和其分流权值W成正比，即W1 / W2 ≈ QPS1 / QPS2。<br>根据分流公式又有：W1 / W2 = QPS1 / QPS2 * (L2 / L1)。<br>故稳定状态时L1和L2应当是趋同的。当L1小于L2时，节点1会更获得相比其QPS1更大的W1，从而在未来获得更多的流量，直到其延时高于平均值或没有更多的流量。</p>
+<p>具体见：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/apache/incubator-brpc/blob/master/docs/cn/lalb.md">Locality-aware</a></p>
+<p>任务：子任务<br>自然任务NatureTask，用户任务, TaskKey 用户邀请别人点赞达到10，自己去下单金额超过100（考虑逆向）</p>
+<p>状态机（根据规则引擎的判定结果，决定状态机往哪边走）</p>
+<p>变与不变，不变的部份，通过代码落地下来；变的部份，通过规则引擎来处理。</p>
+<p>不变的部份：事件是可以枚举的，奖励是可以枚举的；<br>变的部份：任务参数会变，活动周期会变，累加规则会变，事件奖励的各种组合</p>
+<p>写别样的代码…</p>
+<p>PM运营沟通，让他们尽量少提没有通用性的需求；<br>熟悉业务的同时，给出自己的技术方案<br>给大家打鸡血，协同大家一起完成1.0版</p>
+<p>救火案例2<br>B站微博系统，</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/thread_model/thread.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NeoWei">
+      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <#meta itemprop="name" content="Neo's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/backend_knowledge_architecture/server/thread_model/thread.html" class="post-title-link" itemprop="url">高性能服务器设计-常见线程模型</a>
+        </h2>
+
+        <div class="post-meta">
+
+	
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-02-18 10:01:03" itemprop="dateCreated datePublished" datetime="2022-02-18T10:01:03+08:00">2022-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-03-01 22:44:37" itemprop="dateModified" datetime="2022-03-01T22:44:37+08:00">2022-03-01</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/backend_knowledge_architecture/server/thread_model/thread.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/server/thread_model/thread.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="单线程模型"><a href="#单线程模型" class="headerlink" title="单线程模型"></a>单线程模型</h3><p>代表：Redis</p>
+<p>基本原理：</p>
+<p>单一线程，依次socket-&gt;bind-&gt;listen，然后epoll_wait分别进行accept以及读写事件</p>
+<p>优点&amp;使用场景：</p>
+<p>简单、没有并发锁问题；适用于短耗时的计算密集型服务</p>
+<p>缺点：</p>
+<p>不能支持耗时较长的事件，尤其是IO密集型</p>
+<h3 id="单线程-listen-accept-epoll-wait-1队列通知-n线程-读写处理-模型"><a href="#单线程-listen-accept-epoll-wait-1队列通知-n线程-读写处理-模型" class="headerlink" title="单线程(listen+accept+epoll_wait) + 1队列通知 + n线程(读写处理) 模型"></a>单线程(listen+accept+epoll_wait) + 1队列通知 + n线程(读写处理) 模型</h3><p>代表：thrift-nonblocking-server</p>
+<p>基本原理：</p>
+<ol>
+<li>在这种模型中，有1+n个线程</li>
+<li><p>有1个线程执行端口的listen并把listen_fd加入该线程的epoll_set，然后循环去做如下事情：</p>
+<p> 2.1 epoll_wait监听新连接的到</p>
+<p> 2.2 调用accept获得新到的fd</p>
+<p> 2.3 把fd放入队列</p>
+<p> 回到2.1，继续epoll_wait</p>
+</li>
+<li><p>另外有n个工作线程，从队列里面获取文件描述符，然后执行：1）读取数据，2）执行任务</p>
+</li>
+</ol>
+<p>优点：</p>
+<ul>
+<li>模型不算复杂</li>
+<li>并发能力强，能够充分利用多核</li>
+<li>天然支持负载均衡（每个工作工作线程完成任务之后就会去队列里主动获取文件描述符）</li>
+</ul>
+<p>缺点：</p>
+<p>队列可能是性能瓶颈，尤其是当业务逻辑耗时本身极其短的情况下</p>
+<h3 id="单线程-listen-accept-epoll-wait-n队列通知-n线程-读写处理-模型"><a href="#单线程-listen-accept-epoll-wait-n队列通知-n线程-读写处理-模型" class="headerlink" title="单线程(listen+accept+epoll_wait) + n队列通知 + n线程(读写处理) 模型"></a>单线程(listen+accept+epoll_wait) + n队列通知 + n线程(读写处理) 模型</h3><p>代表：memcache</p>
+<p>基本原理：</p>
+<ul>
+<li><p>这种模型基本类似于上一种模型，区别在于把1个队列换成n个队列，每个工作线程绑定一个队列，每个工作线程从自己的队列消费数据，其他的保持一致</p>
+</li>
+<li><p>LISTEN线程往PIPE里写入一个哨兵，通知WORKER线程队列可读</p>
+</li>
+</ul>
+<p>优点：</p>
+<p>并发能力更强。相比于单队列的模型，多队列的好处是减少了队列的锁竞争。对于短耗时任务能得到比较多的提升，很适合缓存类应用</p>
+<p>缺点：</p>
+<p>有可能导致负载不均。因为监听线程是不会去根据不同线程的处理速度决定把任务分配给哪个线程的，如果每个任务的耗时不均衡，那么就可能导致有些线程累死，有些线程饿死。</p>
+<p>单线程listen, 在处理高速率海量连接时，单线程可能会成为瓶颈</p>
+<h3 id="单进程-listen-n进程-accept-epoll-读写处理-模型"><a href="#单进程-listen-n进程-accept-epoll-读写处理-模型" class="headerlink" title="单进程(listen) + n进程(accept + epoll + 读写处理) 模型"></a>单进程(listen) + n进程(accept + epoll + 读写处理) 模型</h3><p>代表：nginx</p>
+<p>基本原理：</p>
+<ol>
+<li>master进程监听新连接的到来，并让其中一个worker进程accept。这里需要处理惊群效应问题(加锁、SO_REUSEPORT)</li>
+<li>worker进程accept到fd之后，把fd注册到到本进程的epoll句柄里面，由本进程处理这个fd的后续读写事件</li>
+<li>worker进程根据自身负载情况，选择性地不去accept新fd，从而实现负载均衡</li>
+</ol>
+<h3 id="单线程-listen-n线程-accept-epoll-读写处理-协程-模型"><a href="#单线程-listen-n线程-accept-epoll-读写处理-协程-模型" class="headerlink" title="单线程(listen) + n线程(accept + epoll + 读写处理 + 协程) 模型"></a>单线程(listen) + n线程(accept + epoll + 读写处理 + 协程) 模型</h3>
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/server/thread_model/libsvrkit.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -842,665 +1401,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/db/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/db/index.html" class="post-title-link" itemprop="url">数据库必知必会</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-16 23:20:03" itemprop="dateCreated datePublished" datetime="2022-02-16T23:20:03+08:00">2022-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-14 20:01:35" itemprop="dateModified" datetime="2022-12-14T20:01:35+08:00">2022-12-14</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/db/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/db/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="自增ID"><a href="#自增ID" class="headerlink" title="自增ID"></a>自增ID</h3><p>1、一张表，里面有 ID 自增主键，当 insert 了 17 条记录之后，删除了第 15,16,17 条记录，再把 Mysql 重启，再 insert 一条记录，这条记录的 ID 是 18 还是 15 ？</p>
-<p>(1) 如果表的类型是 MyISAM，那么是 18</p>
-<p>因为 MyISAM 表会把自增主键的最大 ID 记录到数据文件里，重启 MySQL 自增主键的最大ID 也不会丢失</p>
-<p>（2）如果表的类型是 InnoDB，那么是 15</p>
-<p>InnoDB 表只是把自增主键的最大 ID 记录到内存中，所以重启数据库或者是对表进OPTIMIZE 操作，都会导致最大 ID 丢失</p>
-<h3 id="字符串索引"><a href="#字符串索引" class="headerlink" title="字符串索引"></a>字符串索引</h3><p>还有没有其他方式帮助字符串建立索引</p>
-<p>比如能够给确定业务需求里面只有按照身份证等值查询的需求，需要给身份证加索引，有没有什么办法，占用更小空间，也能达到相同的查询效率。</p>
-<p>第一种方式是使用倒序存储</p>
-<p>【基础假设】存储的字符串<strong>后半部分的区分度相对更高</strong></p>
-<p>身份证最后 6 位，没有重复逻辑，因此最后 6 位可能提供了足够的区分度。</p>
-<p>先倒序存储，然后再创建前缀索引。</p>
-<p>如果存储身份证的时候倒过来存，每次查询的时候,可以这样：</p>
-<p>select field list from t where id card reverse(‘input id card string);<br>第二种方式使用 hash 字段</p>
-<p>可以使用表上再创建一个整数字段，来保持身份证的校验码，同时在这个字段创建索引。</p>
-<p>alter table t add id card crc int unsigned, add index（id_card_crc);<br>每次插入新记录的时候，都同时使用 crc32 这个函数 得到校验码填到这个新字段，校验码可能存在冲突，也就是两个不同的身份证通过 crc32() 函数得到的结果可能是相同的，查询要查询语句  where 部分判断 id_card 的值是精确相同的。</p>
-<h3 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h3><p>全字段排序 VS row_id排序</p>
-<p>MySQL 的一个设计思想：如果内存够，就要多利用内存，尽量减少磁盘访问。 对于 InnoDB 表来说，rowid 排序会要求回表多造成磁盘读，因此不会被优先选择。</p>
-<p>如果数据量很大，内存中无法存下这么多，就会使用磁盘临时文件来辅助排序，称为外部排序；<br>外部排序，MySQL会分为好几份单独的临时文件来存放排序后的数据，一般是磁盘文件中进行归并，然后将这些文件合并成一个大文件；</p>
-<p>参考：<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/qq_29066329/article/details/90036836">https://blog.csdn.net/qq_29066329/article/details/90036836</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/db/innodb.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/db/innodb.html" class="post-title-link" itemprop="url">数据库必知必会-InnoDB存储引擎</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-16 23:20:03" itemprop="dateCreated datePublished" datetime="2022-02-16T23:20:03+08:00">2022-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-14 20:06:10" itemprop="dateModified" datetime="2022-12-14T20:06:10+08:00">2022-12-14</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/db/innodb.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/db/innodb.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>我们通过几个问题来介绍InnoDB存储引擎</p>
-<h4 id="LBCC-VS-MVCC"><a href="#LBCC-VS-MVCC" class="headerlink" title="LBCC VS MVCC"></a>LBCC VS MVCC</h4><p>Lock Based Concurrency Control（LBCC）</p>
-<p>保证前后两次读取数据一致，那么我读取数据的时候，锁定我要操作的数据，不允许其他的事务修改就行了。如果仅仅是基于锁来实现事务隔离，一个事务读取的时候不允许其他时候修改，那就意味着不支持并发的读写操作，而我们的大多数应用都是读多写少的，这样会极大地影响操作数据的效率。</p>
-<p>MVCC Multi Version Concurrency Control（MVCC)</p>
-<p>MVCC是InnoDB存储引擎为了实现事务的隔离级别而引入的一种乐观锁机制。<br>如果要让一个事务前后两次读取的数据保持一致，那么我们可以在修改数据的时候给它建立一个备份或者叫快照，后面再来读取这个快照就行了。</p>
-<p>MVCC的目的在于：我可以查到在我这个事务开始之前已经存在的数据，即使它在后面被修改或者删除了。在我这个事务之后新增的数据，我是查不到的。</p>
-<h4 id="Undo-Log"><a href="#Undo-Log" class="headerlink" title="Undo Log"></a>Undo Log</h4><p>Undo log: 是什么？ 通过它解决了什么问题？ 数据的多个版本，临时写在undo log中，并通过链表管理起来。</p>
-<p>InnoDB为数据库中的每一行添加了三个隐藏字段：DB_TRX_ID(事务版本号)、DB_ROLL_PTR(回滚指针)、DB_ROW_ID(隐藏ID)。</p>
-<ul>
-<li>DB_TRX_ID：记录了创建/更新这条数据的事务版本号（版本号会递增）。</li>
-<li>DB_ROLL_PTR：记录了一个指向undo log中历史版本的数据指针。（用来支持回滚操作）</li>
-<li>DB_ROW_ID：一个自增的隐藏行ID。</li>
-</ul>
-<p>InnoDB基于事务版本号、回滚指针这两个字段，可以在undo log中形成一个单向链表，最新版本的数据放在链表头部，历史数据通过DB_ROLL_PTR指针进行关联。如下图所示</p>
-<p><img src="https://pic1.zhimg.com/80/v2-85a123161b23631a22e89313e76caa2c_1440w.jpg" alt="undo list"></p>
-<h4 id="MVCC"><a href="#MVCC" class="headerlink" title="MVCC"></a>MVCC</h4><p>一致性读视图包括：视图数组（活跃的事务） + 高水位（已经创建过的事务ID + 1）</p>
-<p>InnoDB在事务开启后执行第一个查询时，会创建一个快照（下文称之为ReadView），这个ReadView包含了以下信息</p>
-<ul>
-<li>m_ids: 活动事务id列表（活动事务指的是已经开始、尚未提交/回滚的事务）</li>
-<li>min_trx_id: 最小活动事务id</li>
-<li>max_trx_id: 最大活动事务id</li>
-<li>creator_trx_id:当前事务id</li>
-</ul>
-<p>紧接着InnoDB会通过查询语句定位到最新版本的数据行，并根据以下规则获取到可以访问的数据版本。</p>
-<ul>
-<li>如果被访问版本的trx_id，与readview中的creator_trx_id值相同，表明当前事务在访问自己修改过的记录，直接返回该版本的数据；</li>
-<li>如果被访问版本的trx_id，小于readview中的min_trx_id值，表明生成该版本的事务在当前事务生成readview前已经提交，直接返回该版本的数据；</li>
-<li>如果被访问版本的trx_id，大于或等于readview中的max_trx_id值，表明生成该版本的事务在当前事务生成readview后才开启，此时该版本不可以被当前事务访问，需要通过隐藏的回滚指针从undo log中读取历史版本；</li>
-<li>如果被访问版本的trx_id，在readview的min_trx_id和max_trx_id之间，则需要判断trx_id值是否在m_ids列表中？<br>(1)如果在：说明readview创建时，创建该版本数据的事务还未提交，因此需要通过回滚指针读取历史版本并返回。<br>(2)如果不在：说明readview创建时，创建该版本数据的事务已经提交，所以直接返回该版本的数据；</li>
-</ul>
-<h4 id="InnoDB如何解决各种隔离问题"><a href="#InnoDB如何解决各种隔离问题" class="headerlink" title="InnoDB如何解决各种隔离问题"></a>InnoDB如何解决各种隔离问题</h4><p>第一、InnoDB是如何解决脏读问题的？</p>
-<p>如果是读已提交，那么事务每一个语句执行前都会重新计算出新的视图，也就解决了脏读问题。</p>
-<p>第二、InnoDB是如何解决不可重复读问题的？</p>
-<p>如果是可重复读，那么事务开启时创建一次访问视图。同一个事务中后续所有的查询共用一个ReadView，由此便解决了不可重复读的问题。</p>
-<p>第三、InnoDB是如何解决幻读问题的？</p>
-<p>快照读、锁定读：了解这两种读取方式的发生时机以及如何实现的？</p>
-<p>快照读是指通过MVCC实现的非阻塞读，常见的快照读操作如下：</p>
-<p>select xxx from xxx</p>
-<p>当前读也叫加锁读，每次读取数据都是读取数据的最新版本，并且会对其进行加锁。常见的当前读操作如下</p>
-<ul>
-<li>select xxx from xxx lock in share mode (共享锁/读锁)</li>
-<li>select xxx from xxx for update （排它锁/写锁）</li>
-<li>update 、delete、insert</li>
-</ul>
-<p>为什么要区分这两种读操作呢？因为MVCC并不能解决幻读的问题。即使是在可重复读级别，通过当前读依然会出现幻读问题。</p>
-<p>此问题最终是通过间隙锁（next-key lock)来解决的。</p>
-<h4 id="InnoDB是如何解决事务的持久性问题"><a href="#InnoDB是如何解决事务的持久性问题" class="headerlink" title="InnoDB是如何解决事务的持久性问题"></a>InnoDB是如何解决事务的持久性问题</h4><p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.55syz9b6quo0.webp" alt="image"></p>
-<p>redo log buffer (内存中)是由首尾相连的四个文件组成的，它们分别是：ib_logfile_1、ib_logfile_2、ib_logfile_3、ib_logfile_4。</p>
-<ul>
-<li>write pos 是当前记录的位置，一边写一边后移，写到第 3 号文件末尾后就回到 0 号文件开头。</li>
-<li>checkpoint 是当前要擦除的位置，也是往后推移并且循环的，擦除记录前要把记录更新到数据文件。</li>
-<li>write pos 和 checkpoint 之间的是“粉板”上还空着的部分，可以用来记录新的操作。</li>
-<li>如果 write pos 追上 checkpoint，表示“粉板”满了，这时候不能再执行新的更新，得停下来先擦掉一些记录，把 checkpoint 推进一下。</li>
-<li>有了 redo log，当数据库发生宕机重启后，可通过 redo log将未落盘的数据（check point之后的数据）恢复，保证已经提交的事务记录不会丢失，这种能力称为crash-safe。</li>
-</ul>
-<p>Redo log是什么？ 通过它解决了什么问题？</p>
-<p>redo log是InnoDB存储引擎为了解决事务持久性而引入的WAL技术。借助redo log，InnoDB存储引擎将事务的commit提交简化为一次内存操作与一次磁盘写入操作。如果磁盘页中的数据发生了丢失，也就是在崩溃恢复过程中，存储引擎会通过重做redo log中的操作来进行数据恢复。</p>
-<p>binlog又是什么？他是干什么用的？ 了解主从同步原理。</p>
-<p>binlog是Mysql server层为了解决主从数据同步而引入的一套日志系统。binlog中记录的是一个数据行发生了什么操作。</p>
-<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.6y92ucy02380.webp" alt="image"></p>
-<p>Redo Log与binlog的两阶段提交</p>
-<ul>
-<li>prepare阶段，先写入rede log（状态为准备中）</li>
-<li>写入binlog（状态为已提交）—- TX_ID</li>
-<li>commit阶段，写入redo log（状态为已提交）</li>
-</ul>
-<p>而两阶段提交就是让这两个状态保持逻辑上的一致。redolog 用于恢复主机故障时的未更新的物理数据，binlog 用于备份操作。两者本身就是两个独立的个体，要想保持一致，就必须使用分布式事务的解决方案来处理。</p>
-<p>为什么需要两阶段提交呢?</p>
-<p>如果不用两阶段提交的话，可能会出现这样情况<br>先写 redo log，crash 后 bin log 备份恢复时少了一次更新，与当前数据不一致。<br>先写 bin log，crash 后，由于 redo log 没写入，事务无效，所以后续 bin log 备份恢复时，数据不一致。<br>两阶段提交就是为了保证 redo log 和 binlog 数据的安全一致性。只有在这两个日志文件逻辑上高度一致了才能放心的使用。<br>在恢复数据时，redolog 状态为 commit 则说明 binlog 也成功，直接恢复数据；如果 redolog 是 prepare，则需要查询对应的 binlog事务是否成功，决定是回滚还是执行。</p>
-<h4 id="InnoDB的几个关键特性"><a href="#InnoDB的几个关键特性" class="headerlink" title="InnoDB的几个关键特性"></a>InnoDB的几个关键特性</h4><p>insert buffer、double write、自适应hash索引、异步写等</p>
-<p>参考：<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/hahazz233/article/details/125372412">https://blog.csdn.net/hahazz233/article/details/125372412</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/db/lock.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/db/lock.html" class="post-title-link" itemprop="url">数据库必知必会-锁篇</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-16 23:20:03" itemprop="dateCreated datePublished" datetime="2022-02-16T23:20:03+08:00">2022-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-10-29 09:49:36" itemprop="dateModified" datetime="2022-10-29T09:49:36+08:00">2022-10-29</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/db/lock.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/db/lock.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>数据库中涉及到锁的一些经常考察的知识点</p>
-<p><img src="https://images.gitbook.cn/c347e4d0-a1b6-11ea-97df-0d0e3bd6b465" alt="数据库锁"></p>
-<h5 id="悲观锁-VS-乐观锁"><a href="#悲观锁-VS-乐观锁" class="headerlink" title="悲观锁 VS 乐观锁"></a>悲观锁 VS 乐观锁</h5><p>首先悲观锁（Pessimistic Lock）、乐观锁并不是两种锁，而是两种思想，两种用于实现并发控制的思想。</p>
-<p>其中，悲观锁指的是对数据被外界修改持悲观态度，认为数据大概率会被他人修改，所以在我准备修改数据时，我会对该数据加锁以避免其他人对该数据进行并发访问。</p>
-<p>而乐观锁指的是对外部修改数据持乐观态度，认为数据不会修改，所以我会直接对数据进行修改，在修改的以后再进行冲突的检查。如果修改失败了，我再决定如何去做。</p>
-<p>悲观锁适合<strong>写多读少</strong>的场景，而乐观锁适合<strong>读多写少</strong>的场景。</p>
-<p>悲观锁一般通过数据库锁来实现，而乐观锁一般是通过CAS来实现。</p>
-<h5 id="意向锁"><a href="#意向锁" class="headerlink" title="意向锁"></a>意向锁</h5><p>意向锁是什么？ 为什么需要意向锁？</p>
-<p>意向锁是实现多粒度锁的一种方式，是表锁，分为意向排他锁、意向共享锁；</p>
-<p>意向锁之间是兼容的；意向锁与表级别的共享锁、拍他锁是可能互斥的；</p>
-<p>意向锁与行级的互斥锁、共享锁是兼容的；</p>
-<p>实现意向锁的目的有两个：第一，让多粒度锁共存；第二，加快是否可以加锁的判定效率。</p>
-<p>考虑一种场景，事务A尝试修改一条数据，此时事务B需要加表锁。 如果没有意向锁，数据库系统需要怎么做？ - 系统需要扫描对所有的行加锁。</p>
-<p>意向锁也不会和数据行共享锁S、排它锁X发生冲突。</p>
-<p>那这玩意干啥的？</p>
-<p>update new_table set user_id = 911 where id = 1;<br>假设我们执行这么一条语句，innodb除了在id=1的这条记录上增加了行级X锁之前，还对所在表添加了一个意向排它锁。</p>
-<p>这个时候如果我们有针对 new_table 的表级锁操作，如：alter table、drop table、lock table 的操作时，会先检查对应表是否存在意向排它锁，若存在则等待锁释放。</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th></th>
-<th>意向共享锁</th>
-<th>意向互斥锁</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>表级共享锁</td>
-<td>兼容</td>
-<td>互斥</td>
-</tr>
-<tr>
-<td>表级互斥锁</td>
-<td>互斥</td>
-<td>互斥</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th></th>
-<th>意向共享锁</th>
-<th>意向互斥锁</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>行级共享锁</td>
-<td>兼容</td>
-<td>兼容</td>
-</tr>
-<tr>
-<td>行级互斥锁</td>
-<td>兼容</td>
-<td>兼容</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th></th>
-<th>意向共享锁</th>
-<th>意向互斥锁</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>意向共享锁</td>
-<td>兼容</td>
-<td>兼容</td>
-</tr>
-<tr>
-<td>意向互斥锁</td>
-<td>兼容</td>
-<td>兼容</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h5 id="next-key-lock"><a href="#next-key-lock" class="headerlink" title="next-key lock"></a>next-key lock</h5><p>Record lock、gap lock、next-key lock</p>
-<ul>
-<li>record lock, 行锁， 锁直接加在索引记录上面，锁住的是key。</li>
-<li>gap lock, 间隙锁，用来解决幻读问题</li>
-<li>next-key lock， gap lock + reocrd lock</li>
-</ul>
-<p>关于next-key lock的两个原则、两个优化、一个bug:</p>
-<ul>
-<li>原则1: 加锁的基本单位是next-key lock, 前开后闭区间，（A, B]</li>
-<li>原则2: 查找过程中遇到的对象才会加锁(延迟加锁)</li>
-<li>优化1: 索引上的等值查询，给唯一索引加锁的时候，next-key lock退化为行锁</li>
-<li>优化2: 索引上的等值查询，向右遍历时且最后一个值不满足等值条件时，next-key lock退化为gap lock</li>
-<li>bug: 唯一索引的范围查找会访问到不满足条件的第一个值为止。</li>
-</ul>
-<p>参考：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/zwx900102/article/details/106544634?utm_medium=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.control&amp;dist_request_id=&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.control">https://blog.csdn.net/zwx900102/article/details/106544634?utm_medium=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.control&amp;dist_request_id=&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.control</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/network/index.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/network/index.html" class="post-title-link" itemprop="url">计算机网络必知必会</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-16 23:20:03" itemprop="dateCreated datePublished" datetime="2022-02-16T23:20:03+08:00">2022-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-15 09:58:08" itemprop="dateModified" datetime="2022-12-15T09:58:08+08:00">2022-12-15</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/network/index.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/network/index.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>———-User——-</p>
-<p>application    write(fd,buf.len)</p>
-<p>———-Kernel——-</p>
-<p>File        Validate file descriptor.<br>Sockets     Copy/append buf to <strong>socket buffer</strong>.<br>TCP         Create TCP segment according to TCP state, Compute checksum.<br>IP          Add IP header,perform IP routing. Compute checksum.<br>Ethernet    Add Ethernet header,perform ARP.<br>Driver      Tell NIC to send the packet.</p>
-<p>———-Device——-<br>NIC        Fetch the packet from host memory and send it. Interrupt the host when send is done.</p>
-<p>缓冲区被塞满</p>
-<p>如图所示，物理介质上的数据帧到达后首先由NIC（网络适配器）读取，写入设备内部缓冲区Ring Buffer中，再由中断处理程序触发Softirq从中消费，Ring Buffer的大小因网卡设备而异。当网络数据包到达（生产）的速率快于内核处理（消费）的速率时，Ring Buffer很快会被填满，新来的数据包将被丢弃；</p>
-<p>报文mac地址丢包</p>
-<p>一般计算机网卡都工作在非混杂模式下，此时网卡只接受来自网络端口的目的地址指向自己的数据，如果报文的目的mac地址不是对端的接口的mac地址，一般都会丢包，一般这种情况很有可能是源端设置静态arp表项或者动态学习的arp表项没有及时更新，但目的端mac地址已发生变化（换了网卡），没有更新通知到源端（比如更新报文被丢失，中间交换机异常等情况）；</p>
-<h2 id="长链接-VS-短链接"><a href="#长链接-VS-短链接" class="headerlink" title="长链接 VS 短链接"></a>长链接 VS 短链接</h2><p>长连接：</p>
-<p>长连接多用于操作频繁，点对点的通讯（尤其是需要下行消息的场景，例如<strong>即时通信</strong>），而且连接数不能太多的情况。</p>
-<p>短连接：</p>
-<p>web网站的http服务一般都用短连接。因为长连接对于服务器来说要耗费一定的资源。</p>
-<p>像web网站这么频繁的成千上万甚至上亿客户端的连接用短连接更省一些资源。试想如果都用长连接，而且同时用成千上万的用户，每个用户都占有一个连接的话，可想而知服务器的压力有多大。所以并发量大，但是每个用户又不需频繁操作的情况下需要短连接。</p>
-<h2 id="TCP与UDP的区别"><a href="#TCP与UDP的区别" class="headerlink" title="TCP与UDP的区别"></a>TCP与UDP的区别</h2><p>流模式 VS 数据报模式、连接 VS 无连接、可靠性</p>
-<h3 id="TCP与UDP应用"><a href="#TCP与UDP应用" class="headerlink" title="TCP与UDP应用"></a>TCP与UDP应用</h3><p>TCP:对效率要求低，对准确性要求较高 (如文件传输、重要状态的更新等)</p>
-<p>eg.  STMP, TELNET, HTTP, FTP</p>
-<p>UDP:对效率要求高，对准确性要求较低 (如视频传输、实时通信等)。</p>
-<p>eg.  DNS,TFTP,RIP,DHCP,SNMP</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://www.fpthinker.com/backend_knowledge_architecture/network/tcp.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="NeoWei">
-      <meta itemprop="description" content="我是一名服务端程序员，热衷于第一性原理，会在该博客中不定期分享自己关于后端服务、计算机系统乃至世界本质的思考，望多多交流！">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <#meta itemprop="name" content="Neo's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/backend_knowledge_architecture/network/tcp.html" class="post-title-link" itemprop="url">计算机网络 - TCP协议</a>
-        </h2>
-
-        <div class="post-meta">
-
-	
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-02-16 23:20:03" itemprop="dateCreated datePublished" datetime="2022-02-16T23:20:03+08:00">2022-02-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-15 22:59:45" itemprop="dateModified" datetime="2022-12-15T22:59:45+08:00">2022-12-15</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/backend_knowledge_architecture/network/tcp.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/backend_knowledge_architecture/network/tcp.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="TCP状态迁移图"><a href="#TCP状态迁移图" class="headerlink" title="TCP状态迁移图"></a>TCP状态迁移图</h2><p><img src="https://img-blog.csdn.net/20171214152607931?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGliYWluZXUyMDA0/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="TCP状态迁移图"></p>
-<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.3b988wbfquw.webp" alt="image"></p>
-<p><img src="https://cdn.staticaly.com/gh/neowei1987/blog_assets@main/image.40pqw0597va0.webp" alt="image"></p>
-<p>FIN 段是可以携带数据的，比如客户端可以在它发送的最后一块数据块中“捎带” FIN 段。当然也可以单独发送FIN。不管 FIN 段是否携带数据，都需要消耗一个序列号。</p>
-<p>TCP三次握手的缺陷：Sync Flood攻击</p>
-<h2 id="确认机制与超时重传"><a href="#确认机制与超时重传" class="headerlink" title="确认机制与超时重传"></a>确认机制与超时重传</h2><p>TCP通过确认机制 ( acknowledge ) 保证了信息的成功发送。</p>
-<p>发送的数据编号被称为序列号(Sequence Number - SN)</p>
-<p>确认的数据编号被称为确认序列号(Ackonwledge Sequence Number - ASN)</p>
-<p>TCP协议正是通过序列号保证了传输顺序</p>
-<p>ASN = 填写要接收的下一个字节的数据(本次收到的数据的最后一个字节的下一个)</p>
-<p>TCP是有发送缓冲区的，用于暂时保存已发送，未应答的数据，为什么要进行保存，因为TCP为了保证数据确切地被对方接收到，需要对方发送的ASN，如果对方没有应答，就需要重发，如果不对数据进行保存，就没有办法重发了，所以发送缓冲区主要也是为了保证可靠性而存在的</p>
-<p>TCP有接收缓冲区，这与UDP协议一致，因为接收到的信息，不一定马上就能被应用层取走使用</p>
-<p>TCP规定，SYN报文段不能携带数据，但要消耗一个序号；ACK报文段可以携带数据，但如果不携带数据则不消耗序号</p>
-<p>客户端在收到第三次挥手的FIN 报文之后，再次收到服务端的数据包会怎么处理</p>
-<p>客户端如果收到乱序的 FIN 报文，会将FIN包加入到「乱序队列」，并不会进入到 TIME_WAIT 状态。等收到前面被网络延迟的数据包时，重组报文得到完整顺序的数据包之后，发现有 FIN 标志，这时才会进入 TIME_WAIT 状态。</p>
-<h3 id="关于TIME-WAIT存在的必要性"><a href="#关于TIME-WAIT存在的必要性" class="headerlink" title="关于TIME_WAIT存在的必要性"></a>关于TIME_WAIT存在的必要性</h3><p>MSL 是 Maximum Segment Lifetime，报文最大生存时间，它是任何报文在网络上存在的最长时间，超过这个时间报文将被丢弃。</p>
-<p>1）为实现TCP全双工连接的可靠释放</p>
-<p>由TCP状态变迁图可知，假设发起主动关闭的一方（client）最后发送的ACK在网络中丢失，由于TCP协议的重传机制，执行被动关闭的一方（server）将会重发其FIN，在该FIN到达client之前，client必须维护这条连接状态，也就说这条TCP连接所对应的资源（client方的local_ip,local_port）不能被立即释放或重新分配，直到另一方重发的FIN达到之后，client重发ACK后，经过2MSL时间周期没有再收到另一方的FIN之后，该TCP连接才能恢复初始的CLOSED状态。如果主动关闭一方不维护这样一个TIME_WAIT状态，那么当被动关闭一方重发的FIN到达时，主动关闭一方的TCP传输层会用RST包响应对方，这会被对方认为是有错误发生，然而这事实上只是正常的关闭连接过程，并非异常。</p>
-<p>2）为使旧的数据包在网络因过期而消失；防止lost duplicate对后续新建正常链接的传输造成破坏。</p>
-<p>lost duplicate在实际的网络中非常常见，经常是由于路由器产生故障，路径无法收敛，导致一个packet在路由器A，B，C之间做类似死循环的跳转。IP头部有个TTL，限制了一个包在网络中的最大跳数，因此这个包有两种命运，要么最后TTL变为0，在网络中消失；要么TTL在变为0之前路由器路径收敛，它凭借剩余的TTL跳数终于到达目的地。但非常可惜的是TCP通过超时重传机制在早些时候发送了一个跟它一模一样的包，并先于它达到了目的地，因此它的命运也就注定被TCP协议栈抛弃。</p>
-<p>另外一个概念叫做incarnation connection，指跟上次的socket pair一摸一样的新连接，叫做incarnation of previous connection。</p>
-<p>lost duplicate加上incarnation connection，则会对我们的传输造成致命的错误。</p>
-<p>大家都知道TCP是流式的，所有包到达的顺序是不一致的，依靠序列号由TCP协议栈做顺序的拼接；假设一个incarnation connection这时收到的seq=1000, 来了一个lost duplicate为seq=1000, len=1000, 则tcp认为这个lost duplicate合法，并存放入了receive buffer，导致传输出现错误。</p>
-<p>通过一个2MSL TIME_WAIT状态，确保所有的lost duplicate都会消失掉，避免对新连接造成错误。</p>
-<h2 id="TCP拥塞控制"><a href="#TCP拥塞控制" class="headerlink" title="TCP拥塞控制"></a>TCP拥塞控制</h2><p>流量控制(狭义)：根据对方的接收能力来调节发送流量<br>拥塞控制：根据网络的承载能力来调节发送流量</p>
-<p>接收窗口大致 = 接收缓冲区大小 - 已用大小(接收的数据，暂时没被应用层读走)</p>
-<p>发送窗口 = min(接收窗口, 拥塞窗口)</p>
-<p>核心：拥塞窗口 cwnd</p>
-<p>第一阶段：慢开始、拥塞避免</p>
-<p><strong>快重传</strong>要求接收方在收到一个失序的报文段后就立即发出重复确认（为的是使发送方及早知道有报文段没有到达对方）而不要等到自己发送数据时捎带确认。快重传算法规定，发送方只要一连收到三个重复确认就应当立即重传对方尚未收到的报文段，而不必继续等待设置的重传计时器时间到期。</p>
-<p>第二阶段；快重传、快恢复</p>
-<p>快重传配合使用的还有<strong>快恢复</strong>算法，有以下两个要点:</p>
-<p>①当发送方连续收到三个重复确认时，就执行“乘法减小”算法，把ssthresh门限减半。但是接下去并不执行慢开始算法。</p>
-<p>②考虑到如果网络出现拥塞的话就不会收到好几个重复的确认，所以发送方现在认为网络可能没有出现拥塞。所以此时不执行慢开始算法，而是将cwnd设置为ssthresh的大小，然后执行拥塞避免算法。</p>
-<p><img src="https://img-blog.csdn.net/20130801220615250?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2ljb2ZpZWxk/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="快恢复"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/35/">35</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/36/">36</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1569,7 +1473,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">349</span>
+          <span class="site-state-item-count">354</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1582,7 +1486,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">64</span>
+        <span class="site-state-item-count">66</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
